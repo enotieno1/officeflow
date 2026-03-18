@@ -1,12 +1,861 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Excel Management System - OOES</title>
+    <title>Excel System - OOES</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64,AAABAAEAEBAAAAEAIAAoBAAAAAQAAAAEAAAABAAgAQABAAAAAAAEAIAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA">
+    <style>
+        :root {
+            --color-bg-primary: #F0FDF4;
+            --color-bg-secondary: #DCFCE7;
+            --color-accent-primary: #16A34A;
+            --color-accent-secondary: #22C55E;
+            --color-text-primary: #111827;
+            --color-text-secondary: #6B7280;
+            --color-border: #E5E7EB;
+            --color-success: #10B981;
+            --color-warning: #F59E0B;
+            --color-error: #EF4444;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--color-bg-primary) 0%, var(--color-bg-secondary) 100%);
+            color: var(--color-text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+        
+        .header {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+        
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-accent-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--color-accent-primary), var(--color-accent-secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .sidebar {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            height: fit-content;
+        }
+        
+        .nav-section {
+            margin-bottom: 2rem;
+        }
+        
+        .nav-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .nav-title i {
+            color: var(--color-accent-primary);
+            font-size: 1rem;
+        }
+        
+        .nav-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .nav-item {
+            margin-bottom: 0.75rem;
+        }
+        
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            color: var(--color-text-primary);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .nav-link:hover {
+            background: var(--color-bg-primary);
+            border-color: var(--color-accent-primary);
+            transform: translateY(-2px);
+        }
+        
+        .nav-link i {
+            width: 20px;
+            text-align: center;
+            margin-right: 0.75rem;
+            color: var(--color-text-secondary);
+        }
+        
+        .nav-link.active {
+            background: var(--color-accent-primary);
+            color: white;
+            border-color: var(--color-accent-primary);
+        }
+        
+        .nav-link.active i {
+            color: white;
+        }
+        
+        .content-area {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .section-title i {
+            color: var(--color-accent-primary);
+        }
+        
+        .toolbar {
+            background: var(--color-bg-primary);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .toolbar-group {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        
+        .action-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, var(--color-accent-primary), var(--color-accent-secondary));
+            color: white;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 0.875rem;
+        }
+        
+        .action-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px -5px rgba(22, 163, 74, 0.3);
+        }
+        
+        .action-button i {
+            margin-right: 0.5rem;
+        }
+        
+        .action-button.secondary {
+            background: var(--color-text-secondary);
+        }
+        
+        .spreadsheet-container {
+            background: white;
+            border: 2px solid var(--color-border);
+            border-radius: 0.75rem;
+            overflow: hidden;
+            min-height: 500px;
+        }
+        
+        .spreadsheet-header {
+            background: var(--color-bg-primary);
+            padding: 1rem;
+            border-bottom: 2px solid var(--color-border);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .spreadsheet-grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            width: 100%;
+            overflow: auto;
+            max-height: 400px;
+        }
+        
+        .cell {
+            border: 1px solid var(--color-border);
+            padding: 0.5rem;
+            min-width: 80px;
+            min-height: 30px;
+            font-size: 0.875rem;
+            font-family: 'Courier New', monospace;
+            background: white;
+            cursor: cell;
+            position: relative;
+        }
+        
+        .cell:hover {
+            background: var(--color-bg-primary);
+        }
+        
+        .cell.selected {
+            background: var(--color-accent-primary);
+            color: white;
+        }
+        
+        .cell-header {
+            background: var(--color-bg-secondary);
+            font-weight: 600;
+            text-align: center;
+            color: var(--color-text-primary);
+        }
+        
+        .file-info {
+            background: var(--color-bg-primary);
+            border: 2px solid var(--color-border);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .file-name {
+            font-weight: 600;
+            color: var(--color-text-primary);
+        }
+        
+        .file-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .spreadsheet-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo">
+                        <i class="fas fa-file-excel"></i>
+                        <span>Excel System</span>
+                    </div>
+                    <div style="color: var(--color-text-secondary); font-weight: 500;">Spreadsheet Automation & Analysis</div>
+                </div>
+                
+                <div class="user-section">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <button class="action-button" onclick="goBack()">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to Dashboard
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Sidebar Navigation -->
+            <aside class="sidebar">
+                <div class="nav-section">
+                    <h3 class="nav-title">
+                        <i class="fas fa-file-excel"></i>
+                        Spreadsheet
+                    </h3>
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a href="#editor" class="nav-link active">
+                                <i class="fas fa-edit"></i>
+                                Editor
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#templates" class="nav-link">
+                                <i class="fas fa-file-alt"></i>
+                                Templates
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#import" class="nav-link">
+                                <i class="fas fa-upload"></i>
+                                Import
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#export" class="nav-link">
+                                <i class="fas fa-download"></i>
+                                Export
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="nav-section">
+                    <h3 class="nav-title">
+                        <i class="fas fa-cog"></i>
+                        Settings
+                    </h3>
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a href="#preferences" class="nav-link">
+                                <i class="fas fa-sliders-h"></i>
+                                Preferences
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#help" class="nav-link">
+                                <i class="fas fa-question-circle"></i>
+                                Help
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </aside>
+
+            <!-- Content Area -->
+            <div class="content-area">
+                <!-- File Info -->
+                <div class="file-info">
+                    <div>
+                        <div class="file-name">Untitled Spreadsheet</div>
+                        <div style="color: var(--color-text-secondary); font-size: 0.875rem;">
+                            Last saved: <span id="lastSaved">Never</span>
+                        </div>
+                    </div>
+                    <div class="file-actions">
+                        <button class="action-button" onclick="newSpreadsheet()">
+                            <i class="fas fa-plus"></i>
+                            New
+                        </button>
+                        <button class="action-button" onclick="saveSpreadsheet()">
+                            <i class="fas fa-save"></i>
+                            Save
+                        </button>
+                        <button class="action-button secondary" onclick="exportSpreadsheet()">
+                            <i class="fas fa-download"></i>
+                            Export
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Toolbar -->
+                <div class="toolbar">
+                    <div class="toolbar-group">
+                        <button class="action-button" onclick="undoAction()">
+                            <i class="fas fa-undo"></i>
+                            Undo
+                        </button>
+                        <button class="action-button" onclick="redoAction()">
+                            <i class="fas fa-redo"></i>
+                            Redo
+                        </button>
+                        <button class="action-button" onclick="cutAction()">
+                            <i class="fas fa-cut"></i>
+                            Cut
+                        </button>
+                        <button class="action-button" onclick="copyAction()">
+                            <i class="fas fa-copy"></i>
+                            Copy
+                        </button>
+                        <button class="action-button" onclick="pasteAction()">
+                            <i class="fas fa-paste"></i>
+                            Paste
+                        </button>
+                    </div>
+                    <div class="toolbar-group">
+                        <button class="action-button" onclick="formatBold()">
+                            <i class="fas fa-bold"></i>
+                        </button>
+                        <button class="action-button" onclick="formatItalic()">
+                            <i class="fas fa-italic"></i>
+                        </button>
+                        <button class="action-button" onclick="formatUnderline()">
+                            <i class="fas fa-underline"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Spreadsheet Grid -->
+                <div class="spreadsheet-container">
+                    <div class="spreadsheet-header">
+                        <div style="width: 40px; text-align: center;">#</div>
+                        <div style="width: 80px;">A</div>
+                        <div style="width: 80px;">B</div>
+                        <div style="width: 80px;">C</div>
+                        <div style="width: 80px;">D</div>
+                        <div style="width: 80px;">E</div>
+                        <div style="width: 80px;">F</div>
+                        <div style="width: 80px;">G</div>
+                        <div style="width: 80px;">H</div>
+                    </div>
+                    <div class="spreadsheet-grid" id="spreadsheetGrid">
+                        <!-- Grid will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Authentication check
+        document.addEventListener('DOMContentLoaded', function() {
+            const token = localStorage.getItem('ooes_token');
+            
+            if (!token || !isValidToken(token)) {
+                window.location.href = '../auth.html';
+                return;
+            }
+            
+            // Initialize spreadsheet
+            initializeSpreadsheet();
+            setupNavigation();
+        });
+        
+        function isValidToken(token) {
+            try {
+                const payload = JSON.parse(atob(token.split('.')[1]));
+                const now = Date.now() / 1000;
+                return payload.exp > now;
+            } catch (error) {
+                return false;
+            }
+        }
+        
+        let spreadsheetData = {};
+        let selectedCell = null;
+        let clipboard = null;
+        let history = [];
+        let historyIndex = -1;
+        
+        function initializeSpreadsheet() {
+            const grid = document.getElementById('spreadsheetGrid');
+            grid.innerHTML = '';
+            
+            // Create 100x20 grid (A1-T100)
+            for (let row = 0; row < 100; row++) {
+                for (let col = 0; col < 10; col++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'cell';
+                    cell.contentEditable = true;
+                    cell.dataset.row = row;
+                    cell.dataset.col = col;
+                    cell.dataset.address = String.fromCharCode(65 + col) + (row + 1);
+                    
+                    // Add row header
+                    if (col === 0) {
+                        cell.className = 'cell cell-header';
+                        cell.textContent = row + 1;
+                        cell.contentEditable = false;
+                    }
+                    
+                    // Add column headers for first row
+                    if (row === 0 && col > 0) {
+                        cell.className = 'cell cell-header';
+                        cell.textContent = String.fromCharCode(65 + col);
+                        cell.contentEditable = false;
+                    }
+                    
+                    cell.addEventListener('click', selectCell);
+                    cell.addEventListener('input', updateCell);
+                    cell.addEventListener('keydown', handleCellKeydown);
+                    
+                    grid.appendChild(cell);
+                }
+            }
+        }
+        
+        function selectCell(event) {
+            // Remove previous selection
+            document.querySelectorAll('.cell.selected').forEach(cell => {
+                cell.classList.remove('selected');
+            });
+            
+            // Add selection to current cell
+            event.target.classList.add('selected');
+            selectedCell = event.target;
+        }
+        
+        function updateCell(event) {
+            const address = event.target.dataset.address;
+            const value = event.target.textContent;
+            
+            if (!spreadsheetData[address]) {
+                spreadsheetData[address] = '';
+            }
+            
+            // Only save if value changed
+            if (spreadsheetData[address] !== value) {
+                spreadsheetData[address] = value;
+                addToHistory();
+                updateLastSaved();
+            }
+        }
+        
+        function handleCellKeydown(event) {
+            if (event.key === 'Tab') {
+                event.preventDefault();
+                moveToNextCell();
+            } else if (event.key === 'Enter') {
+                event.preventDefault();
+                moveToNextRow();
+            }
+        }
+        
+        function moveToNextCell() {
+            if (!selectedCell) return;
+            
+            const col = parseInt(selectedCell.dataset.col);
+            const row = parseInt(selectedCell.dataset.row);
+            const nextCol = col + 1;
+            
+            if (nextCol < 10) {
+                const nextCell = document.querySelector(`[data-row="${row}"][data-col="${nextCol}"]`);
+                if (nextCell) {
+                    nextCell.focus();
+                    selectCell({ target: nextCell });
+                }
+            }
+        }
+        
+        function moveToNextRow() {
+            if (!selectedCell) return;
+            
+            const col = parseInt(selectedCell.dataset.col);
+            const row = parseInt(selectedCell.dataset.row);
+            const nextRow = row + 1;
+            
+            if (nextRow < 100) {
+                const nextCell = document.querySelector(`[data-row="${nextRow}"][data-col="${col}"]`);
+                if (nextCell) {
+                    nextCell.focus();
+                    selectCell({ target: nextCell });
+                }
+            }
+        }
+        
+        function addToHistory() {
+            // Remove any history after current index
+            history = history.slice(0, historyIndex + 1);
+            history.push(JSON.parse(JSON.stringify(spreadsheetData)));
+            historyIndex = history.length - 1;
+        }
+        
+        function undoAction() {
+            if (historyIndex > 0) {
+                historyIndex--;
+                spreadsheetData = JSON.parse(JSON.stringify(history[historyIndex]));
+                refreshGrid();
+                updateLastSaved();
+            }
+        }
+        
+        function redoAction() {
+            if (historyIndex < history.length - 1) {
+                historyIndex++;
+                spreadsheetData = JSON.parse(JSON.stringify(history[historyIndex]));
+                refreshGrid();
+                updateLastSaved();
+            }
+        }
+        
+        function cutAction() {
+            if (selectedCell) {
+                clipboard = {
+                    value: selectedCell.textContent,
+                    address: selectedCell.dataset.address
+                };
+                selectedCell.textContent = '';
+                updateCell({ target: selectedCell });
+            }
+        }
+        
+        function copyAction() {
+            if (selectedCell) {
+                clipboard = {
+                    value: selectedCell.textContent,
+                    address: selectedCell.dataset.address
+                };
+            }
+        }
+        
+        function pasteAction() {
+            if (selectedCell && clipboard) {
+                selectedCell.textContent = clipboard.value;
+                updateCell({ target: selectedCell });
+            }
+        }
+        
+        function formatBold() {
+            if (selectedCell) {
+                selectedCell.style.fontWeight = selectedCell.style.fontWeight === 'bold' ? 'normal' : 'bold';
+            }
+        }
+        
+        function formatItalic() {
+            if (selectedCell) {
+                selectedCell.style.fontStyle = selectedCell.style.fontStyle === 'italic' ? 'normal' : 'italic';
+            }
+        }
+        
+        function formatUnderline() {
+            if (selectedCell) {
+                selectedCell.style.textDecoration = selectedCell.style.textDecoration === 'underline' ? 'none' : 'underline';
+            }
+        }
+        
+        function refreshGrid() {
+            const grid = document.getElementById('spreadsheetGrid');
+            const cells = grid.querySelectorAll('.cell');
+            
+            cells.forEach(cell => {
+                if (cell.dataset.address && spreadsheetData[cell.dataset.address] !== undefined) {
+                    cell.textContent = spreadsheetData[cell.dataset.address];
+                }
+            });
+        }
+        
+        function newSpreadsheet() {
+            if (confirm('Create a new spreadsheet? Any unsaved changes will be lost.')) {
+                spreadsheetData = {};
+                history = [{}];
+                historyIndex = 0;
+                initializeSpreadsheet();
+                updateLastSaved();
+            }
+        }
+        
+        function saveSpreadsheet() {
+            const token = localStorage.getItem('ooes_token');
+            
+            fetch('/api/excel/save', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: 'Untitled Spreadsheet',
+                    data: spreadsheetData
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    updateLastSaved();
+                    showNotification('Spreadsheet saved successfully', 'success');
+                } else {
+                    showNotification('Failed to save spreadsheet', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Save error:', error);
+                showNotification('Failed to save spreadsheet', 'error');
+            });
+        }
+        
+        function exportSpreadsheet() {
+            // Create CSV content
+            let csv = '';
+            for (let row = 0; row < 100; row++) {
+                let rowData = [];
+                for (let col = 0; col < 10; col++) {
+                    const address = String.fromCharCode(65 + col) + (row + 1);
+                    const value = spreadsheetData[address] || '';
+                    rowData.push('"' + value.replace(/"/g, '""') + '"');
+                }
+                csv += rowData.join(',') + '\n';
+            }
+            
+            // Create download link
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'spreadsheet.csv';
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            showNotification('Spreadsheet exported as CSV', 'success');
+        }
+        
+        function updateLastSaved() {
+            const now = new Date();
+            document.getElementById('lastSaved').textContent = now.toLocaleString();
+        }
+        
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 ${
+                type === 'error' ? 'bg-red-500' : 
+                type === 'success' ? 'bg-green-500' : 
+                'bg-blue-500'
+            } text-white`;
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas fa-${type === 'error' ? 'exclamation-circle' : type === 'success' ? 'check-circle' : 'info-circle'} mr-2"></i>
+                    ${message}
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+        
+        function goBack() {
+            window.location.href = '../index.html';
+        }
+        
+        function setupNavigation() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const currentHash = window.location.hash || '#editor';
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === currentHash) {
+                    link.classList.add('active');
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const href = this.getAttribute('href');
+                    window.location.hash = href;
+                    updateActiveNav();
+                });
+            });
+        }
+        
+        function updateActiveNav() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const currentHash = window.location.hash || '#editor';
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === currentHash) {
+                    link.classList.add('active');
+                }
+            });
+        }
+        
+        // Handle hash changes
+        window.addEventListener('hashchange', updateActiveNav);
+        
+        // Initialize history
+        history = [{}];
+        historyIndex = 0;
+    </script>
+</body>
+</html>
     <style>
         :root {
             --color-bg-primary: #F0FDF4;
@@ -249,7 +1098,7 @@
                     <div class="border-l border-gray-300 h-6 mx-2"></div>
                     
                     <button class="toolbar-button" onclick="sumSelection()" title="Sum">
-                        <i class="fas fa-sigma"></i> Σ
+                        <i class="fas fa-sigma"></i> ╬ú
                     </button>
                     <button class="toolbar-button" onclick="averageSelection()" title="Average">
                         <i class="fas fa-chart-line"></i> Avg
@@ -398,9 +1247,9 @@
                         <div class="mt-4 p-4 bg-gray-50 rounded-lg">
                             <h4 class="font-medium mb-2">Supported Formats:</h4>
                             <ul class="text-sm text-gray-600 space-y-1">
-                                <li>• Excel (.xlsx, .xls)</li>
-                                <li>• CSV (.csv)</li>
-                                <li>• Google Sheets (via CSV export)</li>
+                                <li>ΓÇó Excel (.xlsx, .xls)</li>
+                                <li>ΓÇó CSV (.csv)</li>
+                                <li>ΓÇó Google Sheets (via CSV export)</li>
                             </ul>
                         </div>
                     </div>
@@ -816,7 +1665,7 @@
                             <i class="fas ${file.icon} text-green-500 text-2xl"></i>
                             <div>
                                 <h4 class="font-semibold">${file.name}</h4>
-                                <p class="text-sm text-gray-600">${file.size} • ${file.modified}</p>
+                                <p class="text-sm text-gray-600">${file.size} ΓÇó ${file.modified}</p>
                             </div>
                         </div>
                     </div>
