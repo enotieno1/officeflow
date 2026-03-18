@@ -689,8 +689,50 @@
             }
         }
 </script>
-</body>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const _supabase3 = supabase.createClient('https://oghowrilrhummzvrljdt.supabase.co', 'sb_publishable_WReuIZP0Pp2mJOJ691GOLA_5Uwf50wQ');
+
+async function syncTasks() {
+  try {
+    const { data, error } = await _supabase3.from('tasks').select('*').order('due_date', { ascending: true });
+    if (error || !data) return;
+    
+    const pending = data.filter(t => t.status === 'pending').length;
+    const completed = data.filter(t => t.status === 'completed').length;
+    const overdue = data.filter(t => t.status === 'overdue').length;
+    
+    document.querySelectorAll('.pending-tasks').forEach(el => el.textContent = pending);
+    document.querySelectorAll('.completed-tasks').forEach(el => el.textContent = completed);
+    document.querySelectorAll('.overdue-tasks').forEach(el => el.textContent = overdue);
+    
+    const container = document.getElementById('tasksContainer');
+    if (container) {
+      container.innerHTML = data.map(t => `
+        <div class="bg-white rounded-lg p-4 shadow border-l-4 ${t.priority === 'high' ? 'border-red-500' : t.priority === 'medium' ? 'border-yellow-500' : 'border-green-500'} mb-3">
+          <div class="flex justify-between items-start">
+            <h4 class="font-semibold text-gray-800">${t.title}</h4>
+            <span class="px-2 py-1 rounded text-xs ${t.status === 'completed' ? 'bg-green-100 text-green-800' : t.status === 'overdue' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800'}">${t.status}</span>
+          </div>
+          <p class="text-sm text-gray-600 mt-1">${t.description || ''}</p>
+          <div class="flex justify-between mt-2 text-xs text-gray-500">
+            <span>Assigned to: ${t.assigned_to || 'Unassigned'}</span>
+            <span>Due: ${t.due_date || 'No date'}</span>
+          </div>
+        </div>
+      `).join('');
+    }
+  } catch(err) {
+    console.log('Tasks sync failed', err);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  setTimeout(syncTasks, 500);
+});
+</script></body>
 </html>
+
 
 
 
