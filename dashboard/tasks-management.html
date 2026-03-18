@@ -730,8 +730,9 @@ async function syncTasks() {
 document.addEventListener('DOMContentLoaded', function() {
   setTimeout(syncTasks, 500);
 });
-</script></body>
+</script><script>function toggleMobileNav(){var s=document.getElementById("sidebarNav");var o=document.getElementById("mobileOverlay");if(s){s.classList.toggle("active");}if(!o){var ov=document.createElement("div");ov.id="mobileOverlay";ov.className="mobile-overlay";ov.onclick=toggleMobileNav;document.body.appendChild(ov);}else{o.classList.toggle("active");}}document.addEventListener("DOMContentLoaded",function(){var btn=document.getElementById("mobileMenuBtn");if(btn){btn.style.display="flex";btn.onclick=toggleMobileNav;}});</script></body>
 </html>
+
 
 
 
