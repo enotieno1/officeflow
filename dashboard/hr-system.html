@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><script>(function(){if(!localStorage.getItem("ooesUser")){window.location.href="/dashboard/auth.html";}})();</script>
+<head><script>(function(){if(!localStorage.getItem("ooesSession")){window.location.href="/dashboard/auth.html";}})();</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HR Management System - OOES</title>
@@ -506,7 +506,27 @@
             }
         ];
 
-        function initializeHRSystem() {
+        async function initializeHRSystem() {
+            try {
+                var data = await getEmployees();
+                if (data && data.length > 0) {
+                    employees = data.map(function(e, i) {
+                        var parts = (e.name || 'Staff').split(' ');
+                        return {
+                            id: e.id || i+1,
+                            firstName: parts[0] || 'Staff',
+                            lastName: parts.slice(1).join(' ') || '',
+                            email: e.email || '',
+                            phone: e.phone || '',
+                            department: e.department || 'General',
+                            salary: parseFloat(e.salary) || 0,
+                            status: e.status || 'active',
+                            avatar: 'https://ui-avatars.com/api/?name=' + encodeURIComponent(e.name || 'Staff') + '&background=3B82F6&color=fff',
+                            joinDate: e.created_at ? e.created_at.substring(0,10) : '2024-01-01'
+                        };
+                    });
+                }
+            } catch(err) { console.log('Using local data'); }
             renderEmployeeTable();
             updateHRStats();
         }
