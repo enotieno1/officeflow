@@ -464,70 +464,34 @@
         // Handle Sign In
         function handleSignIn(event) {
             event.preventDefault();
-            
-            const email = document.getElementById('signInEmail').value;
-            const password = document.getElementById('signInPassword').value;
-            
-            // Simulate authentication
-            showNotification('Signing In...', 'Please wait while we authenticate your account', 'info');
-            
-            setTimeout(() => {
-                // Store user session
-                localStorage.setItem('ooesUser', JSON.stringify({
-                    email: email,
-                    name: email.split('@')[0],
-                    loginTime: new Date().toISOString()
-                }));
-                
-                showNotification('Welcome Back!', 'Successfully signed in to your account', 'success');
-                
-                // Redirect to dashboard
-                setTimeout(() => {
-                    window.location.href = 'index.html';
-                }, 1500);
-            }, 2000);
+            var email = document.getElementById('signInEmail').value;
+            var password = document.getElementById('signInPassword').value;
+            showNotification('Signing in...', 'info');
+            setTimeout(function() {
+                var session = OOES_AUTH.login(email, password);
+                if (session) {
+                    showNotification('Welcome back, ' + session.name + '!', 'success');
+                    setTimeout(function() { window.location.href = 'index.html'; }, 1000);
+                } else {
+                    showNotification('Invalid email or password. Try demo@ooes.co.ke / Demo@2024', 'error');
+                }
+            }, 800);
         }
 
         // Handle Sign Up
         function handleSignUp(event) {
             event.preventDefault();
-            
-            const firstName = document.getElementById('signUpFirstName').value;
-            const lastName = document.getElementById('signUpLastName').value;
-            const email = document.getElementById('signUpEmail').value;
-            const password = document.getElementById('signUpPassword').value;
-            const confirmPassword = document.getElementById('signUpConfirmPassword').value;
-            
-            // Validate passwords
-            if (password !== confirmPassword) {
-                showNotification('Password Mismatch', 'Passwords do not match. Please try again.', 'error');
-                return;
-            }
-            
-            // Validate password strength
-            if (password.length < 8) {
-                showNotification('Weak Password', 'Password must be at least 8 characters long.', 'error');
-                return;
-            }
-            
-            showNotification('Creating Account...', 'Please wait while we create your account', 'info');
-            
-            setTimeout(() => {
-                // Store user session
-                localStorage.setItem('ooesUser', JSON.stringify({
-                    email: email,
-                    name: `${firstName} ${lastName}`,
-                    loginTime: new Date().toISOString(),
-                    isNewUser: true
-                }));
-                
-                showNotification('Account Created!', 'Your account has been created successfully', 'success');
-                
-                // Redirect to dashboard
-                setTimeout(() => {
-                    window.location.href = 'index.html';
-                }, 1500);
-            }, 2000);
+            var fn = document.getElementById('signUpFirstName').value;
+            var ln = document.getElementById('signUpLastName').value;
+            var email = document.getElementById('signUpEmail').value;
+            var pw = document.getElementById('signUpPassword').value;
+            var cp = document.getElementById('signUpConfirmPassword').value;
+            if (pw !== cp) { showNotification('Passwords do not match.', 'error'); return; }
+            if (pw.length < 8) { showNotification('Password must be 8+ characters.', 'error'); return; }
+            var result = OOES_AUTH.register(fn, ln, email, pw);
+            if (result.error) { showNotification(result.error, 'error'); return; }
+            showNotification('Welcome, ' + result.name + '!', 'success');
+            setTimeout(function() { window.location.href = 'index.html'; }, 1000);
         }
 
         // Social Sign In
