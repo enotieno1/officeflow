@@ -1,1 +1,40 @@
-@media (max-width: 768px) { .sidebar-nav, aside { display: none !important; } .sidebar-nav.active, aside.active { display: block !important; position: fixed; top: 0; left: 0; width: 85vw; max-width: 320px; height: 100vh; z-index: 9999; overflow-y: auto; background: #fff; box-shadow: 2px 0 10px rgba(0,0,0,0.2); } main, .flex-1 { width: 100% !important; padding: 0.75rem !important; } h1 { font-size: 1.5rem !important; } h2 { font-size: 1.25rem !important; } button { min-height: 44px !important; padding: 0.6rem 1rem !important; } table { display: block !important; overflow-x: auto !important; white-space: nowrap !important; } .grid-cols-2, .grid-cols-3, .grid-cols-4 { grid-template-columns: 1fr !important; } .card, .dashboard-section, .system-card, .module-card, .kpi-card { width: 100% !important; margin-bottom: 1rem !important; } #mobileMenuBtn { display: flex !important; } .p-8 { padding: 1rem !important; } .p-6 { padding: 0.75rem !important; } body { overflow-x: hidden !important; font-size: 14px !important; } .nav-search { max-width: 150px !important; } } @media (max-width: 480px) { .nav-search { display: none !important; } h1 { font-size: 1.25rem !important; } }
+/* OfficeFlow Mobile Navigation */
+@media (max-width: 768px) {
+  .sidebar-desktop { transform: translateX(-100%); transition: transform 0.3s ease; }
+  .sidebar-desktop.open { transform: translateX(0); }
+  .main-content { margin-left: 0; }
+  .mobile-topbar { display: flex; }
+  .mobile-nav { display: flex; }
+  .sidebar-overlay { display: block; }
+}
+@media (min-width: 769px) {
+  .mobile-topbar { display: none; }
+  .mobile-nav { display: none; }
+  .sidebar-overlay { display: none; }
+}
+.mobile-topbar {
+  display: none;
+  position: fixed; top: 0; left: 0; right: 0; z-index: 90;
+  background: linear-gradient(135deg,#667eea,#764ba2);
+  padding: 12px 16px;
+  align-items: center; justify-content: space-between;
+  color: white;
+}
+.mobile-nav {
+  display: none;
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 90;
+  background: white; border-top: 1px solid #e5e7eb;
+  padding: 8px 0;
+  justify-content: space-around; align-items: center;
+}
+.mobile-nav a {
+  display: flex; flex-direction: column; align-items: center;
+  font-size: 10px; color: #6b7280; text-decoration: none; padding: 4px 8px;
+  transition: color 0.2s;
+}
+.mobile-nav a.active, .mobile-nav a:hover { color: #667eea; }
+.mobile-nav a i { font-size: 20px; margin-bottom: 2px; }
+.sidebar-overlay {
+  display: none;
+  position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 99;
+}

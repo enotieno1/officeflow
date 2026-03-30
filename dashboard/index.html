@@ -16,7 +16,17 @@
 </style>
 </head>
 <body class="bg-gray-100 min-h-screen">
-<div class="fixed inset-y-0 left-0 w-64 gradient-bg text-white z-50 flex flex-col">
+
+<!-- Mobile Top Bar -->
+<div class="mobile-topbar">
+  <button onclick="document.getElementById('sidebar').classList.toggle('open');document.getElementById('overlay').classList.toggle('hidden')" class="text-white"><i class="fas fa-bars text-xl"></i></button>
+  <span class="font-bold text-lg">OfficeFlow</span>
+  <span data-user-initials class="w-8 h-8 bg-white bg-opacity-30 rounded-full flex items-center justify-center font-bold text-sm">OF</span>
+</div>
+<!-- Sidebar Overlay -->
+<div id="overlay" class="sidebar-overlay hidden" onclick="document.getElementById('sidebar').classList.remove('open');this.classList.add('hidden')"></div>
+
+<div id="sidebar" class="fixed inset-y-0 left-0 w-64 gradient-bg text-white z-50 flex flex-col" style="transition:transform 0.3s ease">
 <div class="p-6 border-b border-white border-opacity-20">
 <h1 class="text-2xl font-bold">OfficeFlow</h1>
 <p class="text-xs text-indigo-200 mt-1">Office Operations</p>
@@ -77,5 +87,15 @@ async function loadDashboard(){
 }
 document.addEventListener("DOMContentLoaded",loadDashboard);
 </script>
+
+<!-- Mobile Bottom Nav -->
+<nav class="mobile-nav">
+  <a href="index.html" class="active"><i class="fas fa-home"></i>Home</a>
+  <a href="hr-system.html"><i class="fas fa-users"></i>HR</a>
+  <a href="tasks-management.html"><i class="fas fa-tasks"></i>Tasks</a>
+  <a href="financial-management.html"><i class="fas fa-chart-line"></i>Finance</a>
+  <a href="packages.html"><i class="fas fa-box"></i>More</a>
+</nav>
+
 </body>
 </html>
