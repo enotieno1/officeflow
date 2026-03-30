@@ -573,7 +573,7 @@
         }
 
         // Check if user is already logged in
-        function checkAuthStatus() {
+        function checkAuthStatus_OLD() {
             const user = localStorage.getItem('ooesUser');
             if (user) {
                 // User is already logged in, redirect to dashboard
@@ -583,7 +583,7 @@
 
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
-            checkAuthStatus();
+            // checkAuthStatus();
             
             // Add floating label animations
             const inputs = document.querySelectorAll('input');
