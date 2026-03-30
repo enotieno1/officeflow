@@ -336,7 +336,22 @@
             { id: 'INV-2026-005', client: 'Local Business', amount: 95000, dueDate: '2026-02-18', status: 'pending' }
         ];
 
-        function initializeFinancialSystem() {
+        async function initializeFinancialSystem() {
+            try {
+                var data = await getTransactions();
+                if (data && data.length > 0) {
+                    invoices = data.map(function(t, i) {
+                        return {
+                            id: t.id || 'TXN-' + (i+1),
+                            client: t.description || t.type || 'Transaction',
+                            amount: Math.abs(parseFloat(t.amount) || 0),
+                            dueDate: t.date || '2026-01-01',
+                            status: parseFloat(t.amount) >= 0 ? 'paid' : 'pending',
+                            type: t.type || 'expense'
+                        };
+                    });
+                }
+            } catch(err) { console.log('Using local data'); }
             renderInvoiceTable();
             updateFinancialMetrics();
         }

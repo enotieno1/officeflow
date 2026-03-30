@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><script>(function(){if(!localStorage.getItem("ooesUser")){window.location.href="/dashboard/auth.html";}})();</script>
+<head><script>(function(){if(!localStorage.getItem("ooesSession")){window.location.href="/dashboard/auth.html";}})();</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task Management | OfficeFlow Dashboard</title>
@@ -695,7 +695,7 @@ const _supabase3 = supabase.createClient('https://oghowrilrhummzvrljdt.supabase.
 
 async function syncTasks() {
   try {
-    const { data, error } = await _supabase3.from('tasks').select('*').order('due_date', { ascending: true });
+    const { data, error } = await supabase.from('tasks').select('*').order('due_date', { ascending: true });
     if (error || !data) return;
     
     const pending = data.filter(t => t.status === 'pending').length;
