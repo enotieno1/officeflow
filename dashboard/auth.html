@@ -466,14 +466,14 @@
             event.preventDefault();
             var email = document.getElementById('signInEmail').value;
             var password = document.getElementById('signInPassword').value;
-            showNotification('Signing in...', 'info');
+            showNotification('Signing In', 'Please wait...', 'info');
             setTimeout(function() {
                 var session = OOES_AUTH.login(email, password);
                 if (session) {
                     showNotification('Welcome back, ' + session.name + '!', 'success');
                     setTimeout(function() { window.location.href = 'index.html'; }, 1000);
                 } else {
-                    showNotification('Invalid email or password. Try demo@ooes.co.ke / Demo@2024', 'error');
+                    showNotification('Login Failed', 'Invalid email or password. Try demo@ooes.co.ke / Demo@2024', 'error');
                 }
             }, 800);
         }
@@ -486,8 +486,8 @@
             var email = document.getElementById('signUpEmail').value;
             var pw = document.getElementById('signUpPassword').value;
             var cp = document.getElementById('signUpConfirmPassword').value;
-            if (pw !== cp) { showNotification('Passwords do not match.', 'error'); return; }
-            if (pw.length < 8) { showNotification('Password must be 8+ characters.', 'error'); return; }
+            if (pw !== cp) { showNotification('Error', 'Passwords do not match.', 'error'); return; }
+            if (pw.length < 8) { showNotification('Error', 'Password must be 8+ characters.', 'error'); return; }
             var result = OOES_AUTH.register(fn, ln, email, pw);
             if (result.error) { showNotification(result.error, 'error'); return; }
             showNotification('Welcome, ' + result.name + '!', 'success');
