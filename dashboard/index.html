@@ -54,7 +54,7 @@
 <header class="bg-white shadow-sm px-6 py-4 flex items-center justify-between sticky top-0 z-40">
 <div><h2 class="text-xl font-semibold text-gray-800">Good morning, <span data-user-name>there</span></h2>
 <p class="text-sm text-gray-500" id="current-date"></p></div>
-<button onclick="loadDashboard()" class="text-gray-500 hover:text-indigo-600 text-sm">Refresh</button>
+<div class="flex items-center gap-3"><div class="relative"><input type="text" id="globalSearch" placeholder="Search..." onkeyup="globalSearchFn()" class="pl-8 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" style="width:200px"><i class="fas fa-search absolute left-2.5 top-2.5 text-gray-400 text-xs"></i></div><button onclick="loadDashboard()" class="text-gray-500 hover:text-indigo-600 text-sm">Refresh</button></div>
 </header>
 <main class="p-6 flex-1">
 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
@@ -88,6 +88,33 @@ async function loadDashboard(){
   try{var d=await getDocuments();document.getElementById("stat-documents").textContent=d.length;document.getElementById("stat-docs-sub").textContent="Stored files";}catch(e){document.getElementById("stat-documents").textContent="0";}
 }
 document.addEventListener("DOMContentLoaded",loadDashboard);
+
+function globalSearchFn() {
+    var q = document.getElementById('globalSearch').value.toLowerCase().trim();
+    var results = [];
+    var pages = [
+        {name:'HR Management', url:'hr-system.html', desc:'Employees, payroll, leave management'},
+        {name:'Finance', url:'financial-management.html', desc:'Invoices, transactions, reports'},
+        {name:'Tasks', url:'tasks-management.html', desc:'Task management and tracking'},
+        {name:'Documents', url:'document-management.html', desc:'Document storage and management'},
+        {name:'Email System', url:'email-system.html', desc:'Email and communication'},
+        {name:'Calendar', url:'calendar-system.html', desc:'Scheduling and events'},
+        {name:'AI Features', url:'ai-features.html', desc:'AI-powered tools'},
+        {name:'Security', url:'security-center.html', desc:'Security and compliance'},
+        {name:'Pricing', url:'pricing.html', desc:'Plans and pricing'},
+        {name:'Contact', url:'contact.html', desc:'Get in touch'}
+    ];
+    var matches = pages.filter(function(p){ return p.name.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q); });
+    if (matches.length > 0) {
+        window.location.href = matches[0].url;
+    } else {
+        showNotification('Search', 'No matching page found for: ' + q, 'info');
+    }
+}
+document.getElementById('globalSearch').addEventListener('keydown', function(e){
+    if (e.key === 'Enter') globalSearchFn();
+});
+
 </script>
 
 <!-- Mobile Bottom Nav -->

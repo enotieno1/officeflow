@@ -645,8 +645,13 @@
 
         // Search functionality
         document.getElementById('taskSearch').addEventListener('input', function(e) {
-            const query = e.target.value.toLowerCase();
-            console.log(`Searching for: ${query}`);
+            var query = e.target.value.toLowerCase();
+            var container = document.getElementById('tasksContainer');
+            var cards = container.querySelectorAll('.bg-white.rounded-lg');
+            cards.forEach(function(card) {
+                var text = card.textContent.toLowerCase();
+                card.style.display = text.includes(query) ? '' : 'none';
+            });
         });
 
         // Close modal when clicking outside
