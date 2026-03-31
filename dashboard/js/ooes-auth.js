@@ -16,3 +16,12 @@ var OOES_AUTH = {
   renderUserInfo:function(){var s=this.getSession();if(!s)return;document.querySelectorAll("[data-user-name]").forEach(function(el){el.textContent=s.name;});document.querySelectorAll("[data-user-email]").forEach(function(el){el.textContent=s.email;});}
 };
 (function(){if(!window.location.pathname.includes("auth.html")){document.addEventListener("DOMContentLoaded",function(){if(OOES_AUTH.requireAuth())OOES_AUTH.renderUserInfo();});}})();
+
+OOES_AUTH.ROLE_PERMISSIONS = {
+  admin:   {canEdit:true, canDelete:true, canViewFinance:true, canManageUsers:true},
+  manager: {canEdit:true, canDelete:false, canViewFinance:true, canManageUsers:false},
+  viewer:  {canEdit:false, canDelete:false, canViewFinance:false, canManageUsers:false}
+};
+OOES_AUTH.getRole = function(){ var s=this.getSession(); return s ? s.role : 'viewer'; };
+OOES_AUTH.can = function(p){ var perms=this.ROLE_PERMISSIONS[this.getRole()]||this.ROLE_PERMISSIONS.viewer; return perms[p]===true; };
+var _origRender = OOES_AUTH.renderUserInfo;
