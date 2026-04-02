@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>OfficeFlow - Reports</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/dashboard/js/ooes-auth.js"></script>
+<style>.gradient-bg{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);}.card{background:white;border-radius:12px;padding:24px;box-shadow:0 1px 3px rgba(0,0,0,0.1);margin-bottom:24px;}</style>
+</head>
+<body class="bg-gray-50">
+<header class="gradient-bg text-white py-6 px-8 flex items-center justify-between"><div class="flex items-center space-x-4"><a href="index.html" class="text-white"><i class="fas fa-arrow-left mr-2"></i>Dashboard</a><h1 class="text-2xl font-bold ml-4"><i class="fas fa-chart-bar mr-2"></i>Reports</h1></div><button onclick="loadReports()" class="bg-white text-indigo-600 px-4 py-2 rounded-lg font-semibold">Refresh</button></header>
+<main class="max-w-7xl mx-auto px-6 py-8">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+<div class="card text-center"><p class="text-gray-500 text-sm mb-1">Total Revenue</p><p class="text-3xl font-bold text-green-600" id="r-revenue">--</p></div>
+<div class="card text-center"><p class="text-gray-500 text-sm mb-1">Total Expenses</p><p class="text-3xl font-bold text-red-600" id="r-expenses">--</p></div>
+<div class="card text-center"><p class="text-gray-500 text-sm mb-1">Net Profit</p><p class="text-3xl font-bold text-indigo-600" id="r-profit">--</p></div>
+<div class="card text-center"><p class="text-gray-500 text-sm mb-1">Total Employees</p><p class="text-3xl font-bold text-purple-600" id="r-employees">--</p></div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6"><div class="card"><h3 class="text-lg font-semibold text-gray-800 mb-4">Revenue vs Expenses</h3><canvas id="revenueChart"></canvas></div><div class="card"><h3 class="text-lg font-semibold text-gray-800 mb-4">Task Status</h3><canvas id="taskChart"></canvas></div></div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="card"><h3 class="text-lg font-semibold text-gray-800 mb-4">Employees by Department</h3><canvas id="deptChart"></canvas></div><div class="card"><h3 class="text-lg font-semibold text-gray-800 mb-4">Transaction Trend</h3><canvas id="txnChart"></canvas></div></div>
+</main>
+<script src="/dashboard/js/config.js"></script>
+<script src="/dashboard/js/db.js"></script>
+<script src="/dashboard/js/ooes-core.js"></script>
+<script>
+var ch={};
+async function loadReports(){
+try{
+var t=await getTransactions();
+var inc=t.filter(function(x){return parseFloat(x.amount)>0;}).reduce(function(s,x){return s+parseFloat(x.amount);},0);
+var exp=t.filter(function(x){return parseFloat(x.amount)<0;}).reduce(function(s,x){return s+Math.abs(parseFloat(x.amount));},0);
+document.getElementById("r-revenue").textContent="KES "+inc.toLocaleString();
+document.getElementById("r-expenses").textContent="KES "+exp.toLocaleString();
+document.getElementById("r-profit").textContent="KES "+(inc-exp).toLocaleString();
+var lbs=t.slice(0,8).map(function(x){return x.description||"Txn";});
+var ams=t.slice(0,8).map(function(x){return Math.abs(parseFloat(x.amount)||0);});
+var cls=t.slice(0,8).map(function(x){return parseFloat(x.amount)>=0?"rgba(16,185,129,0.7)":"rgba(239,68,68,0.7)";});
+if(ch.r)ch.r.destroy();
+ch.r=new Chart(document.getElementById("revenueChart"),{type:"bar",data:{labels:lbs,datasets:[{label:"KES",data:ams,backgroundColor:cls,borderRadius:6}]},options:{responsive:true,plugins:{legend:{display:false}}}});
+var tl=t.slice(0,6).map(function(x){return x.date||"Date";});
+var td=t.slice(0,6).map(function(x){return parseFloat(x.amount)||0;});
+if(ch.tx)ch.tx.destroy();
+ch.tx=new Chart(document.getElementById("txnChart"),{type:"line",data:{labels:tl,datasets:[{label:"KES",data:td,borderColor:"#667eea",backgroundColor:"rgba(102,126,234,0.1)",fill:true,tension:0.4}]},options:{responsive:true}});
+}catch(e){}
+try{
+var k=await getTasks();
+var p=k.filter(function(x){return x.status=="pending";}).length;
+var i=k.filter(function(x){return x.status=="in-progress";}).length;
+var d=k.filter(function(x){return x.status=="completed";}).length;
+if(ch.k)ch.k.destroy();
+ch.k=new Chart(document.getElementById("taskChart"),{type:"doughnut",data:{labels:["Pending","In Progress","Completed"],datasets:[{data:[p,i,d],backgroundColor:["#F59E0B","#3B82F6","#10B981"],borderWidth:2}]},options:{responsive:true}});
+}catch(e){}
+try{
+var e=await getEmployees();
+document.getElementById("r-employees").textContent=e.length;
+var depts={};
+e.forEach(function(x){depts[x.department||"Other"]=(depts[x.department||"Other"]||0)+1;});
+if(ch.d)ch.d.destroy();
+ch.d=new Chart(document.getElementById("deptChart"),{type:"bar",data:{labels:Object.keys(depts),datasets:[{label:"Staff",data:Object.values(depts),backgroundColor:"rgba(99,102,241,0.7)",borderRadius:6}]},options:{responsive:true,plugins:{legend:{display:false}}}});
+}catch(e){}
+}
+document.addEventListener("DOMContentLoaded",loadReports);
+</script>
+</body>
+</html>
