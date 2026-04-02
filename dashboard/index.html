@@ -7,54 +7,59 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<style>
-.gradient-bg{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);}
-.stat-card{transition:all 0.3s ease;}
-.stat-card:hover{transform:translateY(-4px);box-shadow:0 10px 25px rgba(0,0,0,0.1);}
-.sidebar-link{display:flex;align-items:center;padding:8px 12px;border-radius:8px;font-size:14px;transition:all 0.2s;}
-.sidebar-link:hover{background:rgba(255,255,255,0.15);}
-</style>
+<link rel="stylesheet" href="css/mobile.css">
+<style>.gradient-bg{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);}.stat-card{transition:all 0.3s ease;}.stat-card:hover{transform:translateY(-4px);box-shadow:0 10px 25px rgba(0,0,0,0.1);}.sidebar-link{display:flex;align-items:center;padding:8px 12px;border-radius:8px;font-size:14px;transition:all 0.2s;color:rgba(199,210,254,1);text-decoration:none;}.sidebar-link:hover,.sidebar-link.active{background:rgba(255,255,255,0.15);color:white;}.section-label{font-size:10px;color:rgba(165,180,252,0.7);padding:4px 12px;text-transform:uppercase;letter-spacing:0.05em;margin-top:8px;}</style>
 </head>
 <body class="bg-gray-100 min-h-screen">
-
-<!-- Mobile Top Bar -->
-<div class="mobile-topbar">
-  <button onclick="document.getElementById('sidebar').classList.toggle('open');document.getElementById('overlay').classList.toggle('hidden')" class="text-white"><i class="fas fa-bars text-xl"></i></button>
-  <span class="font-bold text-lg">OfficeFlow</span>
-  <span data-user-initials class="w-8 h-8 bg-white bg-opacity-30 rounded-full flex items-center justify-center font-bold text-sm">OF</span>
-</div>
-<!-- Sidebar Overlay -->
-<div id="overlay" class="sidebar-overlay hidden" onclick="document.getElementById('sidebar').classList.remove('open');this.classList.add('hidden')"></div>
-
-<div id="sidebar" class="fixed inset-y-0 left-0 w-64 gradient-bg text-white z-50 flex flex-col" style="transition:transform 0.3s ease">
-<div class="p-6 border-b border-white border-opacity-20">
-<h1 class="text-2xl font-bold">OfficeFlow</h1>
-<p class="text-xs text-indigo-200 mt-1">Office Operations</p>
-</div>
-<nav class="flex-1 p-4 space-y-1">
-<a href="index.html" class="sidebar-link bg-white bg-opacity-20 text-white">Dashboard</a>
-<a href="hr-system.html" class="sidebar-link text-indigo-100 hover:text-white">HR</a>
-<a href="financial-management.html" class="sidebar-link text-indigo-100 hover:text-white">Finance</a>
-<a href="tasks-management.html" class="sidebar-link text-indigo-100 hover:text-white">Tasks</a>
-<a href="document-management.html" class="sidebar-link text-indigo-100 hover:text-white">Documents</a>
-<a href="email-system.html" class="sidebar-link text-indigo-100 hover:text-white">Email</a>
-<a href="calendar-system.html" class="sidebar-link text-indigo-100 hover:text-white">Calendar</a>
-<a href="packages.html" class="sidebar-link text-indigo-100 hover:text-white">Packages</a>
-<a href="security-center.html" class="sidebar-link text-indigo-100 hover:text-white">Security</a>
-<a href="pricing.html" class="sidebar-link text-indigo-100 hover:text-white">Pricing</a>
-<a href="contact.html" class="sidebar-link text-indigo-100 hover:text-white">Contact</a>
+<div id="sidebar" class="fixed inset-y-0 left-0 w-64 gradient-bg text-white z-50 flex flex-col overflow-y-auto" style="transition:transform 0.3s ease">
+<div class="p-6 border-b border-white border-opacity-20"><h1 class="text-2xl font-bold">OfficeFlow</h1><p class="text-xs text-indigo-200 mt-1">Office Operations</p></div>
+<nav class="flex-1 p-3 space-y-1">
+<a href="index.html" class="sidebar-link active bg-white bg-opacity-20"><i class="fas fa-home w-5 mr-3"></i>Dashboard</a>
+<a href="hr-system.html" class="sidebar-link"><i class="fas fa-users w-5 mr-3"></i>HR Management</a>
+<a href="financial-management.html" class="sidebar-link"><i class="fas fa-chart-line w-5 mr-3"></i>Finance</a>
+<a href="tasks-management.html" class="sidebar-link"><i class="fas fa-tasks w-5 mr-3"></i>Tasks</a>
+<a href="document-management.html" class="sidebar-link"><i class="fas fa-file-alt w-5 mr-3"></i>Documents</a>
+<a href="email-system.html" class="sidebar-link"><i class="fas fa-envelope w-5 mr-3"></i>Email</a>
+<a href="calendar-system.html" class="sidebar-link"><i class="fas fa-calendar w-5 mr-3"></i>Calendar</a>
+<a href="ai-features.html" class="sidebar-link"><i class="fas fa-robot w-5 mr-3"></i>AI Features</a>
+<a href="reports.html" class="sidebar-link"><i class="fas fa-chart-bar w-5 mr-3"></i>Reports</a>
+<a href="packages.html" class="sidebar-link"><i class="fas fa-box w-5 mr-3"></i>Packages</a>
+<a href="security-center.html" class="sidebar-link"><i class="fas fa-shield-alt w-5 mr-3"></i>Security</a>
+<a href="pricing.html" class="sidebar-link"><i class="fas fa-tags w-5 mr-3"></i>Pricing</a>
+<a href="contact.html" class="sidebar-link"><i class="fas fa-phone w-5 mr-3"></i>Contact</a>
+<div class="border-t border-white border-opacity-20 my-2"></div>
+<p class="section-label">Departments</p>
+<a href="communication-department.html" class="sidebar-link"><i class="fas fa-comments w-5 mr-3"></i>Communication</a>
+<a href="operations-department.html" class="sidebar-link"><i class="fas fa-cog w-5 mr-3"></i>Operations</a>
+<a href="sales-department.html" class="sidebar-link"><i class="fas fa-handshake w-5 mr-3"></i>Sales</a>
+<a href="accounting-tools.html" class="sidebar-link"><i class="fas fa-calculator w-5 mr-3"></i>Accounting</a>
+<a href="automation.html" class="sidebar-link"><i class="fas fa-robot w-5 mr-3"></i>Automation</a>
+<div class="border-t border-white border-opacity-20 my-2"></div>
+<p class="section-label">Tools</p>
+<a href="data-management.html" class="sidebar-link"><i class="fas fa-database w-5 mr-3"></i>Data Management</a>
+<a href="excel-system.html" class="sidebar-link"><i class="fas fa-file-excel w-5 mr-3"></i>Excel System</a>
+<a href="google-drive.html" class="sidebar-link"><i class="fas fa-cloud w-5 mr-3"></i>Google Drive</a>
+<a href="gmail-system.html" class="sidebar-link"><i class="fas fa-envelope-open w-5 mr-3"></i>Gmail</a>
+<a href="trello-management.html" class="sidebar-link"><i class="fas fa-trello w-5 mr-3"></i>Trello</a>
+<a href="it-compliance.html" class="sidebar-link"><i class="fas fa-shield-alt w-5 mr-3"></i>IT Compliance</a>
+<a href="systems.html" class="sidebar-link"><i class="fas fa-server w-5 mr-3"></i>Systems</a>
+<a href="tools.html" class="sidebar-link"><i class="fas fa-tools w-5 mr-3"></i>Tools</a>
 </nav>
 <div class="p-4 border-t border-white border-opacity-20">
 <p class="text-sm font-medium" data-user-name>User</p>
 <p class="text-xs text-indigo-200" data-user-email></p>
-<button onclick="OOES_AUTH.logout()" class="mt-2 text-xs text-red-200 hover:text-white">Logout</button>
+<p class="text-xs text-indigo-300" data-user-role></p>
+<button onclick="OOES_AUTH.logout()" class="mt-2 text-xs text-red-200 hover:text-white"><i class="fas fa-sign-out-alt mr-1"></i>Logout</button>
 </div>
 </div>
 <div class="ml-64 flex flex-col min-h-screen">
 <header class="bg-white shadow-sm px-6 py-4 flex items-center justify-between sticky top-0 z-40">
 <div><h2 class="text-xl font-semibold text-gray-800">Good morning, <span data-user-name>there</span></h2>
 <p class="text-sm text-gray-500" id="current-date"></p></div>
-<div class="flex items-center gap-3"><div class="relative"><input type="text" id="globalSearch" placeholder="Search..." onkeyup="globalSearchFn()" class="pl-8 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" style="width:200px"><i class="fas fa-search absolute left-2.5 top-2.5 text-gray-400 text-xs"></i></div><button onclick="loadDashboard()" class="text-gray-500 hover:text-indigo-600 text-sm">Refresh</button></div>
+<div class="flex items-center gap-3">
+<div class="relative"><input type="text" id="globalSearch" placeholder="Search..." onkeydown="if(event.key==='Enter')globalSearchFn()" class="pl-8 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none" style="width:200px"><i class="fas fa-search absolute left-2.5 top-2.5 text-gray-400 text-xs"></i></div>
+<button onclick="loadDashboard()" class="text-gray-500 hover:text-indigo-600 text-sm"><i class="fas fa-sync-alt"></i></button>
+</div>
 </header>
 <main class="p-6 flex-1">
 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
@@ -67,12 +72,12 @@
 <div class="bg-white rounded-xl shadow-sm p-6"><div class="flex items-center justify-between mb-4"><h3 class="text-lg font-semibold text-gray-800">Upcoming Tasks</h3><a href="tasks-management.html" class="text-sm text-indigo-600">View all</a></div><div id="tasks-list"><p class="text-center text-gray-400 py-8">Loading...</p></div></div>
 <div class="bg-white rounded-xl shadow-sm p-6"><div class="flex items-center justify-between mb-4"><h3 class="text-lg font-semibold text-gray-800">Recent Transactions</h3><a href="financial-management.html" class="text-sm text-indigo-600">View all</a></div><div id="transactions-list"><p class="text-center text-gray-400 py-8">Loading...</p></div></div>
 </div>
-<div class="bg-white rounded-xl shadow-sm p-6"><h3 class="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h3>
-<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-<a href="hr-system.html" class="flex flex-col items-center p-4 bg-indigo-50 rounded-xl hover:bg-indigo-100 transition"><p class="text-sm text-gray-700 mt-2">Add Employee</p></a>
-<a href="tasks-management.html" class="flex flex-col items-center p-4 bg-yellow-50 rounded-xl hover:bg-yellow-100 transition"><p class="text-sm text-gray-700 mt-2">New Task</p></a>
-<a href="document-management.html" class="flex flex-col items-center p-4 bg-purple-50 rounded-xl hover:bg-purple-100 transition"><p class="text-sm text-gray-700 mt-2">Upload Doc</p></a>
-<a href="financial-management.html" class="flex flex-col items-center p-4 bg-green-50 rounded-xl hover:bg-green-100 transition"><p class="text-sm text-gray-700 mt-2">New Invoice</p></a>
+<div class="bg-white rounded-xl shadow-sm p-6"><h3 class="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h3><div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+<a href="hr-system.html" class="flex flex-col items-center p-4 bg-indigo-50 rounded-xl hover:bg-indigo-100 transition"><i class="fas fa-user-plus text-2xl text-indigo-600 mb-2"></i><p class="text-sm text-gray-700">Add Employee</p></a>
+<a href="tasks-management.html" class="flex flex-col items-center p-4 bg-yellow-50 rounded-xl hover:bg-yellow-100 transition"><i class="fas fa-plus-circle text-2xl text-yellow-600 mb-2"></i><p class="text-sm text-gray-700">New Task</p></a>
+<a href="document-management.html" class="flex flex-col items-center p-4 bg-purple-50 rounded-xl hover:bg-purple-100 transition"><i class="fas fa-upload text-2xl text-purple-600 mb-2"></i><p class="text-sm text-gray-700">Upload Doc</p></a>
+<a href="financial-management.html" class="flex flex-col items-center p-4 bg-green-50 rounded-xl hover:bg-green-100 transition"><i class="fas fa-file-invoice-dollar text-2xl text-green-600 mb-2"></i><p class="text-sm text-gray-700">New Invoice</p></a>
+<a href="reports.html" class="flex flex-col items-center p-4 bg-blue-50 rounded-xl hover:bg-blue-100 transition"><i class="fas fa-chart-bar text-2xl text-blue-600 mb-2"></i><p class="text-sm text-gray-700">View Reports</p></a>
 </div></div>
 </main></div>
 <script src="/dashboard/js/config.js"></script>
@@ -80,51 +85,15 @@
 <script src="/dashboard/js/ooes-auth.js"></script>
 <script src="/dashboard/js/ooes-core.js"></script>
 <script>
-document.getElementById("current-date").textContent = new Date().toLocaleDateString("en-KE",{weekday:"long",year:"numeric",month:"long",day:"numeric"});
+document.getElementById("current-date").textContent=new Date().toLocaleDateString("en-KE",{weekday:"long",year:"numeric",month:"long",day:"numeric"});
 async function loadDashboard(){
-  try{var e=await getEmployees();document.getElementById("stat-employees").textContent=e.length;document.getElementById("stat-employees-sub").textContent="Active staff";}catch(e){document.getElementById("stat-employees").textContent="0";}
-  try{var t=await getTransactions();document.getElementById("stat-transactions").textContent=t.length;var tot=t.reduce(function(s,x){return s+(parseFloat(x.amount)||0);},0);document.getElementById("stat-transactions-sub").textContent="KES "+tot.toLocaleString();document.getElementById("transactions-list").innerHTML=t.slice(0,5).map(function(x){var a=parseFloat(x.amount)||0;return "<div class='py-3 border-b border-gray-100 flex justify-between'><span class='text-sm text-gray-700'>"+(x.description||"Transaction")+"</span><span class='text-sm font-semibold "+(a>=0?"text-green-600":"text-red-600")+"'>"+(a>=0?"+KES ":"-KES ")+Math.abs(a).toLocaleString()+"</span></div>";}).join("");}catch(e){document.getElementById("stat-transactions").textContent="0";}
-  try{var k=await getTasks();var p=k.filter(function(x){return x.status!="done"&&x.status!="completed";});document.getElementById("stat-tasks").textContent=p.length;document.getElementById("stat-tasks-sub").textContent=k.length+" total";document.getElementById("tasks-list").innerHTML=k.slice(0,5).map(function(x){var d=x.status=="done"||x.status=="completed";return "<div class='py-3 border-b border-gray-100 flex justify-between items-center'><span class='text-sm "+(d?"line-through text-gray-400":"text-gray-700")+"' >"+(x.title||x.name||"Task")+"</span><span class='text-xs px-2 py-1 bg-gray-100 rounded-full' >"+(x.priority||"normal")+"</span></div>";}).join("");}catch(e){document.getElementById("stat-tasks").textContent="0";}
-  try{var d=await getDocuments();document.getElementById("stat-documents").textContent=d.length;document.getElementById("stat-docs-sub").textContent="Stored files";}catch(e){document.getElementById("stat-documents").textContent="0";}
+try{var e=await getEmployees();document.getElementById("stat-employees").textContent=e.length;document.getElementById("stat-employees-sub").textContent="Active staff";}catch(e){document.getElementById("stat-employees").textContent="0";}
+try{var t=await getTransactions();document.getElementById("stat-transactions").textContent=t.length;var tot=t.reduce(function(s,x){return s+(parseFloat(x.amount)||0);},0);document.getElementById("stat-transactions-sub").textContent="KES "+tot.toLocaleString();document.getElementById("transactions-list").innerHTML=t.slice(0,5).map(function(x){var a=parseFloat(x.amount)||0;return "<div class='py-3 border-b border-gray-100 flex justify-between'><span class='text-sm text-gray-700'>"+(x.description||"Transaction")+"</span><span class='text-sm font-semibold "+(a>=0?"text-green-600":"text-red-600")+"'>"+(a>=0?"+KES ":"-KES ")+Math.abs(a).toLocaleString()+"</span></div>";}).join("");}catch(e){document.getElementById("stat-transactions").textContent="0";}
+try{var k=await getTasks();var p=k.filter(function(x){return x.status!="done"&&x.status!="completed";});document.getElementById("stat-tasks").textContent=p.length;document.getElementById("stat-tasks-sub").textContent=k.length+" total";document.getElementById("tasks-list").innerHTML=k.slice(0,5).map(function(x){var d=x.status=="done"||x.status=="completed";return "<div class='py-3 border-b border-gray-100 flex justify-between items-center'><span class='text-sm "+(d?"line-through text-gray-400":"text-gray-700")+"'>"+(x.title||"Task")+"</span><span class='text-xs px-2 py-1 bg-gray-100 rounded-full'>"+(x.priority||"normal")+"</span></div>";}).join("");}catch(e){document.getElementById("stat-tasks").textContent="0";}
+try{var d=await getDocuments();document.getElementById("stat-documents").textContent=d.length;document.getElementById("stat-docs-sub").textContent="Stored files";}catch(e){document.getElementById("stat-documents").textContent="0";}
 }
 document.addEventListener("DOMContentLoaded",loadDashboard);
-
-function globalSearchFn() {
-    var q = document.getElementById('globalSearch').value.toLowerCase().trim();
-    var results = [];
-    var pages = [
-        {name:'HR Management', url:'hr-system.html', desc:'Employees, payroll, leave management'},
-        {name:'Finance', url:'financial-management.html', desc:'Invoices, transactions, reports'},
-        {name:'Tasks', url:'tasks-management.html', desc:'Task management and tracking'},
-        {name:'Documents', url:'document-management.html', desc:'Document storage and management'},
-        {name:'Email System', url:'email-system.html', desc:'Email and communication'},
-        {name:'Calendar', url:'calendar-system.html', desc:'Scheduling and events'},
-        {name:'AI Features', url:'ai-features.html', desc:'AI-powered tools'},
-        {name:'Security', url:'security-center.html', desc:'Security and compliance'},
-        {name:'Pricing', url:'pricing.html', desc:'Plans and pricing'},
-        {name:'Contact', url:'contact.html', desc:'Get in touch'}
-    ];
-    var matches = pages.filter(function(p){ return p.name.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q); });
-    if (matches.length > 0) {
-        window.location.href = matches[0].url;
-    } else {
-        showNotification('Search', 'No matching page found for: ' + q, 'info');
-    }
-}
-document.getElementById('globalSearch').addEventListener('keydown', function(e){
-    if (e.key === 'Enter') globalSearchFn();
-});
-
+function globalSearchFn(){var q=document.getElementById("globalSearch").value.toLowerCase().trim();if(!q)return;var pages=[{name:"HR",url:"hr-system.html"},{name:"Finance",url:"financial-management.html"},{name:"Tasks",url:"tasks-management.html"},{name:"Documents",url:"document-management.html"},{name:"Email",url:"email-system.html"},{name:"Reports",url:"reports.html"},{name:"AI Features",url:"ai-features.html"},{name:"Security",url:"security-center.html"},{name:"Pricing",url:"pricing.html"},{name:"Contact",url:"contact.html"},{name:"Calendar",url:"calendar-system.html"},{name:"Accounting",url:"accounting-tools.html"},{name:"Sales",url:"sales-department.html"},{name:"Operations",url:"operations-department.html"}];var m=pages.filter(function(p){return p.name.toLowerCase().includes(q);});if(m.length>0){window.location.href=m[0].url;}else{showNotification("Search","No page found for: "+q,"info");}}
 </script>
-
-<!-- Mobile Bottom Nav -->
-<nav class="mobile-nav">
-  <a href="index.html" class="active"><i class="fas fa-home"></i>Home</a>
-  <a href="hr-system.html"><i class="fas fa-users"></i>HR</a>
-  <a href="tasks-management.html"><i class="fas fa-tasks"></i>Tasks</a>
-  <a href="financial-management.html"><i class="fas fa-chart-line"></i>Finance</a>
-  <a href="packages.html"><i class="fas fa-box"></i>More</a>
-</nav>
-
 </body>
 </html>
