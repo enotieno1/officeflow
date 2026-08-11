@@ -1,27 +1,95 @@
+// OOES_AUTH — real Supabase Auth wrapper.
+// Public API is unchanged on purpose (getSession/getRole/can/requireAuth/
+// renderUserInfo/logout) so none of the other dashboard pages need editing.
+// requireAuth()/login()/register() are now async internally, but the result
+// is cached in memory so every other page can keep reading it synchronously.
 var OOES_AUTH = {
-  SESSION_KEY: "ooesSession",
-  SESSION_DURATION: 28800000,
-  DEMO_ACCOUNTS: [
-    {email:"admin@ooes.co.ke",password:"Admin@2024",name:"Admin User",role:"admin"},
-    {email:"manager@ooes.co.ke",password:"Manager@2024",name:"Office Manager",role:"manager"},
-    {email:"demo@ooes.co.ke",password:"Demo@2024",name:"Demo User",role:"viewer"}
-  ],
-  createSession:function(u){var s={email:u.email,name:u.name,role:u.role||"viewer",expires:Date.now()+this.SESSION_DURATION};localStorage.setItem(this.SESSION_KEY,JSON.stringify(s));return s;},
-  getSession:function(){try{var r=localStorage.getItem(this.SESSION_KEY);if(!r)return null;var s=JSON.parse(r);if(Date.now()>s.expires){this.logout(false);return null;}return s;}catch(e){return null;}},
-  isLoggedIn:function(){return this.getSession()!==null;},
-  login:function(email,password){var a=this.DEMO_ACCOUNTS.find(function(a){return a.email.toLowerCase()===email.toLowerCase()&&a.password===password;});if(a)return this.createSession(a);var reg=JSON.parse(localStorage.getItem("ooesRegistered")||"[]");var u=reg.find(function(u){return u.email.toLowerCase()===email.toLowerCase()&&u.password===password;});if(u)return this.createSession(u);return null;},
-  register:function(fn,ln,email,password){var reg=JSON.parse(localStorage.getItem("ooesRegistered")||"[]");if(reg.find(function(u){return u.email.toLowerCase()===email.toLowerCase();}))return{error:"Email already exists."};var u={email:email,name:fn+" "+ln,password:password,role:"viewer"};reg.push(u);localStorage.setItem("ooesRegistered",JSON.stringify(reg));return this.createSession(u);},
-  logout:function(redirect){localStorage.removeItem(this.SESSION_KEY);if(redirect!==false)window.location.href="/dashboard/auth.html";},
-  requireAuth:function(){if(!this.isLoggedIn()){window.location.replace("/dashboard/auth.html");return false;}return true;},
-  renderUserInfo:function(){var s=this.getSession();if(!s)return;document.querySelectorAll("[data-user-name]").forEach(function(el){el.textContent=s.name;});document.querySelectorAll("[data-user-email]").forEach(function(el){el.textContent=s.email;});}
-};
-(function(){if(!window.location.pathname.includes("auth.html")){document.addEventListener("DOMContentLoaded",function(){if(OOES_AUTH.requireAuth())OOES_AUTH.renderUserInfo();});}})();
+  _session: null,   // cached in-memory: {id, email, name, role}
+  _readyResolve: null,
+  ready: null,      // await OOES_AUTH.ready if a page needs the session before it runs
 
-OOES_AUTH.ROLE_PERMISSIONS = {
-  admin:   {canEdit:true, canDelete:true, canViewFinance:true, canManageUsers:true},
-  manager: {canEdit:true, canDelete:false, canViewFinance:true, canManageUsers:false},
-  viewer:  {canEdit:false, canDelete:false, canViewFinance:false, canManageUsers:false}
+  ROLE_PERMISSIONS: {
+    admin:   {canEdit:true,  canDelete:true,  canViewFinance:true,  canManageUsers:true},
+    manager: {canEdit:true,  canDelete:false, canViewFinance:true,  canManageUsers:false},
+    viewer:  {canEdit:false, canDelete:false, canViewFinance:false, canManageUsers:false}
+  },
+
+  async _loadProfile(user) {
+    var name = (user.user_metadata && user.user_metadata.full_name) || user.email;
+    var role = 'admin';
+    try {
+      var res = await supabase.from('profiles').select('full_name, role').eq('id', user.id).single();
+      if (res.data) {
+        name = res.data.full_name || name;
+        role = res.data.role || role;
+      }
+    } catch (e) { /* profile row may not exist yet (trigger lag) — fall back to defaults */ }
+    this._session = { id: user.id, email: user.email, name: name, role: role };
+    return this._session;
+  },
+
+  async login(email, password) {
+    var { data, error } = await supabase.auth.signInWithPassword({ email: email, password: password });
+    if (error || !data.user) return { error: (error && error.message) || 'Invalid email or password.' };
+    return await this._loadProfile(data.user);
+  },
+
+  async register(fn, ln, email, password) {
+    var fullName = (fn + ' ' + ln).trim();
+    var { data, error } = await supabase.auth.signUp({
+      email: email,
+      password: password,
+      options: { data: { full_name: fullName } }
+    });
+    if (error) return { error: error.message };
+    if (!data.user) return { error: 'Check your email to confirm your account, then sign in.' };
+    // If email confirmation is off, Supabase returns a session immediately.
+    if (data.session) return await this._loadProfile(data.user);
+    return { pendingConfirmation: true, email: email };
+  },
+
+  async logout(redirect) {
+    await supabase.auth.signOut();
+    this._session = null;
+    if (redirect !== false) window.location.href = '/dashboard/auth.html';
+  },
+
+  getSession: function () { return this._session; },
+  isLoggedIn: function () { return this._session !== null; },
+  getRole: function () { return this._session ? this._session.role : 'viewer'; },
+  can: function (perm) {
+    var perms = this.ROLE_PERMISSIONS[this.getRole()] || this.ROLE_PERMISSIONS.viewer;
+    return perms[perm] === true;
+  },
+
+  async requireAuth() {
+    var { data } = await supabase.auth.getSession();
+    if (!data.session) {
+      window.location.replace('/dashboard/auth.html');
+      return false;
+    }
+    await this._loadProfile(data.session.user);
+    return true;
+  },
+
+  renderUserInfo: function () {
+    var s = this._session;
+    if (!s) return;
+    document.querySelectorAll('[data-user-name]').forEach(function (el) { el.textContent = s.name; });
+    document.querySelectorAll('[data-user-email]').forEach(function (el) { el.textContent = s.email; });
+  }
 };
-OOES_AUTH.getRole = function(){ var s=this.getSession(); return s ? s.role : 'viewer'; };
-OOES_AUTH.can = function(p){ var perms=this.ROLE_PERMISSIONS[this.getRole()]||this.ROLE_PERMISSIONS.viewer; return perms[p]===true; };
-var _origRender = OOES_AUTH.renderUserInfo;
+
+OOES_AUTH.ready = new Promise(function (resolve) { OOES_AUTH._readyResolve = resolve; });
+
+(function () {
+  if (!window.location.pathname.includes('auth.html')) {
+    document.addEventListener('DOMContentLoaded', async function () {
+      var ok = await OOES_AUTH.requireAuth();
+      if (ok) OOES_AUTH.renderUserInfo();
+      OOES_AUTH._readyResolve(ok);
+    });
+  } else {
+    OOES_AUTH._readyResolve(false);
+  }
+})();

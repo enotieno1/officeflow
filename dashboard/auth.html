@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OfficeFlow - Sign In</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="/dashboard/js/config.js"></script>
+    <script>var supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);</script>
     <script src="/dashboard/js/ooes-auth.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -463,24 +466,22 @@
         }
 
         // Handle Sign In
-        function handleSignIn(event) {
+        async function handleSignIn(event) {
             event.preventDefault();
             var email = document.getElementById('signInEmail').value;
             var password = document.getElementById('signInPassword').value;
             showNotification('Signing In', 'Please wait...', 'info');
-            setTimeout(function() {
-                var session = OOES_AUTH.login(email, password);
-                if (session) {
-                    showNotification('Welcome Back!', 'Signed in as ' + session.name, 'success');
-                    setTimeout(function() { window.location.href = '/dashboard/index.html'; }, 1000);
-                } else {
-                    showNotification('Login Failed', 'Invalid email or password. Try demo@ooes.co.ke / Demo@2024', 'error');
-                }
-            }, 800);
+            var result = await OOES_AUTH.login(email, password);
+            if (result && !result.error) {
+                showNotification('Welcome Back!', 'Signed in as ' + result.name, 'success');
+                setTimeout(function() { window.location.href = '/dashboard/index.html'; }, 800);
+            } else {
+                showNotification('Login Failed', (result && result.error) || 'Invalid email or password.', 'error');
+            }
         }
 
         // Handle Sign Up
-        function handleSignUp(event) {
+        async function handleSignUp(event) {
             event.preventDefault();
             var fn = document.getElementById('signUpFirstName').value;
             var ln = document.getElementById('signUpLastName').value;
@@ -489,10 +490,15 @@
             var cp = document.getElementById('signUpConfirmPassword').value;
             if (pw !== cp) { showNotification('Error', 'Passwords do not match.', 'error'); return; }
             if (pw.length < 8) { showNotification('Error', 'Password must be 8+ characters.', 'error'); return; }
-            var result = OOES_AUTH.register(fn, ln, email, pw);
+            showNotification('Creating Account', 'Please wait...', 'info');
+            var result = await OOES_AUTH.register(fn, ln, email, pw);
             if (result.error) { showNotification('Error', result.error, 'error'); return; }
+            if (result.pendingConfirmation) {
+                showNotification('Check Your Email', 'Confirm your account at ' + result.email + ', then sign in.', 'info');
+                return;
+            }
             showNotification('Account Created!', 'Welcome ' + result.name, 'success');
-            setTimeout(function() { window.location.href = '/dashboard/index.html'; }, 1000);
+            setTimeout(function() { window.location.href = '/dashboard/index.html'; }, 800);
         }
 
         // Social Sign In
