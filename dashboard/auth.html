@@ -10,10 +10,11 @@
     <script>var supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);</script>
     <script src="/dashboard/js/ooes-auth.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/executive-theme.css">
     <style>
         /* Custom animations and styles */
         .gradient-bg {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--of-navy);
         }
         
         .glass-effect {
@@ -28,26 +29,7 @@
             overflow: hidden;
         }
         
-        .auth-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-        }
-        
-        .auth-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-            transition: left 0.6s;
-            z-index: 1;
-        }
-        
-        .auth-card:hover::before {
-            left: 100%;
-        }
+        .auth-card { border-top: 2px solid var(--of-brass); }
         
         .input-group {
             position: relative;
@@ -56,7 +38,7 @@
         .input-group input:focus + label,
         .input-group input:not(:placeholder-shown) + label {
             transform: translateY(-25px) scale(0.85);
-            color: #667eea;
+            color: var(--of-brass);
         }
         
         .floating-label {
@@ -70,33 +52,12 @@
         }
         
         .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
+            background: var(--of-navy);
+            transition: background 0.2s ease;
         }
         
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
-        }
-        
-        .btn-primary::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-        
-        .btn-primary:hover::before {
-            width: 300px;
-            height: 300px;
+            background: var(--of-navy-light);
         }
         
         .social-btn {
@@ -142,17 +103,14 @@
         }
         
         .feature-icon:hover {
-            transform: scale(1.2) rotate(5deg);
-            color: #667eea;
+            color: var(--of-brass);
         }
     </style>
 <link rel="stylesheet" href="css/mobile.css"></head>
 <body class="min-h-screen gradient-bg flex items-center justify-center p-4">
     <!-- Background Elements -->
-    <div class="absolute inset-0 overflow-hidden">
-        <div class="absolute -top-40 -right-40 w-80 h-80 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
-        <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-indigo-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
-        <div class="absolute top-40 left-40 w-80 h-80 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute top-0 left-0 w-full h-px" style="background:linear-gradient(90deg, transparent, var(--of-brass), transparent)"></div>
     </div>
 
     <!-- Main Container -->
@@ -162,15 +120,15 @@
             <!-- Left Side - Features & Benefits -->
             <div class="text-white fade-in">
                 <div class="mb-8">
-                    <h1 class="text-4xl lg:text-5xl font-bold mb-4">
-                        <i class="fas fa-cogs mr-3"></i>
-                        OOES
+                    <h1 class="of-serif text-4xl lg:text-5xl font-semibold mb-2">
+                        OfficeFlow
                     </h1>
-                    <h2 class="text-2xl lg:text-3xl font-semibold mb-4">
-                        OfficeFlow - Smart Office Management
+                    <div style="height:1px;width:64px;background:var(--of-brass);margin-bottom:16px"></div>
+                    <h2 class="text-xl lg:text-2xl font-medium mb-4" style="color:var(--of-brass-light)">
+                        Africa's Office Operating System
                     </h2>
-                    <p class="text-lg opacity-90 mb-8">
-                        Transform your office operations with our comprehensive management platform. Save up to 50% of admin time while increasing productivity.
+                    <p class="text-base opacity-80 mb-8 max-w-md">
+                        HR, finance, tasks, and documents in a single system of record — built for African SMEs.
                     </p>
                 </div>
 
@@ -234,7 +192,7 @@
                             <p class="text-sm opacity-90">Office Manager, TechCorp</p>
                         </div>
                     </div>
-                    <p class="italic">"OOES transformed our office operations. We've saved countless hours and our team is more productive than ever!"</p>
+                    <p class="italic">"OfficeFlow transformed our office operations. We've saved countless hours and our team is more productive than ever!"</p>
                 </div>
             </div>
 
@@ -243,7 +201,7 @@
                 <!-- Sign In Form -->
                 <div id="signInForm" class="auth-card glass-effect rounded-2xl p-8 shadow-2xl">
                     <div class="text-center mb-8">
-                        <h2 class="text-3xl font-bold text-gray-800 mb-2">Welcome Back</h2>
+                        <h2 class="of-serif text-3xl font-semibold text-gray-800 mb-2">Welcome Back</h2>
                         <p class="text-gray-600">Sign in to your OfficeFlow account</p>
                     </div>
 
@@ -271,21 +229,21 @@
                     <form onsubmit="handleSignIn(event)">
                         <div class="space-y-6">
                             <div class="input-group">
-                                <input type="email" id="signInEmail" placeholder=" " required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none">
+                                <input type="email" id="signInEmail" placeholder=" " required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[color:var(--of-brass)] focus:border-transparent outline-none">
                                 <label for="signInEmail" class="floating-label">Email Address</label>
                             </div>
 
                             <div class="input-group">
-                                <input type="password" id="signInPassword" placeholder=" " required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none">
+                                <input type="password" id="signInPassword" placeholder=" " required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[color:var(--of-brass)] focus:border-transparent outline-none">
                                 <label for="signInPassword" class="floating-label">Password</label>
                             </div>
 
                             <div class="flex items-center justify-between">
                                 <label class="flex items-center">
-                                    <input type="checkbox" class="mr-2 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                                    <input type="checkbox" class="mr-2 rounded border-gray-300 text-[color:var(--of-brass)] focus:ring-[color:var(--of-brass)]">
                                     <span class="text-gray-700">Remember me</span>
                                 </label>
-                                <a href="#" class="text-indigo-600 hover:text-indigo-800 text-sm">Forgot password?</a>
+                                <a href="#" class="text-[color:var(--of-brass)] hover:text-[color:var(--of-navy)] text-sm">Forgot password?</a>
                             </div>
 
                             <button type="submit" class="btn-primary w-full text-white py-3 px-4 rounded-lg font-semibold">
@@ -297,7 +255,7 @@
                     <div class="mt-6 text-center">
                         <p class="text-gray-600">
                             Don't have an account? 
-                            <button onclick="toggleForm()" class="text-indigo-600 hover:text-indigo-800 font-semibold">Sign Up</button>
+                            <button onclick="toggleForm()" class="text-[color:var(--of-brass)] hover:text-[color:var(--of-navy)] font-semibold">Sign Up</button>
                         </p>
                     </div>
                 </div>
@@ -305,7 +263,7 @@
                 <!-- Sign Up Form -->
                 <div id="signUpForm" class="auth-card glass-effect rounded-2xl p-8 shadow-2xl hidden">
                     <div class="text-center mb-8">
-                        <h2 class="text-3xl font-bold text-gray-800 mb-2">Create Account</h2>
+                        <h2 class="of-serif text-3xl font-semibold text-gray-800 mb-2">Create Account</h2>
                         <p class="text-gray-600">Join OfficeFlow and transform your office operations</p>
                     </div>
 
@@ -334,39 +292,39 @@
                         <div class="space-y-6">
                             <div class="grid grid-cols-2 gap-4">
                                 <div class="input-group">
-                                    <input type="text" id="signUpFirstName" placeholder=" " required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none">
+                                    <input type="text" id="signUpFirstName" placeholder=" " required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[color:var(--of-brass)] focus:border-transparent outline-none">
                                     <label for="signUpFirstName" class="floating-label">First Name</label>
                                 </div>
                                 <div class="input-group">
-                                    <input type="text" id="signUpLastName" placeholder=" " required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none">
+                                    <input type="text" id="signUpLastName" placeholder=" " required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[color:var(--of-brass)] focus:border-transparent outline-none">
                                     <label for="signUpLastName" class="floating-label">Last Name</label>
                                 </div>
                             </div>
 
                             <div class="input-group">
-                                <input type="email" id="signUpEmail" placeholder=" " required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none">
+                                <input type="email" id="signUpEmail" placeholder=" " required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[color:var(--of-brass)] focus:border-transparent outline-none">
                                 <label for="signUpEmail" class="floating-label">Email Address</label>
                             </div>
 
                             <div class="input-group">
-                                <input type="tel" id="signUpPhone" placeholder=" " class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none">
+                                <input type="tel" id="signUpPhone" placeholder=" " class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[color:var(--of-brass)] focus:border-transparent outline-none">
                                 <label for="signUpPhone" class="floating-label">Phone Number (Optional)</label>
                             </div>
 
                             <div class="input-group">
-                                <input type="password" id="signUpPassword" placeholder=" " required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none">
+                                <input type="password" id="signUpPassword" placeholder=" " required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[color:var(--of-brass)] focus:border-transparent outline-none">
                                 <label for="signUpPassword" class="floating-label">Password</label>
                             </div>
 
                             <div class="input-group">
-                                <input type="password" id="signUpConfirmPassword" placeholder=" " required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none">
+                                <input type="password" id="signUpConfirmPassword" placeholder=" " required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[color:var(--of-brass)] focus:border-transparent outline-none">
                                 <label for="signUpConfirmPassword" class="floating-label">Confirm Password</label>
                             </div>
 
                             <div class="flex items-start">
-                                <input type="checkbox" id="agreeTerms" required class="mt-1 mr-2 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                                <input type="checkbox" id="agreeTerms" required class="mt-1 mr-2 rounded border-gray-300 text-[color:var(--of-brass)] focus:ring-[color:var(--of-brass)]">
                                 <label for="agreeTerms" class="text-gray-700 text-sm">
-                                    I agree to the <a href="#" class="text-indigo-600 hover:text-indigo-800">Terms of Service</a> and <a href="#" class="text-indigo-600 hover:text-indigo-800">Privacy Policy</a>
+                                    I agree to the <a href="#" class="text-[color:var(--of-brass)] hover:text-[color:var(--of-navy)]">Terms of Service</a> and <a href="#" class="text-[color:var(--of-brass)] hover:text-[color:var(--of-navy)]">Privacy Policy</a>
                                 </label>
                             </div>
 
@@ -379,7 +337,7 @@
                     <div class="mt-6 text-center">
                         <p class="text-gray-600">
                             Already have an account? 
-                            <button onclick="toggleForm()" class="text-indigo-600 hover:text-indigo-800 font-semibold">Sign In</button>
+                            <button onclick="toggleForm()" class="text-[color:var(--of-brass)] hover:text-[color:var(--of-navy)] font-semibold">Sign In</button>
                         </p>
                     </div>
                 </div>
@@ -387,8 +345,8 @@
                 <!-- Quick Account Benefits -->
                 <div class="mt-8 glass-effect rounded-xl p-6">
                     <h3 class="text-lg font-semibold text-gray-800 mb-4">
-                        <i class="fas fa-gift mr-2 text-indigo-600"></i>
-                        Why Choose OOES?
+                        <i class="fas fa-gift mr-2 text-[color:var(--of-brass)]"></i>
+                        Why Choose OfficeFlow?
                     </h3>
                     <div class="grid grid-cols-2 gap-4 text-sm">
                         <div class="flex items-center">

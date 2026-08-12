@@ -8,11 +8,11 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link rel="stylesheet" href="css/mobile.css">
-<style>.gradient-bg{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);}.stat-card{transition:all 0.3s ease;}.stat-card:hover{transform:translateY(-4px);box-shadow:0 10px 25px rgba(0,0,0,0.1);}.sidebar-link{display:flex;align-items:center;padding:8px 12px;border-radius:8px;font-size:14px;transition:all 0.2s;color:rgba(199,210,254,1);text-decoration:none;}.sidebar-link:hover,.sidebar-link.active{background:rgba(255,255,255,0.15);color:white;}.section-label{font-size:10px;color:rgba(165,180,252,0.7);padding:4px 12px;text-transform:uppercase;letter-spacing:0.05em;margin-top:8px;}</style>
+<link rel="stylesheet" href="css/executive-theme.css">
 </head>
 <body class="bg-gray-100 min-h-screen">
 <div id="sidebar" class="fixed inset-y-0 left-0 w-64 gradient-bg text-white z-50 flex flex-col overflow-y-auto" style="transition:transform 0.3s ease">
-<div class="p-6 border-b border-white border-opacity-20"><h1 class="text-2xl font-bold">OfficeFlow</h1><p class="text-xs text-indigo-200 mt-1">Office Operations</p></div>
+<div class="p-6 border-b border-white border-opacity-10"><h1 class="brand-mark">OfficeFlow</h1><p class="brand-sub mt-1">Office Operations</p><div class="brand-rule"></div></div>
 <nav class="flex-1 p-3 space-y-1">
 <a href="index.html" class="sidebar-link active bg-white bg-opacity-20"><i class="fas fa-home w-5 mr-3"></i>Dashboard</a>
 <a href="hr-system.html" class="sidebar-link"><i class="fas fa-users w-5 mr-3"></i>HR Management</a>
@@ -47,37 +47,38 @@
 </nav>
 <div class="p-4 border-t border-white border-opacity-20">
 <p class="text-sm font-medium" data-user-name>User</p>
-<p class="text-xs text-indigo-200" data-user-email></p>
-<p class="text-xs text-indigo-300" data-user-role></p>
-<button onclick="OOES_AUTH.logout()" class="mt-2 text-xs text-red-200 hover:text-white"><i class="fas fa-sign-out-alt mr-1"></i>Logout</button>
+<p class="text-xs text-[#C7CEDB]" data-user-email></p>
+<p class="text-xs text-[#8A93A3]" data-user-role></p>
+<button onclick="OOES_AUTH.logout()" class="mt-2 text-xs text-[#D9A6A6] hover:text-white"><i class="fas fa-sign-out-alt mr-1"></i>Logout</button>
 </div>
 </div>
 <div class="ml-64 flex flex-col min-h-screen">
-<header class="bg-white shadow-sm px-6 py-4 flex items-center justify-between sticky top-0 z-40">
-<div><h2 class="text-xl font-semibold text-gray-800">Good morning, <span data-user-name>there</span></h2>
-<p class="text-sm text-gray-500" id="current-date"></p></div>
+<header class="of-header px-6 py-4 flex items-center justify-between sticky top-0 z-40">
+<div><p class="of-eyebrow mb-1">Dashboard</p><h2 class="of-greeting text-xl"><span data-user-name>there</span></h2>
+<p class="text-sm of-mono text-gray-400 mt-1" id="current-date"></p></div>
 <div class="flex items-center gap-3">
-<div class="relative"><input type="text" id="globalSearch" placeholder="Search..." onkeydown="if(event.key==='Enter')globalSearchFn()" class="pl-8 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none" style="width:200px"><i class="fas fa-search absolute left-2.5 top-2.5 text-gray-400 text-xs"></i></div>
-<button onclick="loadDashboard()" class="text-gray-500 hover:text-indigo-600 text-sm"><i class="fas fa-sync-alt"></i></button>
+<div class="relative"><input type="text" id="globalSearch" placeholder="Search..." onkeydown="if(event.key==='Enter')globalSearchFn()" class="pl-8 pr-4 py-2 border rounded text-sm focus:outline-none" style="width:200px;border-color:var(--of-border)"><i class="fas fa-search absolute left-2.5 top-2.5 text-gray-400 text-xs"></i></div>
+<button onclick="loadDashboard()" class="text-gray-400 hover:text-[var(--of-brass)] text-sm"><i class="fas fa-sync-alt"></i></button>
 </div>
 </header>
 <main class="p-6 flex-1">
 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
-<div class="stat-card bg-white rounded-xl p-6 shadow-sm border-l-4 border-indigo-500"><p class="text-sm text-gray-500">Employees</p><p class="text-3xl font-bold text-gray-800 mt-1" id="stat-employees">--</p><p class="text-xs text-gray-400 mt-2" id="stat-employees-sub">Loading...</p></div>
-<div class="stat-card bg-white rounded-xl p-6 shadow-sm border-l-4 border-green-500"><p class="text-sm text-gray-500">Transactions</p><p class="text-3xl font-bold text-gray-800 mt-1" id="stat-transactions">--</p><p class="text-xs text-gray-400 mt-2" id="stat-transactions-sub">Loading...</p></div>
-<div class="stat-card bg-white rounded-xl p-6 shadow-sm border-l-4 border-yellow-500"><p class="text-sm text-gray-500">Pending Tasks</p><p class="text-3xl font-bold text-gray-800 mt-1" id="stat-tasks">--</p><p class="text-xs text-gray-400 mt-2" id="stat-tasks-sub">Loading...</p></div>
-<div class="stat-card bg-white rounded-xl p-6 shadow-sm border-l-4 border-purple-500"><p class="text-sm text-gray-500">Documents</p><p class="text-3xl font-bold text-gray-800 mt-1" id="stat-documents">--</p><p class="text-xs text-gray-400 mt-2" id="stat-docs-sub">Loading...</p></div>
+<div class="stat-card of-rule-top p-6">
+<p class="of-stat-label">Employees</p><p class="of-stat-value text-3xl mt-2" id="stat-employees">--</p><p class="text-xs text-gray-400 mt-2" id="stat-employees-sub">Loading...</p></div>
+<div class="stat-card of-rule-top p-6"><p class="of-stat-label">Transactions</p><p class="of-stat-value text-3xl mt-2" id="stat-transactions">--</p><p class="text-xs text-gray-400 mt-2" id="stat-transactions-sub">Loading...</p></div>
+<div class="stat-card of-rule-top p-6"><p class="of-stat-label">Pending Tasks</p><p class="of-stat-value text-3xl mt-2" id="stat-tasks">--</p><p class="text-xs text-gray-400 mt-2" id="stat-tasks-sub">Loading...</p></div>
+<div class="stat-card of-rule-top p-6"><p class="of-stat-label">Documents</p><p class="of-stat-value text-3xl mt-2" id="stat-documents">--</p><p class="text-xs text-gray-400 mt-2" id="stat-docs-sub">Loading...</p></div>
 </div>
 <div class="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-8">
-<div class="bg-white rounded-xl shadow-sm p-6"><div class="flex items-center justify-between mb-4"><h3 class="text-lg font-semibold text-gray-800">Upcoming Tasks</h3><a href="tasks-management.html" class="text-sm text-indigo-600">View all</a></div><div id="tasks-list"><p class="text-center text-gray-400 py-8">Loading...</p></div></div>
-<div class="bg-white rounded-xl shadow-sm p-6"><div class="flex items-center justify-between mb-4"><h3 class="text-lg font-semibold text-gray-800">Recent Transactions</h3><a href="financial-management.html" class="text-sm text-indigo-600">View all</a></div><div id="transactions-list"><p class="text-center text-gray-400 py-8">Loading...</p></div></div>
+<div class="of-card p-6"><div class="flex items-center justify-between mb-4"><h3 class="of-serif text-lg font-semibold">Upcoming Tasks</h3><a href="tasks-management.html" class="text-sm" style="color:var(--of-brass)">View all →</a></div><div id="tasks-list"><p class="text-center text-gray-400 py-8">Loading...</p></div></div>
+<div class="of-card p-6"><div class="flex items-center justify-between mb-4"><h3 class="of-serif text-lg font-semibold">Recent Transactions</h3><a href="financial-management.html" class="text-sm" style="color:var(--of-brass)">View all →</a></div><div id="transactions-list"><p class="text-center text-gray-400 py-8">Loading...</p></div></div>
 </div>
-<div class="bg-white rounded-xl shadow-sm p-6"><h3 class="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h3><div class="grid grid-cols-2 md:grid-cols-5 gap-4">
-<a href="hr-system.html" class="flex flex-col items-center p-4 bg-indigo-50 rounded-xl hover:bg-indigo-100 transition"><i class="fas fa-user-plus text-2xl text-indigo-600 mb-2"></i><p class="text-sm text-gray-700">Add Employee</p></a>
-<a href="tasks-management.html" class="flex flex-col items-center p-4 bg-yellow-50 rounded-xl hover:bg-yellow-100 transition"><i class="fas fa-plus-circle text-2xl text-yellow-600 mb-2"></i><p class="text-sm text-gray-700">New Task</p></a>
-<a href="document-management.html" class="flex flex-col items-center p-4 bg-purple-50 rounded-xl hover:bg-purple-100 transition"><i class="fas fa-upload text-2xl text-purple-600 mb-2"></i><p class="text-sm text-gray-700">Upload Doc</p></a>
-<a href="financial-management.html" class="flex flex-col items-center p-4 bg-green-50 rounded-xl hover:bg-green-100 transition"><i class="fas fa-file-invoice-dollar text-2xl text-green-600 mb-2"></i><p class="text-sm text-gray-700">New Invoice</p></a>
-<a href="reports.html" class="flex flex-col items-center p-4 bg-blue-50 rounded-xl hover:bg-blue-100 transition"><i class="fas fa-chart-bar text-2xl text-blue-600 mb-2"></i><p class="text-sm text-gray-700">View Reports</p></a>
+<div class="of-card p-6"><h3 class="of-serif text-lg font-semibold mb-4">Quick Actions</h3><div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+<a href="hr-system.html" class="flex flex-col items-center p-4 rounded border hover:border-[var(--of-brass)] transition" style="border-color:var(--of-border)"><i class="fas fa-user-plus text-xl mb-2" style="color:var(--of-navy)"></i><p class="text-sm text-gray-700">Add Employee</p></a>
+<a href="tasks-management.html" class="flex flex-col items-center p-4 rounded border hover:border-[var(--of-brass)] transition" style="border-color:var(--of-border)"><i class="fas fa-plus-circle text-xl mb-2" style="color:var(--of-navy)"></i><p class="text-sm text-gray-700">New Task</p></a>
+<a href="document-management.html" class="flex flex-col items-center p-4 rounded border hover:border-[var(--of-brass)] transition" style="border-color:var(--of-border)"><i class="fas fa-upload text-xl mb-2" style="color:var(--of-navy)"></i><p class="text-sm text-gray-700">Upload Doc</p></a>
+<a href="financial-management.html" class="flex flex-col items-center p-4 rounded border hover:border-[var(--of-brass)] transition" style="border-color:var(--of-border)"><i class="fas fa-file-invoice-dollar text-xl mb-2" style="color:var(--of-navy)"></i><p class="text-sm text-gray-700">New Invoice</p></a>
+<a href="reports.html" class="flex flex-col items-center p-4 rounded border hover:border-[var(--of-brass)] transition" style="border-color:var(--of-border)"><i class="fas fa-chart-bar text-xl mb-2" style="color:var(--of-navy)"></i><p class="text-sm text-gray-700">View Reports</p></a>
 </div></div>
 </main></div>
 <script src="/dashboard/js/config.js"></script>

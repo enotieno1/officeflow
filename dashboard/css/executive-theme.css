@@ -1,0 +1,78 @@
+/* OfficeFlow — Executive theme
+   Design tokens: deep navy + warm paper + single brass accent.
+   Serif for headings/figures (gravitas), Inter for UI, Plex Mono for tabular data. */
+
+@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+:root{
+  --of-navy: #16213E;
+  --of-navy-light: #1F2C4F;
+  --of-paper: #F7F6F2;
+  --of-ink: #1A1A1A;
+  --of-slate: #5B6472;
+  --of-slate-light: #8A93A3;
+  --of-brass: #A6823D;
+  --of-brass-light: #C9A868;
+  --of-border: #E4E1D8;
+  --of-green: #2F6E4E;
+  --of-red: #A13D3D;
+  --of-amber: #A97C1F;
+  --of-serif: 'Source Serif 4', Georgia, serif;
+  --of-sans: 'Inter', -apple-system, sans-serif;
+  --of-mono: 'IBM Plex Mono', ui-monospace, monospace;
+}
+
+body{ font-family: var(--of-sans); background: var(--of-paper); color: var(--of-ink); }
+
+.of-serif{ font-family: var(--of-serif); }
+.of-mono{ font-family: var(--of-mono); font-variant-numeric: tabular-nums; }
+
+/* Sidebar */
+#sidebar{ background: var(--of-navy) !important; background-image:none !important; }
+#sidebar .brand-mark{ font-family: var(--of-serif); font-weight:600; font-size:1.5rem; letter-spacing:0.01em; color:#F7F6F2; }
+#sidebar .brand-rule{ height:1px; background:linear-gradient(90deg, var(--of-brass), transparent); margin-top:10px; }
+#sidebar .brand-sub{ font-family: var(--of-mono); font-size:10px; letter-spacing:0.12em; text-transform:uppercase; color: var(--of-slate-light); }
+
+.sidebar-link{
+  display:flex; align-items:center; padding:9px 14px; font-size:13.5px;
+  color:#C7CEDB; text-decoration:none; border-left:2px solid transparent;
+  transition: border-color .15s ease, color .15s ease, background .15s ease;
+}
+.sidebar-link:hover{ color:#fff; background:rgba(255,255,255,0.04); }
+.sidebar-link.active{ color:#fff; background:rgba(166,130,61,0.12); border-left-color:var(--of-brass); font-weight:500; }
+.section-label{
+  font-family: var(--of-mono); font-size:10px; color: var(--of-slate-light);
+  padding:16px 14px 4px; text-transform:uppercase; letter-spacing:0.12em;
+}
+
+/* Header */
+.of-header{ background:#fff; border-bottom:1px solid var(--of-border); box-shadow:none; }
+.of-eyebrow{ font-family: var(--of-mono); font-size:10.5px; letter-spacing:0.12em; text-transform:uppercase; color: var(--of-slate); }
+.of-greeting{ font-family: var(--of-serif); font-weight:600; color: var(--of-ink); }
+
+/* Cards */
+.of-card, .stat-card{
+  background:#fff; border:1px solid var(--of-border); border-radius:6px;
+  box-shadow:none !important; transition: border-color .15s ease;
+}
+.of-card:hover, .stat-card:hover{ border-color: var(--of-brass-light); transform:none !important; }
+.of-stat-value{ font-family: var(--of-serif); font-weight:600; font-variant-numeric: tabular-nums; color: var(--of-navy); }
+.of-stat-label{ font-family: var(--of-mono); font-size:10.5px; text-transform:uppercase; letter-spacing:0.08em; color: var(--of-slate); }
+.of-rule-top{ border-top:2px solid var(--of-brass); }
+
+/* Buttons */
+.of-btn-primary{
+  background: var(--of-navy); color:#fff; font-weight:500; border-radius:4px;
+  padding:9px 18px; font-size:14px; transition:background .15s ease;
+}
+.of-btn-primary:hover{ background: var(--of-navy-light); }
+.of-btn-secondary{
+  background:transparent; color:var(--of-navy); border:1px solid var(--of-border);
+  border-radius:4px; padding:9px 18px; font-size:14px;
+}
+.of-btn-secondary:hover{ border-color: var(--of-brass); }
+
+/* Tables */
+.of-table th{ font-family: var(--of-mono); font-size:10.5px; text-transform:uppercase; letter-spacing:0.08em; color:var(--of-slate); font-weight:500; border-bottom:1px solid var(--of-border); }
+.of-table td{ font-family: var(--of-sans); border-bottom:1px solid var(--of-border); }
+.of-table .amount{ font-family: var(--of-mono); }

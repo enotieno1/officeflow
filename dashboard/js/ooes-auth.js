@@ -31,7 +31,14 @@ var OOES_AUTH = {
   async login(email, password) {
     var { data, error } = await supabase.auth.signInWithPassword({ email: email, password: password });
     if (error || !data.user) return { error: (error && error.message) || 'Invalid email or password.' };
-    return await this._loadProfile(data.user);
+    var s = await this._loadProfile(data.user);
+    // 28 of the dashboard pages have an inline pre-render guard that checks this
+    // localStorage flag before ooes-auth.js even runs, to avoid a flash of content.
+    // It is NOT the security boundary — Supabase's own session + RLS are — so a
+    // stale/forged flag can't grant access to anything; requireAuth() below still
+    // verifies the real session on every page load.
+    localStorage.setItem('ooesSession', '1');
+    return s;
   },
 
   async register(fn, ln, email, password) {
@@ -44,13 +51,18 @@ var OOES_AUTH = {
     if (error) return { error: error.message };
     if (!data.user) return { error: 'Check your email to confirm your account, then sign in.' };
     // If email confirmation is off, Supabase returns a session immediately.
-    if (data.session) return await this._loadProfile(data.user);
+    if (data.session) {
+      var s = await this._loadProfile(data.user);
+      localStorage.setItem('ooesSession', '1');
+      return s;
+    }
     return { pendingConfirmation: true, email: email };
   },
 
   async logout(redirect) {
     await supabase.auth.signOut();
     this._session = null;
+    localStorage.removeItem('ooesSession');
     if (redirect !== false) window.location.href = '/dashboard/auth.html';
   },
 
@@ -65,10 +77,12 @@ var OOES_AUTH = {
   async requireAuth() {
     var { data } = await supabase.auth.getSession();
     if (!data.session) {
+      localStorage.removeItem('ooesSession');
       window.location.replace('/dashboard/auth.html');
       return false;
     }
     await this._loadProfile(data.session.user);
+    localStorage.setItem('ooesSession', '1'); // keep the pre-render guard flag in sync
     return true;
   },
 
