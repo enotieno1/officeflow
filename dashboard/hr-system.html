@@ -693,6 +693,11 @@
             document.querySelector('[data-section="attendance"]').scrollIntoView({ behavior: 'smooth' });
         }
 
+        function generateReports() {
+            alert('Generating HR reports (headcount, payroll summary, attendance)...');
+            window.location.href = '/dashboard/reports.html';
+        }
+
         function markAttendance() {
             alert('Marking all employees as present for today...');
             // Update attendance status
@@ -1604,19 +1609,6 @@
             setTimeout(() => {
                 showNotification('Employee data loaded', 'success');
             }, 1000);
-        }
-//
-//        function saveEmployee() {
-//            const form = document.getElementById('employeeForm');
-//            if (form) {
-//                const formData = new FormData(form);
-//                showNotification('Saving employee data...', 'info');
-//                
-//                setTimeout(() => {
-//                    showNotification('Employee saved successfully!', 'success');
-//                    closeModal(document.querySelector('#employeeModal button[onclick*="closeModal"]'));
-//                }, 1500);
-//            }
         }
 
         async function deleteEmployee(employeeId) {
