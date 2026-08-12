@@ -19,9 +19,10 @@
         .status-draft { background-color: #6b7280; color: white; }
         .progress-bar { transition: width 0.3s ease; }
     </style>
-<link rel="stylesheet" href="css/mobile.css"></head>
+<link rel="stylesheet" href="css/mobile.css">
+<link rel="stylesheet" href="css/executive-theme.css"></head>
 <body class="bg-gray-50">
-<div id="sidebar" class="fixed inset-y-0 left-0 w-56 text-white z-50 flex flex-col overflow-y-auto" style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);transition:transform 0.3s ease">
+<div id="sidebar" class="fixed inset-y-0 left-0 w-56 text-white z-50 flex flex-col overflow-y-auto" style="background:linear-gradient(135deg,#16213E 0%,#1F2C4F 100%);transition:transform 0.3s ease">
 <div class="p-4 border-b border-white border-opacity-20"><a href="/dashboard/index.html" style="color:white;text-decoration:none;font-size:18px;font-weight:bold">OfficeFlow</a></div>
 <nav class="flex-1 p-2 space-y-1 text-sm">
 <a href="/dashboard/index.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-home" style="width:16px;margin-right:8px"></i>Dashboard</a>
@@ -135,17 +136,17 @@
                         </div>
                     </div>
                     
-                    <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-lg border border-purple-200 finance-card" onclick="showBillingDashboard()">
+                    <div class="bg-gradient-to-br from-[#F7F6F2] to-[#EFEAE0] p-6 rounded-lg border border-[#E4E1D8] finance-card" onclick="showBillingDashboard()">
                         <div class="flex items-center justify-between mb-4">
-                            <i class="fas fa-credit-card text-3xl text-purple-600"></i>
+                            <i class="fas fa-credit-card text-3xl text-[#A6823D]"></i>
                             <span class="text-lg font-bold text-green-600">+8%</span>
                         </div>
-                        <h4 class="text-lg font-bold text-purple-800 mb-2">Billing & Payments</h4>
-                        <p class="text-3xl font-bold text-purple-600">KSh 1.8M</p>
+                        <h4 class="text-lg font-bold text-[#16213E] mb-2">Billing & Payments</h4>
+                        <p class="text-3xl font-bold text-[#A6823D]">KSh 1.8M</p>
                         <p class="text-sm text-gray-600 mt-2">Collected this month</p>
                         <div class="mt-3">
-                            <div class="w-full bg-purple-200 rounded-full h-2">
-                                <div class="bg-purple-600 h-2 rounded-full" style="width: 85%"></div>
+                            <div class="w-full bg-[#E4E1D8] rounded-full h-2">
+                                <div class="bg-[#16213E] h-2 rounded-full" style="width: 85%"></div>
                             </div>
                             <p class="text-xs text-gray-600 mt-1">85% Collection Rate</p>
                         </div>
@@ -185,7 +186,7 @@
                     <button onclick="processPayroll()" class="bg-blue-600 text-white px-6 py-4 rounded-lg hover:bg-blue-700 transition font-semibold">
                         <i class="fas fa-user-clock mr-2"></i>Process Payroll
                     </button>
-                    <button onclick="sendPaymentReminder()" class="bg-purple-600 text-white px-6 py-4 rounded-lg hover:bg-purple-700 transition font-semibold">
+                    <button onclick="sendPaymentReminder()" class="bg-[#16213E] text-white px-6 py-4 rounded-lg hover:bg-[#1F2C4F] transition font-semibold">
                         <i class="fas fa-bell mr-2"></i>Send Reminders
                     </button>
                     <button onclick="generateFinancialReport()" class="bg-yellow-600 text-white px-6 py-4 rounded-lg hover:bg-yellow-700 transition font-semibold">
@@ -564,11 +565,11 @@ function viewInvoice(id) {
   var w = window.open('','_blank');
   var vat = Math.round((inv.amount||0)*0.16);
   var total = Math.round((inv.amount||0)*1.16);
-  w.document.write('<html><head><title>Invoice '+inv.id+'</title><style>body{font-family:Arial;padding:40px;color:#333}.hdr{display:flex;justify-content:space-between;margin-bottom:30px}.logo{font-size:24px;font-weight:bold;color:#667eea}table{width:100%;border-collapse:collapse;margin:20px 0}th{background:#667eea;color:#fff;padding:10px}td{padding:10px;border-bottom:1px solid #eee}.tot{text-align:right;margin-top:20px}.btn{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;padding:12px 40px;border-radius:8px;cursor:pointer;font-size:16px;margin-top:20px}@media print{.btn{display:none}}</style></head><body>');
-  w.document.write('<div class=hdr><div><div class=logo>OfficeFlow</div><div>Nairobi, Kenya</div><div>hello@officeflow.co.ke</div></div><div style=text-align:right><div style=font-size:32px;font-weight:bold;color:#667eea>INVOICE</div><div>#'+inv.id+'</div><div>'+new Date().toLocaleDateString()+'</div></div></div>');
+  w.document.write('<html><head><title>Invoice '+inv.id+'</title><style>body{font-family:Arial;padding:40px;color:#333}.hdr{display:flex;justify-content:space-between;margin-bottom:30px}.logo{font-size:24px;font-weight:bold;color:#16213E}table{width:100%;border-collapse:collapse;margin:20px 0}th{background:#16213E;color:#fff;padding:10px}td{padding:10px;border-bottom:1px solid #eee}.tot{text-align:right;margin-top:20px}.btn{background:linear-gradient(135deg,#16213E,#1F2C4F);color:#fff;border:none;padding:12px 40px;border-radius:8px;cursor:pointer;font-size:16px;margin-top:20px}@media print{.btn{display:none}}</style></head><body>');
+  w.document.write('<div class=hdr><div><div class=logo>OfficeFlow</div><div>Nairobi, Kenya</div><div>hello@officeflow.co.ke</div></div><div style=text-align:right><div style=font-size:32px;font-weight:bold;color:#16213E>INVOICE</div><div>#'+inv.id+'</div><div>'+new Date().toLocaleDateString()+'</div></div></div>');
   w.document.write('<p><strong>Bill To:</strong> '+(inv.client||'Client')+'</p><p><strong>Due:</strong> '+(inv.dueDate||'N/A')+'</p>');
   w.document.write('<table><tr><th>Description</th><th>Amount</th></tr><tr><td>'+(inv.client||'Services Rendered')+'</td><td>KES '+(inv.amount||0).toLocaleString()+'</td></tr></table>');
-  w.document.write('<div class=tot><p>Subtotal: KES '+(inv.amount||0).toLocaleString()+'</p><p>VAT 16%: KES '+vat.toLocaleString()+'</p><p style=font-size:20px;font-weight:bold;color:#667eea>TOTAL: KES '+total.toLocaleString()+'</p></div>');
+  w.document.write('<div class=tot><p>Subtotal: KES '+(inv.amount||0).toLocaleString()+'</p><p>VAT 16%: KES '+vat.toLocaleString()+'</p><p style=font-size:20px;font-weight:bold;color:#16213E>TOTAL: KES '+total.toLocaleString()+'</p></div>');
   w.document.write('<div style=text-align:center><button class=btn onclick=window.print()>Print / Save as PDF</button></div>');
   w.document.write('<p style=text-align:center;color:#888;margin-top:40px>Thank you for your business! | OfficeFlow</p></div>
 </body>

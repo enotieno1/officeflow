@@ -26,9 +26,10 @@
         .modal.active { display: flex; align-items: center; justify-content: center; }
         .modal-content { background: white; border-radius: 12px; max-w-4xl w-full max-h-[90vh] overflow-hidden m-4; }
     </style>
-<link rel="stylesheet" href="css/mobile.css"></head>
+<link rel="stylesheet" href="css/mobile.css">
+<link rel="stylesheet" href="css/executive-theme.css"></head>
 <body class="bg-gray-50">
-<div id="sidebar" class="fixed inset-y-0 left-0 w-56 text-white z-50 flex flex-col overflow-y-auto" style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);transition:transform 0.3s ease">
+<div id="sidebar" class="fixed inset-y-0 left-0 w-56 text-white z-50 flex flex-col overflow-y-auto" style="background:linear-gradient(135deg,#16213E 0%,#1F2C4F 100%);transition:transform 0.3s ease">
 <div class="p-4 border-b border-white border-opacity-20">
   <a href="/dashboard/index.html" class="flex items-center space-x-2">
     <i class="fas fa-cogs text-xl"></i>
@@ -36,37 +37,37 @@
   </a>
 </div>
 <nav class="flex-1 p-2 space-y-1 text-sm">
-  <a href="/dashboard/index.html" class="flex items-center px-3 py-2 rounded-lg text-indigo-100 hover:bg-white hover:bg-opacity-20"><i class="fas fa-home w-4 mr-2"></i>Dashboard</a>
-  <a href="/dashboard/hr-system.html" class="flex items-center px-3 py-2 rounded-lg text-indigo-100 hover:bg-white hover:bg-opacity-20"><i class="fas fa-users w-4 mr-2"></i>HR</a>
-  <a href="/dashboard/financial-management.html" class="flex items-center px-3 py-2 rounded-lg text-indigo-100 hover:bg-white hover:bg-opacity-20"><i class="fas fa-chart-line w-4 mr-2"></i>Finance</a>
-  <a href="/dashboard/tasks-management.html" class="flex items-center px-3 py-2 rounded-lg text-indigo-100 hover:bg-white hover:bg-opacity-20"><i class="fas fa-tasks w-4 mr-2"></i>Tasks</a>
-  <a href="/dashboard/document-management.html" class="flex items-center px-3 py-2 rounded-lg text-indigo-100 hover:bg-white hover:bg-opacity-20"><i class="fas fa-file-alt w-4 mr-2"></i>Documents</a>
-  <a href="/dashboard/email-system.html" class="flex items-center px-3 py-2 rounded-lg text-indigo-100 hover:bg-white hover:bg-opacity-20"><i class="fas fa-envelope w-4 mr-2"></i>Email</a>
-  <a href="/dashboard/calendar-system.html" class="flex items-center px-3 py-2 rounded-lg text-indigo-100 hover:bg-white hover:bg-opacity-20"><i class="fas fa-calendar w-4 mr-2"></i>Calendar</a>
-  <a href="/dashboard/ai-features.html" class="flex items-center px-3 py-2 rounded-lg text-indigo-100 hover:bg-white hover:bg-opacity-20"><i class="fas fa-robot w-4 mr-2"></i>AI Features</a>
-  <a href="/dashboard/reports.html" class="flex items-center px-3 py-2 rounded-lg text-indigo-100 hover:bg-white hover:bg-opacity-20"><i class="fas fa-chart-bar w-4 mr-2"></i>Reports</a>
-  <a href="/dashboard/security-center.html" class="flex items-center px-3 py-2 rounded-lg text-indigo-100 hover:bg-white hover:bg-opacity-20"><i class="fas fa-shield-alt w-4 mr-2"></i>Security</a>
+  <a href="/dashboard/index.html" class="flex items-center px-3 py-2 rounded-lg text-[#EFEAE0] hover:bg-white hover:bg-opacity-20"><i class="fas fa-home w-4 mr-2"></i>Dashboard</a>
+  <a href="/dashboard/hr-system.html" class="flex items-center px-3 py-2 rounded-lg text-[#EFEAE0] hover:bg-white hover:bg-opacity-20"><i class="fas fa-users w-4 mr-2"></i>HR</a>
+  <a href="/dashboard/financial-management.html" class="flex items-center px-3 py-2 rounded-lg text-[#EFEAE0] hover:bg-white hover:bg-opacity-20"><i class="fas fa-chart-line w-4 mr-2"></i>Finance</a>
+  <a href="/dashboard/tasks-management.html" class="flex items-center px-3 py-2 rounded-lg text-[#EFEAE0] hover:bg-white hover:bg-opacity-20"><i class="fas fa-tasks w-4 mr-2"></i>Tasks</a>
+  <a href="/dashboard/document-management.html" class="flex items-center px-3 py-2 rounded-lg text-[#EFEAE0] hover:bg-white hover:bg-opacity-20"><i class="fas fa-file-alt w-4 mr-2"></i>Documents</a>
+  <a href="/dashboard/email-system.html" class="flex items-center px-3 py-2 rounded-lg text-[#EFEAE0] hover:bg-white hover:bg-opacity-20"><i class="fas fa-envelope w-4 mr-2"></i>Email</a>
+  <a href="/dashboard/calendar-system.html" class="flex items-center px-3 py-2 rounded-lg text-[#EFEAE0] hover:bg-white hover:bg-opacity-20"><i class="fas fa-calendar w-4 mr-2"></i>Calendar</a>
+  <a href="/dashboard/ai-features.html" class="flex items-center px-3 py-2 rounded-lg text-[#EFEAE0] hover:bg-white hover:bg-opacity-20"><i class="fas fa-robot w-4 mr-2"></i>AI Features</a>
+  <a href="/dashboard/reports.html" class="flex items-center px-3 py-2 rounded-lg text-[#EFEAE0] hover:bg-white hover:bg-opacity-20"><i class="fas fa-chart-bar w-4 mr-2"></i>Reports</a>
+  <a href="/dashboard/security-center.html" class="flex items-center px-3 py-2 rounded-lg text-[#EFEAE0] hover:bg-white hover:bg-opacity-20"><i class="fas fa-shield-alt w-4 mr-2"></i>Security</a>
   <div class="border-t border-white border-opacity-20 my-1"></div>
-  <p class="text-xs text-indigo-300 px-3 py-1 uppercase tracking-wider">Departments</p>
-  <a href="/dashboard/communication-department.html" class="flex items-center px-3 py-2 rounded-lg text-indigo-100 hover:bg-white hover:bg-opacity-20"><i class="fas fa-comments w-4 mr-2"></i>Communication</a>
-  <a href="/dashboard/operations-department.html" class="flex items-center px-3 py-2 rounded-lg text-indigo-100 hover:bg-white hover:bg-opacity-20"><i class="fas fa-cog w-4 mr-2"></i>Operations</a>
-  <a href="/dashboard/sales-department.html" class="flex items-center px-3 py-2 rounded-lg text-indigo-100 hover:bg-white hover:bg-opacity-20"><i class="fas fa-handshake w-4 mr-2"></i>Sales</a>
-  <a href="/dashboard/accounting-tools.html" class="flex items-center px-3 py-2 rounded-lg text-indigo-100 hover:bg-white hover:bg-opacity-20"><i class="fas fa-calculator w-4 mr-2"></i>Accounting</a>
-  <a href="/dashboard/automation.html" class="flex items-center px-3 py-2 rounded-lg text-indigo-100 hover:bg-white hover:bg-opacity-20"><i class="fas fa-magic w-4 mr-2"></i>Automation</a>
+  <p class="text-xs text-[#8A93A3] px-3 py-1 uppercase tracking-wider">Departments</p>
+  <a href="/dashboard/communication-department.html" class="flex items-center px-3 py-2 rounded-lg text-[#EFEAE0] hover:bg-white hover:bg-opacity-20"><i class="fas fa-comments w-4 mr-2"></i>Communication</a>
+  <a href="/dashboard/operations-department.html" class="flex items-center px-3 py-2 rounded-lg text-[#EFEAE0] hover:bg-white hover:bg-opacity-20"><i class="fas fa-cog w-4 mr-2"></i>Operations</a>
+  <a href="/dashboard/sales-department.html" class="flex items-center px-3 py-2 rounded-lg text-[#EFEAE0] hover:bg-white hover:bg-opacity-20"><i class="fas fa-handshake w-4 mr-2"></i>Sales</a>
+  <a href="/dashboard/accounting-tools.html" class="flex items-center px-3 py-2 rounded-lg text-[#EFEAE0] hover:bg-white hover:bg-opacity-20"><i class="fas fa-calculator w-4 mr-2"></i>Accounting</a>
+  <a href="/dashboard/automation.html" class="flex items-center px-3 py-2 rounded-lg text-[#EFEAE0] hover:bg-white hover:bg-opacity-20"><i class="fas fa-magic w-4 mr-2"></i>Automation</a>
   <div class="border-t border-white border-opacity-20 my-1"></div>
-  <p class="text-xs text-indigo-300 px-3 py-1 uppercase tracking-wider">Tools</p>
-  <a href="/dashboard/excel-system.html" class="flex items-center px-3 py-2 rounded-lg text-indigo-100 hover:bg-white hover:bg-opacity-20"><i class="fas fa-file-excel w-4 mr-2"></i>Excel</a>
-  <a href="/dashboard/google-drive.html" class="flex items-center px-3 py-2 rounded-lg text-indigo-100 hover:bg-white hover:bg-opacity-20"><i class="fas fa-cloud w-4 mr-2"></i>Google Drive</a>
-  <a href="/dashboard/gmail-system.html" class="flex items-center px-3 py-2 rounded-lg text-indigo-100 hover:bg-white hover:bg-opacity-20"><i class="fas fa-envelope-open w-4 mr-2"></i>Gmail</a>
-  <a href="/dashboard/trello-management.html" class="flex items-center px-3 py-2 rounded-lg text-indigo-100 hover:bg-white hover:bg-opacity-20"><i class="fab fa-trello w-4 mr-2"></i>Trello</a>
-  <a href="/dashboard/data-management.html" class="flex items-center px-3 py-2 rounded-lg text-indigo-100 hover:bg-white hover:bg-opacity-20"><i class="fas fa-database w-4 mr-2"></i>Data</a>
-  <a href="/dashboard/it-compliance.html" class="flex items-center px-3 py-2 rounded-lg text-indigo-100 hover:bg-white hover:bg-opacity-20"><i class="fas fa-shield-alt w-4 mr-2"></i>IT Compliance</a>
-  <a href="/dashboard/pricing.html" class="flex items-center px-3 py-2 rounded-lg text-indigo-100 hover:bg-white hover:bg-opacity-20"><i class="fas fa-tags w-4 mr-2"></i>Pricing</a>
-  <a href="/dashboard/contact.html" class="flex items-center px-3 py-2 rounded-lg text-indigo-100 hover:bg-white hover:bg-opacity-20"><i class="fas fa-phone w-4 mr-2"></i>Contact</a>
+  <p class="text-xs text-[#8A93A3] px-3 py-1 uppercase tracking-wider">Tools</p>
+  <a href="/dashboard/excel-system.html" class="flex items-center px-3 py-2 rounded-lg text-[#EFEAE0] hover:bg-white hover:bg-opacity-20"><i class="fas fa-file-excel w-4 mr-2"></i>Excel</a>
+  <a href="/dashboard/google-drive.html" class="flex items-center px-3 py-2 rounded-lg text-[#EFEAE0] hover:bg-white hover:bg-opacity-20"><i class="fas fa-cloud w-4 mr-2"></i>Google Drive</a>
+  <a href="/dashboard/gmail-system.html" class="flex items-center px-3 py-2 rounded-lg text-[#EFEAE0] hover:bg-white hover:bg-opacity-20"><i class="fas fa-envelope-open w-4 mr-2"></i>Gmail</a>
+  <a href="/dashboard/trello-management.html" class="flex items-center px-3 py-2 rounded-lg text-[#EFEAE0] hover:bg-white hover:bg-opacity-20"><i class="fab fa-trello w-4 mr-2"></i>Trello</a>
+  <a href="/dashboard/data-management.html" class="flex items-center px-3 py-2 rounded-lg text-[#EFEAE0] hover:bg-white hover:bg-opacity-20"><i class="fas fa-database w-4 mr-2"></i>Data</a>
+  <a href="/dashboard/it-compliance.html" class="flex items-center px-3 py-2 rounded-lg text-[#EFEAE0] hover:bg-white hover:bg-opacity-20"><i class="fas fa-shield-alt w-4 mr-2"></i>IT Compliance</a>
+  <a href="/dashboard/pricing.html" class="flex items-center px-3 py-2 rounded-lg text-[#EFEAE0] hover:bg-white hover:bg-opacity-20"><i class="fas fa-tags w-4 mr-2"></i>Pricing</a>
+  <a href="/dashboard/contact.html" class="flex items-center px-3 py-2 rounded-lg text-[#EFEAE0] hover:bg-white hover:bg-opacity-20"><i class="fas fa-phone w-4 mr-2"></i>Contact</a>
 </nav>
 <div class="p-3 border-t border-white border-opacity-20 text-xs">
   <p class="font-medium" data-user-name>User</p>
-  <p class="text-indigo-300" data-user-role></p>
+  <p class="text-[#8A93A3]" data-user-role></p>
   <button onclick="OOES_AUTH.logout()" class="mt-1 text-red-200 hover:text-white"><i class="fas fa-sign-out-alt mr-1"></i>Logout</button>
 </div>
 </div>
@@ -134,13 +135,13 @@
                     </div>
                     
                     <!-- Data Protection -->
-                    <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-lg border border-purple-200">
+                    <div class="bg-gradient-to-br from-[#F7F6F2] to-[#EFEAE0] p-6 rounded-lg border border-[#E4E1D8]">
                         <div class="flex items-center justify-between mb-4">
-                            <i class="fas fa-lock text-3xl text-purple-600"></i>
+                            <i class="fas fa-lock text-3xl text-[#A6823D]"></i>
                             <span class="status-badge status-compliant">Encrypted</span>
                         </div>
-                        <h3 class="text-lg font-bold text-purple-800 mb-2">Data Protection</h3>
-                        <p class="text-purple-700">AES-256 encryption active</p>
+                        <h3 class="text-lg font-bold text-[#16213E] mb-2">Data Protection</h3>
+                        <p class="text-[#1F2C4F]">AES-256 encryption active</p>
                     </div>
                     </div>
                 </div>
@@ -181,13 +182,13 @@
                     </div>
                     
                     <!-- Software Assets -->
-                    <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-lg border border-purple-200">
+                    <div class="bg-gradient-to-br from-[#F7F6F2] to-[#EFEAE0] p-6 rounded-lg border border-[#E4E1D8]">
                         <div class="flex items-center justify-between mb-4">
-                            <i class="fas fa-cube text-3xl text-purple-600"></i>
+                            <i class="fas fa-cube text-3xl text-[#A6823D]"></i>
                             <span class="status-badge status-compliant">Licensed</span>
                         </div>
-                        <h3 class="text-lg font-bold text-purple-800 mb-2">Software Assets</h3>
-                        <p class="text-purple-700">Office suite, development tools</p>
+                        <h3 class="text-lg font-bold text-[#16213E] mb-2">Software Assets</h3>
+                        <p class="text-[#1F2C4F]">Office suite, development tools</p>
                         </div>
                     </div>
                     
@@ -248,16 +249,16 @@
                     </div>
                     
                     <!-- System Tools -->
-                    <div class="bg-gradient-to-br from-indigo-50 to-indigo-100 p-6 rounded-lg border-indigo-200">
+                    <div class="bg-gradient-to-br from-[#F7F6F2] to-[#EFEAE0] p-6 rounded-lg border-[#E4E1D8]">
                         <div class="flex items-center justify-between mb-4">
-                            <i class="fas fa-cogs text-3xl text-indigo-600"></i>
+                            <i class="fas fa-cogs text-3xl text-[#A6823D]"></i>
                             <span class="status-badge status-compliant">Optimized</span>
                         </div>
-                        <h3 class="text-lg font-bold text-indigo-800 mb-2">System Tools</h3>
-                        <p class="text-indigo-700">Performance monitoring, cleanup</p>
+                        <h3 class="text-lg font-bold text-[#16213E] mb-2">System Tools</h3>
+                        <p class="text-[#1F2C4F]">Performance monitoring, cleanup</p>
                         </div>
                         <div class="flex justify-end space-x-2">
-                            <button onclick="runSystemOptimization()" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition">
+                            <button onclick="runSystemOptimization()" class="bg-[#16213E] text-white px-4 py-2 rounded hover:bg-[#1F2C4F] transition">
                                 <i class="fas fa-tachometer-alt mr-2"></i>Optimize System
                             </button>
                         </div>
@@ -299,7 +300,7 @@
                         <button onclick="viewTickets()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
                             <i class="fas fa-list mr-2"></i>View All Tickets
                         </button>
-                        <button onclick="exportTickets()" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition">
+                        <button onclick="exportTickets()" class="bg-[#16213E] text-white px-4 py-2 rounded hover:bg-[#1F2C4F] transition">
                             <i class="fas fa-download mr-2"></i>Export Tickets
                         </button>
                     </div>
@@ -334,16 +335,16 @@
                     </div>
                     
                     <!-- System Monitoring -->
-                    <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-lg border-purple-200">
+                    <div class="bg-gradient-to-br from-[#F7F6F2] to-[#EFEAE0] p-6 rounded-lg border-[#E4E1D8]">
                         <div class="flex items-center justify-between mb-4">
-                            <i class="fas fa-eye text-3xl text-purple-600"></i>
+                            <i class="fas fa-eye text-3xl text-[#A6823D]"></i>
                             <span class="status-badge status-compliant">Monitoring</span>
                         </div>
-                        <h3 class="text-lg font-bold text-purple-800 mb-2">Remote Sessions</h3>
-                        <p class="text-purple-700">3 active sessions</p>
+                        <h3 class="text-lg font-bold text-[#16213E] mb-2">Remote Sessions</h3>
+                        <p class="text-[#1F2C4F]">3 active sessions</p>
                         </div>
                         <div class="flex justify-end space-x-2">
-                            <button onclick="viewRemoteSessions()" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition">
+                            <button onclick="viewRemoteSessions()" class="bg-[#16213E] text-white px-4 py-2 rounded hover:bg-[#1F2C4F] transition">
                                 <i class="fas fa-eye mr-2"></i>View Sessions
                             </button>
                         </div>
@@ -354,18 +355,18 @@
         </section>
 
                     <!-- IT Access Portal -->
-                    <div class="bg-gradient-to-br from-indigo-50 to-indigo-100 p-6 rounded-lg border border-indigo-200">
+                    <div class="bg-gradient-to-br from-[#F7F6F2] to-[#EFEAE0] p-6 rounded-lg border border-[#E4E1D8]">
                         <div class="flex items-center justify-between mb-4">
-                            <i class="fas fa-key text-3xl text-indigo-600"></i>
+                            <i class="fas fa-key text-3xl text-[#A6823D]"></i>
                             <span class="status-badge status-active">Secure</span>
                         </div>
-                        <h3 class="text-lg font-bold text-indigo-800 mb-2">IT Access Portal</h3>
-                        <p class="text-indigo-700">Secure remote access to all IT systems and management tools</p>
+                        <h3 class="text-lg font-bold text-[#16213E] mb-2">IT Access Portal</h3>
+                        <p class="text-[#1F2C4F]">Secure remote access to all IT systems and management tools</p>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <button onclick="openRemoteDesktop()" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition">
+                            <button onclick="openRemoteDesktop()" class="bg-[#16213E] text-white px-4 py-2 rounded hover:bg-[#1F2C4F] transition">
                                 <i class="fas fa-desktop mr-2"></i>Remote Desktop
                             </button>
-                            <button onclick="openServerManagement()" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition">
+                            <button onclick="openServerManagement()" class="bg-[#16213E] text-white px-4 py-2 rounded hover:bg-[#1F2C4F] transition">
                                 <i class="fas fa-server mr-2"></i>Server Management
                             </button>
                             <button onclick="openNetworkTools()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
@@ -386,7 +387,7 @@
                         <button onclick="generateSystemReport()" class="bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700 transition font-semibold">
                             <i class="fas fa-file-alt mr-2"></i>Generate Report
                         </button>
-                        <button onclick="openITDashboard()" class="bg-purple-600 text-white px-6 py-3 rounded hover:bg-purple-700 transition font-semibold">
+                        <button onclick="openITDashboard()" class="bg-[#16213E] text-white px-6 py-3 rounded hover:bg-[#1F2C4F] transition font-semibold">
                             <i class="fas fa-tachometer-alt mr-2"></i>Performance Dashboard
                         </button>
                     </div>
@@ -460,12 +461,12 @@
                     </div>
                     
                     <!-- Access Control -->
-                    <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-lg border border-purple-200">
+                    <div class="bg-gradient-to-br from-[#F7F6F2] to-[#EFEAE0] p-6 rounded-lg border border-[#E4E1D8]">
                         <div class="flex items-center justify-between mb-4">
-                            <i class="fas fa-user-shield text-3xl text-purple-600"></i>
+                            <i class="fas fa-user-shield text-3xl text-[#A6823D]"></i>
                             <span class="status-badge status-active">Controlled</span>
                         </div>
-                        <h3 class="text-lg font-bold text-purple-800 mb-2">Access Control</h3>
+                        <h3 class="text-lg font-bold text-[#16213E] mb-2">Access Control</h3>
                         <div class="space-y-4">
                             <div class="flex justify-between items-center">
                                 <span class="text-gray-600">Multi-Factor Auth:</span>
@@ -473,7 +474,7 @@
                             </div>
                             <div class="flex justify-between items-center">
                                 <span class="text-gray-600">Session Timeout:</span>
-                                <span class="text-purple-600 font-bold">8 hours</span>
+                                <span class="text-[#A6823D] font-bold">8 hours</span>
                             </div>
                             <div class="flex justify-between items-center">
                                 <span class="text-gray-600">IP Restrictions:</span>
@@ -481,11 +482,11 @@
                             </div>
                             <div class="flex justify-between items-center">
                                 <span class="text-gray-600">Device Limits:</span>
-                                <span class="text-purple-600 font-bold">3 per user</span>
+                                <span class="text-[#A6823D] font-bold">3 per user</span>
                             </div>
                         </div>
                         <div class="mt-4">
-                            <button onclick="configureAccess()" class="w-full bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition">
+                            <button onclick="configureAccess()" class="w-full bg-[#16213E] text-white px-4 py-2 rounded hover:bg-[#1F2C4F] transition">
                                 <i class="fas fa-cogs mr-2"></i>Configure Access Settings
                             </button>
                         </div>
@@ -626,7 +627,7 @@
                     <button onclick="runSecurityAudit()" class="bg-red-600 text-white px-6 py-3 rounded hover:bg-red-700 transition font-semibold">
                         <i class="fas fa-shield-alt mr-2"></i>Security Audit
                     </button>
-                    <button onclick="openITDashboard()" class="bg-purple-600 text-white px-6 py-3 rounded hover:bg-purple-700 transition font-semibold">
+                    <button onclick="openITDashboard()" class="bg-[#16213E] text-white px-6 py-3 rounded hover:bg-[#1F2C4F] transition font-semibold">
                         <i class="fas fa-chart-line mr-2"></i>Performance Dashboard
                     </button>
                 </div>
@@ -686,7 +687,7 @@
     <!-- IT Dashboard Modal -->
     <div id="itModal" class="modal">
         <div class="bg-white rounded-lg max-w-6xl w-full max-h-[90vh] overflow-hidden m-4">
-            <div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6">
+            <div class="bg-gradient-to-r from-blue-600 to-[#16213E] text-white p-6">
                 <div class="flex justify-between items-center">
                     <h3 id="modalTitle" class="text-xl font-bold">IT Configuration</h3>
                     <button onclick="closeITModal()" class="text-white hover:text-gray-200">
@@ -745,7 +746,7 @@
                     
                     <!-- Save Button -->
                     <div class="mt-6">
-                        <button onclick="saveITConfiguration()" class="w-full bg-indigo-600 text-white px-6 py-3 rounded hover:bg-indigo-700 transition font-semibold">
+                        <button onclick="saveITConfiguration()" class="w-full bg-[#16213E] text-white px-6 py-3 rounded hover:bg-[#1F2C4F] transition font-semibold">
                             <i class="fas fa-save mr-2"></i>Save Configuration
                         </button>
                     </div>

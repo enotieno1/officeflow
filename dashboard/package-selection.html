@@ -7,13 +7,13 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .gradient-bg { background: linear-gradient(135deg, #16213E 0%, #1F2C4F 100%); }
         .package-card { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; position: relative; overflow: hidden; }
         .package-card::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); transition: left 0.5s; }
         .package-card:hover::before { left: 100%; }
         .package-card:hover { transform: translateY(-12px) scale(1.02); box-shadow: 0 25px 50px rgba(0,0,0,0.2); }
-        .package-card.recommended { border: 3px solid #667eea; position: relative; }
-        .package-card.recommended::after { content: "RECOMMENDED"; position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 5px 20px; border-radius: 20px; font-size: 12px; font-weight: bold; animation: glow 2s ease-in-out infinite; }
+        .package-card.recommended { border: 3px solid #16213E; position: relative; }
+        .package-card.recommended::after { content: "RECOMMENDED"; position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #16213E, #1F2C4F); color: white; padding: 5px 20px; border-radius: 20px; font-size: 12px; font-weight: bold; animation: glow 2s ease-in-out infinite; }
         @keyframes glow { 0%, 100% { box-shadow: 0 0 10px rgba(102, 126, 234, 0.5); } 50% { box-shadow: 0 0 20px rgba(102, 126, 234, 0.8); } }
         .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(5px); }
         .modal.active { display: flex; align-items: center; justify-content: center; animation: fadeIn 0.3s ease; }
@@ -28,24 +28,25 @@
         .trust-badge:hover { transform: scale(1.1) rotate(5deg); }
         .payment-method { transition: all 0.3s ease; cursor: pointer; }
         .payment-method:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        .payment-method.selected { border-color: #667eea; background: rgba(102, 126, 234, 0.1); }
+        .payment-method.selected { border-color: #16213E; background: rgba(102, 126, 234, 0.1); }
         .step-indicator { transition: all 0.3s ease; }
-        .step-indicator.active { background: #667eea; transform: scale(1.2); }
+        .step-indicator.active { background: #16213E; transform: scale(1.2); }
         .testimonial-card { transition: all 0.3s ease; }
         .testimonial-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
         .comparison-table { transition: all 0.3s ease; }
         .comparison-table:hover { box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
         .add-on-item { transition: all 0.3s ease; cursor: pointer; }
         .add-on-item:hover { transform: translateX(5px); background: rgba(102, 126, 234, 0.05); }
-        .add-on-item.selected { background: rgba(102, 126, 234, 0.1); border-left: 4px solid #667eea; }
+        .add-on-item.selected { background: rgba(102, 126, 234, 0.1); border-left: 4px solid #16213E; }
         @media (max-width: 768px) {
             .package-card { transform: none !important; }
             .package-card:hover { transform: translateY(-5px) !important; }
         }
     </style>
-<link rel="stylesheet" href="css/mobile.css"></head>
+<link rel="stylesheet" href="css/mobile.css">
+<link rel="stylesheet" href="css/executive-theme.css"></head>
 <body class="bg-gray-50">
-<div id="sidebar" class="fixed inset-y-0 left-0 w-56 text-white z-50 flex flex-col overflow-y-auto" style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);transition:transform 0.3s ease">
+<div id="sidebar" class="fixed inset-y-0 left-0 w-56 text-white z-50 flex flex-col overflow-y-auto" style="background:linear-gradient(135deg,#16213E 0%,#1F2C4F 100%);transition:transform 0.3s ease">
 <div class="p-4 border-b border-white border-opacity-20"><a href="/dashboard/index.html" style="color:white;text-decoration:none;font-size:18px;font-weight:bold">OfficeFlow</a></div>
 <nav class="flex-1 p-2 space-y-1 text-sm">
 <a href="/dashboard/index.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-home" style="width:16px;margin-right:8px"></i>Dashboard</a>
@@ -92,10 +93,10 @@
                     <i class="fas fa-cube text-3xl mr-4"></i>
                     <div>
                         <h1 class="text-2xl font-bold">Choose Your Package</h1>
-                        <p class="text-purple-100">Select the perfect solution for your business</p>
+                        <p class="text-[#EFEAE0]">Select the perfect solution for your business</p>
                     </div>
                 </div>
-                <button onclick="goBack()" class="bg-white text-purple-600 px-4 py-2 rounded hover:bg-gray-100 transition font-semibold">
+                <button onclick="goBack()" class="bg-white text-[#A6823D] px-4 py-2 rounded hover:bg-gray-100 transition font-semibold">
                     <i class="fas fa-arrow-left mr-2"></i>Back to Dashboard
                 </button>
             </div>
@@ -121,11 +122,11 @@
                         <span class="text-sm font-semibold">30-Day Guarantee</span>
                     </div>
                     <div class="trust-badge flex items-center">
-                        <i class="fas fa-clock text-purple-500 text-2xl mr-2"></i>
+                        <i class="fas fa-clock text-[#A6823D] text-2xl mr-2"></i>
                         <span class="text-sm font-semibold">48hr Setup</span>
                     </div>
                     <div class="trust-badge flex items-center">
-                        <i class="fas fa-headset text-indigo-500 text-2xl mr-2"></i>
+                        <i class="fas fa-headset text-[#A6823D] text-2xl mr-2"></i>
                         <span class="text-sm font-semibold">24/7 Support</span>
                     </div>
                 </div>
@@ -137,7 +138,7 @@
             <div class="bg-white rounded-lg shadow-md p-8">
                 <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">What Our Clients Say</h2>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="testimonial-card bg-gradient-to-br from-purple-50 to-indigo-50 p-6 rounded-lg">
+                    <div class="testimonial-card bg-gradient-to-br from-[#F7F6F2] to-[#F7F6F2] p-6 rounded-lg">
                         <div class="flex items-center mb-4">
                             <img src="https://picsum.photos/seed/client1/50/50" alt="Client" class="w-12 h-12 rounded-full mr-3">
                             <div>
@@ -154,7 +155,7 @@
                         </div>
                         <p class="text-gray-700 text-sm">"The Business Package transformed our operations. We save 15+ hours weekly and our efficiency increased by 40%!"</p>
                     </div>
-                    <div class="testimonial-card bg-gradient-to-br from-blue-50 to-purple-50 p-6 rounded-lg">
+                    <div class="testimonial-card bg-gradient-to-br from-blue-50 to-[#F7F6F2] p-6 rounded-lg">
                         <div class="flex items-center mb-4">
                             <img src="https://picsum.photos/seed/client2/50/50" alt="Client" class="w-12 h-12 rounded-full mr-3">
                             <div>
@@ -202,7 +203,7 @@
                             <tr class="bg-gray-100">
                                 <th class="px-4 py-3 text-left">Features</th>
                                 <th class="px-4 py-3 text-center">Starter</th>
-                                <th class="px-4 py-3 text-center bg-purple-100">Business</th>
+                                <th class="px-4 py-3 text-center bg-[#EFEAE0]">Business</th>
                                 <th class="px-4 py-3 text-center">Premium</th>
                             </tr>
                         </thead>
@@ -210,49 +211,49 @@
                             <tr class="border-b hover:bg-gray-50">
                                 <td class="px-4 py-3 font-semibold">Price</td>
                                 <td class="px-4 py-3 text-center">KSh 15K/mo</td>
-                                <td class="px-4 py-3 text-center bg-purple-100 font-bold text-purple-600">KSh 40K/mo</td>
+                                <td class="px-4 py-3 text-center bg-[#EFEAE0] font-bold text-[#A6823D]">KSh 40K/mo</td>
                                 <td class="px-4 py-3 text-center">KSh 80K+/mo</td>
                             </tr>
                             <tr class="border-b hover:bg-gray-50">
                                 <td class="px-4 py-3">Cloud Storage</td>
                                 <td class="px-4 py-3 text-center">20GB</td>
-                                <td class="px-4 py-3 text-center bg-purple-100 font-bold">50GB</td>
+                                <td class="px-4 py-3 text-center bg-[#EFEAE0] font-bold">50GB</td>
                                 <td class="px-4 py-3 text-center">100GB</td>
                             </tr>
                             <tr class="border-b hover:bg-gray-50">
                                 <td class="px-4 py-3">Users</td>
                                 <td class="px-4 py-3 text-center">Up to 10</td>
-                                <td class="px-4 py-3 text-center bg-purple-100 font-bold">Up to 50</td>
+                                <td class="px-4 py-3 text-center bg-[#EFEAE0] font-bold">Up to 50</td>
                                 <td class="px-4 py-3 text-center">Unlimited</td>
                             </tr>
                             <tr class="border-b hover:bg-gray-50">
                                 <td class="px-4 py-3">Service Hours</td>
                                 <td class="px-4 py-3 text-center">10 hrs/mo</td>
-                                <td class="px-4 py-3 text-center bg-purple-100 font-bold">30 hrs/mo</td>
+                                <td class="px-4 py-3 text-center bg-[#EFEAE0] font-bold">30 hrs/mo</td>
                                 <td class="px-4 py-3 text-center">50+ hrs/mo</td>
                             </tr>
                             <tr class="border-b hover:bg-gray-50">
                                 <td class="px-4 py-3">Email Automation</td>
                                 <td class="px-4 py-3 text-center"><i class="fas fa-check text-green-500"></i></td>
-                                <td class="px-4 py-3 text-center bg-purple-100"><i class="fas fa-check text-green-500"></i></td>
+                                <td class="px-4 py-3 text-center bg-[#EFEAE0]"><i class="fas fa-check text-green-500"></i></td>
                                 <td class="px-4 py-3 text-center"><i class="fas fa-check text-green-500"></i></td>
                             </tr>
                             <tr class="border-b hover:bg-gray-50">
                                 <td class="px-4 py-3">Payroll Support</td>
                                 <td class="px-4 py-3 text-center"><i class="fas fa-times text-red-500"></i></td>
-                                <td class="px-4 py-3 text-center bg-purple-100"><i class="fas fa-check text-green-500"></i></td>
+                                <td class="px-4 py-3 text-center bg-[#EFEAE0]"><i class="fas fa-check text-green-500"></i></td>
                                 <td class="px-4 py-3 text-center"><i class="fas fa-check text-green-500"></i></td>
                             </tr>
                             <tr class="border-b hover:bg-gray-50">
                                 <td class="px-4 py-3">Priority Support</td>
                                 <td class="px-4 py-3 text-center"><i class="fas fa-times text-red-500"></i></td>
-                                <td class="px-4 py-3 text-center bg-purple-100"><i class="fas fa-check text-green-500"></i></td>
+                                <td class="px-4 py-3 text-center bg-[#EFEAE0]"><i class="fas fa-check text-green-500"></i></td>
                                 <td class="px-4 py-3 text-center"><i class="fas fa-check text-green-500"></i></td>
                             </tr>
                             <tr class="hover:bg-gray-50">
                                 <td class="px-4 py-3">Dedicated Assistant</td>
                                 <td class="px-4 py-3 text-center"><i class="fas fa-times text-red-500"></i></td>
-                                <td class="px-4 py-3 text-center bg-purple-100"><i class="fas fa-times text-red-500"></i></td>
+                                <td class="px-4 py-3 text-center bg-[#EFEAE0]"><i class="fas fa-times text-red-500"></i></td>
                                 <td class="px-4 py-3 text-center"><i class="fas fa-check text-green-500"></i></td>
                             </tr>
                         </tbody>
@@ -265,7 +266,7 @@
         <section class="mb-12">
             <div class="bg-white rounded-lg shadow-md p-8">
                 <div class="text-center mb-8">
-                    <span class="bg-purple-100 text-purple-800 px-4 py-2 rounded-full text-sm font-semibold">IDEAL FOR GROWING BUSINESSES (5-20 EMPLOYEES)</span>
+                    <span class="bg-[#EFEAE0] text-[#16213E] px-4 py-2 rounded-full text-sm font-semibold">IDEAL FOR GROWING BUSINESSES (5-20 EMPLOYEES)</span>
                     <div class="mt-4 flex justify-center items-center gap-4">
                         <div class="flex items-center">
                             <i class="fas fa-fire text-orange-500 mr-2"></i>
@@ -284,11 +285,11 @@
                 
                 <!-- Recommended Package -->
                 <div class="max-w-4xl mx-auto">
-                    <div class="package-card recommended bg-gradient-to-br from-purple-50 to-indigo-100 rounded-2xl p-8 mb-8 pulse-animation">
+                    <div class="package-card recommended bg-gradient-to-br from-[#F7F6F2] to-[#EFEAE0] rounded-2xl p-8 mb-8 pulse-animation">
                         <div class="text-center mb-8">
-                            <h2 class="text-3xl font-bold text-purple-800 mb-2">Business Package</h2>
+                            <h2 class="text-3xl font-bold text-[#16213E] mb-2">Business Package</h2>
                             <div class="flex items-center justify-center mb-4">
-                                <span class="text-5xl font-bold text-purple-600">KSh 40,000</span>
+                                <span class="text-5xl font-bold text-[#A6823D]">KSh 40,000</span>
                                 <span class="text-xl text-gray-600 ml-2">/month</span>
                             </div>
                             <div class="flex justify-center items-center mb-6">
@@ -372,23 +373,23 @@
                         </div>
 
                         <!-- Ideal For -->
-                        <div class="mb-8 bg-purple-50 rounded-lg p-6">
-                            <h3 class="text-lg font-bold text-purple-800 mb-4 text-center">Ideal For:</h3>
+                        <div class="mb-8 bg-[#F7F6F2] rounded-lg p-6">
+                            <h3 class="text-lg font-bold text-[#16213E] mb-4 text-center">Ideal For:</h3>
                             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
                                 <div class="bg-white rounded-lg p-3">
-                                    <i class="fas fa-building text-purple-600 text-2xl mb-2"></i>
+                                    <i class="fas fa-building text-[#A6823D] text-2xl mb-2"></i>
                                     <p class="text-sm font-semibold text-gray-800">Medium-sized businesses</p>
                                 </div>
                                 <div class="bg-white rounded-lg p-3">
-                                    <i class="fas fa-graduation-cap text-purple-600 text-2xl mb-2"></i>
+                                    <i class="fas fa-graduation-cap text-[#A6823D] text-2xl mb-2"></i>
                                     <p class="text-sm font-semibold text-gray-800">Educational institutions</p>
                                 </div>
                                 <div class="bg-white rounded-lg p-3">
-                                    <i class="fas fa-heartbeat text-purple-600 text-2xl mb-2"></i>
+                                    <i class="fas fa-heartbeat text-[#A6823D] text-2xl mb-2"></i>
                                     <p class="text-sm font-semibold text-gray-800">Healthcare practices</p>
                                 </div>
                                 <div class="bg-white rounded-lg p-3">
-                                    <i class="fas fa-industry text-purple-600 text-2xl mb-2"></i>
+                                    <i class="fas fa-industry text-[#A6823D] text-2xl mb-2"></i>
                                     <p class="text-sm font-semibold text-gray-800">Manufacturing companies</p>
                                 </div>
                             </div>
@@ -398,7 +399,7 @@
                         <div class="text-center">
                             <p class="text-lg font-semibold text-gray-800 mb-6">Ready to get started?</p>
                             <div class="flex flex-col md:flex-row gap-4 justify-center">
-                                <button onclick="choosePackage()" class="bg-purple-600 text-white px-8 py-4 rounded-lg hover:bg-purple-700 transition font-semibold text-lg">
+                                <button onclick="choosePackage()" class="bg-[#16213E] text-white px-8 py-4 rounded-lg hover:bg-[#1F2C4F] transition font-semibold text-lg">
                                     <i class="fas fa-check-circle mr-2"></i>Choose Package
                                 </button>
                                 <button onclick="scheduleConsultation()" class="bg-blue-600 text-white px-8 py-4 rounded-lg hover:bg-blue-700 transition font-semibold text-lg">
@@ -428,7 +429,7 @@
                                 <h4 class="font-bold text-gray-800">Extra Storage</h4>
                                 <p class="text-sm text-gray-600">Additional 50GB cloud storage</p>
                             </div>
-                            <span class="text-lg font-bold text-purple-600">+KSh 5K/mo</span>
+                            <span class="text-lg font-bold text-[#A6823D]">+KSh 5K/mo</span>
                         </div>
                         <div class="flex items-center text-sm text-gray-500">
                             <i class="fas fa-hdd mr-2"></i>
@@ -442,7 +443,7 @@
                                 <h4 class="font-bold text-gray-800">Advanced Analytics</h4>
                                 <p class="text-sm text-gray-600">Detailed business insights & reports</p>
                             </div>
-                            <span class="text-lg font-bold text-purple-600">+KSh 8K/mo</span>
+                            <span class="text-lg font-bold text-[#A6823D]">+KSh 8K/mo</span>
                         </div>
                         <div class="flex items-center text-sm text-gray-500">
                             <i class="fas fa-chart-bar mr-2"></i>
@@ -456,7 +457,7 @@
                                 <h4 class="font-bold text-gray-800">VIP Support</h4>
                                 <p class="text-sm text-gray-600">Dedicated account manager</p>
                             </div>
-                            <span class="text-lg font-bold text-purple-600">+KSh 12K/mo</span>
+                            <span class="text-lg font-bold text-[#A6823D]">+KSh 12K/mo</span>
                         </div>
                         <div class="flex items-center text-sm text-gray-500">
                             <i class="fas fa-concierge-bell mr-2"></i>
@@ -470,7 +471,7 @@
                                 <h4 class="font-bold text-gray-800">Custom Integration</h4>
                                 <p class="text-sm text-gray-600">Connect with your existing systems</p>
                             </div>
-                            <span class="text-lg font-bold text-purple-600">+KSh 15K/mo</span>
+                            <span class="text-lg font-bold text-[#A6823D]">+KSh 15K/mo</span>
                         </div>
                         <div class="flex items-center text-sm text-gray-500">
                             <i class="fas fa-plug mr-2"></i>
@@ -484,7 +485,7 @@
                                 <h4 class="font-bold text-gray-800">Team Training</h4>
                                 <p class="text-sm text-gray-600">On-site training sessions</p>
                             </div>
-                            <span class="text-lg font-bold text-purple-600">+KSh 10K/mo</span>
+                            <span class="text-lg font-bold text-[#A6823D]">+KSh 10K/mo</span>
                         </div>
                         <div class="flex items-center text-sm text-gray-500">
                             <i class="fas fa-chalkboard-teacher mr-2"></i>
@@ -498,7 +499,7 @@
                                 <h4 class="font-bold text-gray-800">Automated Backup</h4>
                                 <p class="text-sm text-gray-600">Daily automated backups</p>
                             </div>
-                            <span class="text-lg font-bold text-purple-600">+KSh 3K/mo</span>
+                            <span class="text-lg font-bold text-[#A6823D]">+KSh 3K/mo</span>
                         </div>
                         <div class="flex items-center text-sm text-gray-500">
                             <i class="fas fa-database mr-2"></i>
@@ -617,7 +618,7 @@
     <!-- Multi-Step Package Selection Modal -->
     <div id="packageModal" class="modal">
         <div class="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-hidden m-4">
-            <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-6">
+            <div class="bg-gradient-to-r from-[#16213E] to-blue-600 text-white p-6">
                 <div class="flex justify-between items-center">
                     <h3 class="text-xl font-bold">Complete Your Package Selection</h3>
                     <button onclick="closePackageModal()" class="text-white hover:text-gray-200">
@@ -627,7 +628,7 @@
                 <!-- Progress Steps -->
                 <div class="flex items-center justify-center mt-4">
                     <div class="flex items-center">
-                        <div class="step-indicator w-8 h-8 bg-white text-purple-600 rounded-full flex items-center justify-center font-bold" id="step1">1</div>
+                        <div class="step-indicator w-8 h-8 bg-white text-[#A6823D] rounded-full flex items-center justify-center font-bold" id="step1">1</div>
                         <div class="w-16 h-1 bg-white opacity-50 mx-2"></div>
                         <div class="step-indicator w-8 h-8 bg-white bg-opacity-30 text-white rounded-full flex items-center justify-center font-bold" id="step2">2</div>
                         <div class="w-16 h-1 bg-white opacity-50 mx-2"></div>
@@ -643,10 +644,10 @@
                 <!-- Step 1: Company Information -->
                 <div id="step1Content" class="step-content">
                     <div class="mb-6">
-                        <div class="bg-purple-50 border-l-4 border-purple-500 p-4 rounded">
-                            <h4 class="font-bold text-purple-800 mb-2">Business Package Selected</h4>
-                            <p class="text-purple-700">KSh 40,000/month • Perfect for growing businesses</p>
-                            <div class="mt-2 text-sm text-purple-600">
+                        <div class="bg-[#F7F6F2] border-l-4 border-[#A6823D] p-4 rounded">
+                            <h4 class="font-bold text-[#16213E] mb-2">Business Package Selected</h4>
+                            <p class="text-[#1F2C4F]">KSh 40,000/month • Perfect for growing businesses</p>
+                            <div class="mt-2 text-sm text-[#A6823D]">
                                 <span id="addOnsSummary">No add-ons selected</span>
                             </div>
                         </div>
@@ -655,28 +656,28 @@
                     <form id="companyForm" class="space-y-6" onsubmit="return validateForm(this)">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Company Name *</label>
-                            <input type="text" id="companyName" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Enter your company name" required>
+                            <input type="text" id="companyName" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#A6823D] focus:border-transparent" placeholder="Enter your company name" required>
                         </div>
                         
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Contact Person *</label>
-                            <input type="text" id="contactPerson" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Your full name" required>
+                            <input type="text" id="contactPerson" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#A6823D] focus:border-transparent" placeholder="Your full name" required>
                         </div>
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Email *</label>
-                                <input type="email" id="companyEmail" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="company@example.com" required>
+                                <input type="email" id="companyEmail" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#A6823D] focus:border-transparent" placeholder="company@example.com" required>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Phone *</label>
-                                <input type="tel" id="companyPhone" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="+254 XXX XXX XXX" required>
+                                <input type="tel" id="companyPhone" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#A6823D] focus:border-transparent" placeholder="+254 XXX XXX XXX" required>
                             </div>
                         </div>
                         
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Number of Employees *</label>
-                            <select id="employeeCount" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" required>
+                            <select id="employeeCount" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#A6823D] focus:border-transparent" required>
                                 <option value="">Select employee count</option>
                                 <option value="5-10">5-10 employees</option>
                                 <option value="11-15">11-15 employees</option>
@@ -687,7 +688,7 @@
                         
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Industry</label>
-                            <select id="industry" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                            <select id="industry" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#A6823D] focus:border-transparent">
                                 <option value="">Select industry</option>
                                 <option value="technology">Technology</option>
                                 <option value="education">Education</option>
@@ -699,7 +700,7 @@
                         </div>
                         
                         <div class="flex justify-end">
-                            <button type="button" onclick="nextStep(2)" class="bg-purple-600 text-white px-6 py-3 rounded hover:bg-purple-700 transition font-semibold">
+                            <button type="button" onclick="nextStep(2)" class="bg-[#16213E] text-white px-6 py-3 rounded hover:bg-[#1F2C4F] transition font-semibold">
                                 Next Step <i class="fas fa-arrow-right ml-2"></i>
                             </button>
                         </div>
@@ -722,7 +723,7 @@
                             <p class="text-sm text-gray-600">Visa, Mastercard</p>
                         </div>
                         <div class="payment-method border-2 border-gray-200 rounded-lg p-4 text-center" onclick="selectPayment(this, 'bank')">
-                            <i class="fas fa-university text-3xl text-purple-600 mb-2"></i>
+                            <i class="fas fa-university text-3xl text-[#A6823D] mb-2"></i>
                             <p class="font-semibold">Bank Transfer</p>
                             <p class="text-sm text-gray-600">Direct deposit</p>
                         </div>
@@ -775,9 +776,9 @@
                         </div>
                         
                         <div id="bankDetails" class="payment-details hidden">
-                            <div class="bg-purple-50 border-l-4 border-purple-500 p-4 rounded mb-4">
-                                <h5 class="font-bold text-purple-800 mb-2">Bank Transfer Details</h5>
-                                <p class="text-purple-700">Transfer funds directly to our account</p>
+                            <div class="bg-[#F7F6F2] border-l-4 border-[#A6823D] p-4 rounded mb-4">
+                                <h5 class="font-bold text-[#16213E] mb-2">Bank Transfer Details</h5>
+                                <p class="text-[#1F2C4F]">Transfer funds directly to our account</p>
                             </div>
                             <div class="bg-gray-50 p-4 rounded">
                                 <p class="font-semibold mb-2">Bank Details:</p>
@@ -793,7 +794,7 @@
                         <button type="button" onclick="previousStep(1)" class="bg-gray-500 text-white px-6 py-3 rounded hover:bg-gray-600 transition font-semibold">
                             <i class="fas fa-arrow-left mr-2"></i> Previous
                         </button>
-                        <button type="button" onclick="nextStep(3)" class="bg-purple-600 text-white px-6 py-3 rounded hover:bg-purple-700 transition font-semibold">
+                        <button type="button" onclick="nextStep(3)" class="bg-[#16213E] text-white px-6 py-3 rounded hover:bg-[#1F2C4F] transition font-semibold">
                             Next Step <i class="fas fa-arrow-right ml-2"></i>
                         </button>
                     </div>
@@ -815,7 +816,7 @@
                             </div>
                             <div class="flex justify-between border-t pt-2">
                                 <span class="font-bold">Total Monthly:</span>
-                                <span class="font-bold text-purple-600" id="totalMonthly">KSh 40,000</span>
+                                <span class="font-bold text-[#A6823D]" id="totalMonthly">KSh 40,000</span>
                             </div>
                         </div>
                     </div>
@@ -873,7 +874,7 @@
     <!-- Consultation Scheduling Modal -->
     <div id="consultationModal" class="modal">
         <div class="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-hidden m-4">
-            <div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6">
+            <div class="bg-gradient-to-r from-blue-600 to-[#16213E] text-white p-6">
                 <div class="flex justify-between items-center">
                     <h3 class="text-xl font-bold">Schedule Your Consultation</h3>
                     <button onclick="closeConsultationModal()" class="text-white hover:text-gray-200">
@@ -998,7 +999,7 @@
                     indicator.className = 'step-indicator w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center font-bold';
                     indicator.innerHTML = '<i class="fas fa-check text-xs"></i>';
                 } else if (i === step) {
-                    indicator.className = 'step-indicator w-8 h-8 bg-white text-purple-600 rounded-full flex items-center justify-center font-bold active';
+                    indicator.className = 'step-indicator w-8 h-8 bg-white text-[#A6823D] rounded-full flex items-center justify-center font-bold active';
                     indicator.textContent = i;
                 } else {
                     indicator.className = 'step-indicator w-8 h-8 bg-white bg-opacity-30 text-white rounded-full flex items-center justify-center font-bold';

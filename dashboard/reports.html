@@ -8,10 +8,11 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="/dashboard/js/ooes-auth.js"></script>
-<style>.gradient-bg{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);}.card{background:white;border-radius:12px;padding:24px;box-shadow:0 1px 3px rgba(0,0,0,0.1);margin-bottom:24px;}</style>
+<style>.gradient-bg{background:linear-gradient(135deg,#16213E 0%,#1F2C4F 100%);}.card{background:white;border-radius:12px;padding:24px;box-shadow:0 1px 3px rgba(0,0,0,0.1);margin-bottom:24px;}</style>
+<link rel="stylesheet" href="css/executive-theme.css">
 </head>
 <body class="bg-gray-50">
-<div id="sidebar" class="fixed inset-y-0 left-0 w-56 text-white z-50 flex flex-col overflow-y-auto" style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);transition:transform 0.3s ease">
+<div id="sidebar" class="fixed inset-y-0 left-0 w-56 text-white z-50 flex flex-col overflow-y-auto" style="background:linear-gradient(135deg,#16213E 0%,#1F2C4F 100%);transition:transform 0.3s ease">
 <div class="p-4 border-b border-white border-opacity-20"><a href="/dashboard/index.html" style="color:white;text-decoration:none;font-size:18px;font-weight:bold">OfficeFlow</a></div>
 <nav class="flex-1 p-2 space-y-1 text-sm">
 <a href="/dashboard/index.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-home" style="width:16px;margin-right:8px"></i>Dashboard</a>
@@ -50,13 +51,13 @@
 </div>
 <div style="margin-left:224px">
 
-<header class="gradient-bg text-white py-6 px-8 flex items-center justify-between"><div class="flex items-center space-x-4"><a href="index.html" class="text-white"><i class="fas fa-arrow-left mr-2"></i>Dashboard</a><h1 class="text-2xl font-bold ml-4"><i class="fas fa-chart-bar mr-2"></i>Reports</h1></div><button onclick="loadReports()" class="bg-white text-indigo-600 px-4 py-2 rounded-lg font-semibold">Refresh</button></header>
+<header class="gradient-bg text-white py-6 px-8 flex items-center justify-between"><div class="flex items-center space-x-4"><a href="index.html" class="text-white"><i class="fas fa-arrow-left mr-2"></i>Dashboard</a><h1 class="text-2xl font-bold ml-4"><i class="fas fa-chart-bar mr-2"></i>Reports</h1></div><button onclick="loadReports()" class="bg-white text-[#A6823D] px-4 py-2 rounded-lg font-semibold">Refresh</button></header>
 <main class="max-w-7xl mx-auto px-6 py-8">
 <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
 <div class="card text-center"><p class="text-gray-500 text-sm mb-1">Total Revenue</p><p class="text-3xl font-bold text-green-600" id="r-revenue">--</p></div>
 <div class="card text-center"><p class="text-gray-500 text-sm mb-1">Total Expenses</p><p class="text-3xl font-bold text-red-600" id="r-expenses">--</p></div>
-<div class="card text-center"><p class="text-gray-500 text-sm mb-1">Net Profit</p><p class="text-3xl font-bold text-indigo-600" id="r-profit">--</p></div>
-<div class="card text-center"><p class="text-gray-500 text-sm mb-1">Total Employees</p><p class="text-3xl font-bold text-purple-600" id="r-employees">--</p></div>
+<div class="card text-center"><p class="text-gray-500 text-sm mb-1">Net Profit</p><p class="text-3xl font-bold text-[#A6823D]" id="r-profit">--</p></div>
+<div class="card text-center"><p class="text-gray-500 text-sm mb-1">Total Employees</p><p class="text-3xl font-bold text-[#A6823D]" id="r-employees">--</p></div>
 </div>
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6"><div class="card"><h3 class="text-lg font-semibold text-gray-800 mb-4">Revenue vs Expenses</h3><canvas id="revenueChart"></canvas></div><div class="card"><h3 class="text-lg font-semibold text-gray-800 mb-4">Task Status</h3><canvas id="taskChart"></canvas></div></div>
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="card"><h3 class="text-lg font-semibold text-gray-800 mb-4">Employees by Department</h3><canvas id="deptChart"></canvas></div><div class="card"><h3 class="text-lg font-semibold text-gray-800 mb-4">Transaction Trend</h3><canvas id="txnChart"></canvas></div></div>
@@ -82,7 +83,7 @@ ch.r=new Chart(document.getElementById("revenueChart"),{type:"bar",data:{labels:
 var tl=t.slice(0,6).map(function(x){return x.date||"Date";});
 var td=t.slice(0,6).map(function(x){return parseFloat(x.amount)||0;});
 if(ch.tx)ch.tx.destroy();
-ch.tx=new Chart(document.getElementById("txnChart"),{type:"line",data:{labels:tl,datasets:[{label:"KES",data:td,borderColor:"#667eea",backgroundColor:"rgba(102,126,234,0.1)",fill:true,tension:0.4}]},options:{responsive:true}});
+ch.tx=new Chart(document.getElementById("txnChart"),{type:"line",data:{labels:tl,datasets:[{label:"KES",data:td,borderColor:"#16213E",backgroundColor:"rgba(102,126,234,0.1)",fill:true,tension:0.4}]},options:{responsive:true}});
 }catch(e){}
 try{
 var k=await getTasks();

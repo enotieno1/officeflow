@@ -28,18 +28,18 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary-bg: #000000;
-            --secondary-bg: #111111;
-            --tertiary-bg: #1a1a1a;
-            --accent-red: #dc2626;
-            --accent-red-hover: #b91c1c;
-            --text-primary: #ffffff;
-            --text-secondary: #a0a0a0;
-            --text-muted: #6b7280;
-            --border-color: #374151;
-            --success-green: #10b981;
-            --warning-yellow: #f59e0b;
-            --info-blue: #3b82f6;
+            --primary-bg: #16213E;
+            --secondary-bg: #1F2C4F;
+            --tertiary-bg: #29365A;
+            --accent-red: #A6823D;
+            --accent-red-hover: #C9A868;
+            --text-primary: #F7F6F2;
+            --text-secondary: #C7CEDB;
+            --text-muted: #8A93A3;
+            --border-color: #3A4870;
+            --success-green: #4A9070;
+            --warning-yellow: #C9A868;
+            --info-blue: #8FA3C9;
         }
 
         body {
@@ -126,9 +126,10 @@
             color: var(--text-muted);
         }
     </style>
-<link rel="stylesheet" href="css/mobile.css"></head>
+<link rel="stylesheet" href="css/mobile.css">
+<link rel="stylesheet" href="css/executive-theme.css"></head>
 <body class="min-h-screen">
-<div id="sidebar" class="fixed inset-y-0 left-0 w-56 text-white z-50 flex flex-col overflow-y-auto" style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);transition:transform 0.3s ease">
+<div id="sidebar" class="fixed inset-y-0 left-0 w-56 text-white z-50 flex flex-col overflow-y-auto" style="background:linear-gradient(135deg,#16213E 0%,#1F2C4F 100%);transition:transform 0.3s ease">
 <div class="p-4 border-b border-white border-opacity-20"><a href="/dashboard/index.html" style="color:white;text-decoration:none;font-size:18px;font-weight:bold">OfficeFlow</a></div>
 <nav class="flex-1 p-2 space-y-1 text-sm">
 <a href="/dashboard/index.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-home" style="width:16px;margin-right:8px"></i>Dashboard</a>
@@ -374,7 +375,7 @@
                             <span class="text-green-400 font-semibold">8.7/10</span>
                         </div>
                         <div class="w-full bg-gray-700 rounded-full h-2">
-                            <div class="bg-purple-500 h-2 rounded-full" style="width: 87%"></div>
+                            <div class="bg-[#A6823D] h-2 rounded-full" style="width: 87%"></div>
                         </div>
                     </div>
                 </div>
@@ -610,7 +611,7 @@
             var messages = document.getElementById('aiChatMessages');
 
             // Add user message
-            messages.innerHTML += '<div class="flex justify-end mb-4"><div class="px-4 py-3 rounded-xl max-w-xs text-sm text-white" style="background:linear-gradient(135deg,#667eea,#764ba2)">' + msg + '</div></div>';
+            messages.innerHTML += '<div class="flex justify-end mb-4"><div class="px-4 py-3 rounded-xl max-w-xs text-sm text-white" style="background:linear-gradient(135deg,#16213E,#1F2C4F)">' + msg + '</div></div>';
             input.value = '';
 
             // Add loading

@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .gradient-bg { background: linear-gradient(135deg, #16213E 0%, #1F2C4F 100%); }
         .email-item { transition: all 0.3s ease; cursor: pointer; }
         .email-item:hover { transform: translateX(5px); background-color: #f3f4f6; }
         .compose-area { min-height: 400px; }
@@ -17,9 +17,10 @@
         .toolbar-btn:hover { background-color: #e5e7eb; transform: scale(1.05); }
         .toolbar-btn.active { background-color: #3b82f6; color: white; }
     </style>
-<link rel="stylesheet" href="css/mobile.css"></head>
+<link rel="stylesheet" href="css/mobile.css">
+<link rel="stylesheet" href="css/executive-theme.css"></head>
 <body class="bg-gray-50">
-<div id="sidebar" class="fixed inset-y-0 left-0 w-56 text-white z-50 flex flex-col overflow-y-auto" style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);transition:transform 0.3s ease">
+<div id="sidebar" class="fixed inset-y-0 left-0 w-56 text-white z-50 flex flex-col overflow-y-auto" style="background:linear-gradient(135deg,#16213E 0%,#1F2C4F 100%);transition:transform 0.3s ease">
 <div class="p-4 border-b border-white border-opacity-20"><a href="/dashboard/index.html" style="color:white;text-decoration:none;font-size:18px;font-weight:bold">OfficeFlow</a></div>
 <nav class="flex-1 p-2 space-y-1 text-sm">
 <a href="/dashboard/index.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-home" style="width:16px;margin-right:8px"></i>Dashboard</a>
@@ -66,7 +67,7 @@
                     <i class="fas fa-envelope text-3xl mr-4"></i>
                     <div>
                         <h1 class="text-2xl font-bold">Professional Email System</h1>
-                        <p class="text-indigo-100">OfficeFlow Business Communications</p>
+                        <p class="text-[#EFEAE0]">OfficeFlow Business Communications</p>
                     </div>
                 </div>
                 <div class="flex items-center space-x-4">
@@ -136,7 +137,7 @@
                     </div>
                     <div class="flex space-x-2">
                         <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">Active</span>
-                        <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded text-xs">Professional</span>
+                        <span class="bg-[#EFEAE0] text-[#16213E] px-2 py-1 rounded text-xs">Professional</span>
                     </div>
                 </div>
                 <div class="flex items-center justify-between">
@@ -164,13 +165,13 @@
                     </div>
                 </div>
                 <div class="flex items-center justify-between">
-                    <i class="fas fa-chart-line text-3xl text-purple-600 mr-3"></i>
+                    <i class="fas fa-chart-line text-3xl text-[#A6823D] mr-3"></i>
                     <i class="fas fa-clock text-sm text-gray-500 mr-2"></i>
                     <span class="text-sm text-gray-600">Last report: Today</span>
                 </div>
             </div>
             <p class="text-gray-600 text-sm mb-4">Comprehensive email analytics with delivery tracking, open rates, and response metrics.</p>
-            <button onclick="viewEmailAnalytics()" class="w-full bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition font-semibold">
+            <button onclick="viewEmailAnalytics()" class="w-full bg-[#16213E] text-white px-4 py-2 rounded-lg hover:bg-[#1F2C4F] transition font-semibold">
                 <i class="fas fa-arrow-right mr-2"></i>View Analytics
             </button>
             </div>
@@ -198,7 +199,7 @@
                     <p class="text-sm text-gray-600">Start composing a new professional email</p>
                 </div>
                 <div class="text-center">
-                    <button onclick="viewCalendar(this)" class="w-full bg-purple-500 text-white px-6 py-4 rounded-lg hover:bg-purple-600 transition-all mb-3">
+                    <button onclick="viewCalendar(this)" class="w-full bg-[#A6823D] text-white px-6 py-4 rounded-lg hover:bg-[#16213E] transition-all mb-3">
                         <i class="fas fa-calendar text-2xl mb-2"></i>
                         <div class="font-semibold">View Calendar</div>
                     </button>
@@ -306,9 +307,9 @@
                         <p class="text-sm text-gray-600">Payment reminder</p>
                     </div>
                 </div>
-                <div class="activity-card bg-white rounded-xl shadow-lg overflow-hidden border border-purple-200" onclick="useTemplate('meeting')">
+                <div class="activity-card bg-white rounded-xl shadow-lg overflow-hidden border border-[#E4E1D8]" onclick="useTemplate('meeting')">
                     <div class="p-4 text-center">
-                        <i class="fas fa-calendar text-purple-500 text-3xl mb-3"></i>
+                        <i class="fas fa-calendar text-[#A6823D] text-3xl mb-3"></i>
                         <h4 class="font-bold text-gray-800 mb-1">Meeting Request</h4>
                         <p class="text-sm text-gray-600">Schedule meeting</p>
                     </div>
@@ -344,9 +345,9 @@
                     </div>
                 </div>
                 <div class="text-center">
-                    <div class="bg-purple-50 p-6 rounded-lg border border-purple-200">
-                        <i class="fas fa-archive text-purple-600 text-3xl mb-3"></i>
-                        <div class="text-2xl font-bold text-purple-600">3,456</div>
+                    <div class="bg-[#F7F6F2] p-6 rounded-lg border border-[#E4E1D8]">
+                        <i class="fas fa-archive text-[#A6823D] text-3xl mb-3"></i>
+                        <div class="text-2xl font-bold text-[#A6823D]">3,456</div>
                         <div class="text-sm text-gray-600">Archived Emails</div>
                     </div>
                 </div>
@@ -357,7 +358,7 @@
     <!-- Email Preview Modal -->
     <div id="emailModal" class="modal">
         <div class="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-hidden m-4">
-            <div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6">
+            <div class="bg-gradient-to-r from-blue-600 to-[#16213E] text-white p-6">
                 <div class="flex justify-between items-center">
                     <h3 id="emailModalTitle" class="text-xl font-bold">Email Preview</h3>
                     <button onclick="closeEmailModal()" class="text-white hover:text-gray-200">
@@ -722,13 +723,13 @@ contact@ooes.co.ke`
                             <div class="text-2xl font-bold text-green-600">78%</div>
                             <div class="text-sm text-green-600">+5% from last month</div>
                         </div>
-                        <div class="bg-purple-50 p-4 rounded-lg">
+                        <div class="bg-[#F7F6F2] p-4 rounded-lg">
                             <div class="flex items-center justify-between mb-2">
-                                <h5 class="font-semibold text-purple-800">Response Rate</h5>
-                                <i class="fas fa-reply text-purple-600"></i>
+                                <h5 class="font-semibold text-[#16213E]">Response Rate</h5>
+                                <i class="fas fa-reply text-[#A6823D]"></i>
                             </div>
-                            <div class="text-2xl font-bold text-purple-600">45%</div>
-                            <div class="text-sm text-purple-600">+8% from last month</div>
+                            <div class="text-2xl font-bold text-[#A6823D]">45%</div>
+                            <div class="text-sm text-[#A6823D]">+8% from last month</div>
                         </div>
                     </div>
                     
@@ -757,7 +758,7 @@ contact@ooes.co.ke`
                                 <span class="text-sm text-gray-600">This Week</span>
                                 <div class="flex items-center">
                                     <div class="w-32 bg-gray-200 rounded-full h-2 mr-2">
-                                        <div class="bg-purple-600 h-2 rounded-full" style="width: 85%"></div>
+                                        <div class="bg-[#16213E] h-2 rounded-full" style="width: 85%"></div>
                                     </div>
                                     <span class="text-sm font-semibold">234 sent</span>
                                 </div>
@@ -784,7 +785,7 @@ contact@ooes.co.ke`
             modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
             modal.innerHTML = `
                 <div class="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-hidden m-4">
-                    <div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6">
+                    <div class="bg-gradient-to-r from-blue-600 to-[#16213E] text-white p-6">
                         <div class="flex justify-between items-center">
                             <h3 class="text-xl font-bold">${title}</h3>
                             <button onclick="closeModal(this)" class="text-white hover:text-gray-200">

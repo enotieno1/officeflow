@@ -9,21 +9,22 @@
     <style>
         .calendar-day { transition: all 0.3s ease; cursor: pointer; }
         .calendar-day:hover { transform: scale(1.05); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-        .calendar-day.today { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .calendar-day.today { background: linear-gradient(135deg, #16213E 0%, #1F2C4F 100%); }
         .calendar-day.has-event { border-left: 4px solid #10b981; }
-        .calendar-day.selected { border: 2px solid #667eea; }
+        .calendar-day.selected { border: 2px solid #16213E; }
         .event-item { transition: all 0.3s ease; cursor: pointer; }
         .event-item:hover { transform: translateX(5px); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
         .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); backdrop-filter: blur(5px); }
         .modal.active { display: flex; align-items: center; justify-content: center; }
         .view-btn { transition: all 0.3s ease; }
-        .view-btn.active { background: #667eea; color: white; }
+        .view-btn.active { background: #16213E; color: white; }
         .category-badge { transition: all 0.2s ease; }
         .category-badge:hover { transform: scale(1.1); }
     </style>
-<link rel="stylesheet" href="css/mobile.css"></head>
+<link rel="stylesheet" href="css/mobile.css">
+<link rel="stylesheet" href="css/executive-theme.css"></head>
 <body class="bg-gray-50">
-<div id="sidebar" class="fixed inset-y-0 left-0 w-56 text-white z-50 flex flex-col overflow-y-auto" style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);transition:transform 0.3s ease">
+<div id="sidebar" class="fixed inset-y-0 left-0 w-56 text-white z-50 flex flex-col overflow-y-auto" style="background:linear-gradient(135deg,#16213E 0%,#1F2C4F 100%);transition:transform 0.3s ease">
 <div class="p-4 border-b border-white border-opacity-20"><a href="/dashboard/index.html" style="color:white;text-decoration:none;font-size:18px;font-weight:bold">OfficeFlow</a></div>
 <nav class="flex-1 p-2 space-y-1 text-sm">
 <a href="/dashboard/index.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-home" style="width:16px;margin-right:8px"></i>Dashboard</a>
@@ -63,17 +64,17 @@
 <div style="margin-left:224px">
 
     <!-- Header -->
-    <header class="bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg">
+    <header class="bg-gradient-to-r from-[#16213E] to-blue-600 text-white shadow-lg">
         <div class="container mx-auto px-6 py-6">
             <div class="flex items-center justify-between">
                 <div class="flex items-center">
                     <i class="fas fa-calendar-alt text-3xl mr-4"></i>
                     <div>
                         <h1 class="text-2xl font-bold">Office Calendar System</h1>
-                        <p class="text-purple-100">Manage your schedule, events, and tasks</p>
+                        <p class="text-[#EFEAE0]">Manage your schedule, events, and tasks</p>
                     </div>
                 </div>
-                <button onclick="goBack()" class="bg-white text-purple-600 px-4 py-2 rounded hover:bg-gray-100 transition font-semibold">
+                <button onclick="goBack()" class="bg-white text-[#A6823D] px-4 py-2 rounded hover:bg-gray-100 transition font-semibold">
                     <i class="fas fa-arrow-left mr-2"></i>Back to Dashboard
                 </button>
             </div>
@@ -94,7 +95,7 @@
                         <button onclick="nextMonth()" class="bg-gray-100 hover:bg-gray-200 p-2 rounded-lg transition">
                             <i class="fas fa-chevron-right"></i>
                         </button>
-                        <button onclick="goToToday()" class="bg-purple-100 hover:bg-purple-200 text-purple-700 px-4 py-2 rounded-lg transition font-semibold">
+                        <button onclick="goToToday()" class="bg-[#EFEAE0] hover:bg-[#E4E1D8] text-[#1F2C4F] px-4 py-2 rounded-lg transition font-semibold">
                             Today
                         </button>
                     </div>
@@ -109,7 +110,7 @@
                         <button onclick="setView('day')" class="view-btn px-4 py-2 rounded-lg font-semibold" id="dayView">
                             <i class="fas fa-calendar-day mr-2"></i>Day
                         </button>
-                        <button onclick="openEventModal()" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition font-semibold">
+                        <button onclick="openEventModal()" class="bg-[#16213E] hover:bg-[#1F2C4F] text-white px-4 py-2 rounded-lg transition font-semibold">
                             <i class="fas fa-plus mr-2"></i>New Event
                         </button>
                     </div>
@@ -189,7 +190,7 @@
                             </div>
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center">
-                                    <span class="category-badge w-4 h-4 bg-purple-500 rounded-full mr-3"></span>
+                                    <span class="category-badge w-4 h-4 bg-[#A6823D] rounded-full mr-3"></span>
                                     <span class="text-sm font-medium">Holidays</span>
                                 </div>
                                 <span class="text-sm text-gray-600" id="holidayCount">0</span>
@@ -223,7 +224,7 @@
     <!-- Event Modal -->
     <div id="eventModal" class="modal">
         <div class="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-hidden m-4">
-            <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-6">
+            <div class="bg-gradient-to-r from-[#16213E] to-blue-600 text-white p-6">
                 <div class="flex justify-between items-center">
                     <h3 class="text-xl font-bold">Create New Event</h3>
                     <button onclick="closeEventModal()" class="text-white hover:text-gray-200">
@@ -235,23 +236,23 @@
                 <form id="eventForm" class="space-y-6" onsubmit="return validateForm(this)">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Event Title *</label>
-                        <input type="text" id="eventTitle" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500" placeholder="Enter event title" required>
+                        <input type="text" id="eventTitle" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#A6823D]" placeholder="Enter event title" required>
                     </div>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Date *</label>
-                            <input type="date" id="eventDate" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500" required>
+                            <input type="date" id="eventDate" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#A6823D]" required>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Time</label>
-                            <input type="time" id="eventTime" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                            <input type="time" id="eventTime" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#A6823D]">
                         </div>
                     </div>
                     
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Category *</label>
-                        <select id="eventCategory" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500" required>
+                        <select id="eventCategory" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#A6823D]" required>
                             <option value="">Select category</option>
                             <option value="meeting">Meeting</option>
                             <option value="task">Task</option>
@@ -262,22 +263,22 @@
                     
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Location</label>
-                        <input type="text" id="eventLocation" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500" placeholder="Event location (optional)">
+                        <input type="text" id="eventLocation" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#A6823D]" placeholder="Event location (optional)">
                     </div>
                     
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
-                        <textarea id="eventDescription" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500" placeholder="Event description (optional)"></textarea>
+                        <textarea id="eventDescription" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#A6823D]" placeholder="Event description (optional)"></textarea>
                     </div>
                     
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Attendees</label>
-                        <input type="text" id="eventAttendees" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500" placeholder="Enter email addresses separated by commas">
+                        <input type="text" id="eventAttendees" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#A6823D]" placeholder="Enter email addresses separated by commas">
                     </div>
                     
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Reminder</label>
-                        <select id="eventReminder" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                        <select id="eventReminder" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#A6823D]">
                             <option value="none">No reminder</option>
                             <option value="15">15 minutes before</option>
                             <option value="30">30 minutes before</option>
@@ -290,7 +291,7 @@
                         <button type="button" onclick="closeEventModal()" class="bg-gray-500 text-white px-6 py-3 rounded hover:bg-gray-600 transition font-semibold">
                             Cancel
                         </button>
-                        <button type="button" onclick="saveEvent()" class="bg-purple-600 text-white px-6 py-3 rounded hover:bg-purple-700 transition font-semibold">
+                        <button type="button" onclick="saveEvent()" class="bg-[#16213E] text-white px-6 py-3 rounded hover:bg-[#1F2C4F] transition font-semibold">
                             <i class="fas fa-save mr-2"></i>Save Event
                         </button>
                     </div>
@@ -390,7 +391,7 @@
                     <div class="font-semibold ${isToday ? 'text-white' : 'text-gray-800'}">${day}</div>
                     ${dayEvents.length > 0 ? `
                         <div class="mt-2">
-                            <div class="text-xs ${isToday ? 'text-purple-100' : 'text-gray-600'}">${dayEvents.length} event${dayEvents.length > 1 ? 's' : ''}</div>
+                            <div class="text-xs ${isToday ? 'text-[#EFEAE0]' : 'text-gray-600'}">${dayEvents.length} event${dayEvents.length > 1 ? 's' : ''}</div>
                         </div>
                     ` : ''}
                 `;
@@ -438,7 +439,7 @@
                 meeting: 'bg-blue-100 text-blue-800',
                 task: 'bg-green-100 text-green-800',
                 deadline: 'bg-red-100 text-red-800',
-                holiday: 'bg-purple-100 text-purple-800'
+                holiday: 'bg-[#EFEAE0] text-[#16213E]'
             };
             return colors[category] || 'bg-gray-100 text-gray-800';
         }

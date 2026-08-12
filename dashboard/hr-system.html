@@ -8,31 +8,31 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            /* Light Blue Theme Variables */
-            --color-bg-primary: #F0F9FF;
-            --color-bg-secondary: #E0F2FE;
-            --color-bg-tertiary: #BAE6FD;
+            /* Executive Theme Variables */
+            --color-bg-primary: #F7F6F2;
+            --color-bg-secondary: #EFEAE0;
+            --color-bg-tertiary: #E4E1D8;
             --color-bg-card: #FFFFFF;
-            --color-bg-hover: #F8FAFC;
-            --color-text-primary: #1E3A8A;
-            --color-text-secondary: #1E40AF;
-            --color-text-tertiary: #2563EB;
-            --color-text-muted: #3B82F6;
-            --color-text-disabled: #60A5FA;
-            --color-accent-primary: #2563EB;
-            --color-accent-secondary: #3B82F6;
-            --color-accent-tertiary: #60A5FA;
-            --color-accent-success: #10B981;
-            --color-accent-warning: #F59E0B;
-            --color-border-primary: #E0F2FE;
-            --color-border-secondary: #BAE6FD;
-            --color-border-light: #93C5FD;
-            --color-shadow-primary: rgba(59, 130, 246, 0.1);
-            --color-shadow-secondary: rgba(59, 130, 246, 0.2);
-            --color-shadow-accent: rgba(37, 99, 235, 0.3);
+            --color-bg-hover: #F7F6F2;
+            --color-text-primary: #16213E;
+            --color-text-secondary: #1F2C4F;
+            --color-text-tertiary: #5B6472;
+            --color-text-muted: #5B6472;
+            --color-text-disabled: #8A93A3;
+            --color-accent-primary: #A6823D;
+            --color-accent-secondary: #C9A868;
+            --color-accent-tertiary: #C9A868;
+            --color-accent-success: #2F6E4E;
+            --color-accent-warning: #A97C1F;
+            --color-border-primary: #E4E1D8;
+            --color-border-secondary: #E4E1D8;
+            --color-border-light: #C9A868;
+            --color-shadow-primary: rgba(22, 33, 62, 0.06);
+            --color-shadow-secondary: rgba(22, 33, 62, 0.1);
+            --color-shadow-accent: rgba(166, 130, 61, 0.2);
         }
 
-        .gradient-bg { background: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%); }
+        .gradient-bg { background: #16213E; }
         .hr-card { transition: all 0.3s ease; cursor: pointer; }
         .hr-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(59, 130, 246, 0.1); }
         .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(59, 130, 246, 0.2); }
@@ -47,9 +47,10 @@
         .progress-bar { transition: width 0.3s ease; }
         .employee-avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; }
     </style>
-<link rel="stylesheet" href="css/mobile.css"></head>
+<link rel="stylesheet" href="css/mobile.css">
+<link rel="stylesheet" href="css/executive-theme.css"></head>
 <body class="bg-blue-50">
-<div id="sidebar" class="fixed inset-y-0 left-0 w-56 text-white z-50 flex flex-col overflow-y-auto" style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);transition:transform 0.3s ease">
+<div id="sidebar" class="fixed inset-y-0 left-0 w-56 text-white z-50 flex flex-col overflow-y-auto" style="background:linear-gradient(135deg,#16213E 0%,#1F2C4F 100%);transition:transform 0.3s ease">
 <div class="p-4 border-b border-white border-opacity-20"><a href="/dashboard/index.html" style="color:white;text-decoration:none;font-size:18px;font-weight:bold">OfficeFlow</a></div>
 <nav class="flex-1 p-2 space-y-1 text-sm">
 <a href="/dashboard/index.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-home" style="width:16px;margin-right:8px"></i>Dashboard</a>
@@ -152,13 +153,13 @@
                     </div>
                     
                     <!-- Payroll Summary -->
-                    <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-lg border border-purple-200">
+                    <div class="bg-gradient-to-br from-[#F7F6F2] to-[#EFEAE0] p-6 rounded-lg border border-[#E4E1D8]">
                         <div class="flex items-center justify-between mb-4">
-                            <i class="fas fa-money-bill-wave text-3xl text-purple-600"></i>
+                            <i class="fas fa-money-bill-wave text-3xl text-[#A6823D]"></i>
                             <span class="status-badge status-active">KSh 2.5M</span>
                         </div>
-                        <h3 class="text-lg font-bold text-purple-800">Monthly Payroll</h3>
-                        <p class="text-purple-700">Total monthly compensation</p>
+                        <h3 class="text-lg font-bold text-[#16213E]">Monthly Payroll</h3>
+                        <p class="text-[#1F2C4F]">Total monthly compensation</p>
                     </div>
                     
                     <!-- Attendance Rate -->
@@ -188,7 +189,7 @@
                         <button onclick="addEmployee()" class="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition font-semibold">
                             <i class="fas fa-user-plus mr-2"></i>Add Employee
                         </button>
-                        <button onclick="runPayroll()" class="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition font-semibold">
+                        <button onclick="runPayroll()" class="bg-[#16213E] text-white px-6 py-3 rounded-lg hover:bg-[#1F2C4F] transition font-semibold">
                             <i class="fas fa-calculator mr-2"></i>Run Payroll
                         </button>
                         <button onclick="viewAttendance()" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition font-semibold">
@@ -334,10 +335,10 @@
         <!-- HR Reports -->
         <section class="mb-12">
             <div class="bg-white rounded-lg shadow-md p-8 hr-card" onclick="showHRAnalyticsDashboard()">
-                <h2 class="text-2xl font-bold mb-6 text-gray-800 cursor-pointer hover:text-purple-600 transition">
-                    <i class="fas fa-file-alt mr-3 text-purple-600"></i>
+                <h2 class="text-2xl font-bold mb-6 text-gray-800 cursor-pointer hover:text-[#A6823D] transition">
+                    <i class="fas fa-file-alt mr-3 text-[#A6823D]"></i>
                     HR Reports & Analytics
-                    <span class="ml-3 text-sm text-purple-500 font-normal">Click to view dashboard</span>
+                    <span class="ml-3 text-sm text-[#A6823D] font-normal">Click to view dashboard</span>
                 </h2>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
@@ -356,16 +357,16 @@
                         </div>
                     </div>
                     
-                    <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-4 rounded-lg border border-purple-200">
+                    <div class="bg-gradient-to-br from-[#F7F6F2] to-[#EFEAE0] p-4 rounded-lg border border-[#E4E1D8]">
                         <div class="flex items-center justify-between mb-2">
-                            <i class="fas fa-money-bill text-2xl text-purple-600"></i>
-                            <span class="text-sm text-purple-600 font-semibold">+8%</span>
+                            <i class="fas fa-money-bill text-2xl text-[#A6823D]"></i>
+                            <span class="text-sm text-[#A6823D] font-semibold">+8%</span>
                         </div>
-                        <h4 class="text-lg font-bold text-purple-800">Payroll Report</h4>
-                        <p class="text-purple-700 text-sm">Salary calculations and payroll analytics</p>
+                        <h4 class="text-lg font-bold text-[#16213E]">Payroll Report</h4>
+                        <p class="text-[#1F2C4F] text-sm">Salary calculations and payroll analytics</p>
                         <div class="mt-3">
-                            <div class="w-full bg-purple-200 rounded-full h-2">
-                                <div class="bg-purple-600 h-2 rounded-full" style="width: 92%"></div>
+                            <div class="w-full bg-[#E4E1D8] rounded-full h-2">
+                                <div class="bg-[#16213E] h-2 rounded-full" style="width: 92%"></div>
                             </div>
                             <p class="text-xs text-gray-600 mt-1">92% Complete</p>
                         </div>
@@ -406,7 +407,7 @@
                     <button onclick="generateEmployeeReport()" class="bg-blue-600 text-white px-4 py-3 rounded hover:bg-blue-700 transition font-semibold text-sm">
                         <i class="fas fa-chart-bar mr-2"></i>View Employee Report
                     </button>
-                    <button onclick="generatePayrollReport()" class="bg-purple-600 text-white px-4 py-3 rounded hover:bg-purple-700 transition font-semibold text-sm">
+                    <button onclick="generatePayrollReport()" class="bg-[#16213E] text-white px-4 py-3 rounded hover:bg-[#1F2C4F] transition font-semibold text-sm">
                         <i class="fas fa-chart-line mr-2"></i>View Payroll Report
                     </button>
                     <button onclick="generateAttendanceReport()" class="bg-green-600 text-white px-4 py-3 rounded hover:bg-green-700 transition font-semibold text-sm">
@@ -798,7 +799,7 @@
             reportModal.className = 'modal active';
             reportModal.innerHTML = `
                 <div class="bg-white rounded-lg max-w-6xl w-full max-h-[90vh] overflow-hidden m-4">
-                    <div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6">
+                    <div class="bg-gradient-to-r from-blue-600 to-[#16213E] text-white p-6">
                         <div class="flex justify-between items-center">
                             <h3 class="text-xl font-bold">
                                 <i class="fas fa-users mr-2"></i>Employee Report
@@ -820,8 +821,8 @@
                                     <p class="text-2xl font-bold text-green-600">${employees.filter(emp => emp.status === 'active').length}</p>
                                     <p class="text-sm text-gray-600">Active Employees</p>
                                 </div>
-                                <div class="bg-purple-50 p-4 rounded-lg">
-                                    <p class="text-2xl font-bold text-purple-600">${[...new Set(employees.map(emp => emp.department))].length}</p>
+                                <div class="bg-[#F7F6F2] p-4 rounded-lg">
+                                    <p class="text-2xl font-bold text-[#A6823D]">${[...new Set(employees.map(emp => emp.department))].length}</p>
                                     <p class="text-sm text-gray-600">Departments</p>
                                 </div>
                                 <div class="bg-yellow-50 p-4 rounded-lg">
@@ -896,7 +897,7 @@
             reportModal.className = 'modal active';
             reportModal.innerHTML = `
                 <div class="bg-white rounded-lg max-w-6xl w-full max-h-[90vh] overflow-hidden m-4">
-                    <div class="bg-gradient-to-r from-purple-600 to-pink-600 text-white p-6">
+                    <div class="bg-gradient-to-r from-[#16213E] to-pink-600 text-white p-6">
                         <div class="flex justify-between items-center">
                             <h3 class="text-xl font-bold">
                                 <i class="fas fa-money-bill mr-2"></i>Payroll Report
@@ -910,8 +911,8 @@
                         <div class="mb-6">
                             <h4 class="text-lg font-semibold text-gray-800 mb-4">Payroll Summary</h4>
                             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                                <div class="bg-purple-50 p-4 rounded-lg">
-                                    <p class="text-2xl font-bold text-purple-600">${payrollData.totalEmployees}</p>
+                                <div class="bg-[#F7F6F2] p-4 rounded-lg">
+                                    <p class="text-2xl font-bold text-[#A6823D]">${payrollData.totalEmployees}</p>
                                     <p class="text-sm text-gray-600">Total Employees</p>
                                 </div>
                                 <div class="bg-green-50 p-4 rounded-lg">
@@ -996,7 +997,7 @@
                         </div>
                         
                         <div class="flex justify-end space-x-4">
-                            <button onclick="window.print()" class="bg-purple-600 text-white px-6 py-3 rounded hover:bg-purple-700 transition font-semibold">
+                            <button onclick="window.print()" class="bg-[#16213E] text-white px-6 py-3 rounded hover:bg-[#1F2C4F] transition font-semibold">
                                 <i class="fas fa-print mr-2"></i>Print Report
                             </button>
                             <button onclick="this.closest('.modal').remove()" class="bg-gray-500 text-white px-6 py-3 rounded hover:bg-gray-600 transition font-semibold">
@@ -1049,8 +1050,8 @@
                                     <p class="text-2xl font-bold text-yellow-600">${attendanceData.totalEmployees - attendanceData.presentToday}</p>
                                     <p class="text-sm text-gray-600">Absent Today</p>
                                 </div>
-                                <div class="bg-purple-50 p-4 rounded-lg">
-                                    <p class="text-2xl font-bold text-purple-600">${attendanceData.attendanceRate}%</p>
+                                <div class="bg-[#F7F6F2] p-4 rounded-lg">
+                                    <p class="text-2xl font-bold text-[#A6823D]">${attendanceData.attendanceRate}%</p>
                                     <p class="text-sm text-gray-600">Attendance Rate</p>
                                 </div>
                             </div>
@@ -1193,8 +1194,8 @@
                                     <p class="text-2xl font-bold text-blue-600">${complianceData.activeEmployees}</p>
                                     <p class="text-sm text-gray-600">Active Employees</p>
                                 </div>
-                                <div class="bg-purple-50 p-4 rounded-lg">
-                                    <p class="text-2xl font-bold text-purple-600">${complianceData.departments.length}</p>
+                                <div class="bg-[#F7F6F2] p-4 rounded-lg">
+                                    <p class="text-2xl font-bold text-[#A6823D]">${complianceData.departments.length}</p>
                                     <p class="text-sm text-gray-600">Departments</p>
                                 </div>
                             </div>
@@ -1358,7 +1359,7 @@
             analyticsModal.className = 'modal active';
             analyticsModal.innerHTML = `
                 <div class="bg-white rounded-lg max-w-7xl w-full max-h-[95vh] overflow-hidden m-4">
-                    <div class="bg-gradient-to-r from-purple-600 to-pink-600 text-white p-6">
+                    <div class="bg-gradient-to-r from-[#16213E] to-pink-600 text-white p-6">
                         <div class="flex justify-between items-center">
                             <h3 class="text-2xl font-bold">
                                 <i class="fas fa-chart-line mr-3"></i>HR Analytics Dashboard
@@ -1393,13 +1394,13 @@
                                     <p class="text-sm text-gray-600 mt-2">Average monthly attendance</p>
                                 </div>
                                 
-                                <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-lg border border-purple-200">
+                                <div class="bg-gradient-to-br from-[#F7F6F2] to-[#EFEAE0] p-6 rounded-lg border border-[#E4E1D8]">
                                     <div class="flex items-center justify-between mb-4">
-                                        <i class="fas fa-money-bill-wave text-3xl text-purple-600"></i>
+                                        <i class="fas fa-money-bill-wave text-3xl text-[#A6823D]"></i>
                                         <span class="text-lg font-bold text-green-600">+8%</span>
                                     </div>
-                                    <h5 class="text-lg font-bold text-purple-800 mb-2">Total Payroll</h5>
-                                    <p class="text-3xl font-bold text-purple-600">KSh ${employees.reduce((sum, emp) => sum + emp.salary, 0).toLocaleString()}</p>
+                                    <h5 class="text-lg font-bold text-[#16213E] mb-2">Total Payroll</h5>
+                                    <p class="text-3xl font-bold text-[#A6823D]">KSh ${employees.reduce((sum, emp) => sum + emp.salary, 0).toLocaleString()}</p>
                                     <p class="text-sm text-gray-600 mt-2">Monthly payroll expense</p>
                                 </div>
                                 
@@ -1436,7 +1437,7 @@
                                                 </div>
                                                 <div class="flex justify-between items-center">
                                                     <span class="text-gray-600">Total Payroll:</span>
-                                                    <span class="font-bold text-purple-600">KSh ${deptEmployees.reduce((sum, emp) => sum + emp.salary, 0).toLocaleString()}</span>
+                                                    <span class="font-bold text-[#A6823D]">KSh ${deptEmployees.reduce((sum, emp) => sum + emp.salary, 0).toLocaleString()}</span>
                                                 </div>
                                                 <div class="flex justify-between items-center">
                                                     <span class="text-gray-600">Attendance:</span>
@@ -1498,15 +1499,15 @@
                                     </div>
                                 </div>
                                 
-                                <div class="bg-purple-50 p-6 rounded-lg">
-                                    <h5 class="text-lg font-bold text-purple-800 mb-4">Payroll Trends</h5>
+                                <div class="bg-[#F7F6F2] p-6 rounded-lg">
+                                    <h5 class="text-lg font-bold text-[#16213E] mb-4">Payroll Trends</h5>
                                     <div class="space-y-3">
                                         ${['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'].map(month => {
                                             const payroll = employees.reduce((sum, emp) => sum + emp.salary, 0) * (1 + Math.random() * 0.2);
                                             return `
                                                 <div class="flex justify-between items-center">
                                                     <span class="text-gray-600">${month}:</span>
-                                                    <span class="font-bold text-purple-600">KSh ${Math.round(payroll).toLocaleString()}</span>
+                                                    <span class="font-bold text-[#A6823D]">KSh ${Math.round(payroll).toLocaleString()}</span>
                                                 </div>
                                             `;
                                         }).join('')}
@@ -1520,7 +1521,7 @@
                             <button onclick="generateEmployeeReport()" class="bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700 transition font-semibold">
                                 <i class="fas fa-users mr-2"></i>Generate Employee Report
                             </button>
-                            <button onclick="generatePayrollReport()" class="bg-purple-600 text-white px-6 py-3 rounded hover:bg-purple-700 transition font-semibold">
+                            <button onclick="generatePayrollReport()" class="bg-[#16213E] text-white px-6 py-3 rounded hover:bg-[#1F2C4F] transition font-semibold">
                                 <i class="fas fa-money-bill mr-2"></i>Generate Payroll Report
                             </button>
                             <button onclick="generateAttendanceReport()" class="bg-green-600 text-white px-6 py-3 rounded hover:bg-green-700 transition font-semibold">
@@ -1836,7 +1837,7 @@
     <!-- Employee Management Modal -->
     <div id="employeeModal" class="modal">
         <div class="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-hidden m-4">
-            <div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6">
+            <div class="bg-gradient-to-r from-blue-600 to-[#16213E] text-white p-6">
                 <div class="flex justify-between items-center">
                     <h3 class="text-xl font-bold">
                         <i class="fas fa-user-plus mr-2"></i>Employee Management
@@ -1973,7 +1974,7 @@
     <!-- Performance Review Modal -->
     <div id="performanceModal" class="modal">
         <div class="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-hidden m-4">
-            <div class="bg-gradient-to-r from-purple-600 to-pink-600 text-white p-6">
+            <div class="bg-gradient-to-r from-[#16213E] to-pink-600 text-white p-6">
                 <div class="flex justify-between items-center">
                     <h3 class="text-xl font-bold">
                         <i class="fas fa-chart-line mr-2"></i>Performance Review
@@ -1988,7 +1989,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Employee</label>
-                            <select name="employeeId" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
+                            <select name="employeeId" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#A6823D]">
                                 <option value="">Select Employee</option>
                                 <option value="1">John Doe</option>
                                 <option value="2">Jane Smith</option>
@@ -1997,7 +1998,7 @@
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Review Period</label>
-                            <select name="reviewPeriod" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
+                            <select name="reviewPeriod" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#A6823D]">
                                 <option value="">Select Period</option>
                                 <option value="Q1 2024">Q1 2024</option>
                                 <option value="Q2 2024">Q2 2024</option>
@@ -2012,33 +2013,33 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Quality of Work (1-10)</label>
-                                <input type="number" name="quality" min="1" max="10" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
+                                <input type="number" name="quality" min="1" max="10" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#A6823D]">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Teamwork (1-10)</label>
-                                <input type="number" name="teamwork" min="1" max="10" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
+                                <input type="number" name="teamwork" min="1" max="10" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#A6823D]">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Communication (1-10)</label>
-                                <input type="number" name="communication" min="1" max="10" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
+                                <input type="number" name="communication" min="1" max="10" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#A6823D]">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Punctuality (1-10)</label>
-                                <input type="number" name="punctuality" min="1" max="10" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
+                                <input type="number" name="punctuality" min="1" max="10" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#A6823D]">
                             </div>
                         </div>
                     </div>
                     
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Comments</label>
-                        <textarea name="comments" rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"></textarea>
+                        <textarea name="comments" rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#A6823D]"></textarea>
                     </div>
                     
                     <div class="flex justify-end space-x-4">
                         <button type="button" onclick="closeModal(this)" class="bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600 transition font-semibold">
                             Cancel
                         </button>
-                        <button type="submit" class="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition font-semibold">
+                        <button type="submit" class="bg-[#16213E] text-white px-6 py-3 rounded-lg hover:bg-[#1F2C4F] transition font-semibold">
                             <i class="fas fa-save mr-2"></i>Save Review
                         </button>
                     </div>

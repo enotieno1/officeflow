@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         .gradient-bg {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #16213E 0%, #1F2C4F 100%);
         }
         .file-item {
             transition: all 0.3s ease;
@@ -57,9 +57,10 @@
             transition: width 0.3s ease;
         }
     </style>
-<link rel="stylesheet" href="css/mobile.css"></head>
+<link rel="stylesheet" href="css/mobile.css">
+<link rel="stylesheet" href="css/executive-theme.css"></head>
 <body class="bg-gray-50">
-<div id="sidebar" class="fixed inset-y-0 left-0 w-56 text-white z-50 flex flex-col overflow-y-auto" style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);transition:transform 0.3s ease">
+<div id="sidebar" class="fixed inset-y-0 left-0 w-56 text-white z-50 flex flex-col overflow-y-auto" style="background:linear-gradient(135deg,#16213E 0%,#1F2C4F 100%);transition:transform 0.3s ease">
 <div class="p-4 border-b border-white border-opacity-20"><a href="/dashboard/index.html" style="color:white;text-decoration:none;font-size:18px;font-weight:bold">OfficeFlow</a></div>
 <nav class="flex-1 p-2 space-y-1 text-sm">
 <a href="/dashboard/index.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-home" style="width:16px;margin-right:8px"></i>Dashboard</a>
@@ -106,7 +107,7 @@
                     <i class="fas fa-folder-open text-3xl mr-4"></i>
                     <div>
                         <h1 class="text-2xl font-bold">Document Management System</h1>
-                        <p class="text-indigo-100">Secure digital file storage for your business documents</p>
+                        <p class="text-[#EFEAE0]">Secure digital file storage for your business documents</p>
                     </div>
                 </div>
                 <div class="flex items-center space-x-4">
@@ -146,7 +147,7 @@
                         <p class="text-gray-500 text-sm">Files</p>
                         <p class="text-2xl font-bold text-gray-800">247</p>
                     </div>
-                    <i class="fas fa-file text-3xl text-purple-500"></i>
+                    <i class="fas fa-file text-3xl text-[#A6823D]"></i>
                 </div>
             </div>
             <div class="bg-white rounded-lg shadow-md p-6">
@@ -211,13 +212,13 @@
                         <p class="text-gray-600 font-semibold mb-2">Drag & Drop Files Here</p>
                         <p class="text-gray-500 text-sm mb-4">or click to browse</p>
                         <input type="file" id="fileInput" multiple class="hidden" onchange="handleFileSelect(event)">
-                        <button onclick="document.getElementById('fileInput').click()" class="bg-indigo-600 text-white px-6 py-2 rounded hover:bg-indigo-700 transition">
+                        <button onclick="document.getElementById('fileInput').click()" class="bg-[#16213E] text-white px-6 py-2 rounded hover:bg-[#1F2C4F] transition">
                             <i class="fas fa-folder-open mr-2"></i>Browse Files
                         </button>
                     </div>
                     <div id="uploadProgress" class="mt-4 hidden">
                         <div class="bg-gray-200 rounded-full h-2">
-                            <div class="progress-bar bg-indigo-600 h-2 rounded-full" style="width: 0%"></div>
+                            <div class="progress-bar bg-[#16213E] h-2 rounded-full" style="width: 0%"></div>
                         </div>
                         <p class="text-sm text-gray-600 mt-2">Uploading... <span id="progressText">0%</span></p>
                     </div>
@@ -234,7 +235,7 @@
                             <i class="fas fa-scanner mr-2"></i>
                             Scan Document
                         </button>
-                        <button onclick="createDocument()" class="w-full bg-purple-500 text-white px-4 py-3 rounded hover:bg-purple-600 transition text-left">
+                        <button onclick="createDocument()" class="w-full bg-[#A6823D] text-white px-4 py-3 rounded hover:bg-[#16213E] transition text-left">
                             <i class="fas fa-file-alt mr-2"></i>
                             Create Document
                         </button>
@@ -266,7 +267,7 @@
     <!-- File Preview Modal -->
     <div id="fileModal" class="modal">
         <div class="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-hidden m-4">
-            <div class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-6">
+            <div class="bg-gradient-to-r from-[#A6823D] to-[#16213E] text-white p-6">
                 <div class="flex justify-between items-center">
                     <h3 id="modalTitle" class="text-xl font-bold">File Preview</h3>
                     <button onclick="closeFileModal()" class="text-white hover:text-gray-200">

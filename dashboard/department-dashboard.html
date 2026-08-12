@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .gradient-bg { background: linear-gradient(135deg, #16213E 0%, #1F2C4F 100%); }
         .dept-card { transition: all 0.3s ease; cursor: pointer; }
         .dept-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
         .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); }
@@ -20,9 +20,10 @@
         .metric-card { transition: all 0.3s ease; }
         .metric-card:hover { transform: scale(1.02); }
     </style>
-<link rel="stylesheet" href="css/mobile.css"></head>
+<link rel="stylesheet" href="css/mobile.css">
+<link rel="stylesheet" href="css/executive-theme.css"></head>
 <body class="bg-gray-50">
-<div id="sidebar" class="fixed inset-y-0 left-0 w-56 text-white z-50 flex flex-col overflow-y-auto" style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);transition:transform 0.3s ease">
+<div id="sidebar" class="fixed inset-y-0 left-0 w-56 text-white z-50 flex flex-col overflow-y-auto" style="background:linear-gradient(135deg,#16213E 0%,#1F2C4F 100%);transition:transform 0.3s ease">
 <div class="p-4 border-b border-white border-opacity-20">
   <a href="/dashboard/index.html" class="flex items-center space-x-2">
     <i class="fas fa-cogs text-xl"></i>
@@ -30,37 +31,37 @@
   </a>
 </div>
 <nav class="flex-1 p-2 space-y-1 text-sm">
-  <a href="/dashboard/index.html" class="flex items-center px-3 py-2 rounded-lg text-indigo-100 hover:bg-white hover:bg-opacity-20"><i class="fas fa-home w-4 mr-2"></i>Dashboard</a>
-  <a href="/dashboard/hr-system.html" class="flex items-center px-3 py-2 rounded-lg text-indigo-100 hover:bg-white hover:bg-opacity-20"><i class="fas fa-users w-4 mr-2"></i>HR</a>
-  <a href="/dashboard/financial-management.html" class="flex items-center px-3 py-2 rounded-lg text-indigo-100 hover:bg-white hover:bg-opacity-20"><i class="fas fa-chart-line w-4 mr-2"></i>Finance</a>
-  <a href="/dashboard/tasks-management.html" class="flex items-center px-3 py-2 rounded-lg text-indigo-100 hover:bg-white hover:bg-opacity-20"><i class="fas fa-tasks w-4 mr-2"></i>Tasks</a>
-  <a href="/dashboard/document-management.html" class="flex items-center px-3 py-2 rounded-lg text-indigo-100 hover:bg-white hover:bg-opacity-20"><i class="fas fa-file-alt w-4 mr-2"></i>Documents</a>
-  <a href="/dashboard/email-system.html" class="flex items-center px-3 py-2 rounded-lg text-indigo-100 hover:bg-white hover:bg-opacity-20"><i class="fas fa-envelope w-4 mr-2"></i>Email</a>
-  <a href="/dashboard/calendar-system.html" class="flex items-center px-3 py-2 rounded-lg text-indigo-100 hover:bg-white hover:bg-opacity-20"><i class="fas fa-calendar w-4 mr-2"></i>Calendar</a>
-  <a href="/dashboard/ai-features.html" class="flex items-center px-3 py-2 rounded-lg text-indigo-100 hover:bg-white hover:bg-opacity-20"><i class="fas fa-robot w-4 mr-2"></i>AI Features</a>
-  <a href="/dashboard/reports.html" class="flex items-center px-3 py-2 rounded-lg text-indigo-100 hover:bg-white hover:bg-opacity-20"><i class="fas fa-chart-bar w-4 mr-2"></i>Reports</a>
-  <a href="/dashboard/security-center.html" class="flex items-center px-3 py-2 rounded-lg text-indigo-100 hover:bg-white hover:bg-opacity-20"><i class="fas fa-shield-alt w-4 mr-2"></i>Security</a>
+  <a href="/dashboard/index.html" class="flex items-center px-3 py-2 rounded-lg text-[#EFEAE0] hover:bg-white hover:bg-opacity-20"><i class="fas fa-home w-4 mr-2"></i>Dashboard</a>
+  <a href="/dashboard/hr-system.html" class="flex items-center px-3 py-2 rounded-lg text-[#EFEAE0] hover:bg-white hover:bg-opacity-20"><i class="fas fa-users w-4 mr-2"></i>HR</a>
+  <a href="/dashboard/financial-management.html" class="flex items-center px-3 py-2 rounded-lg text-[#EFEAE0] hover:bg-white hover:bg-opacity-20"><i class="fas fa-chart-line w-4 mr-2"></i>Finance</a>
+  <a href="/dashboard/tasks-management.html" class="flex items-center px-3 py-2 rounded-lg text-[#EFEAE0] hover:bg-white hover:bg-opacity-20"><i class="fas fa-tasks w-4 mr-2"></i>Tasks</a>
+  <a href="/dashboard/document-management.html" class="flex items-center px-3 py-2 rounded-lg text-[#EFEAE0] hover:bg-white hover:bg-opacity-20"><i class="fas fa-file-alt w-4 mr-2"></i>Documents</a>
+  <a href="/dashboard/email-system.html" class="flex items-center px-3 py-2 rounded-lg text-[#EFEAE0] hover:bg-white hover:bg-opacity-20"><i class="fas fa-envelope w-4 mr-2"></i>Email</a>
+  <a href="/dashboard/calendar-system.html" class="flex items-center px-3 py-2 rounded-lg text-[#EFEAE0] hover:bg-white hover:bg-opacity-20"><i class="fas fa-calendar w-4 mr-2"></i>Calendar</a>
+  <a href="/dashboard/ai-features.html" class="flex items-center px-3 py-2 rounded-lg text-[#EFEAE0] hover:bg-white hover:bg-opacity-20"><i class="fas fa-robot w-4 mr-2"></i>AI Features</a>
+  <a href="/dashboard/reports.html" class="flex items-center px-3 py-2 rounded-lg text-[#EFEAE0] hover:bg-white hover:bg-opacity-20"><i class="fas fa-chart-bar w-4 mr-2"></i>Reports</a>
+  <a href="/dashboard/security-center.html" class="flex items-center px-3 py-2 rounded-lg text-[#EFEAE0] hover:bg-white hover:bg-opacity-20"><i class="fas fa-shield-alt w-4 mr-2"></i>Security</a>
   <div class="border-t border-white border-opacity-20 my-1"></div>
-  <p class="text-xs text-indigo-300 px-3 py-1 uppercase tracking-wider">Departments</p>
-  <a href="/dashboard/communication-department.html" class="flex items-center px-3 py-2 rounded-lg text-indigo-100 hover:bg-white hover:bg-opacity-20"><i class="fas fa-comments w-4 mr-2"></i>Communication</a>
-  <a href="/dashboard/operations-department.html" class="flex items-center px-3 py-2 rounded-lg text-indigo-100 hover:bg-white hover:bg-opacity-20"><i class="fas fa-cog w-4 mr-2"></i>Operations</a>
-  <a href="/dashboard/sales-department.html" class="flex items-center px-3 py-2 rounded-lg text-indigo-100 hover:bg-white hover:bg-opacity-20"><i class="fas fa-handshake w-4 mr-2"></i>Sales</a>
-  <a href="/dashboard/accounting-tools.html" class="flex items-center px-3 py-2 rounded-lg text-indigo-100 hover:bg-white hover:bg-opacity-20"><i class="fas fa-calculator w-4 mr-2"></i>Accounting</a>
-  <a href="/dashboard/automation.html" class="flex items-center px-3 py-2 rounded-lg text-indigo-100 hover:bg-white hover:bg-opacity-20"><i class="fas fa-magic w-4 mr-2"></i>Automation</a>
+  <p class="text-xs text-[#8A93A3] px-3 py-1 uppercase tracking-wider">Departments</p>
+  <a href="/dashboard/communication-department.html" class="flex items-center px-3 py-2 rounded-lg text-[#EFEAE0] hover:bg-white hover:bg-opacity-20"><i class="fas fa-comments w-4 mr-2"></i>Communication</a>
+  <a href="/dashboard/operations-department.html" class="flex items-center px-3 py-2 rounded-lg text-[#EFEAE0] hover:bg-white hover:bg-opacity-20"><i class="fas fa-cog w-4 mr-2"></i>Operations</a>
+  <a href="/dashboard/sales-department.html" class="flex items-center px-3 py-2 rounded-lg text-[#EFEAE0] hover:bg-white hover:bg-opacity-20"><i class="fas fa-handshake w-4 mr-2"></i>Sales</a>
+  <a href="/dashboard/accounting-tools.html" class="flex items-center px-3 py-2 rounded-lg text-[#EFEAE0] hover:bg-white hover:bg-opacity-20"><i class="fas fa-calculator w-4 mr-2"></i>Accounting</a>
+  <a href="/dashboard/automation.html" class="flex items-center px-3 py-2 rounded-lg text-[#EFEAE0] hover:bg-white hover:bg-opacity-20"><i class="fas fa-magic w-4 mr-2"></i>Automation</a>
   <div class="border-t border-white border-opacity-20 my-1"></div>
-  <p class="text-xs text-indigo-300 px-3 py-1 uppercase tracking-wider">Tools</p>
-  <a href="/dashboard/excel-system.html" class="flex items-center px-3 py-2 rounded-lg text-indigo-100 hover:bg-white hover:bg-opacity-20"><i class="fas fa-file-excel w-4 mr-2"></i>Excel</a>
-  <a href="/dashboard/google-drive.html" class="flex items-center px-3 py-2 rounded-lg text-indigo-100 hover:bg-white hover:bg-opacity-20"><i class="fas fa-cloud w-4 mr-2"></i>Google Drive</a>
-  <a href="/dashboard/gmail-system.html" class="flex items-center px-3 py-2 rounded-lg text-indigo-100 hover:bg-white hover:bg-opacity-20"><i class="fas fa-envelope-open w-4 mr-2"></i>Gmail</a>
-  <a href="/dashboard/trello-management.html" class="flex items-center px-3 py-2 rounded-lg text-indigo-100 hover:bg-white hover:bg-opacity-20"><i class="fab fa-trello w-4 mr-2"></i>Trello</a>
-  <a href="/dashboard/data-management.html" class="flex items-center px-3 py-2 rounded-lg text-indigo-100 hover:bg-white hover:bg-opacity-20"><i class="fas fa-database w-4 mr-2"></i>Data</a>
-  <a href="/dashboard/it-compliance.html" class="flex items-center px-3 py-2 rounded-lg text-indigo-100 hover:bg-white hover:bg-opacity-20"><i class="fas fa-shield-alt w-4 mr-2"></i>IT Compliance</a>
-  <a href="/dashboard/pricing.html" class="flex items-center px-3 py-2 rounded-lg text-indigo-100 hover:bg-white hover:bg-opacity-20"><i class="fas fa-tags w-4 mr-2"></i>Pricing</a>
-  <a href="/dashboard/contact.html" class="flex items-center px-3 py-2 rounded-lg text-indigo-100 hover:bg-white hover:bg-opacity-20"><i class="fas fa-phone w-4 mr-2"></i>Contact</a>
+  <p class="text-xs text-[#8A93A3] px-3 py-1 uppercase tracking-wider">Tools</p>
+  <a href="/dashboard/excel-system.html" class="flex items-center px-3 py-2 rounded-lg text-[#EFEAE0] hover:bg-white hover:bg-opacity-20"><i class="fas fa-file-excel w-4 mr-2"></i>Excel</a>
+  <a href="/dashboard/google-drive.html" class="flex items-center px-3 py-2 rounded-lg text-[#EFEAE0] hover:bg-white hover:bg-opacity-20"><i class="fas fa-cloud w-4 mr-2"></i>Google Drive</a>
+  <a href="/dashboard/gmail-system.html" class="flex items-center px-3 py-2 rounded-lg text-[#EFEAE0] hover:bg-white hover:bg-opacity-20"><i class="fas fa-envelope-open w-4 mr-2"></i>Gmail</a>
+  <a href="/dashboard/trello-management.html" class="flex items-center px-3 py-2 rounded-lg text-[#EFEAE0] hover:bg-white hover:bg-opacity-20"><i class="fab fa-trello w-4 mr-2"></i>Trello</a>
+  <a href="/dashboard/data-management.html" class="flex items-center px-3 py-2 rounded-lg text-[#EFEAE0] hover:bg-white hover:bg-opacity-20"><i class="fas fa-database w-4 mr-2"></i>Data</a>
+  <a href="/dashboard/it-compliance.html" class="flex items-center px-3 py-2 rounded-lg text-[#EFEAE0] hover:bg-white hover:bg-opacity-20"><i class="fas fa-shield-alt w-4 mr-2"></i>IT Compliance</a>
+  <a href="/dashboard/pricing.html" class="flex items-center px-3 py-2 rounded-lg text-[#EFEAE0] hover:bg-white hover:bg-opacity-20"><i class="fas fa-tags w-4 mr-2"></i>Pricing</a>
+  <a href="/dashboard/contact.html" class="flex items-center px-3 py-2 rounded-lg text-[#EFEAE0] hover:bg-white hover:bg-opacity-20"><i class="fas fa-phone w-4 mr-2"></i>Contact</a>
 </nav>
 <div class="p-3 border-t border-white border-opacity-20 text-xs">
   <p class="font-medium" data-user-name>User</p>
-  <p class="text-indigo-300" data-user-role></p>
+  <p class="text-[#8A93A3]" data-user-role></p>
   <button onclick="OOES_AUTH.logout()" class="mt-1 text-red-200 hover:text-white"><i class="fas fa-sign-out-alt mr-1"></i>Logout</button>
 </div>
 </div>
@@ -74,7 +75,7 @@
                     <i class="fas fa-th-large text-3xl mr-4"></i>
                     <div>
                         <h1 class="text-2xl font-bold">Department Dashboard</h1>
-                        <p class="text-purple-100">Complete Office Management Overview</p>
+                        <p class="text-[#EFEAE0]">Complete Office Management Overview</p>
                     </div>
                 </div>
                 <div class="flex items-center space-x-4">
@@ -90,7 +91,7 @@
                         <p class="text-sm text-gray-300">System Status</p>
                         <p class="text-lg font-bold text-green-400">Active</p>
                     </div>
-                    <button onclick="goBack()" class="bg-white text-purple-600 px-4 py-2 rounded hover:bg-gray-100 transition font-semibold">
+                    <button onclick="goBack()" class="bg-white text-[#A6823D] px-4 py-2 rounded hover:bg-gray-100 transition font-semibold">
                         <i class="fas fa-arrow-left mr-2"></i>Back to Dashboard
                     </button>
                 </div>
@@ -104,7 +105,7 @@
         <section class="mb-12">
             <div class="bg-white rounded-lg shadow-md p-8">
                 <h2 class="text-2xl font-bold mb-6 text-gray-800">
-                    <i class="fas fa-building mr-3 text-purple-600"></i>
+                    <i class="fas fa-building mr-3 text-[#A6823D]"></i>
                     Department Overview
                 </h2>
                 
@@ -170,17 +171,17 @@
                     </div>
                     
                     <!-- Communication Department -->
-                    <div class="dept-card bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-lg border border-purple-200" onclick="openCommunicationDepartment()">
+                    <div class="dept-card bg-gradient-to-br from-[#F7F6F2] to-[#EFEAE0] p-6 rounded-lg border border-[#E4E1D8]" onclick="openCommunicationDepartment()">
                         <div class="flex items-center justify-between mb-4">
-                            <i class="fas fa-envelope text-3xl text-purple-600"></i>
+                            <i class="fas fa-envelope text-3xl text-[#A6823D]"></i>
                             <span class="status-badge status-active">Active</span>
                         </div>
-                        <h3 class="text-xl font-bold text-purple-800 mb-2">Communication</h3>
-                        <p class="text-purple-700 text-sm mb-4">Email management, messaging, and client communication</p>
+                        <h3 class="text-xl font-bold text-[#16213E] mb-2">Communication</h3>
+                        <p class="text-[#1F2C4F] text-sm mb-4">Email management, messaging, and client communication</p>
                         <div class="space-y-2">
                             <div class="flex justify-between items-center">
                                 <span class="text-gray-600 text-sm">Emails Today:</span>
-                                <span class="font-bold text-purple-600">156</span>
+                                <span class="font-bold text-[#A6823D]">156</span>
                             </div>
                             <div class="flex justify-between items-center">
                                 <span class="text-gray-600 text-sm">Response Rate:</span>
@@ -188,12 +189,12 @@
                             </div>
                             <div class="flex justify-between items-center">
                                 <span class="text-gray-600 text-sm">Active Campaigns:</span>
-                                <span class="font-bold text-purple-600">8</span>
+                                <span class="font-bold text-[#A6823D]">8</span>
                             </div>
                         </div>
                         <div class="mt-4">
-                            <div class="w-full bg-purple-200 rounded-full h-2">
-                                <div class="bg-purple-600 h-2 rounded-full" style="width: 92%"></div>
+                            <div class="w-full bg-[#E4E1D8] rounded-full h-2">
+                                <div class="bg-[#16213E] h-2 rounded-full" style="width: 92%"></div>
                             </div>
                             <p class="text-xs text-gray-600 mt-1">92% Communication Efficiency</p>
                         </div>
@@ -260,17 +261,17 @@
                     </div>
                     
                     <!-- Sales & Marketing -->
-                    <div class="dept-card bg-gradient-to-br from-indigo-50 to-indigo-100 p-6 rounded-lg border border-indigo-200" onclick="openSalesDepartment()">
+                    <div class="dept-card bg-gradient-to-br from-[#F7F6F2] to-[#EFEAE0] p-6 rounded-lg border border-[#E4E1D8]" onclick="openSalesDepartment()">
                         <div class="flex items-center justify-between mb-4">
-                            <i class="fas fa-chart-line text-3xl text-indigo-600"></i>
+                            <i class="fas fa-chart-line text-3xl text-[#A6823D]"></i>
                             <span class="status-badge status-active">Active</span>
                         </div>
-                        <h3 class="text-xl font-bold text-indigo-800 mb-2">Sales & Marketing</h3>
-                        <p class="text-indigo-700 text-sm mb-4">Lead generation, customer management, and campaigns</p>
+                        <h3 class="text-xl font-bold text-[#16213E] mb-2">Sales & Marketing</h3>
+                        <p class="text-[#1F2C4F] text-sm mb-4">Lead generation, customer management, and campaigns</p>
                         <div class="space-y-2">
                             <div class="flex justify-between items-center">
                                 <span class="text-gray-600 text-sm">New Leads:</span>
-                                <span class="font-bold text-indigo-600">45</span>
+                                <span class="font-bold text-[#A6823D]">45</span>
                             </div>
                             <div class="flex justify-between items-center">
                                 <span class="text-gray-600 text-sm">Conversion Rate:</span>
@@ -278,12 +279,12 @@
                             </div>
                             <div class="flex justify-between items-center">
                                 <span class="text-gray-600 text-sm">Active Campaigns:</span>
-                                <span class="font-bold text-indigo-600">6</span>
+                                <span class="font-bold text-[#A6823D]">6</span>
                             </div>
                         </div>
                         <div class="mt-4">
-                            <div class="w-full bg-indigo-200 rounded-full h-2">
-                                <div class="bg-indigo-600 h-2 rounded-full" style="width: 78%"></div>
+                            <div class="w-full bg-[#E4E1D8] rounded-full h-2">
+                                <div class="bg-[#16213E] h-2 rounded-full" style="width: 78%"></div>
                             </div>
                             <p class="text-xs text-gray-600 mt-1">78% Sales Performance</p>
                         </div>
@@ -296,7 +297,7 @@
         <section class="mb-12">
             <div class="bg-white rounded-lg shadow-md p-8">
                 <h2 class="text-2xl font-bold mb-6 text-gray-800">
-                    <i class="fas fa-tachometer-alt mr-3 text-purple-600"></i>
+                    <i class="fas fa-tachometer-alt mr-3 text-[#A6823D]"></i>
                     Overall Business Metrics
                 </h2>
                 
@@ -321,13 +322,13 @@
                         <p class="text-sm text-gray-600 mt-2">Total business revenue</p>
                     </div>
                     
-                    <div class="metric-card bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-lg border border-purple-200">
+                    <div class="metric-card bg-gradient-to-br from-[#F7F6F2] to-[#EFEAE0] p-6 rounded-lg border border-[#E4E1D8]">
                         <div class="flex items-center justify-between mb-4">
-                            <i class="fas fa-tasks text-2xl text-purple-600"></i>
+                            <i class="fas fa-tasks text-2xl text-[#A6823D]"></i>
                             <span class="text-sm font-bold text-green-600">+8%</span>
                         </div>
-                        <h4 class="text-lg font-bold text-purple-800 mb-2">Active Projects</h4>
-                        <p class="text-2xl font-bold text-purple-600">67</p>
+                        <h4 class="text-lg font-bold text-[#16213E] mb-2">Active Projects</h4>
+                        <p class="text-2xl font-bold text-[#A6823D]">67</p>
                         <p class="text-sm text-gray-600 mt-2">Projects in progress</p>
                     </div>
                     
@@ -348,12 +349,12 @@
         <section class="mb-12">
             <div class="bg-white rounded-lg shadow-md p-8">
                 <h2 class="text-2xl font-bold mb-6 text-gray-800">
-                    <i class="fas fa-bolt mr-3 text-purple-600"></i>
+                    <i class="fas fa-bolt mr-3 text-[#A6823D]"></i>
                     Quick Actions
                 </h2>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <button onclick="generateDepartmentReport()" class="bg-purple-600 text-white px-6 py-4 rounded-lg hover:bg-purple-700 transition font-semibold">
+                    <button onclick="generateDepartmentReport()" class="bg-[#16213E] text-white px-6 py-4 rounded-lg hover:bg-[#1F2C4F] transition font-semibold">
                         <i class="fas fa-file-alt mr-2"></i>Generate Department Report
                     </button>
                     <button onclick="scheduleDepartmentMeeting()" class="bg-blue-600 text-white px-6 py-4 rounded-lg hover:bg-blue-700 transition font-semibold">
@@ -368,7 +369,7 @@
                     <button onclick="createDepartmentTask()" class="bg-red-600 text-white px-6 py-4 rounded-lg hover:bg-red-700 transition font-semibold">
                         <i class="fas fa-plus-circle mr-2"></i>Create Department Task
                     </button>
-                    <button onclick="exportDepartmentData()" class="bg-indigo-600 text-white px-6 py-4 rounded-lg hover:bg-indigo-700 transition font-semibold">
+                    <button onclick="exportDepartmentData()" class="bg-[#16213E] text-white px-6 py-4 rounded-lg hover:bg-[#1F2C4F] transition font-semibold">
                         <i class="fas fa-download mr-2"></i>Export Department Data
                     </button>
                 </div>
