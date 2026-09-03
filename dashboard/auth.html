@@ -434,7 +434,10 @@
                 showNotification('Welcome Back!', 'Signed in as ' + result.name, 'success');
                 setTimeout(function() { window.location.href = '/dashboard/index.html'; }, 800);
             } else {
-                showNotification('Login Failed', (result && result.error) || 'Invalid email or password.', 'error');
+                var loginError = (result && result.error)
+                    ? (typeof result.error === 'string' ? result.error : (result.error.message || 'Invalid email or password.'))
+                    : 'Invalid email or password.';
+                showNotification('Login Failed', loginError, 'error');
             }
         }
 
