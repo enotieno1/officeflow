@@ -741,9 +741,9 @@
         }
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/dashboard/js/config.js"></script>
+<script src="/dashboard/js/db.js"></script>
 <script>
-const _supabase3 = supabase.createClient('https://oghowrilrhummzvrljdt.supabase.co', 'sb_publishable_WReuIZP0Pp2mJOJ691GOLA_5Uwf50wQ');
-
 async function syncTasks() {
   try {
     const { data, error } = await supabase.from('tasks').select('*').order('due_date', { ascending: true });

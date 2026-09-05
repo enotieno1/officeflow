@@ -8,15 +8,21 @@ var OOES_AUTH = {
   _readyResolve: null,
   ready: null,      // await OOES_AUTH.ready if a page needs the session before it runs
 
+  // Locked six-role model (profiles_role_check). Least-privilege ('employee')
+  // is the fail-safe default everywhere below — never fail open into a
+  // privileged role.
   ROLE_PERMISSIONS: {
-    admin:   {canEdit:true,  canDelete:true,  canViewFinance:true,  canManageUsers:true},
-    manager: {canEdit:true,  canDelete:false, canViewFinance:true,  canManageUsers:false},
-    viewer:  {canEdit:false, canDelete:false, canViewFinance:false, canManageUsers:false}
+    employee:      {canEdit:true,  canDelete:false, canViewFinance:false, canManageUsers:false},
+    officer:       {canEdit:true,  canDelete:false, canViewFinance:true,  canManageUsers:false},
+    manager:       {canEdit:true,  canDelete:true,  canViewFinance:true,  canManageUsers:false},
+    administrator: {canEdit:true,  canDelete:true,  canViewFinance:true,  canManageUsers:true},
+    auditor:       {canEdit:false, canDelete:false, canViewFinance:true,  canManageUsers:false},
+    super_admin:   {canEdit:true,  canDelete:true,  canViewFinance:true,  canManageUsers:true}
   },
 
   async _loadProfile(user) {
     var name = (user.user_metadata && user.user_metadata.full_name) || user.email;
-    var role = 'admin';
+    var role = 'employee'; // fail-safe default (matches the DB's own default role) if the profile fetch fails
     try {
       var res = await supabase.from('profiles').select('full_name, role').eq('id', user.id).single();
       if (res.data) {
@@ -68,9 +74,9 @@ var OOES_AUTH = {
 
   getSession: function () { return this._session; },
   isLoggedIn: function () { return this._session !== null; },
-  getRole: function () { return this._session ? this._session.role : 'viewer'; },
+  getRole: function () { return this._session ? this._session.role : 'employee'; },
   can: function (perm) {
-    var perms = this.ROLE_PERMISSIONS[this.getRole()] || this.ROLE_PERMISSIONS.viewer;
+    var perms = this.ROLE_PERMISSIONS[this.getRole()] || this.ROLE_PERMISSIONS.employee;
     return perms[perm] === true;
   },
 
