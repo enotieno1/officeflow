@@ -24,9 +24,8 @@ var OOES_AUTH = {
     var name = (user.user_metadata && user.user_metadata.full_name) || user.email;
     var role = 'employee'; // fail-safe default (matches the DB's own default role) if the profile fetch fails
     try {
-      var res = await supabase.from('profiles').select('full_name, role').eq('id', user.id).single();
+      var res = await supabase.from('profiles').select('role').eq('id', user.id).single();
       if (res.data) {
-        name = res.data.full_name || name;
         role = res.data.role || role;
       }
     } catch (e) { /* profile row may not exist yet (trigger lag) — fall back to defaults */ }
