@@ -243,7 +243,7 @@
                                     <input type="checkbox" class="mr-2 rounded border-gray-300 text-[color:var(--of-brass)] focus:ring-[color:var(--of-brass)]">
                                     <span class="text-gray-700">Remember me</span>
                                 </label>
-                                <a href="#" class="text-[color:var(--of-brass)] hover:text-[color:var(--of-navy)] text-sm">Forgot password?</a>
+                                <button type="button" onclick="handleForgotPassword()" class="text-[color:var(--of-brass)] hover:text-[color:var(--of-navy)] text-sm">Forgot password?</button>
                             </div>
 
                             <button type="submit" class="btn-primary w-full text-white py-3 px-4 rounded-lg font-semibold">
@@ -462,46 +462,31 @@
             setTimeout(function() { window.location.href = '/dashboard/index.html'; }, 800);
         }
 
-        // Social Sign In
-        function socialSignIn(provider) { showNotification('Coming Soon', 'Google and Microsoft login will be available soon. Please use email login.', 'info');
-            
-            setTimeout(() => {
-                // Simulate social authentication
-                localStorage.setItem('ooesUser', JSON.stringify({
-                    email: `user@${provider}.com`,
-                    name: `${provider} User`,
-                    loginTime: new Date().toISOString(),
-                    provider: provider
-                }));
-                
-                showNotification('Welcome!', `Successfully signed in with ${provider}`, 'success');
-                
-                setTimeout(() => {
-                    window.location.href = '/dashboard/index.html';
-                }, 1500);
-            }, 1500);
+        // Social authentication is intentionally disabled until the provider is configured in Supabase.
+        function socialSignIn(provider) {
+            showNotification('Not Available Yet', provider.charAt(0).toUpperCase() + provider.slice(1) + ' sign-in is not configured yet. Please use email and password.', 'info');
         }
 
-        // Social Sign Up
         function socialSignUp(provider) {
-            showNotification('Social Sign Up', `Creating account with ${provider}...`, 'info');
-            
-            setTimeout(() => {
-                // Simulate social account creation
-                localStorage.setItem('ooesUser', JSON.stringify({
-                    email: `user@${provider}.com`,
-                    name: `${provider} User`,
-                    loginTime: new Date().toISOString(),
-                    provider: provider,
-                    isNewUser: true
-                }));
-                
-                showNotification('Account Created!', `Your ${provider} account has been created`, 'success');
-                
-                setTimeout(() => {
-                    window.location.href = '/dashboard/index.html';
-                }, 1500);
-            }, 1500);
+            showNotification('Not Available Yet', provider.charAt(0).toUpperCase() + provider.slice(1) + ' sign-up is not configured yet. Please use email and password.', 'info');
+        }
+
+        async function handleForgotPassword() {
+            var email = document.getElementById('signInEmail').value.trim();
+            if (!email) {
+                showNotification('Email Required', 'Enter your account email first, then choose Forgot password.', 'info');
+                document.getElementById('signInEmail').focus();
+                return;
+            }
+            showNotification('Sending Reset Link', 'Please wait...', 'info');
+            var { error } = await supabase.auth.resetPasswordForEmail(email, {
+                redirectTo: window.location.origin + '/dashboard/reset-password.html'
+            });
+            if (error) {
+                showNotification('Reset Failed', error.message, 'error');
+                return;
+            }
+            showNotification('Check Your Email', 'If the account exists, a password reset link has been sent.', 'success');
         }
 
         // Check if user is already logged in
