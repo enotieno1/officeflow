@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OfficeFlow — Workflows</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/dashboard/js/config.js"></script><script>var supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);</script>
+<link rel="stylesheet" href="css/executive-theme.css"><link rel="stylesheet" href="css/mobile.css">
+</head><body class="bg-gray-50">
+<header class="of-header px-6 py-4 flex justify-between items-center"><div><div class="of-eyebrow">OfficeFlow</div><h1 class="of-serif text-2xl font-semibold">Workflows</h1></div><a href="/dashboard/index.html" class="text-sm">Dashboard</a></header>
+<main class="max-w-6xl mx-auto p-6 grid lg:grid-cols-3 gap-6">
+<section class="lg:col-span-1 of-card p-6">
+<h2 class="of-serif text-xl font-semibold mb-1">Submit a request</h2><p class="text-sm text-gray-500 mb-5">Start an approved workflow.</p>
+<label class="block text-sm font-medium mb-1">Workflow</label><select id="workflow" class="w-full border rounded px-3 py-2 mb-4"></select>
+<label class="block text-sm font-medium mb-1">Title</label><input id="title" maxlength="200" class="w-full border rounded px-3 py-2 mb-4" placeholder="e.g. Annual leave request">
+<label class="block text-sm font-medium mb-1">Priority</label><select id="priority" class="w-full border rounded px-3 py-2 mb-4"><option>low</option><option selected>normal</option><option>high</option><option>urgent</option></select>
+<label class="block text-sm font-medium mb-1">Details</label><textarea id="details" rows="5" class="w-full border rounded px-3 py-2 mb-4" placeholder="Add relevant details"></textarea>
+<button id="submit" class="w-full text-white rounded px-4 py-3" style="background:var(--of-navy)">Submit Request</button>
+<p id="msg" class="text-sm mt-3"></p>
+</section>
+<section class="lg:col-span-2 of-card p-6"><div class="flex justify-between items-center mb-4"><div><h2 class="of-serif text-xl font-semibold">Published workflows</h2><p class="text-sm text-gray-500">Available organization workflows.</p></div><button id="refresh" class="text-sm" style="color:var(--of-brass)">Refresh</button></div><div id="list" class="space-y-3"></div></section>
+</main>
+<script src="/dashboard/js/ooes-auth.js"></script><script src="/dashboard/js/workflow-db.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+async function load(){try{const rows=await OfficeFlowWorkflow.published();$('workflow').innerHTML=rows.map(x=>'<option value="'+esc(x.id)+'">'+esc(x.workflow_definitions?.name||'Workflow')+' — v'+esc(x.version_no)+'</option>').join('')||'<option>No published workflows</option>';$('list').innerHTML=rows.map(x=>'<div class="border rounded p-4 flex justify-between"><div><div class="font-semibold">'+esc(x.workflow_definitions?.name||'Workflow')+'</div><div class="text-xs text-gray-500">Version '+esc(x.version_no)+' · Published</div></div><span class="text-xs px-2 py-1 rounded bg-gray-100">Active</span></div>').join('')||'<p class="text-gray-500">No published workflows.</p>';}catch(e){$('msg').textContent=e.message;$('msg').className='text-sm mt-3 text-red-600';}}
+$('submit').onclick=async()=>{const v=$('workflow').value,t=$('title').value.trim();if(!v||!t){$('msg').textContent='Choose a workflow and enter a title.';return;}try{$('submit').disabled=true;const r=await OfficeFlowWorkflow.submit(v,t,{details:$('details').value.trim()},$('priority').value);$('msg').innerHTML='Submitted. <a class="underline" href="requestDetail.html?id='+encodeURIComponent(r.id)+'">Open request</a>';$('msg').className='text-sm mt-3 text-green-600';}catch(e){$('msg').textContent=e.message;$('msg').className='text-sm mt-3 text-red-600';}finally{$('submit').disabled=false;}};
+$('refresh').onclick=load;document.addEventListener('DOMContentLoaded',load);
+</script></body></html>
