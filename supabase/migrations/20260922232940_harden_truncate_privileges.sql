@@ -1,0 +1,1 @@
+REVOKE TRUNCATE ON TABLE public.organizations,public.departments,public.profiles,public.employees,public.tasks,public.documents,public.transactions,public.workflow_definitions,public.workflow_versions,public.workflow_steps,public.requests,public.request_steps,public.request_comments,public.audit_events FROM authenticated,anon;
