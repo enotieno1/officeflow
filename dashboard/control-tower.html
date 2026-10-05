@@ -6,42 +6,74 @@
 <script src="/dashboard/js/config.js"></script><script>var supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);</script>
 <link rel="stylesheet" href="css/executive-theme.css"><link rel="stylesheet" href="css/mobile.css">
 </head><body class="bg-gray-50">
-<header class="of-header px-6 py-4 flex justify-between items-center"><div><div class="of-eyebrow">OfficeFlow</div><h1 class="of-serif text-2xl font-semibold">Control Tower</h1><p class="text-sm text-gray-500 mt-1">See where organizational work is moving — and where it is getting stuck.</p></div><a href="index.html" class="text-sm">Dashboard</a></header>
-<main class="max-w-6xl mx-auto p-6"><div id="error" class="hidden text-red-600 mb-4"></div>
-<div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4 mb-6">
-<div class="of-card p-4"><div class="text-xs text-gray-500">Total</div><div id="total" class="text-2xl font-semibold">—</div></div>
-<div class="of-card p-4"><div class="text-xs text-gray-500">Active</div><div id="pending" class="text-2xl font-semibold">—</div></div>
-<div class="of-card p-4"><div class="text-xs text-gray-500">Completed</div><div id="completed" class="text-2xl font-semibold">—</div></div>
-<div class="of-card p-4"><div class="text-xs text-gray-500">Rejected</div><div id="rejected" class="text-2xl font-semibold">—</div></div>
-<div class="of-card p-4"><div class="text-xs text-gray-500">Overdue</div><div id="overdue" class="text-2xl font-semibold">—</div></div>
-<div class="of-card p-4"><div class="text-xs text-gray-500">Escalated</div><div id="escalated" class="text-2xl font-semibold">—</div></div>
-</div>
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-<section class="of-card p-6 lg:col-span-2"><div class="flex justify-between items-center"><div><h2 class="of-serif text-xl font-semibold">Operational bottlenecks</h2><p class="text-sm text-gray-500 mt-1">Active workflow steps with the most work waiting.</p></div><button onclick="load()" class="text-sm" style="color:var(--of-brass)">Refresh</button></div><div id="bottlenecks" class="mt-5 space-y-3"><p class="text-sm text-gray-500">Loading…</p></div></section>
-<section class="of-card p-6"><h2 class="of-serif text-xl font-semibold">Work age</h2><p class="text-sm text-gray-500 mt-1">How long active requests have been open.</p><div id="aging" class="mt-5 space-y-4"></div></section>
-</div>
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-<section class="of-card p-6"><h2 class="of-serif text-lg font-semibold">Priority pressure</h2><div id="priority" class="mt-4 space-y-3"></div></section>
-<section class="of-card p-6 md:col-span-2"><h2 class="of-serif text-lg font-semibold">Management signal</h2><div id="signal" class="mt-4 text-sm text-gray-600">Loading operational signal…</div></section>
-</div>
+<header class="of-header px-6 py-4 flex justify-between items-center">
+ <div><div class="of-eyebrow">OfficeFlow</div><h1 class="of-serif text-2xl font-semibold">Control Tower</h1><p class="text-sm text-gray-500 mt-1">See how work moves across the organization — by unit, workflow and accountability.</p></div>
+ <a href="index.html" class="text-sm">Dashboard</a>
+</header>
+<main class="max-w-7xl mx-auto p-6">
+ <div id="error" class="hidden text-red-600 mb-4"></div>
+ <section class="of-card p-4 mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+  <div><div class="text-xs uppercase tracking-wider text-gray-500">Operational scope</div><div class="font-semibold">Organization-wide control</div><p id="scopeHint" class="text-sm text-gray-500 mt-1">View performance across every organizational unit.</p></div>
+  <div class="flex items-center gap-2"><label for="unitSelect" class="text-sm text-gray-600">Unit</label><select id="unitSelect" class="border rounded-lg px-3 py-2 bg-white"><option value="">Entire organization</option></select><button onclick="load()" class="text-sm px-3 py-2 rounded-lg border">Refresh</button></div>
+ </section>
+
+ <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4 mb-6">
+  <div class="of-card p-4"><div class="text-xs text-gray-500">Total</div><div id="total" class="text-2xl font-semibold">—</div></div>
+  <div class="of-card p-4"><div class="text-xs text-gray-500">Active</div><div id="pending" class="text-2xl font-semibold">—</div></div>
+  <div class="of-card p-4"><div class="text-xs text-gray-500">Completed</div><div id="completed" class="text-2xl font-semibold">—</div></div>
+  <div class="of-card p-4"><div class="text-xs text-gray-500">Rejected</div><div id="rejected" class="text-2xl font-semibold">—</div></div>
+  <div class="of-card p-4"><div class="text-xs text-gray-500">Overdue</div><div id="overdue" class="text-2xl font-semibold">—</div></div>
+  <div class="of-card p-4"><div class="text-xs text-gray-500">Escalated</div><div id="escalated" class="text-2xl font-semibold">—</div></div>
+ </div>
+
+ <section class="of-card p-6 mb-6">
+  <div><h2 class="of-serif text-xl font-semibold">Unit performance</h2><p class="text-sm text-gray-500 mt-1">Where work is concentrated, delayed or escalating.</p></div>
+  <div id="units" class="mt-5 overflow-x-auto"><p class="text-sm text-gray-500">Loading…</p></div>
+ </section>
+
+ <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+  <section class="of-card p-6 lg:col-span-2"><div class="flex justify-between items-center"><div><h2 class="of-serif text-xl font-semibold">Operational bottlenecks</h2><p class="text-sm text-gray-500 mt-1">Active workflow steps with the most work waiting.</p></div></div><div id="bottlenecks" class="mt-5 space-y-3"><p class="text-sm text-gray-500">Loading…</p></div></section>
+  <section class="of-card p-6"><h2 class="of-serif text-xl font-semibold">Work age</h2><p class="text-sm text-gray-500 mt-1">How long active requests have been open.</p><div id="aging" class="mt-5 space-y-4"></div></section>
+ </div>
+
+ <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+  <section class="of-card p-6"><h2 class="of-serif text-lg font-semibold">Priority pressure</h2><div id="priority" class="mt-4 space-y-3"></div></section>
+  <section class="of-card p-6 md:col-span-2"><h2 class="of-serif text-lg font-semibold">Management signal</h2><div id="signal" class="mt-4 text-sm text-gray-600">Loading operational signal…</div></section>
+ </div>
 </main>
 <script src="/dashboard/js/ooes-auth.js"></script>
 <script>
-const $=x=>document.getElementById(x);const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const $=x=>document.getElementById(x);
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function metric(n,label,extra=''){return '<div class="flex items-center justify-between border-b pb-3"><span class="text-sm text-gray-600">'+esc(label)+'</span><span class="font-semibold">'+esc(n)+extra+'</span></div>';}
+function selectedUnit(){const v=$('unitSelect').value;return v||null;}
+function renderUnits(units){
+ const rows=(units||[]).map(u=>'<tr class="border-b"><td class="py-3 pr-4"><div class="font-semibold">'+esc(u.unit_name)+'</div><div class="text-xs text-gray-500">'+esc(u.unit_type)+'</div></td><td class="py-3 px-3">'+esc(u.active_requests)+'</td><td class="py-3 px-3">'+esc(u.overdue_steps)+'</td><td class="py-3 px-3">'+esc(u.escalated_steps)+'</td><td class="py-3 pl-3">'+esc(u.avg_age_hours)+'h</td></tr>').join('');
+ $('units').innerHTML=rows?'<table class="w-full text-sm"><thead><tr class="text-left text-xs uppercase tracking-wider text-gray-500 border-b"><th class="py-2 pr-4">Unit</th><th class="py-2 px-3">Active</th><th class="py-2 px-3">Overdue</th><th class="py-2 px-3">Escalated</th><th class="py-2 pl-3">Avg age</th></tr></thead><tbody>'+rows+'</tbody></table>':'<p class="text-sm text-gray-500 py-4">No active unit data.</p>';
+}
+async function loadUnits(){
+ const {data,error}=await supabase.from('departments').select('id,name,code,unit_type,parent_id').eq('is_active',true).order('name');
+ if(error)throw error;
+ const current=$('unitSelect').value;
+ $('unitSelect').innerHTML='<option value="">Entire organization</option>'+(data||[]).map(u=>'<option value="'+esc(u.id)+'">'+esc(u.name)+' · '+esc(u.code||u.unit_type)+'</option>').join('');
+ if(current)$('unitSelect').value=current;
+}
 async function load(){
  try{
   await OOES_AUTH.ready;if(!OOES_AUTH.isLoggedIn())return;
-  const [tower,intel]=await Promise.all([supabase.rpc('fn_control_tower'),supabase.rpc('fn_operational_intelligence')]);
+  const unitId=selectedUnit();
+  const [tower,intel]=await Promise.all([supabase.rpc('fn_control_tower',{p_unit_id:unitId}),supabase.rpc('fn_operational_intelligence',{p_unit_id:unitId})]);
   if(tower.error)throw tower.error;if(intel.error)throw intel.error;
-  const x=(tower.data||[])[0]||{}, d=intel.data||{}, s=d.summary||{};
+  const x=(tower.data||[])[0]||{},d=intel.data||{},s=d.summary||{};
   $('total').textContent=x.total_requests??0;$('pending').textContent=x.pending_requests??0;$('completed').textContent=x.completed_requests??0;$('rejected').textContent=x.rejected_requests??0;$('overdue').textContent=x.overdue_steps??0;$('escalated').textContent=x.escalated_steps??0;
-  const b=d.bottlenecks||[];
-  $('bottlenecks').innerHTML=b.length?b.map((v,i)=>'<div class="border rounded-lg p-4"><div class="flex justify-between gap-3"><div><div class="font-semibold">'+esc(v.step_name)+'</div><div class="text-xs text-gray-500 mt-1">'+esc(v.approver_role)+' · avg age '+esc(v.avg_age_hours)+'h</div></div><div class="text-right"><div class="font-semibold">'+esc(v.pending_count)+' waiting</div><div class="text-xs '+(v.overdue_count?'text-red-600':'text-gray-500')+'">'+esc(v.overdue_count)+' overdue</div></div></div></div>').join(''):'<p class="text-sm text-gray-500 py-4">No active bottlenecks.</p>';
+  const scope=d.scope_unit_id?((d.units||[]).find(u=>u.unit_id===d.scope_unit_id)?.unit_name||'Selected unit'):'Entire organization';
+  $('scopeHint').textContent='Showing '+scope+'.';
+  renderUnits(d.units);
+  const b=d.bottlenecks||[];$('bottlenecks').innerHTML=b.length?b.map(v=>'<div class="border rounded-lg p-4"><div class="flex justify-between gap-3"><div><div class="font-semibold">'+esc(v.step_name)+'</div><div class="text-xs text-gray-500 mt-1">'+esc(v.unit_name||'Unassigned unit')+' · '+esc(v.approver_role)+' · avg age '+esc(v.avg_age_hours)+'h</div></div><div class="text-right"><div class="font-semibold">'+esc(v.pending_count)+' waiting</div><div class="text-xs '+(v.overdue_count?'text-red-600':'text-gray-500')+'">'+esc(v.overdue_count)+' overdue</div></div></div></div>').join(''):'<p class="text-sm text-gray-500 py-4">No active bottlenecks.</p>';
   const a=d.aging||{};$('aging').innerHTML=metric(a.under_24h??0,'Under 24 hours')+metric(a['24_72h']??0,'24–72 hours')+metric(a.over_72h??0,'Over 72 hours');
   const p=d.priority||[];$('priority').innerHTML=p.length?p.map(v=>metric(v.count,v.priority||'Unspecified')).join(''):'<p class="text-sm text-gray-500">No active requests.</p>';
-  const signals=[];if((s.overdue_steps||0)>0)signals.push((s.overdue_steps)+' overdue step(s) require attention.');if((s.escalated_steps||0)>0)signals.push((s.escalated_steps)+' escalated step(s) are currently unresolved.');if((s.high_priority_active||0)>0)signals.push((s.high_priority_active)+' high/urgent request(s) are active.');if(!signals.length)signals.push('No immediate operational pressure detected.');$('signal').innerHTML=signals.map(v=>'<div class="mb-2">• '+esc(v)+'</div>').join('');
+  const signals=[];if((s.overdue_steps||0)>0)signals.push(s.overdue_steps+' overdue step(s) require attention.');if((s.escalated_steps||0)>0)signals.push(s.escalated_steps+' escalated step(s) are currently unresolved.');if((s.high_priority_active||0)>0)signals.push(s.high_priority_active+' high/urgent request(s) are active.');if(!signals.length)signals.push('No immediate operational pressure detected.');$('signal').innerHTML=signals.map(v=>'<div class="mb-2">• '+esc(v)+'</div>').join('');
  }catch(e){$('error').textContent=e.message||'Unable to load Control Tower.';$('error').classList.remove('hidden');}
 }
-document.addEventListener('DOMContentLoaded',load);
+document.addEventListener('DOMContentLoaded',async()=>{try{await OOES_AUTH.ready;if(!OOES_AUTH.isLoggedIn())return;await loadUnits();await load();$('unitSelect').addEventListener('change',load);}catch(e){$('error').textContent=e.message||'Unable to load organizational units.';$('error').classList.remove('hidden');}});
 </script></body></html>
