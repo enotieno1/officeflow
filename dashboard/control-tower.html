@@ -21,6 +21,6 @@
 <script src="/dashboard/js/ooes-auth.js"></script>
 <script>
 const $=x=>document.getElementById(x);
-async function load(){try{const {data,error}=await supabase.rpc('fn_control_tower');if(error)throw error;const x=(data||[])[0]||{};['total','pending','completed','rejected','overdue','escalated'].forEach(k=>$(k).textContent=x[k+'_requests']??x[k+'_steps']??0);}catch(e){$('error').textContent=e.message||'Unable to load Control Tower.';$('error').classList.remove('hidden');}}
+async function load(){try{await OOES_AUTH.ready;if(!OOES_AUTH.isLoggedIn())return;const {data,error}=await supabase.rpc('fn_control_tower');if(error)throw error;const x=(data||[])[0]||{};['total','pending','completed','rejected','overdue','escalated'].forEach(k=>$(k).textContent=x[k+'_requests']??x[k+'_steps']??0);}catch(e){$('error').textContent=e.message||'Unable to load Control Tower.';$('error').classList.remove('hidden');}}
 document.addEventListener('DOMContentLoaded',load);
 </script></body></html>
