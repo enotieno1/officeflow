@@ -87,6 +87,6 @@ document.getElementById("stat-escalated-sub").textContent="Escalated items";
 }
 }
 document.addEventListener("DOMContentLoaded",loadDashboard);
-function globalSearchFn(){var q=document.getElementById("globalSearch").value.toLowerCase().trim();if(!q)return;var pages=[{name:"Requests",url:"workflow.html"},{name:"My Work",url:"my-work.html"},{name:"Control Tower",url:"control-tower.html"},{name:"Workflow Builder",url:"workflow-builder.html"},{name:"Reports",url:"reports.html"},{name:"People",url:"hr-system.html"},{name:"Documents",url:"document-management.html"},{name:"Security",url:"security-center.html"}];var m=pages.filter(function(p){return p.name.toLowerCase().includes(q);});if(m.length>0){window.location.href=m[0].url;}else{showNotification("Search","No OfficeFlow area found for: "+q,"info");}}</script>
+function globalSearchFn(){var q=document.getElementById("globalSearch").value.toLowerCase().trim();if(!q)return;var pages=[{name:"Requests",url:"workflow.html"},{name:"My Work",url:"my-work.html"},{name:"Notifications",url:"notifications.html"},{name:"Control Tower",url:"control-tower.html"},{name:"Workflow Builder",url:"workflow-builder.html"},{name:"Reports",url:"reports.html"},{name:"People",url:"hr-system.html"},{name:"Documents",url:"document-management.html"},{name:"Security",url:"security-center.html"}];var m=pages.filter(function(p){return p.name.toLowerCase().includes(q);});if(m.length>0){window.location.href=m[0].url;}else{showNotification("Search","No OfficeFlow area found for: "+q,"info");}}</script>
 </body>
 </html>
