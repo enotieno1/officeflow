@@ -96,6 +96,7 @@ var OOES_AUTH = {
     if (!s) return;
     document.querySelectorAll('[data-user-name]').forEach(function (el) { el.textContent = s.name; });
     document.querySelectorAll('[data-user-email]').forEach(function (el) { el.textContent = s.email; });
+    document.querySelectorAll('[data-user-role]').forEach(function (el) { el.textContent = s.role; });
   }
 };
 
