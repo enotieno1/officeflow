@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OfficeFlow — Notifications</title>
+<script src="https://cdn.tailwindcss.com"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/dashboard/js/config.js"></script><script>var supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);</script>
+<link rel="stylesheet" href="css/executive-theme.css"><link rel="stylesheet" href="css/mobile.css">
+</head><body class="bg-gray-50">
+<header class="of-header px-6 py-4 flex justify-between items-center"><div><div class="of-eyebrow">OfficeFlow</div><h1 class="of-serif text-2xl font-semibold">Notifications</h1></div><a href="index.html" class="text-sm">Dashboard</a></header>
+<main class="max-w-4xl mx-auto p-6">
+<div class="flex justify-between items-center mb-5"><div><h2 class="of-serif text-xl font-semibold">Your notifications</h2><p class="text-sm text-gray-500">Approval requests, decisions, completions and escalations.</p></div><button id="refresh" class="text-sm" style="color:var(--of-brass)">Refresh</button></div>
+<div id="error" class="hidden text-red-600 mb-4"></div><div id="list" class="space-y-3"></div>
+</main>
+<script src="/dashboard/js/ooes-auth.js"></script>
+<script>
+const $=x=>document.getElementById(x); const esc=v=>String(v??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+async function load(){try{await OOES_AUTH.ready;if(!OOES_AUTH.isLoggedIn())return;const {data,error}=await supabase.rpc('fn_my_notifications');if(error)throw error;const rows=data||[];$('list').innerHTML=rows.length?rows.map(n=>'<article class="of-card p-4 '+(n.read_at?'opacity-70':'')+'"><div class="flex justify-between gap-4"><div><div class="font-semibold">'+esc(n.title)+'</div><p class="text-sm text-gray-600 mt-1">'+esc(n.body)+'</p><div class="text-xs text-gray-400 mt-2">'+new Date(n.created_at).toLocaleString()+'</div></div><div class="flex flex-col items-end gap-2">'+(!n.read_at?'<span class="text-xs px-2 py-1 rounded-full bg-[var(--of-brass)] text-white">New</span>':'')+(n.request_id?'<a class="text-xs" style="color:var(--of-brass)" href="requestDetail.html?id='+encodeURIComponent(n.request_id)+'">Open request</a>':'')+(!n.read_at?'<button class="text-xs underline" onclick="read(\''+n.id+'\')">Mark read</button>':'')+'</div></div></article>').join(''):'<div class="of-card p-10 text-center text-gray-500">You are all caught up.</div>';}catch(e){$('error').textContent=e.message||'Unable to load notifications.';$('error').classList.remove('hidden');}}
+async function read(id){const {error}=await supabase.rpc('fn_mark_notification_read',{p_notification_id:id});if(error){$('error').textContent=error.message;$('error').classList.remove('hidden');return;}load();}
+$('refresh').onclick=load;document.addEventListener('DOMContentLoaded',load);
+</script></body></html>
