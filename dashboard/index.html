@@ -20,6 +20,7 @@
 <a href="workflow.html" class="sidebar-link"><i class="fas fa-route w-5 mr-3"></i>Requests & Workflows</a>
 <a href="control-tower.html" class="sidebar-link"><i class="fas fa-chart-line w-5 mr-3"></i>Control Tower</a>
 <a href="workflow-builder.html" class="sidebar-link"><i class="fas fa-sitemap w-5 mr-3"></i>Workflow Builder</a>
+<a href="automation.html" class="sidebar-link"><i class="fas fa-bolt w-5 mr-3"></i>Automation Engine</a>
 <a href="reports.html" class="sidebar-link"><i class="fas fa-chart-bar w-5 mr-3"></i>Reports</a>
 <a href="security-center.html" class="sidebar-link"><i class="fas fa-shield-alt w-5 mr-3"></i>Security</a>
 <div class="border-t border-white border-opacity-20 my-2"></div>
@@ -61,6 +62,7 @@
 <a href="notifications.html" class="flex flex-col items-center p-4 rounded border hover:border-[var(--of-brass)] transition" style="border-color:var(--of-border)"><i class="fas fa-bell text-xl mb-2" style="color:var(--of-navy)"></i><p class="text-sm text-gray-700">Notifications</p></a>
 <a href="workflow-builder.html" class="flex flex-col items-center p-4 rounded border hover:border-[var(--of-brass)] transition" style="border-color:var(--of-border)"><i class="fas fa-upload text-xl mb-2" style="color:var(--of-navy)"></i><p class="text-sm text-gray-700">Build Workflow</p></a>
 <a href="control-tower.html" class="flex flex-col items-center p-4 rounded border hover:border-[var(--of-brass)] transition" style="border-color:var(--of-border)"><i class="fas fa-file-invoice-dollar text-xl mb-2" style="color:var(--of-navy)"></i><p class="text-sm text-gray-700">Control Tower</p></a>
+<a href="automation.html" class="flex flex-col items-center p-4 rounded border hover:border-[var(--of-brass)] transition" style="border-color:var(--of-border)"><i class="fas fa-bolt text-xl mb-2" style="color:var(--of-navy)"></i><p class="text-sm text-gray-700">Automation</p></a>
 <a href="reports.html" class="flex flex-col items-center p-4 rounded border hover:border-[var(--of-brass)] transition" style="border-color:var(--of-border)"><i class="fas fa-chart-bar text-xl mb-2" style="color:var(--of-navy)"></i><p class="text-sm text-gray-700">Reports</p></a>
 </div></div>
 </main></div>
@@ -87,6 +89,6 @@ document.getElementById("stat-escalated-sub").textContent="Escalated items";
 }
 }
 document.addEventListener("DOMContentLoaded",loadDashboard);
-function globalSearchFn(){var q=document.getElementById("globalSearch").value.toLowerCase().trim();if(!q)return;var pages=[{name:"Requests",url:"workflow.html"},{name:"My Work",url:"my-work.html"},{name:"Notifications",url:"notifications.html"},{name:"Control Tower",url:"control-tower.html"},{name:"Workflow Builder",url:"workflow-builder.html"},{name:"Reports",url:"reports.html"},{name:"People",url:"hr-system.html"},{name:"Documents",url:"document-management.html"},{name:"Security",url:"security-center.html"}];var m=pages.filter(function(p){return p.name.toLowerCase().includes(q);});if(m.length>0){window.location.href=m[0].url;}else{showNotification("Search","No OfficeFlow area found for: "+q,"info");}}</script>
+function globalSearchFn(){var q=document.getElementById("globalSearch").value.toLowerCase().trim();if(!q)return;var pages=[{name:"Requests",url:"workflow.html"},{name:"My Work",url:"my-work.html"},{name:"Notifications",url:"notifications.html"},{name:"Control Tower",url:"control-tower.html"},{name:"Workflow Builder",url:"workflow-builder.html"},{name:"Automation Engine",url:"automation.html"},{name:"Reports",url:"reports.html"},{name:"People",url:"hr-system.html"},{name:"Documents",url:"document-management.html"},{name:"Security",url:"security-center.html"}];var m=pages.filter(function(p){return p.name.toLowerCase().includes(q);});if(m.length>0){window.location.href=m[0].url;}else{showNotification("Search","No OfficeFlow area found for: "+q,"info");}}</script>
 </body>
 </html>
