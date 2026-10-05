@@ -70,6 +70,7 @@
 document.getElementById("current-date").textContent=new Date().toLocaleDateString("en-KE",{weekday:"long",year:"numeric",month:"long",day:"numeric"});
 async function loadDashboard(){
 try{
+await OOES_AUTH.ready;if(!OOES_AUTH.isLoggedIn())return;
 var r=await supabase.rpc('fn_control_tower');if(r.error)throw r.error;var x=(r.data||[])[0]||{};
 document.getElementById("stat-requests").textContent=x.total_requests??0;
 document.getElementById("stat-approvals").textContent=x.pending_requests??0;
@@ -84,7 +85,6 @@ document.getElementById("stat-escalated-sub").textContent="Escalated items";
 }
 }
 document.addEventListener("DOMContentLoaded",loadDashboard);
-function globalSearchFn(){var q=document.getElementById("globalSearch").value.toLowerCase().trim();if(!q)return;var pages=[{name:"HR",url:"hr-system.html"},{name:"Finance",url:"financial-management.html"},{name:"Tasks",url:"tasks-management.html"},{name:"Documents",url:"document-management.html"},{name:"Email",url:"email-system.html"},{name:"Reports",url:"reports.html"},{name:"AI Features",url:"ai-features.html"},{name:"Security",url:"security-center.html"},{name:"Pricing",url:"pricing.html"},{name:"Contact",url:"contact.html"},{name:"Calendar",url:"calendar-system.html"},{name:"Accounting",url:"accounting-tools.html"},{name:"Sales",url:"sales-department.html"},{name:"Operations",url:"operations-department.html"}];var m=pages.filter(function(p){return p.name.toLowerCase().includes(q);});if(m.length>0){window.location.href=m[0].url;}else{showNotification("Search","No page found for: "+q,"info");}}
-</script>
+function globalSearchFn(){var q=document.getElementById("globalSearch").value.toLowerCase().trim();if(!q)return;var pages=[{name:"Requests",url:"workflow.html"},{name:"My Work",url:"my-work.html"},{name:"Control Tower",url:"control-tower.html"},{name:"Workflow Builder",url:"workflow-builder.html"},{name:"Reports",url:"reports.html"},{name:"People",url:"hr-system.html"},{name:"Documents",url:"document-management.html"},{name:"Security",url:"security-center.html"}];var m=pages.filter(function(p){return p.name.toLowerCase().includes(q);});if(m.length>0){window.location.href=m[0].url;}else{showNotification("Search","No OfficeFlow area found for: "+q,"info");}}</script>
 </body>
 </html>
