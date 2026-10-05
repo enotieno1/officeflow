@@ -69,10 +69,19 @@
 <script>
 document.getElementById("current-date").textContent=new Date().toLocaleDateString("en-KE",{weekday:"long",year:"numeric",month:"long",day:"numeric"});
 async function loadDashboard(){
-try{var e=await getEmployees();document.getElementById("stat-employees").textContent=e.length;document.getElementById("stat-employees-sub").textContent="Active staff";}catch(e){document.getElementById("stat-employees").textContent="0";}
-try{var t=await getTransactions();document.getElementById("stat-transactions").textContent=t.length;var tot=t.reduce(function(s,x){return s+(parseFloat(x.amount)||0);},0);document.getElementById("stat-transactions-sub").textContent="KES "+tot.toLocaleString();document.getElementById("transactions-list").innerHTML=t.slice(0,5).map(function(x){var a=parseFloat(x.amount)||0;return "<div class='py-3 border-b border-gray-100 flex justify-between'><span class='text-sm text-gray-700'>"+(x.description||"Transaction")+"</span><span class='text-sm font-semibold "+(a>=0?"text-green-600":"text-red-600")+"'>"+(a>=0?"+KES ":"-KES ")+Math.abs(a).toLocaleString()+"</span></div>";}).join("");}catch(e){document.getElementById("stat-transactions").textContent="0";}
-try{var k=await getTasks();var p=k.filter(function(x){return x.status!="done"&&x.status!="completed";});document.getElementById("stat-tasks").textContent=p.length;document.getElementById("stat-tasks-sub").textContent=k.length+" total";document.getElementById("tasks-list").innerHTML=k.slice(0,5).map(function(x){var d=x.status=="done"||x.status=="completed";return "<div class='py-3 border-b border-gray-100 flex justify-between items-center'><span class='text-sm "+(d?"line-through text-gray-400":"text-gray-700")+"'>"+(x.title||"Task")+"</span><span class='text-xs px-2 py-1 bg-gray-100 rounded-full'>"+(x.priority||"normal")+"</span></div>";}).join("");}catch(e){document.getElementById("stat-tasks").textContent="0";}
-try{var d=await getDocuments();document.getElementById("stat-documents").textContent=d.length;document.getElementById("stat-docs-sub").textContent="Stored files";}catch(e){document.getElementById("stat-documents").textContent="0";}
+try{
+var r=await supabase.rpc('fn_control_tower');if(r.error)throw r.error;var x=(r.data||[])[0]||{};
+document.getElementById("stat-requests").textContent=x.total_requests??0;
+document.getElementById("stat-approvals").textContent=x.pending_requests??0;
+document.getElementById("stat-overdue").textContent=x.overdue_steps??0;
+document.getElementById("stat-escalated").textContent=x.escalated_steps??0;
+document.getElementById("stat-requests-sub").textContent="Total workflow requests";
+document.getElementById("stat-approvals-sub").textContent="Awaiting action";
+document.getElementById("stat-overdue-sub").textContent="Past SLA";
+document.getElementById("stat-escalated-sub").textContent="Escalated items";
+}catch(e){
+["requests","approvals","overdue","escalated"].forEach(function(k){document.getElementById("stat-"+k).textContent="—";});
+}
 }
 document.addEventListener("DOMContentLoaded",loadDashboard);
 function globalSearchFn(){var q=document.getElementById("globalSearch").value.toLowerCase().trim();if(!q)return;var pages=[{name:"HR",url:"hr-system.html"},{name:"Finance",url:"financial-management.html"},{name:"Tasks",url:"tasks-management.html"},{name:"Documents",url:"document-management.html"},{name:"Email",url:"email-system.html"},{name:"Reports",url:"reports.html"},{name:"AI Features",url:"ai-features.html"},{name:"Security",url:"security-center.html"},{name:"Pricing",url:"pricing.html"},{name:"Contact",url:"contact.html"},{name:"Calendar",url:"calendar-system.html"},{name:"Accounting",url:"accounting-tools.html"},{name:"Sales",url:"sales-department.html"},{name:"Operations",url:"operations-department.html"}];var m=pages.filter(function(p){return p.name.toLowerCase().includes(q);});if(m.length>0){window.location.href=m[0].url;}else{showNotification("Search","No page found for: "+q,"info");}}
