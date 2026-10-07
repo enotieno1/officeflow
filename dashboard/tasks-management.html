@@ -664,7 +664,7 @@
                 var r = await supabase.from('tasks').insert([newTask]).select();
                 if (r.error) throw r.error;
                 showNotification('Success', 'Task created!', 'success');
-            } catch(err) { showNotification('Saved', 'Task saved locally.', 'info'); }
+            } catch(err) { showNotification('Error', 'Task was not saved. Please retry.', 'error'); }
             closeTaskModal();
             setTimeout(syncTasks, 500);
         }
