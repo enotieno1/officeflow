@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OfficeFlow — Operational Module</title>
+<script src="https://cdn.tailwindcss.com"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/dashboard/js/config.js"></script><link rel="stylesheet" href="css/executive-theme.css"><link rel="stylesheet" href="css/mobile.css">
+</head><body class="bg-gray-50"><header class="of-header px-6 py-4 flex justify-between items-center"><div><div class="of-eyebrow">OfficeFlow</div><h1 id="title" class="of-serif text-2xl font-semibold">Operational Module</h1><p id="sub" class="text-sm text-gray-500 mt-1">Live workflows for this area.</p></div><a href="/dashboard/workflow.html" class="text-sm">Work Center</a></header>
+<main class="max-w-6xl mx-auto p-6"><div id="status" class="mb-5"></div><div id="grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-5"></div></main>
+<script src="/dashboard/js/ooes-auth.js"></script><script src="/dashboard/js/workflow-db.js"></script><script>
+const p=new URLSearchParams(location.search), category=p.get('category')||'General';
+const titleMap={HR:'Human Resources',Finance:'Finance',Procurement:'Procurement',IT:'IT & Compliance',Facilities:'Facilities',Documents:'Documents',Operations:'Operations',Sales:'Sales & Marketing',Communication:'Communication'};
+document.getElementById('title').textContent=titleMap[category]||category+' Operations';
+document.getElementById('sub').textContent='Live OfficeFlow workflows for '+(titleMap[category]||category)+'. No simulated actions.';
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+async function load(){const grid=document.getElementById('grid');try{const rows=await OfficeFlowWorkflow.published();const filtered=rows.filter(x=>(x.workflow_definitions?.category||'General').toLowerCase()===category.toLowerCase());if(!filtered.length){grid.innerHTML='<div class="of-card p-6 md:col-span-2 lg:col-span-3"><h2 class="of-serif text-xl font-semibold mb-2">No live workflows yet</h2><p class="text-gray-600">This area is ready for a workflow to be configured in Workflow Builder. OfficeFlow will not pretend an unimplemented function is working.</p><a class="inline-block mt-4 underline" href="workflow-builder.html">Open Workflow Builder</a></div>';return;}grid.innerHTML=filtered.map(x=>{const d=x.workflow_definitions||{};return '<div class="of-card p-5"><div class="text-xs uppercase tracking-wider text-gray-500">'+esc(d.category||'General')+'</div><h2 class="of-serif text-xl font-semibold mt-1">'+esc(d.name||'Workflow')+'</h2><p class="text-sm text-gray-600 mt-2">'+esc(d.description||'Execute this process through OfficeFlow.')+'</p><a class="inline-block mt-4 px-4 py-2 rounded text-white" style="background:var(--of-navy)" href="workflow.html?workflow='+encodeURIComponent(x.id)+'">Start process</a></div>';}).join('');}catch(e){document.getElementById('status').innerHTML='<div class="text-red-600">Unable to load live workflows: '+esc(e.message)+'</div>';}}
+document.addEventListener('DOMContentLoaded',load);
+</script></body></html>
