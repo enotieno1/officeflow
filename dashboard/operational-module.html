@@ -3,7 +3,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>OfficeFlow — Operational Module</title>
 <script src="https://cdn.tailwindcss.com"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="/dashboard/js/config.js"></script><link rel="stylesheet" href="css/executive-theme.css"><link rel="stylesheet" href="css/mobile.css">
+<script src="/dashboard/js/config.js"></script><script>var supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);</script><link rel="stylesheet" href="css/executive-theme.css"><link rel="stylesheet" href="css/mobile.css">
 </head><body class="bg-gray-50"><header class="of-header px-6 py-4 flex justify-between items-center"><div><div class="of-eyebrow">OfficeFlow</div><h1 id="title" class="of-serif text-2xl font-semibold">Operational Module</h1><p id="sub" class="text-sm text-gray-500 mt-1">Live workflows for this area.</p></div><a href="/dashboard/workflow.html" class="text-sm">Work Center</a></header>
 <main class="max-w-6xl mx-auto p-6"><div id="status" class="mb-5"></div><div id="grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-5"></div></main>
 <script src="/dashboard/js/ooes-auth.js"></script><script src="/dashboard/js/workflow-db.js"></script><script>
