@@ -34,34 +34,43 @@ var OOES_AUTH = {
   },
 
   async login(email, password) {
-    var { data, error } = await supabase.auth.signInWithPassword({ email: email, password: password });
-    if (error || !data.user) return { error: (error && error.message) || 'Invalid email or password.' };
-    var s = await this._loadProfile(data.user);
-    // 28 of the dashboard pages have an inline pre-render guard that checks this
-    // localStorage flag before ooes-auth.js even runs, to avoid a flash of content.
-    // It is NOT the security boundary — Supabase's own session + RLS are — so a
-    // stale/forged flag can't grant access to anything; requireAuth() below still
-    // verifies the real session on every page load.
-    localStorage.setItem('ooesSession', '1');
-    return s;
-  },
-
-  async register(fn, ln, email, password) {
-    var fullName = (fn + ' ' + ln).trim();
-    var { data, error } = await supabase.auth.signUp({
-      email: email,
-      password: password,
-      options: { data: { full_name: fullName } }
-    });
-    if (error) return { error: error.message };
-    if (!data.user) return { error: 'Check your email to confirm your account, then sign in.' };
-    // If email confirmation is off, Supabase returns a session immediately.
-    if (data.session) {
+    try {
+      var { data, error } = await supabase.auth.signInWithPassword({ email: email, password: password });
+      if (error || !data.user) return { error: (error && error.message) || 'Invalid email or password.' };
       var s = await this._loadProfile(data.user);
+      // This flag is only a UI hint; Supabase session validation and RLS remain
+      // the actual security boundary.
       localStorage.setItem('ooesSession', '1');
       return s;
+    } catch (e) {
+      return { error: 'Unable to reach the sign-in service. Check your connection and try again.' };
     }
-    return { pendingConfirmation: true, email: email };
+  },
+
+  async register(fn, ln, email, password, redirectTo) {
+    try {
+      var fullName = (fn + ' ' + ln).trim();
+      var confirmationUrl = redirectTo || (window.location.origin + '/dashboard/auth.html');
+      var { data, error } = await supabase.auth.signUp({
+        email: email,
+        password: password,
+        options: {
+          data: { full_name: fullName },
+          emailRedirectTo: confirmationUrl
+        }
+      });
+      if (error) return { error: error.message };
+      if (!data.user) return { error: 'If registration succeeded, check your email to confirm the account, then sign in.' };
+      // If email confirmation is off, Supabase returns a session immediately.
+      if (data.session) {
+        var s = await this._loadProfile(data.user);
+        localStorage.setItem('ooesSession', '1');
+        return s;
+      }
+      return { pendingConfirmation: true, email: email };
+    } catch (e) {
+      return { error: 'Unable to reach the sign-up service. Check your connection and try again.' };
+    }
   },
 
   async logout(redirect) {
