@@ -452,8 +452,8 @@
             if (pw !== cp) { showNotification('Error', 'Passwords do not match.', 'error'); return; }
             if (pw.length < 8) { showNotification('Error', 'Password must be 8+ characters.', 'error'); return; }
             showNotification('Creating Account', 'Please wait...', 'info');
-            var result = await OOES_AUTH.register(fn, ln, email, pw);
-            if (result.error) { showNotification('Error', result.error, 'error'); return; }
+            var result = await OOES_AUTH.register(fn, ln, email, pw, window.location.origin + '/dashboard/auth.html');
+            if (!result || result.error) { showNotification('Sign Up Failed', (result && result.error) || 'Unable to create your account. Please try again.', 'error'); return; }
             if (result.pendingConfirmation) {
                 showNotification('Check Your Email', 'Confirm your account at ' + result.email + ', then sign in.', 'info');
                 return;
@@ -498,21 +498,48 @@
             }
         }
 
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            // checkAuthStatus();
-            
-            // Add floating label animations
+        // Initialize auth form and safely handle Supabase email-link callbacks.
+        document.addEventListener('DOMContentLoaded', async function() {
+            const params = new URLSearchParams(window.location.search);
+            const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+
+            // The public "Start Free Trial" links should land directly on sign-up.
+            if (params.get('mode') === 'signup') {
+                document.getElementById('signInForm').classList.add('hidden');
+                document.getElementById('signUpForm').classList.remove('hidden');
+            }
+
+            // Supabase can return authentication errors in the query string or hash.
+            const authError = params.get('error_description') || hashParams.get('error_description');
+            if (authError) {
+                showNotification('Authentication Link Problem', authError, 'error');
+            }
+
+            // When an email confirmation returns a valid session, continue into OfficeFlow.
+            if (hashParams.get('access_token') && hashParams.get('type') !== 'recovery') {
+                try {
+                    const { data, error } = await supabase.auth.getSession();
+                    if (!error && data.session) {
+                        await OOES_AUTH._loadProfile(data.session.user);
+                        localStorage.setItem('ooesSession', '1');
+                        showNotification('Email Confirmed', 'Your email is confirmed. Opening OfficeFlow...', 'success');
+                        window.history.replaceState({}, document.title, window.location.pathname);
+                        setTimeout(function() { window.location.replace('/dashboard/index.html'); }, 900);
+                        return;
+                    }
+                } catch (e) {
+                    showNotification('Email Confirmation', 'Your link was opened, but OfficeFlow could not complete sign-in. Please sign in with your email and password.', 'info');
+                }
+            }
+
+            // Add floating label animations.
             const inputs = document.querySelectorAll('input');
             inputs.forEach(input => {
                 input.addEventListener('focus', function() {
-                    this.parentElement.classList.add('focused');
+                    if (this.parentElement) this.parentElement.classList.add('focused');
                 });
-                
                 input.addEventListener('blur', function() {
-                    if (!this.value) {
-                        this.parentElement.classList.remove('focused');
-                    }
+                    if (this.parentElement && !this.value) this.parentElement.classList.remove('focused');
                 });
             });
         });
