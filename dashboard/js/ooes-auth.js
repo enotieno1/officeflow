@@ -24,12 +24,18 @@ var OOES_AUTH = {
     var name = (user.user_metadata && user.user_metadata.full_name) || user.email;
     var role = 'employee'; // fail-safe default (matches the DB's own default role) if the profile fetch fails
     try {
-      var res = await supabase.from('profiles').select('role').eq('id', user.id).single();
+      var res = await supabase.from('profiles').select('role, organization_id').eq('id', user.id).single();
       if (res.data) {
         role = res.data.role || role;
       }
     } catch (e) { /* profile row may not exist yet (trigger lag) — fall back to defaults */ }
-    this._session = { id: user.id, email: user.email, name: name, role: role };
+    this._session = {
+      id: user.id,
+      email: user.email,
+      name: name,
+      role: role,
+      organization_id: (typeof res !== 'undefined' && res.data) ? res.data.organization_id : null
+    };
     return this._session;
   },
 
