@@ -1,6 +1,8 @@
 -- Self-service organization onboarding.
 -- Existing sign-ups are placed in the shared bootstrap organization. This RPC
 -- lets an authenticated employee create a tenant and become its first admin.
+-- The organizations table intentionally has no direct client INSERT grant;
+-- creation is available only through the guarded SECURITY DEFINER RPC below.
 CREATE OR REPLACE FUNCTION public.fn_enforce_profiles_organization_immutable()
 RETURNS trigger
 LANGUAGE plpgsql
