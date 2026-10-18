@@ -383,6 +383,13 @@
     </div>
 
     <script>
+        function destinationForAccount(account) {
+            var bootstrapOrgId = '00000000-0000-0000-0000-000000000001';
+            return account && account.role === 'employee' && account.organization_id === bootstrapOrgId
+                ? '/dashboard/organization-setup.html'
+                : '/dashboard/index.html';
+        }
+
         // Form Toggle
         function toggleForm() {
             const signInForm = document.getElementById('signInForm');
@@ -435,7 +442,7 @@
                 var result = await OOES_AUTH.login(email, password);
                 if (result && !result.error) {
                     showNotification('Welcome Back!', 'Signed in as ' + result.name, 'success');
-                    setTimeout(function() { window.location.href = '/dashboard/index.html'; }, 800);
+                    setTimeout(function() { window.location.href = destinationForAccount(result); }, 800);
                 } else {
                     var loginError = (result && result.error)
                         ? (typeof result.error === 'string' ? result.error : (result.error.message || 'Invalid email or password.'))
@@ -543,11 +550,11 @@
                 try {
                     const { data, error } = await supabase.auth.getSession();
                     if (!error && data.session) {
-                        await OOES_AUTH._loadProfile(data.session.user);
+                        var account = await OOES_AUTH._loadProfile(data.session.user);
                         localStorage.setItem('ooesSession', '1');
                         showNotification('Email Confirmed', 'Your email is confirmed. Opening OfficeFlow...', 'success');
                         window.history.replaceState({}, document.title, window.location.pathname);
-                        setTimeout(function() { window.location.replace('/dashboard/index.html'); }, 900);
+                        setTimeout(function() { window.location.replace(destinationForAccount(account)); }, 900);
                         return;
                     }
                 } catch (e) {
