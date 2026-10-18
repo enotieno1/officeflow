@@ -426,40 +426,59 @@
         // Handle Sign In
         async function handleSignIn(event) {
             event.preventDefault();
-            var email = document.getElementById('signInEmail').value;
+            var email = document.getElementById('signInEmail').value.trim();
             var password = document.getElementById('signInPassword').value;
+            var submitButton = event.submitter || event.target.querySelector('button[type="submit"]');
+            if (submitButton) submitButton.disabled = true;
             showNotification('Signing In', 'Please wait...', 'info');
-            var result = await OOES_AUTH.login(email, password);
-            if (result && !result.error) {
-                showNotification('Welcome Back!', 'Signed in as ' + result.name, 'success');
-                setTimeout(function() { window.location.href = '/dashboard/index.html'; }, 800);
-            } else {
-                var loginError = (result && result.error)
-                    ? (typeof result.error === 'string' ? result.error : (result.error.message || 'Invalid email or password.'))
-                    : 'Invalid email or password.';
-                showNotification('Login Failed', loginError, 'error');
+            try {
+                var result = await OOES_AUTH.login(email, password);
+                if (result && !result.error) {
+                    showNotification('Welcome Back!', 'Signed in as ' + result.name, 'success');
+                    setTimeout(function() { window.location.href = '/dashboard/index.html'; }, 800);
+                } else {
+                    var loginError = (result && result.error)
+                        ? (typeof result.error === 'string' ? result.error : (result.error.message || 'Invalid email or password.'))
+                        : 'Invalid email or password.';
+                    showNotification('Login Failed', loginError, 'error');
+                }
+            } catch (error) {
+                showNotification('Login Failed', 'OfficeFlow could not complete sign-in. Check your connection and try again.', 'error');
+            } finally {
+                if (submitButton) submitButton.disabled = false;
             }
         }
 
         // Handle Sign Up
         async function handleSignUp(event) {
             event.preventDefault();
-            var fn = document.getElementById('signUpFirstName').value;
-            var ln = document.getElementById('signUpLastName').value;
-            var email = document.getElementById('signUpEmail').value;
+            var fn = document.getElementById('signUpFirstName').value.trim();
+            var ln = document.getElementById('signUpLastName').value.trim();
+            var email = document.getElementById('signUpEmail').value.trim();
             var pw = document.getElementById('signUpPassword').value;
             var cp = document.getElementById('signUpConfirmPassword').value;
             if (pw !== cp) { showNotification('Error', 'Passwords do not match.', 'error'); return; }
-            if (pw.length < 8) { showNotification('Error', 'Password must be 8+ characters.', 'error'); return; }
+            if (pw.length < 8) { showNotification('Error', 'Password must be at least 8 characters.', 'error'); return; }
+            var submitButton = event.submitter || event.target.querySelector('button[type="submit"]');
+            if (submitButton) submitButton.disabled = true;
             showNotification('Creating Account', 'Please wait...', 'info');
-            var result = await OOES_AUTH.register(fn, ln, email, pw, window.location.origin + '/dashboard/auth.html');
-            if (!result || result.error) { showNotification('Sign Up Failed', (result && result.error) || 'Unable to create your account. Please try again.', 'error'); return; }
-            if (result.pendingConfirmation) {
-                showNotification('Check Your Email', 'Confirm your account at ' + result.email + ', then sign in.', 'info');
-                return;
+            try {
+                var result = await OOES_AUTH.register(fn, ln, email, pw, window.location.origin + '/dashboard/auth.html');
+                if (!result || result.error) {
+                    showNotification('Sign Up Failed', (result && result.error) || 'Unable to create your account. Please try again.', 'error');
+                    return;
+                }
+                if (result.pendingConfirmation) {
+                    showNotification('Check Your Email', 'Confirm your account at ' + result.email + ', then sign in.', 'info');
+                    return;
+                }
+                showNotification('Account Created!', 'Welcome ' + result.name, 'success');
+                setTimeout(function() { window.location.href = '/dashboard/index.html'; }, 800);
+            } catch (error) {
+                showNotification('Sign Up Failed', 'OfficeFlow could not complete registration. Check your connection and try again.', 'error');
+            } finally {
+                if (submitButton) submitButton.disabled = false;
             }
-            showNotification('Account Created!', 'Welcome ' + result.name, 'success');
-            setTimeout(function() { window.location.href = '/dashboard/index.html'; }, 800);
         }
 
         // Social authentication is intentionally disabled until the provider is configured in Supabase.
@@ -479,14 +498,18 @@
                 return;
             }
             showNotification('Sending Reset Link', 'Please wait...', 'info');
-            var { error } = await supabase.auth.resetPasswordForEmail(email, {
-                redirectTo: window.location.origin + '/dashboard/reset-password.html'
-            });
-            if (error) {
-                showNotification('Reset Failed', error.message, 'error');
-                return;
+            try {
+                var { error } = await supabase.auth.resetPasswordForEmail(email, {
+                    redirectTo: window.location.origin + '/dashboard/reset-password.html'
+                });
+                if (error) {
+                    showNotification('Reset Failed', error.message || 'Unable to send a reset link. Please try again.', 'error');
+                    return;
+                }
+                showNotification('Check Your Email', 'If the account exists, a password reset link has been sent.', 'success');
+            } catch (error) {
+                showNotification('Reset Failed', 'OfficeFlow could not reach the password-reset service. Check your connection and try again.', 'error');
             }
-            showNotification('Check Your Email', 'If the account exists, a password reset link has been sent.', 'success');
         }
 
         // Check if user is already logged in
