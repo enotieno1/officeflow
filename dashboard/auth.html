@@ -480,7 +480,7 @@
                     return;
                 }
                 showNotification('Account Created!', 'Welcome ' + result.name, 'success');
-                setTimeout(function() { window.location.href = '/dashboard/index.html'; }, 800);
+                setTimeout(function() { window.location.href = destinationForAccount(result); }, 800);
             } catch (error) {
                 showNotification('Sign Up Failed', 'OfficeFlow could not complete registration. Check your connection and try again.', 'error');
             } finally {
