@@ -433,11 +433,6 @@
           if (!portalCode) return true;
           if (!selectedPortal) { showNotification('Portal Not Found','Choose a department from the directory.','error'); return false; }
           const privileged = ['administrator','super_admin'].includes(account.role);
-          if (portalCode.toUpperCase() === 'HR' && !privileged) {
-            await OOES_AUTH.logout(false);
-            showNotification('Restricted Portal','Human Resources access is restricted to administrators and top management.','error');
-            return false;
-          }
           if (privileged) return true;
           const {data: department,error} = await supabase.from('departments').select('id,name,code').eq('code',portalCode.toUpperCase()).eq('is_active',true).maybeSingle();
           if (error || !department) { await OOES_AUTH.logout(false); showNotification('Portal Unavailable','This department portal is not active. Contact your organization administrator.','error'); return false; }
