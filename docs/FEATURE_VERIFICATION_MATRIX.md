@@ -37,7 +37,7 @@ Status values: **PASS** means the stated SQL invariant passed; **PARTIAL** means
 | HR-01 | employee records | PARTIAL | `employees` table exists; full CRUD/security test absent |
 | HR-02 | leave/onboarding/transfer/attendance lifecycle | PARTIAL | Workflow catalog evidence; complete operational test absent |
 | FIN-01 | transaction register | PARTIAL | `transactions` table exists; not a complete accounting ledger |
-| FIN-02 | finance workflow page provides integrated live operations | PARTIAL / ISSUE | `financial-management.html` redirects to `operational-module.html?category=Finance` |
+| FIN-02 | finance workflow page provides integrated live operations | PARTIAL / ISSUE | `financial-management.html` redirects to `operational-module.html?category=Finance`; separate accountant portal uses hard-coded sample records. PR #7 removed false success responses for non-persistent invoice/expense creation and bill payment, but persistent finance operations remain unimplemented. |
 | PROC-01 | supplier/quotation/PO/receipt lifecycle | UNKNOWN / GAP | Dedicated data tables not found in inspected public schema |
 | TASK-01 | task create/assign/update/complete lifecycle | PARTIAL | `tasks` table and automation create-task action; UI lifecycle not verified |
 | DOC-01 | document metadata register | PARTIAL | `documents` table and read-only register page |
