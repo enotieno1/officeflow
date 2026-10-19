@@ -133,7 +133,7 @@ class AccountantPortalHandler(http.server.SimpleHTTPRequestHandler):
                 ]
             }
         elif operation == 'create':
-            return {'success': True, 'invoice_id': 4, 'message': 'Invoice created successfully'}
+            return {'success': False, 'error': 'Invoice creation is not connected to persistent storage. No invoice was created.'}
         else:
             return {'error': 'Invalid operation'}
 
@@ -150,7 +150,7 @@ class AccountantPortalHandler(http.server.SimpleHTTPRequestHandler):
                 ]
             }
         elif operation == 'pay':
-            return {'success': True, 'message': 'Bill payment processed successfully'}
+            return {'success': False, 'error': 'Payment processing is not configured. No payment was made.'}
         else:
             return {'error': 'Invalid operation'}
 
@@ -200,7 +200,7 @@ class AccountantPortalHandler(http.server.SimpleHTTPRequestHandler):
                 ]
             }
         elif operation == 'add':
-            return {'success': True, 'expense_id': 4, 'message': 'Expense added successfully'}
+            return {'success': False, 'error': 'Expense creation is not connected to persistent storage. No expense was saved.'}
         else:
             return {'error': 'Invalid operation'}
 
