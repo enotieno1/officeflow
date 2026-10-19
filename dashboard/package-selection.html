@@ -874,8 +874,7 @@
     <script>
         // Global variables
         let currentStep = 1;
-        let selectedPayment = '';
-        let selectedAddOns = [];
+let selectedAddOns = [];
         let packageData = {};
 
         // Add-on prices
@@ -966,28 +965,8 @@
                     return false;
                 }
             } else if (currentStep === 2) {
-                if (!selectedPayment) {
-                    showNotification('Please select a payment method', 'error');
-                    return false;
-                }
-                
-                if (selectedPayment === 'mpesa') {
-                    const mpesaNumber = document.getElementById('mpesaNumber').value;
-                    const mpesaName = document.getElementById('mpesaName').value;
-                    if (!mpesaNumber || !mpesaName) {
-                        showNotification('Please fill in M-Pesa details', 'error');
-                        return false;
-                    }
-                } else if (selectedPayment === 'card') {
-                    const cardNumber = document.getElementById('cardNumber').value;
-                    const cardExpiry = document.getElementById('cardExpiry').value;
-                    const cardCvv = document.getElementById('cardCvv').value;
-                    const cardName = document.getElementById('cardName').value;
-                    if (!cardNumber || !cardExpiry || !cardCvv || !cardName) {
-                        showNotification('Please fill in card details', 'error');
-                        return false;
-                    }
-                }
+                showNotification('Subscription checkout is not enabled. No payment has been taken.', 'error');
+                return false;
             }
             
             return true;
@@ -1003,28 +982,6 @@
             return re.test(phone.replace(/\s/g, ''));
         }
 
-        function selectPayment(element, method) {
-            // Remove previous selection
-            document.querySelectorAll('.payment-method').forEach(el => {
-                el.classList.remove('selected');
-            });
-            
-            // Add selection to clicked element
-            element.classList.add('selected');
-            selectedPayment = method;
-            
-            // Show payment details
-            document.getElementById('paymentDetails').classList.remove('hidden');
-            
-            // Hide all payment details
-            document.querySelectorAll('.payment-details').forEach(el => {
-                el.classList.add('hidden');
-            });
-            
-            // Show relevant payment details
-            document.getElementById(`${method}Details`).classList.remove('hidden');
-        }
-
         function updateReviewSection() {
             // Update company information
             document.getElementById('reviewCompany').textContent = document.getElementById('companyName').value;
@@ -1038,9 +995,7 @@
                 'card': 'Credit/Debit Card',
                 'bank': 'Bank Transfer'
             };
-            document.getElementById('reviewPayment').textContent = paymentMethods[selectedPayment];
-            
-            // Update total with add-ons
+// Update total with add-ons
             let total = 40000;
             let addOnsBreakdown = '';
             
@@ -1091,14 +1046,7 @@
             // Reset form fields
             document.getElementById('companyForm').reset();
             
-            // Reset payment selection
-            selectedPayment = '';
-            document.querySelectorAll('.payment-method').forEach(el => {
-                el.classList.remove('selected');
-            });
-            document.getElementById('paymentDetails').classList.add('hidden');
-            
-            // Reset add-ons
+// Reset add-ons
             selectedAddOns = [];
             document.querySelectorAll('.add-on-item').forEach(el => {
                 el.classList.remove('selected');
