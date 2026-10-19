@@ -1,0 +1,68 @@
+# OfficeFlow Product Scope & Gap Audit
+**Audit date:** 2026-10-19  
+**Repository:** `enotieno1/officeflow`, default branch `main` at inspected tree `9e36007d7c3619af8e9f6d4be1122636f21e7d4d`  
+**Supabase project:** `oghowrilrhummzvrljdt` (ACTIVE_HEALTHY; PostgreSQL 17.6.1)  
+**Method:** Read-only repository inspection, production schema/migration inventory, targeted catalog queries, Supabase security/performance advisors, and read-only SQL regression checks.  
+**Limitations:** No browser-driven end-to-end test, email delivery test, payment-provider test, or real customer pilot was performed in this audit. A page/table/function is not counted as proof of complete user-facing functionality.
+
+## Executive finding
+
+OfficeFlow has a substantial workflow foundation: tenant-scoped database tables, six-role profile model, workflow definitions and versions, request/step records, SQL RPCs for submission/decision/cancellation/resubmission/publication, an SLA escalation job, in-app notifications, an automation rules/runs schema, organization onboarding RPC, and Control Tower RPCs. The production regression suite run on 2026-10-19 returned PASS for all 17 checks in `tests/officeflow_regression_checks.sql` (original 14 checks plus three stronger checks).
+
+However, the full SaaS operating-system promise is **not yet demonstrated**. The inspected repository shows legacy and workflow-era modules coexisting. The Finance page redirects to `operational-module.html?category=Finance`; package selection still begins with a legacy `localStorage.ooesSession` gate; the Documents page is a read-only database register; billing/subscription tables were not present in the inspected public schema; the email outbox was empty and delivery was not verified. Production counts at audit time: 1 organization, 3 profiles, 9 workflow definitions, 2 requests, 3 request steps, 4 notifications, 0 automation rules, 0 automation runs, 0 email-outbox rows. Counts are a snapshot, not a quality score.
+
+## Status definitions
+
+- **VERIFIED:** Direct evidence from a read-only production query or specific source plus a successful applicable test.
+- **PARTIAL:** Some implementation exists, but the full user-facing behavior is not proven or is incomplete.
+- **MISSING:** No supporting implementation was found in the inspected schema/files.
+- **BROKEN:** Specific implementation behavior is contradictory or demonstrably fails by inspection/test.
+- **BLOCKED:** Depends on external credentials, provider setup, access, or a test environment not available in this audit.
+- **UNKNOWN:** Evidence is insufficient. Do not advertise as complete.
+
+## Evidence-backed domain register
+
+| Domain / problem | Required capability | Current status | Evidence and remaining work | Priority / acceptance test |
+|---|---|---|---|---|
+| Organization onboarding | Self-service tenant creation and first-admin provisioning | PARTIAL | `dashboard/organization-setup.html` calls `fn_create_organization_for_current_user`; production has 1 organization and 3 profiles. Full new-user journey not browser-tested. | P1: create a test tenant end-to-end; first user becomes administrator; second tenant cannot read first tenant's records. |
+| Authentication | Reliable sign-in, sign-up, session refresh, reset, sign-out | PARTIAL | `dashboard/js/ooes-auth.js` uses Supabase Auth, but also synchronizes a legacy `ooesSession` localStorage flag. `dashboard/package-selection.html` has a localStorage-only pre-render guard. Mixed auth patterns need consolidation and tests. | P1: fresh browser, expired session, sign-in, sign-out, reset and direct URL tests. |
+| Roles / access | Six roles and server-enforced authorization | VERIFIED for database constraints tested; UI end-to-end PARTIAL | Production T10 passed for approved non-null role values; RLS enabled and function grants checks passed. UI role behavior not exhaustively tested. | P0/P1: test every role against each protected action and tenant boundary. |
+| Tenant isolation | All tenant-owned data isolated by organization | PARTIAL | RLS enabled and organization_id constraints passed. Supabase security advisor reports 15 public objects visible in GraphQL schema to authenticated users; this is an exposure finding requiring policy/grant review, not by itself proof of data leakage. | P0: inspect each finding, verify RLS and intended GraphQL exposure, test cross-tenant reads/writes using separate authenticated identities. |
+| Workflow configuration | Create/edit/publish versioned workflows and steps | PARTIAL | `workflow_definitions`, `workflow_versions`, `workflow_steps`; `dashboard/workflow-builder.html`; `fn_create_workflow` and `fn_publish_workflow_version` exist. Conditional routing and full form-builder breadth not demonstrated. | P1: test draft, publish, new version, in-flight version stability and invalid configuration rejection. |
+| Request execution | Submit, route, decide, return, reject, cancel, resubmit | PARTIAL / core DB paths present | `workflow.html`, `requestDetail.html`, `workflow-db.js`; RPCs exist. 2 production requests and 3 steps at snapshot. Full multi-role browser run not performed in this audit. | P1: automated lifecycle test with separate submitter/approver accounts. |
+| SLA / escalation | One active clock, scheduled escalation, no duplicates | VERIFIED for database regression invariants; end-to-end PARTIAL | Cron job exists and active; T09/T12/T14 passed. Need assert actual cron run history and notification side effects in a test tenant. | P1: create overdue test step in staging, execute scheduled job, assert one escalation and one audit event. |
+| Automation | Configurable triggers, conditions, actions, run history, retries | PARTIAL | `dashboard/automation.html`; `automation_rules`, `automation_runs`, private `fn_run_automation` and related migrations. Current production snapshot has 0 rules and 0 runs. Email action queues an outbox record; delivery not shown. | P2: test each supported trigger/action, error isolation, retries, duplicate protection and organization scoping. |
+| HR | Employee register plus leave, onboarding, transfers, attendance, reviews | PARTIAL | `employees` table and HR-related workflow catalog exist, but a complete HR lifecycle was not demonstrated. Employee table is not a payroll/HRIS proof. | P2: publish tested workflows and validate authorized HR records and data confidentiality. |
+| Finance | Expenses, invoices, budget, payment requests, reconciliations, accounting integration | PARTIAL | `transactions` table exists; Finance route redirects to `operational-module.html?category=Finance`. No subscription/billing tables found in public schema. This is operational records, not a full accounting ledger. | P1/P2: implement request-and-approval flows; explicitly scope ledger/tax/payment execution as integration or separate capability. |
+| Procurement | Requisitions, supplier quotes, purchase orders, receipt and controls | PARTIAL / UNKNOWN | Cross-domain workflow catalog exists, but dedicated supplier, quotation, PO and goods-received records were not found in inspected public tables. | P2: define minimal procurement data model and end-to-end test before claiming complete procurement. |
+| Tasks | Assigned work, due dates, status and execution evidence | PARTIAL | `tasks` table exists; automation can create tasks. Legacy task UI is present but complete authenticated assignment and update behavior not established in this audit. | P1/P2: create, assign, update, complete, overdue and audit tests. |
+| Documents | Secure upload, download, versioning, search, retention | PARTIAL | `documents` table stores metadata and URL; `dashboard/document-management.html` explicitly renders a read-only register and says it no longer uses demo/localStorage files. Storage upload/download, version history, expiry and retention were not verified. | P2: test storage bucket policies, tenant-scoped upload/download/delete, versioning and retention behavior. |
+| Notifications | In-app alerts and read state | PARTIAL | `notifications`, `fn_my_notifications`, `fn_mark_notification_read`; production has 4 notifications. Email outbox has 0 rows; delivery is unverified. | P1: test assignment/decision/escalation events and recipient isolation; verify email provider, retries and delivery receipt. |
+| Email delivery | Actual email send, retry, failure visibility | UNKNOWN / BLOCKED | `email_outbox` exists and automation can enqueue email, but no end-to-end sender/provider delivery evidence was available. | P1: configure secrets/provider in a non-production environment; test delivered, failed, retried and idempotent messages. |
+| Control Tower | Accurate org-scoped live KPIs and bottlenecks | PARTIAL | `control-tower.html`, `fn_control_tower`, `fn_operational_intelligence`; migration `20261019112544_fix_control_tower_unit_attribution_and_age` is recorded. SQL advisor and code review do not prove every displayed metric. | P1: compare each displayed figure to independent SQL counts for a test organization and each unit. |
+| Reports / exports | Trusted reports and exportable records | UNKNOWN / PARTIAL | Legacy reports and charts exist in repository; comprehensive current workflow-based reports and validated exports were not tested. | P2: define supported report set; test filters, totals, tenant scope and CSV export. |
+| Subscription / billing | Plans, trial, entitlement, payment, renewal, cancellation | MISSING in inspected public schema | Pricing/package pages exist, but no subscription, invoice, payment or entitlement tables were found in public schema. The inspected package-selection baseline collected card number/expiry/CVV, simulated payment success and logged the purchase object to console. Remediation PR #6 removes credential entry and fake success; it does not implement billing. | P0/P1: keep checkout disabled until provider-backed checkout/webhooks and subscription state are implemented and tested. |
+| Integrations | Accounting, messaging, storage, SSO, APIs/webhooks | PARTIAL / BLOCKED | UI/docs describe integration areas; live external connections and OAuth provider configuration were not verified. | P2/P3: inventory each integration and label accurately; test one supported integration at a time. |
+| Mobile / accessibility | Responsive and keyboard/screen-reader use | PARTIAL | `css/mobile.css` is linked on key pages. No automated visual/accessibility suite was run. | P2: viewport smoke tests, keyboard navigation, labels, contrast and focus checks. |
+| Platform operations | Manage customer tenants, usage, support and lifecycle | UNKNOWN | Tenant provisioning exists; full platform operator console, metering and customer lifecycle controls were not established. | P2: define least-privilege platform admin workflows and audit all support access. |
+| Security / audit | Immutable action history, least privilege, safe exceptions | PARTIAL | `audit_events`, RLS and security-definer RPCs exist; SQL grants checks passed. GraphQL visibility findings require review; append-only behavior and all RPC grants require additional targeted tests. | P0: verify each audit write path, role matrix, function EXECUTE grants and GraphQL exposure. |
+
+## Highest-priority findings
+
+1. **P0 security review:** Resolve the 15 GraphQL schema exposure advisories through intended exposure review and role/RLS verification; do not blindly revoke grants needed by RLS helpers.
+2. **P1 auth consistency:** Replace localStorage-only access gating with the same Supabase session/auth path used elsewhere; test package-selection and legacy redirects.
+3. **P1 onboarding validation:** Exercise sign-up → profile creation → organization setup → first administrator → department/user setup → first workflow.
+4. **P1 billing gap:** Subscription collection is not represented in the inspected public schema; pricing UI is not a payment system.
+5. **P1 email gap:** Outbox exists but sender and delivery are unverified.
+6. **P1 payment UI safety:** The package-selection page on the inspected baseline asks for card number, expiry and CVV, simulates a successful payment, and logs the assembled purchase object to the browser console. This is unsafe and misleading. A separate remediation PR (#6) removes the credential form and simulated success; it does not implement billing.
+7. **P1 Control Tower validation:** Reconcile every KPI against known test data.
+7. **P2 integration of departments:** Finance, HR, tasks, procurement and documents must connect to workflows and records, not merely appear as navigation items.
+8. **P2 operational proof:** Production data volume is small; a controlled pilot and documented user outcomes are still needed.
+
+## Regression run on 2026-10-19
+
+All 17 checks passed; the exact SQL and test intent are in `tests/officeflow_regression_checks.sql`. These checks validate database invariants and privileges. They do **not** substitute for authenticated cross-tenant integration tests, UI testing, email delivery tests, payment tests, or pilot usage.
+
+## Release decision
+
+**Current decision: pilot preparation / limited workflow pilot, not proven full commercial readiness.** Keep the workflow engine as the foundation. Do not advertise complete accounting, payroll, document lifecycle, email delivery, billing or broad integrations until the corresponding acceptance tests pass.
