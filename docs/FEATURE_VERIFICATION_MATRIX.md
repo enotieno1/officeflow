@@ -45,7 +45,7 @@ Status values: **PASS** means the stated SQL invariant passed; **PARTIAL** means
 | NOTIF-01 | in-app notifications and mark read | PARTIAL | RPCs exist; 4 rows at snapshot; event coverage not end-to-end tested |
 | EMAIL-01 | email delivery | NOT RUN / BLOCKED | outbox exists; 0 queued rows at snapshot; sender/provider delivery not demonstrated |
 | CT-01 | Control Tower data accuracy | PARTIAL | RPCs/pages and latest unit-attribution migration exist; KPI-to-SQL reconciliation not run |
-| BILL-01 | subscriptions/payment collection | GAP | No subscription/payment/billing tables found in inspected public schema |
+| BILL-01 | subscriptions/payment collection | GAP / SAFETY ISSUE | No subscription/payment/billing tables found in inspected public schema. Baseline package-selection UI simulated payment success and logged card/CVV-bearing purchase data; remediation PR #6 disables this UI and removes credential handling. |
 | INT-01 | external integrations and SSO | BLOCKED / UNKNOWN | Credentials/provider setup and successful external calls not verified |
 | MOB-01 | responsive layouts | PARTIAL | mobile.css linked on key pages; no viewport/accessibility suite run |
 | PILOT-01 | sustained real organization use | NOT RUN | Requires pilot users and agreed success measures |
