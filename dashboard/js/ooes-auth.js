@@ -25,7 +25,7 @@ var OOES_AUTH = {
     var name = metadata.full_name || [metadata.first_name, metadata.last_name].filter(Boolean).join(' ') || user.email;
     var res;
     try {
-      res = await supabase.from('profiles').select('role, organization_id').eq('id', user.id).single();
+      res = await supabase.from('profiles').select('role, organization_id, unit_id').eq('id', user.id).single();
     } catch (e) {
       throw new Error('Your account was authenticated, but OfficeFlow could not load your profile. Please try again.');
     }
@@ -37,7 +37,8 @@ var OOES_AUTH = {
       email: user.email,
       name: name,
       role: res.data.role || 'employee',
-      organization_id: res.data.organization_id || null
+      organization_id: res.data.organization_id || null,
+      unit_id: res.data.unit_id || null
     };
     return this._session;
   },
