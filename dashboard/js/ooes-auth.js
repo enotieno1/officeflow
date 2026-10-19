@@ -21,20 +21,23 @@ var OOES_AUTH = {
   },
 
   async _loadProfile(user) {
-    var name = (user.user_metadata && user.user_metadata.full_name) || user.email;
-    var role = 'employee'; // fail-safe default (matches the DB's own default role) if the profile fetch fails
+    var metadata = user.user_metadata || {};
+    var name = metadata.full_name || [metadata.first_name, metadata.last_name].filter(Boolean).join(' ') || user.email;
+    var res;
     try {
-      var res = await supabase.from('profiles').select('role, organization_id').eq('id', user.id).single();
-      if (res.data) {
-        role = res.data.role || role;
-      }
-    } catch (e) { /* profile row may not exist yet (trigger lag) — fall back to defaults */ }
+      res = await supabase.from('profiles').select('role, organization_id').eq('id', user.id).single();
+    } catch (e) {
+      throw new Error('Your account was authenticated, but OfficeFlow could not load your profile. Please try again.');
+    }
+    if (res.error || !res.data) {
+      throw new Error('Your account profile is not ready yet. Please wait a moment and sign in again. If this continues, contact OfficeFlow support.');
+    }
     this._session = {
       id: user.id,
       email: user.email,
       name: name,
-      role: role,
-      organization_id: (typeof res !== 'undefined' && res.data) ? res.data.organization_id : null
+      role: res.data.role || 'employee',
+      organization_id: res.data.organization_id || null
     };
     return this._session;
   },
@@ -49,11 +52,11 @@ var OOES_AUTH = {
       localStorage.setItem('ooesSession', '1');
       return s;
     } catch (e) {
-      return { error: 'Unable to reach the sign-in service. Check your connection and try again.' };
+      return { error: e && e.message ? e.message : 'Unable to complete sign-in. Check your connection and try again.' };
     }
   },
 
-  async register(fn, ln, email, password, redirectTo) {
+  async register(fn, ln, email, password, redirectTo, phone) {
     try {
       var fullName = (fn + ' ' + ln).trim();
       var confirmationUrl = redirectTo || (window.location.origin + '/dashboard/auth.html');
@@ -61,7 +64,12 @@ var OOES_AUTH = {
         email: email,
         password: password,
         options: {
-          data: { full_name: fullName },
+          data: {
+            full_name: fullName,
+            first_name: fn,
+            last_name: ln,
+            ...(phone ? { phone: phone } : {})
+          },
           emailRedirectTo: confirmationUrl
         }
       });
@@ -75,7 +83,7 @@ var OOES_AUTH = {
       }
       return { pendingConfirmation: true, email: email };
     } catch (e) {
-      return { error: 'Unable to reach the sign-up service. Check your connection and try again.' };
+      return { error: e && e.message ? e.message : 'Unable to complete sign-up. Check your connection and try again.' };
     }
   },
 

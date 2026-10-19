@@ -372,7 +372,7 @@
     </div>
 
     <!-- Notification Toast -->
-    <div id="notification" class="fixed top-4 right-4 z-50 hidden">
+    <div id="notification" role="status" aria-live="polite" class="fixed top-4 right-4 z-50 hidden">
         <div class="bg-white rounded-lg shadow-lg p-4 flex items-center space-x-3 min-w-[300px]">
             <div id="notificationIcon"></div>
             <div>
@@ -470,7 +470,8 @@
             if (submitButton) submitButton.disabled = true;
             showNotification('Creating Account', 'Please wait...', 'info');
             try {
-                var result = await OOES_AUTH.register(fn, ln, email, pw, window.location.origin + '/dashboard/auth.html');
+                var phone = document.getElementById('signUpPhone').value.trim();
+                var result = await OOES_AUTH.register(fn, ln, email, pw, window.location.origin + '/dashboard/auth.html', phone);
                 if (!result || result.error) {
                     showNotification('Sign Up Failed', (result && result.error) || 'Unable to create your account. Please try again.', 'error');
                     return;
