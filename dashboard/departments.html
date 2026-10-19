@@ -39,12 +39,14 @@ async function loadDepartments(){
     const rows=data||[];
     if(!rows.length){status.textContent='No active departments are configured for this organization yet.';return;}
     const isAdmin=['administrator','super_admin'].includes(OOES_AUTH.getRole());
+    const profile=OOES_AUTH.getSession();
+    const {data:hrDepartment}=await supabase.from('departments').select('id').eq('code','HR').eq('is_active',true).maybeSingle();
     status.textContent=rows.length+' active departments';
     grid.innerHTML=rows.map(d=>{
       const code=String(d.code||'').toUpperCase();
       const category=categories[code]||d.name;
       const isHr=code==='HR'||String(d.name||'').toLowerCase()==='human resources';
-      const restricted=isHr&&!isAdmin;
+      const restricted=isHr&&!isAdmin&&(!profile||!hrDepartment||profile.unit_id!==hrDepartment.id);
       const href='operational-module.html?category='+encodeURIComponent(category);
       const portalHref='/dashboard/auth.html?department='+encodeURIComponent(code);
       const label=restricted?'Restricted — admin & top management': 'Open department';
