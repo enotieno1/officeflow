@@ -30,7 +30,7 @@
 | Notifications | `dashboard/notifications.html` | Uses notification RPCs. Email delivery is separate and unverified. |
 | Control Tower | `dashboard/control-tower.html`, `dashboard/index.html` | Calls database reporting RPCs; reconcile all metrics against SQL fixtures. |
 | Documents | `dashboard/document-management.html` | Read-only register view. Storage lifecycle not verified. |
-| Finance | `dashboard/financial-management.html` | Redirects to `operational-module.html?category=Finance`; test the actual destination. |
+| Finance | `dashboard/financial-management.html`; `accountant-portal/server.py` | Finance page redirects to `operational-module.html?category=Finance`. The separate Python accountant portal returns hard-coded sample data; fake success responses for non-persistent invoice/expense/bill-payment actions were removed in PR #7. No real ledger/payment service is established. |
 | Tasks | `dashboard/tasks-management.html` | Legacy page includes localStorage gate; live CRUD lifecycle not proven. |
 | Packages | `dashboard/package-selection.html`, `dashboard/pricing.html`, `dashboard/packages.html` | UI exists; package selection has a localStorage-only guard. No subscription/payment tables found. The inspected baseline simulated successful payment and logged card/CVV-bearing data; remediation PR #6 disables checkout and removes credential collection. |
 
