@@ -393,7 +393,24 @@
         const portalCode = new URLSearchParams(window.location.search).get('department');
         const selectedPortal = portalCode ? DEPARTMENT_PORTALS[portalCode.toUpperCase()] : null;
         document.addEventListener('DOMContentLoaded', function () {
-          if (!selectedPortal) return;
+          if (!selectedPortal) {
+            const signIn = document.getElementById('signInForm');
+            const signUp = document.getElementById('signUpForm');
+            if (signIn) signIn.classList.add('hidden');
+            if (signUp) signUp.classList.add('hidden');
+            const host = document.querySelector('.slide-in');
+            const picker = document.createElement('section');
+            picker.className = 'auth-card glass-effect rounded-2xl p-8 shadow-2xl';
+            picker.innerHTML = '<div class="text-center mb-6"><h2 class="of-serif text-3xl font-semibold text-gray-800 mb-2">Choose your department</h2><p class="text-gray-600">Sign in through your department’s secure portal.</p></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-3">' +
+              Object.keys(DEPARTMENT_PORTALS).map(function(code) { return '<a class="border rounded-lg p-4 hover:border-[color:var(--of-brass)] flex items-center gap-3" style="border-color:var(--of-border)" href="/dashboard/auth.html?department=' + code + '"><i class="fas ' + DEPARTMENT_PORTALS[code].icon + ' text-xl" style="color:var(--of-navy)"></i><span class="font-medium text-gray-800">' + DEPARTMENT_PORTALS[code].name + '<span class="block text-xs text-gray-500 mt-1">Open secure sign-in →</span></span></a>'; }).join('') +
+              '</div><p class="text-xs text-gray-500 mt-5">Access is controlled by your organization’s assigned department and role. Human Resources is restricted to Administrator and Super Admin.</p>';
+            if (host) host.insertBefore(picker, host.firstChild);
+            if (portalCode) {
+              const title = picker.querySelector('h2');
+              if (title) title.textContent = 'Department portal not found';
+            }
+            return;
+          }
           document.title = 'OfficeFlow — ' + selectedPortal.name + ' Sign In';
           const heading = document.querySelector('#signInForm h2');
           const subtitle = document.querySelector('#signInForm .text-center p');
