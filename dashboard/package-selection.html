@@ -115,11 +115,11 @@
                     </div>
                     <div class="trust-badge flex items-center">
                         <i class="fas fa-lock text-blue-500 text-2xl mr-2"></i>
-                        <span class="text-sm font-semibold">Payment Protected</span>
+                        <span class="text-sm font-semibold">Checkout not enabled</span>
                     </div>
                     <div class="trust-badge flex items-center">
                         <i class="fas fa-award text-yellow-500 text-2xl mr-2"></i>
-                        <span class="text-sm font-semibold">30-Day Guarantee</span>
+                        <span class="text-sm font-semibold">Contact us for onboarding</span>
                     </div>
                     <div class="trust-badge flex items-center">
                         <i class="fas fa-clock text-[#A6823D] text-2xl mr-2"></i>
@@ -408,7 +408,7 @@
                             </div>
                             <div class="mt-4 flex items-center justify-center text-sm text-gray-600">
                                 <i class="fas fa-lock mr-2"></i>
-                                <span>Secure payment • 30-day money-back guarantee • Setup within 48 hours</span>
+                                <span>Package information only • Subscription checkout is not enabled</span>
                             </div>
                         </div>
                     </div>
@@ -707,99 +707,20 @@
                     </form>
                 </div>
                 
-                <!-- Step 2: Payment Method -->
+                <!-- Step 2: Payment setup is not enabled yet -->
                 <div id="step2Content" class="step-content hidden">
-                    <h4 class="text-lg font-bold text-gray-800 mb-6">Choose Payment Method</h4>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                        <div class="payment-method border-2 border-gray-200 rounded-lg p-4 text-center" onclick="selectPayment(this, 'mpesa')">
-                            <i class="fas fa-mobile-alt text-3xl text-green-600 mb-2"></i>
-                            <p class="font-semibold">M-Pesa</p>
-                            <p class="text-sm text-gray-600">Pay via M-Pesa</p>
-                        </div>
-                        <div class="payment-method border-2 border-gray-200 rounded-lg p-4 text-center" onclick="selectPayment(this, 'card')">
-                            <i class="fas fa-credit-card text-3xl text-blue-600 mb-2"></i>
-                            <p class="font-semibold">Credit/Debit Card</p>
-                            <p class="text-sm text-gray-600">Visa, Mastercard</p>
-                        </div>
-                        <div class="payment-method border-2 border-gray-200 rounded-lg p-4 text-center" onclick="selectPayment(this, 'bank')">
-                            <i class="fas fa-university text-3xl text-[#A6823D] mb-2"></i>
-                            <p class="font-semibold">Bank Transfer</p>
-                            <p class="text-sm text-gray-600">Direct deposit</p>
-                        </div>
+                    <h4 class="text-lg font-bold text-gray-800 mb-4">Subscription checkout unavailable</h4>
+                    <div class="bg-amber-50 border-l-4 border-amber-500 p-5 rounded mb-6" role="status">
+                        <h5 class="font-bold text-amber-900 mb-2">No payment will be collected on this page</h5>
+                        <p class="text-amber-900">OfficeFlow's subscription payment provider is not connected to this page yet. Do not enter card numbers, CVV codes, M-Pesa PINs, or bank credentials here. No subscription can be activated from this preview.</p>
                     </div>
-                    
-                    <!-- Payment Details -->
-                    <div id="paymentDetails" class="hidden">
-                        <div id="mpesaDetails" class="payment-details hidden">
-                            <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded mb-4">
-                                <h5 class="font-bold text-green-800 mb-2">M-Pesa Payment</h5>
-                                <p class="text-green-700">Pay via M-Pesa to complete your subscription</p>
-                            </div>
-                            <div class="space-y-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">M-Pesa Number</label>
-                                    <input type="tel" id="mpesaNumber" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="07XX XXX XXX">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">M-Pesa Name</label>
-                                    <input type="text" id="mpesaName" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="Name on M-Pesa account">
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div id="cardDetails" class="payment-details hidden">
-                            <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded mb-4">
-                                <h5 class="font-bold text-blue-800 mb-2">Card Payment</h5>
-                                <p class="text-blue-700">Secure payment via SSL encryption</p>
-                            </div>
-                            <div class="space-y-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Card Number</label>
-                                    <input type="text" id="cardNumber" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="1234 5678 9012 3456">
-                                </div>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">Expiry Date</label>
-                                        <input type="text" id="cardExpiry" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="MM/YY">
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">CVV</label>
-                                        <input type="text" id="cardCvv" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="123">
-                                    </div>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Cardholder Name</label>
-                                    <input type="text" id="cardName" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="Name on card">
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div id="bankDetails" class="payment-details hidden">
-                            <div class="bg-[#F7F6F2] border-l-4 border-[#A6823D] p-4 rounded mb-4">
-                                <h5 class="font-bold text-[#16213E] mb-2">Bank Transfer Details</h5>
-                                <p class="text-[#1F2C4F]">Transfer funds directly to our account</p>
-                            </div>
-                            <div class="bg-gray-50 p-4 rounded">
-                                <p class="font-semibold mb-2">Bank Details:</p>
-                                <p class="text-sm">Bank: Equity Bank Kenya</p>
-                                <p class="text-sm">Account Name: OOES Solutions Ltd</p>
-                                <p class="text-sm">Account Number: 0123456789</p>
-                                <p class="text-sm">Branch: Nairobi CBD</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="flex justify-between">
+                    <div class="flex justify-start">
                         <button type="button" onclick="previousStep(1)" class="bg-gray-500 text-white px-6 py-3 rounded hover:bg-gray-600 transition font-semibold">
                             <i class="fas fa-arrow-left mr-2"></i> Previous
                         </button>
-                        <button type="button" onclick="nextStep(3)" class="bg-[#16213E] text-white px-6 py-3 rounded hover:bg-[#1F2C4F] transition font-semibold">
-                            Next Step <i class="fas fa-arrow-right ml-2"></i>
-                        </button>
                     </div>
                 </div>
-                
+
                 <!-- Step 3: Review & Confirm -->
                 <div id="step3Content" class="step-content hidden">
                     <h4 class="text-lg font-bold text-gray-800 mb-6">Review Your Order</h4>
@@ -843,27 +764,22 @@
                         </div>
                     </div>
                     
-                    <div class="bg-gray-50 p-6 rounded-lg mb-6">
-                        <h5 class="font-bold text-gray-800 mb-4">Payment Method</h5>
-                        <p class="font-semibold" id="reviewPayment">-</p>
+                    <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded mb-6">
+                        <h5 class="font-bold text-amber-900 mb-2">Payment not available</h5>
+                        <p class="text-sm text-amber-900">This page cannot accept or verify payments. No payment has been taken and no subscription will be activated here.</p>
                     </div>
                     
-                    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded mb-6">
-                        <h5 class="font-bold text-blue-800 mb-2">Terms & Conditions</h5>
-                        <ul class="text-sm text-blue-700 space-y-1">
-                            <li>• 30-day money-back guarantee</li>
-                            <li>• Setup within 48 hours</li>
-                            <li>• Monthly billing cycle</li>
-                            <li>• Cancel anytime with no penalty</li>
-                        </ul>
+                    <div class="bg-gray-100 border-l-4 border-gray-500 p-4 rounded mb-6">
+                        <h5 class="font-bold text-gray-800 mb-2">Next step</h5>
+                        <p class="text-sm text-gray-700">Contact OfficeFlow to discuss onboarding. Online checkout, payment verification and subscription activation are not available in this page yet.</p>
                     </div>
                     
                     <div class="flex justify-between">
                         <button type="button" onclick="previousStep(2)" class="bg-gray-500 text-white px-6 py-3 rounded hover:bg-gray-600 transition font-semibold">
                             <i class="fas fa-arrow-left mr-2"></i> Previous
                         </button>
-                        <button type="button" onclick="confirmPackage()" class="bg-green-600 text-white px-6 py-3 rounded hover:bg-green-700 transition font-semibold">
-                            <i class="fas fa-check mr-2"></i> Complete Purchase
+                        <button type="button" disabled aria-disabled="true" title="Checkout is not enabled" class="bg-gray-400 text-white px-6 py-3 rounded cursor-not-allowed font-semibold">
+                            Checkout unavailable
                         </button>
                     </div>
                 </div>
@@ -958,8 +874,7 @@
     <script>
         // Global variables
         let currentStep = 1;
-        let selectedPayment = '';
-        let selectedAddOns = [];
+let selectedAddOns = [];
         let packageData = {};
 
         // Add-on prices
@@ -1050,28 +965,8 @@
                     return false;
                 }
             } else if (currentStep === 2) {
-                if (!selectedPayment) {
-                    showNotification('Please select a payment method', 'error');
-                    return false;
-                }
-                
-                if (selectedPayment === 'mpesa') {
-                    const mpesaNumber = document.getElementById('mpesaNumber').value;
-                    const mpesaName = document.getElementById('mpesaName').value;
-                    if (!mpesaNumber || !mpesaName) {
-                        showNotification('Please fill in M-Pesa details', 'error');
-                        return false;
-                    }
-                } else if (selectedPayment === 'card') {
-                    const cardNumber = document.getElementById('cardNumber').value;
-                    const cardExpiry = document.getElementById('cardExpiry').value;
-                    const cardCvv = document.getElementById('cardCvv').value;
-                    const cardName = document.getElementById('cardName').value;
-                    if (!cardNumber || !cardExpiry || !cardCvv || !cardName) {
-                        showNotification('Please fill in card details', 'error');
-                        return false;
-                    }
-                }
+                showNotification('Subscription checkout is not enabled. No payment has been taken.', 'error');
+                return false;
             }
             
             return true;
@@ -1087,28 +982,6 @@
             return re.test(phone.replace(/\s/g, ''));
         }
 
-        function selectPayment(element, method) {
-            // Remove previous selection
-            document.querySelectorAll('.payment-method').forEach(el => {
-                el.classList.remove('selected');
-            });
-            
-            // Add selection to clicked element
-            element.classList.add('selected');
-            selectedPayment = method;
-            
-            // Show payment details
-            document.getElementById('paymentDetails').classList.remove('hidden');
-            
-            // Hide all payment details
-            document.querySelectorAll('.payment-details').forEach(el => {
-                el.classList.add('hidden');
-            });
-            
-            // Show relevant payment details
-            document.getElementById(`${method}Details`).classList.remove('hidden');
-        }
-
         function updateReviewSection() {
             // Update company information
             document.getElementById('reviewCompany').textContent = document.getElementById('companyName').value;
@@ -1122,9 +995,7 @@
                 'card': 'Credit/Debit Card',
                 'bank': 'Bank Transfer'
             };
-            document.getElementById('reviewPayment').textContent = paymentMethods[selectedPayment];
-            
-            // Update total with add-ons
+// Update total with add-ons
             let total = 40000;
             let addOnsBreakdown = '';
             
@@ -1154,28 +1025,8 @@
         }
 
         function confirmPackage() {
-            // Collect all package data
-            packageData = {
-                package: 'Business Package',
-                basePrice: 40000,
-                addOns: selectedAddOns,
-                totalPrice: calculateTotalPrice(),
-                company: {
-                    name: document.getElementById('companyName').value,
-                    contact: document.getElementById('contactPerson').value,
-                    email: document.getElementById('companyEmail').value,
-                    phone: document.getElementById('companyPhone').value,
-                    employees: document.getElementById('employeeCount').value,
-                    industry: document.getElementById('industry').value
-                },
-                payment: {
-                    method: selectedPayment,
-                    details: getPaymentDetails()
-                }
-            };
-            
-            // Process payment (simulation)
-            processPayment();
+            // Never collect or log payment credentials. Provider-backed checkout is not implemented.
+            showNotification('Checkout is not enabled. No payment has been taken and no subscription has been activated.', 'error');
         }
 
         function calculateTotalPrice() {
@@ -1186,51 +1037,16 @@
             return total;
         }
 
-        function getPaymentDetails() {
-            if (selectedPayment === 'mpesa') {
-                return {
-                    number: document.getElementById('mpesaNumber').value,
-                    name: document.getElementById('mpesaName').value
-                };
-            } else if (selectedPayment === 'card') {
-                return {
-                    number: document.getElementById('cardNumber').value,
-                    expiry: document.getElementById('cardExpiry').value,
-                    cvv: document.getElementById('cardCvv').value,
-                    name: document.getElementById('cardName').value
-                };
-            }
-            return {};
-        }
-
         function processPayment() {
-            showNotification('Processing payment...', 'info');
-            
-            // Simulate payment processing
-            setTimeout(() => {
-                closePackageModal();
-                showNotification('Payment successful! Welcome to OOES Business Package. We\'ll contact you within 24 hours for setup.', 'success');
-                
-                // In a real application, this would send data to a backend
-                console.log('Package Purchase Completed:', packageData);
-                
-                // Reset form after successful purchase
-                resetForm();
-            }, 3000);
+            // Fail closed until a verified payment provider and server-side webhook exist.
+            showNotification('Checkout is not enabled. No payment has been processed.', 'error');
         }
 
         function resetForm() {
             // Reset form fields
             document.getElementById('companyForm').reset();
             
-            // Reset payment selection
-            selectedPayment = '';
-            document.querySelectorAll('.payment-method').forEach(el => {
-                el.classList.remove('selected');
-            });
-            document.getElementById('paymentDetails').classList.add('hidden');
-            
-            // Reset add-ons
+// Reset add-ons
             selectedAddOns = [];
             document.querySelectorAll('.add-on-item').forEach(el => {
                 el.classList.remove('selected');
@@ -1274,10 +1090,7 @@
         }
 
         function selectAnnualBilling() {
-            showNotification('Annual billing selected! Redirecting to checkout...', 'info');
-            setTimeout(() => {
-                showNotification('Annual billing checkout would open here with 20% discount applied', 'success');
-            }, 1500);
+            showNotification('Annual checkout is not connected yet. No payment has been taken.', 'error');
         }
 
         function scheduleConsultation() {
@@ -1306,24 +1119,17 @@
             };
             
             closeConsultationModal();
-            showNotification('Consultation scheduled successfully! We\'ll send you a confirmation email shortly.', 'success');
-            
-            // In a real application, this would send data to a backend
-            console.log('Consultation Scheduled:', consultationData);
+            // No booking backend is connected; do not claim the request was sent.
+            showNotification('Consultation was not booked because the booking service is not connected. Please contact OfficeFlow directly.', 'error');
+            console.info('Consultation form submitted locally only; no request was sent.', { company: consultationData.company });
         }
 
         function selectStarterPackage() {
-            showNotification('Starter Package selected! Redirecting to checkout...', 'info');
-            setTimeout(() => {
-                showNotification('Starter Package checkout would open here', 'success');
-            }, 1500);
+            showNotification('Starter package checkout is not connected yet. No payment has been taken.', 'error');
         }
 
         function selectPremiumPackage() {
-            showNotification('Premium Package selected! Redirecting to checkout...', 'info');
-            setTimeout(() => {
-                showNotification('Premium Package checkout would open here', 'success');
-            }, 1500);
+            showNotification('Premium package checkout is not connected yet. No payment has been taken.', 'error');
         }
 
         function showNotification(message, type) {
