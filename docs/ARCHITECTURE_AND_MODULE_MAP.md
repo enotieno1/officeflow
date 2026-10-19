@@ -32,7 +32,7 @@
 | Documents | `dashboard/document-management.html` | Read-only register view. Storage lifecycle not verified. |
 | Finance | `dashboard/financial-management.html` | Redirects to `operational-module.html?category=Finance`; test the actual destination. |
 | Tasks | `dashboard/tasks-management.html` | Legacy page includes localStorage gate; live CRUD lifecycle not proven. |
-| Packages | `dashboard/package-selection.html`, `dashboard/pricing.html`, `dashboard/packages.html` | UI exists; package selection has a localStorage-only guard. No subscription/payment tables found. |
+| Packages | `dashboard/package-selection.html`, `dashboard/pricing.html`, `dashboard/packages.html` | UI exists; package selection has a localStorage-only guard. No subscription/payment tables found. The inspected baseline simulated successful payment and logged card/CVV-bearing data; remediation PR #6 disables checkout and removes credential collection. |
 
 ## Intended integrated flow
 
