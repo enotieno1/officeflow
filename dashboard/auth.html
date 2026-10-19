@@ -343,7 +343,7 @@
                 </div>
 
                 <!-- Quick Account Benefits -->
-                <div class="mt-8 glass-effect rounded-xl p-6">
+                <div class="mt-8 glass-effect rounded-xl p-6"><h3 class="text-lg font-semibold text-gray-800 mb-3">Department sign-in portals</h3><div class="grid grid-cols-2 gap-2 text-sm mb-5"><a class="rounded border p-2" href="/dashboard/auth.html?department=HR">Human Resources</a><a class="rounded border p-2" href="/dashboard/auth.html?department=FIN">Finance</a><a class="rounded border p-2" href="/dashboard/auth.html?department=PROC">Procurement</a><a class="rounded border p-2" href="/dashboard/auth.html?department=ADMIN">Administration</a><a class="rounded border p-2" href="/dashboard/auth.html?department=IT">Information Technology</a><a class="rounded border p-2" href="/dashboard/auth.html?department=LEGAL">Legal & Compliance</a><a class="rounded border p-2" href="/dashboard/auth.html?department=CORP">Corporate Operations</a></div>
                     <h3 class="text-lg font-semibold text-gray-800 mb-4">
                         <i class="fas fa-gift mr-2 text-[color:var(--of-brass)]"></i>
                         Why Choose OfficeFlow?
@@ -471,7 +471,7 @@
             showNotification('Creating Account', 'Please wait...', 'info');
             try {
                 var phone = document.getElementById('signUpPhone').value.trim();
-                var result = await OOES_AUTH.register(fn, ln, email, pw, window.location.origin + '/dashboard/auth.html', phone);
+                var result = await OOES_AUTH.register(fn, ln, email, pw, window.location.origin + '/dashboard/auth.html' + (portalCode ? '?department=' + encodeURIComponent(portalCode) : ''), phone);
                 if (!result || result.error) {
                     showNotification('Sign Up Failed', (result && result.error) || 'Unable to create your account. Please try again.', 'error');
                     return;
