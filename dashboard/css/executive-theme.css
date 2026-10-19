@@ -1,8 +1,7 @@
 /* OfficeFlow — Executive theme
-   Design tokens: deep navy + warm paper + single brass accent.
-   Serif for headings/figures (gravitas), Inter for UI, Plex Mono for tabular data. */
+   Consistent typography: Inter throughout the product for a clean, accessible enterprise experience. */
 
-@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 :root{
   --of-navy: #16213E;
@@ -17,19 +16,19 @@
   --of-green: #2F6E4E;
   --of-red: #A13D3D;
   --of-amber: #A97C1F;
-  --of-serif: 'Source Serif 4', Georgia, serif;
+  --of-serif: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --of-sans: 'Inter', -apple-system, sans-serif;
-  --of-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --of-mono: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 body{ font-family: var(--of-sans); background: var(--of-paper); color: var(--of-ink); }
 
-.of-serif{ font-family: var(--of-serif); }
-.of-mono{ font-family: var(--of-mono); font-variant-numeric: tabular-nums; }
+.of-serif{ font-family: var(--of-sans); }
+.of-mono{ font-family: var(--of-sans); font-variant-numeric: tabular-nums; }
 
 /* Sidebar */
 #sidebar{ background: var(--of-navy) !important; background-image:none !important; }
-#sidebar .brand-mark{ font-family: var(--of-serif); font-weight:600; font-size:1.5rem; letter-spacing:0.01em; color:#F7F6F2; }
+#sidebar .brand-mark{ font-family: var(--of-sans); font-weight:600; font-size:1.5rem; letter-spacing:0.01em; color:#F7F6F2; }
 #sidebar .brand-rule{ height:1px; background:linear-gradient(90deg, var(--of-brass), transparent); margin-top:10px; }
 #sidebar .brand-sub{ font-family: var(--of-mono); font-size:10px; letter-spacing:0.12em; text-transform:uppercase; color: var(--of-slate-light); }
 
