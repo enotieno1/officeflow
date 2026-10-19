@@ -44,7 +44,8 @@ async function loadDepartments(){
       const code=String(d.code||'').toUpperCase();
       const category=categories[code]||d.name;
       const isHr=code==='HR'||String(d.name||'').toLowerCase()==='human resources';
-      const restricted=isHr&&!isAdmin;
+      const currentProfile=OOES_AUTH.getSession();
+      const restricted=isHr&&!isAdmin&&(!currentProfile||!currentProfile.unit_id);
       const href='operational-module.html?category='+encodeURIComponent(category);
       const portalHref='/dashboard/auth.html?department='+encodeURIComponent(code);
       const label=restricted?'Restricted — admin & top management': 'Open department';
