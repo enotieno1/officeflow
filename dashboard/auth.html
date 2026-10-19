@@ -343,7 +343,7 @@
                 </div>
 
                 <!-- Quick Account Benefits -->
-                <div class="mt-8 glass-effect rounded-xl p-6"><h3 class="text-lg font-semibold text-gray-800 mb-3">Department sign-in portals</h3><div class="grid grid-cols-2 gap-2 text-sm mb-5"><a class="rounded border p-2" href="/dashboard/auth.html?department=HR">Human Resources</a><a class="rounded border p-2" href="/dashboard/auth.html?department=FIN">Finance</a><a class="rounded border p-2" href="/dashboard/auth.html?department=PROC">Procurement</a><a class="rounded border p-2" href="/dashboard/auth.html?department=ADMIN">Administration</a><a class="rounded border p-2" href="/dashboard/auth.html?department=IT">Information Technology</a><a class="rounded border p-2" href="/dashboard/auth.html?department=LEGAL">Legal & Compliance</a><a class="rounded border p-2" href="/dashboard/auth.html?department=CORP">Corporate Operations</a></div>
+                <div class="mt-8 glass-effect rounded-xl p-6"><h3 class="text-lg font-semibold text-gray-800 mb-3">Department sign-in portals</h3><div class="grid grid-cols-2 gap-2 text-sm mb-5"><a class="rounded border p-2" href="/dashboard/auth.html?department=HR">Human Resources</a><a class="rounded border p-2" href="/dashboard/auth.html?department=FIN">Finance</a><a class="rounded border p-2" href="/dashboard/auth.html?department=PROC">Procurement</a><a class="rounded border p-2" href="/dashboard/auth.html?department=ADMIN">Administration</a><a class="rounded border p-2" href="/dashboard/auth.html?department=IT">Information Technology</a><a class="rounded border p-2" href="/dashboard/auth.html?department=LEGAL">Legal & Compliance</a><a class="rounded border p-2" href="/dashboard/auth.html?department=CORP">Corporate Operations</a></div><h3 class="text-lg font-semibold text-gray-800 mb-3">Department sign-in portals</h3><div class="grid grid-cols-2 gap-2 text-sm mb-5"><a class="rounded border p-2" href="/dashboard/auth.html?department=HR">Human Resources</a><a class="rounded border p-2" href="/dashboard/auth.html?department=FIN">Finance</a><a class="rounded border p-2" href="/dashboard/auth.html?department=PROC">Procurement</a><a class="rounded border p-2" href="/dashboard/auth.html?department=ADMIN">Administration</a><a class="rounded border p-2" href="/dashboard/auth.html?department=IT">Information Technology</a><a class="rounded border p-2" href="/dashboard/auth.html?department=LEGAL">Legal & Compliance</a><a class="rounded border p-2" href="/dashboard/auth.html?department=CORP">Corporate Operations</a></div>
                     <h3 class="text-lg font-semibold text-gray-800 mb-4">
                         <i class="fas fa-gift mr-2 text-[color:var(--of-brass)]"></i>
                         Why Choose OfficeFlow?
@@ -383,6 +383,55 @@
     </div>
 
     <script>
+
+        const DEPARTMENT_PORTALS = {
+          HR:{name:'Human Resources',icon:'fa-users'}, FIN:{name:'Finance',icon:'fa-coins'},
+          PROC:{name:'Procurement',icon:'fa-cart-shopping'}, ADMIN:{name:'Administration',icon:'fa-building'},
+          IT:{name:'Information Technology',icon:'fa-laptop-code'}, LEGAL:{name:'Legal & Compliance',icon:'fa-scale-balanced'},
+          CORP:{name:'Corporate Operations',icon:'fa-sitemap'}
+        };
+        const portalCode = new URLSearchParams(window.location.search).get('department');
+        const selectedPortal = portalCode ? DEPARTMENT_PORTALS[portalCode.toUpperCase()] : null;
+        document.addEventListener('DOMContentLoaded', function () {
+          if (!selectedPortal) return;
+          document.title = 'OfficeFlow — ' + selectedPortal.name + ' Sign In';
+          const heading = document.querySelector('#signInForm h2');
+          const subtitle = document.querySelector('#signInForm .text-center p');
+          if (heading) heading.textContent = selectedPortal.name + ' Portal';
+          if (subtitle) subtitle.textContent = 'Sign in with an account assigned to ' + selectedPortal.name + '.';
+          const button = document.querySelector('#signInForm form button[type="submit"]');
+          if (button) button.textContent = 'Sign In to ' + selectedPortal.name;
+          const note = document.createElement('div');
+          note.className = 'mb-5 rounded-lg px-4 py-3 text-sm';
+          note.style.cssText = 'background:#F2EFE7;color:#18263D;border-left:3px solid #B69A5A';
+          note.innerHTML = '<strong><i class="fas ' + selectedPortal.icon + ' mr-2"></i>' + selectedPortal.name + ' secure portal</strong><p class="mt-1">Your department assignment is checked after sign-in. Access is managed by your organization administrator.</p>';
+          const form = document.querySelector('#signInForm form');
+          if (form) form.parentNode.insertBefore(note, form);
+          const back = document.createElement('a');
+          back.href = '/dashboard/departments.html'; back.className = 'block text-center text-sm mt-4';
+          back.style.color = 'var(--of-brass)'; back.textContent = '← Choose another department portal';
+          document.querySelector('#signInForm').appendChild(back);
+        });
+        async function verifyDepartmentPortal(account) {
+          if (!portalCode) return true;
+          if (!selectedPortal) { showNotification('Portal Not Found','Choose a department from the directory.','error'); return false; }
+          const privileged = ['administrator','super_admin'].includes(account.role);
+          if (portalCode.toUpperCase() === 'HR' && !privileged) {
+            await OOES_AUTH.logout(false);
+            showNotification('Restricted Portal','Human Resources access is restricted to administrators and top management.','error');
+            return false;
+          }
+          if (privileged) return true;
+          const {data: department,error} = await supabase.from('departments').select('id,name,code').eq('code',portalCode.toUpperCase()).eq('is_active',true).maybeSingle();
+          if (error || !department) { await OOES_AUTH.logout(false); showNotification('Portal Unavailable','This department portal is not active. Contact your organization administrator.','error'); return false; }
+          if (!account.unit_id || account.unit_id !== department.id) {
+            await OOES_AUTH.logout(false);
+            showNotification('Department Access Denied','This account is not assigned to '+department.name+'. Ask your organization administrator to assign your department.','error');
+            return false;
+          }
+          return true;
+        }
+
         function destinationForAccount(account) {
             var bootstrapOrgId = '00000000-0000-0000-0000-000000000001';
             return account && account.role === 'employee' && account.organization_id === bootstrapOrgId
@@ -441,6 +490,7 @@
             try {
                 var result = await OOES_AUTH.login(email, password);
                 if (result && !result.error) {
+                    if (!(await verifyDepartmentPortal(result))) return;
                     showNotification('Welcome Back!', 'Signed in as ' + result.name, 'success');
                     setTimeout(function() { window.location.href = destinationForAccount(result); }, 800);
                 } else {
