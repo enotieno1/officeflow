@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OfficeFlow — Departments</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/dashboard/js/config.js"></script>
+<script>var supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);</script>
+<link rel="stylesheet" href="css/executive-theme.css">
+<link rel="stylesheet" href="css/mobile.css">
+</head>
+<body class="bg-gray-50">
+<header class="of-header px-6 py-4 flex items-center justify-between">
+  <div><div class="of-eyebrow">OfficeFlow</div><h1 class="of-serif text-2xl font-semibold">Departments</h1><p class="text-sm text-gray-500 mt-1">One operating workspace, with access controlled by role.</p></div>
+  <a href="index.html" class="text-sm" style="color:var(--of-brass)">← Dashboard</a>
+</header>
+<main class="max-w-6xl mx-auto p-6">
+  <section class="of-card p-5 mb-6">
+    <h2 class="of-serif text-lg font-semibold">Your organization</h2>
+    <p class="text-sm text-gray-600 mt-1">Choose a department to open its workflow area. Only configured, published workflows can be started. Department names are visible to organization members; confidential records remain protected by database permissions.</p>
+  </section>
+  <div id="status" role="status" aria-live="polite" class="mb-5 text-sm text-gray-600">Loading departments…</div>
+  <section id="departments" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5"></section>
+</main>
+<script src="/dashboard/js/ooes-auth.js"></script>
+<script>
+const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const icons = {HR:'fa-users',FIN:'fa-coins',PROC:'fa-cart-shopping',ADMIN:'fa-building',IT:'fa-laptop-code',LEGAL:'fa-scale-balanced',CORP:'fa-sitemap'};
+const categories = {HR:'HR',FIN:'Finance',PROC:'Procurement',ADMIN:'Administration',IT:'IT','LEGAL':'Legal & Compliance',CORP:'Corporate Operations'};
+async function loadDepartments(){
+  const status=document.getElementById('status'), grid=document.getElementById('departments');
+  try {
+    await OOES_AUTH.ready;
+    if (!OOES_AUTH.isLoggedIn()) { status.textContent='Please sign in to view your organization departments.'; return; }
+    const {data,error}=await supabase.from('departments').select('id,name,code,unit_type,is_active').eq('is_active',true).order('name');
+    if(error) throw error;
+    const rows=data||[];
+    if(!rows.length){status.textContent='No active departments are configured for this organization yet.';return;}
+    const isAdmin=['administrator','super_admin'].includes(OOES_AUTH.getRole());
+    status.textContent=rows.length+' active departments';
+    grid.innerHTML=rows.map(d=>{
+      const code=String(d.code||'').toUpperCase();
+      const category=categories[code]||d.name;
+      const isHr=code==='HR'||String(d.name||'').toLowerCase()==='human resources';
+      const restricted=isHr&&!isAdmin;
+      const href='operational-module.html?category='+encodeURIComponent(category);
+      const label=restricted?'Restricted — admin & top management': 'Open department';
+      return '<article class="of-card p-5 flex flex-col min-h-48"><div class="flex items-start justify-between gap-3"><div class="rounded-lg p-3" style="background:#F2EFE7;color:var(--of-navy)"><i class="fas '+(icons[code]||'fa-layer-group')+' text-xl"></i></div><span class="text-xs rounded-full px-2 py-1" style="background:'+(restricted?'#F5E8D0':'#E8F1EB')+';color:'+(restricted?'#775B22':'#2F6E4E')+'">'+(restricted?'Restricted':'Available')+'</span></div><h2 class="of-serif text-xl font-semibold mt-4">'+escapeHtml(d.name)+'</h2><p class="text-xs uppercase tracking-wider text-gray-500 mt-1">'+escapeHtml(d.code||d.unit_type||'Department')+'</p><p class="text-sm text-gray-600 mt-2">'+(restricted?'Confidential HR records are not visible to your role.': 'Department workflows and resources for authorized users.')+'</p><a class="inline-flex items-center gap-2 mt-5 text-sm font-medium" style="color:var(--of-brass)" href="'+href+'">'+label+' <span aria-hidden="true">→</span></a></article>';
+    }).join('');
+  } catch(e) {
+    status.className='mb-5 text-sm text-red-700';
+    status.textContent='Unable to load departments: '+(e.message||'Please refresh and try again.');
+  }
+}
+document.addEventListener('DOMContentLoaded',loadDepartments);
+</script>
+</body>
+</html>
