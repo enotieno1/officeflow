@@ -42,7 +42,7 @@ test("authenticated user can create, update and delete their own task", async ({
 });
 
 test("authenticated user can upload and delete a private document", async ({ page }) => {
-  test.skip(process.env.RUN_MUTATING_E2E !== "1", "Set RUN_MUTATING_E2E=1 only for a dedicated test organization.");
+  test.skip(process.env.RUN_MUTATING_E2E !== "1" || /(^|\.)officeflow\.co\.ke$|(^|\.)office-sort\.vercel\.app$/.test(new URL(baseURL).hostname), "Mutating tests are allowed only against a dedicated staging/preview app and test organization.");
   await signIn(page);
   await page.goto(baseURL + "/dashboard/document-management.html");
   await expect(page.getByRole("heading", { name: "Documents" })).toBeVisible();
