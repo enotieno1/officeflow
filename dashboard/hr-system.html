@@ -546,7 +546,7 @@
             }
         ];
 
-        async async function initializeHRSystem() {
+        async function initializeHRSystem() {
             await OOES_AUTH.ready;
             if (!OOES_AUTH.isLoggedIn()) { window.location.href='/dashboard/auth.html'; return; }
             if (!['administrator','super_admin'].includes(OOES_AUTH.getRole())) { window.location.replace('operational-module.html?category=HR'); return; }
