@@ -25,17 +25,19 @@ body{background:#f5f6f8;color:#16213e}.shell{max-width:1180px;margin:auto}.navy{
 <section id="taskList" class="space-y-3"></section>
 </main>
 <div id="taskModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="panel p-6 w-full max-w-xl"><div class="flex items-start justify-between gap-3 mb-5"><div><p class="brass uppercase tracking-widest text-xs font-bold">Task record</p><h2 id="modalTitle" class="text-xl font-bold mt-1">Create task</h2></div><button id="closeModal" class="btn btn-secondary">Close</button></div>
-<form id="taskForm" class="space-y-4"><label class="block text-sm font-semibold">Task title<input id="taskTitle" class="field mt-1" maxlength="200" required></label><label class="block text-sm font-semibold">Description<textarea id="taskDescription" class="field mt-1" rows="4" maxlength="5000"></textarea></label><div class="grid grid-cols-1 md:grid-cols-2 gap-3"><label class="block text-sm font-semibold">Priority<select id="taskPriority" class="field mt-1"><option value="low">Low</option><option value="medium" selected>Medium</option><option value="high">High</option></select></label><label class="block text-sm font-semibold">Due date<input id="taskDueDate" type="date" class="field mt-1"></label></div><label class="block text-sm font-semibold">Assigned to (optional)<input id="taskAssignee" class="field mt-1" maxlength="200" placeholder="Name or leave blank"></label><div class="flex justify-end gap-2 pt-2"><button type="button" id="cancelModal" class="btn btn-secondary">Cancel</button><button type="submit" id="saveTask" class="btn btn-primary">Create task</button></div></form></div></div>
+<form id="taskForm" class="space-y-4"><label class="block text-sm font-semibold">Task title<input id="taskTitle" class="field mt-1" maxlength="200" required></label><label class="block text-sm font-semibold">Description<textarea id="taskDescription" class="field mt-1" rows="4" maxlength="5000"></textarea></label><div class="grid grid-cols-1 md:grid-cols-2 gap-3"><label class="block text-sm font-semibold">Priority<select id="taskPriority" class="field mt-1"><option value="low">Low</option><option value="medium" selected>Medium</option><option value="high">High</option></select></label><label class="block text-sm font-semibold">Due date<input id="taskDueDate" type="date" class="field mt-1"></label></div><label class="block text-sm font-semibold">Assign to<select id="taskAssignee" class="field mt-1"><option value="">Unassigned</option></select><span id="assigneeHelp" class="muted text-xs font-normal block mt-1">Managers and administrators can assign tasks to organization members.</span></label><div class="flex justify-end gap-2 pt-2"><button type="button" id="cancelModal" class="btn btn-secondary">Cancel</button><button type="submit" id="saveTask" class="btn btn-primary">Create task</button></div></form></div></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="/dashboard/js/config.js"></script><script src="/dashboard/js/db.js"></script><script src="/dashboard/js/ooes-auth.js"></script>
 <script>
 (function(){
  const $=id=>document.getElementById(id);
- let tasks=[],editingId=null;
+ let tasks=[],members=[],editingId=null;
  const escape=v=>String(v??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
  const today=()=>{const d=new Date();d.setHours(0,0,0,0);return d;};
  const overdue=t=>t.status!=='completed'&&!!t.due_date&&new Date(t.due_date+'T00:00:00')<today();
  function notice(message,type='info'){const el=$('notice');el.textContent=message;el.className='rounded-lg border p-3 mb-5 text-sm '+(type==='error'?'bg-red-50 border-red-200 text-red-800':type==='success'?'bg-green-50 border-green-200 text-green-800':'bg-blue-50 border-blue-200 text-blue-800');}
  function statusText(t){return overdue(t)?'Overdue':String(t.status||'pending').replace('_',' ').replace(/^./,x=>x.toUpperCase());}
+ function makeOption(label,value){const o=document.createElement('option');o.value=value;o.textContent=label;return o;}
+ async function loadAssignees(){const select=$('taskAssignee'),session=OOES_AUTH.getSession();select.replaceChildren(makeOption('Unassigned',''));if(!session)return;if(['administrator','manager','super_admin'].includes(session.role)){const {data,error}=await supabase.rpc('fn_list_task_assignees');if(error){$('assigneeHelp').textContent='Member list unavailable; tasks can still be saved unassigned.';return;}members=data||[];members.forEach(m=>select.append(makeOption((m.display_name||m.email)+(m.email&&m.display_name!==m.email?' · '+m.email:''),m.user_id)));}else{select.append(makeOption('Me — '+(session.name||session.email),session.id));$('assigneeHelp').textContent='You can assign a task to yourself. Ask a manager to assign tasks to others.';}}
  function render(){
   const q=$('searchTasks').value.trim().toLowerCase(),status=$('filterStatus').value,priority=$('filterPriority').value;
   const rows=tasks.filter(t=>{if(status==='overdue'&&!overdue(t))return false;if(status&&status!=='overdue'&&(t.status||'pending')!==status)return false;if(priority&&t.priority!==priority)return false;return !q||[t.title,t.description,t.assigned_to,t.status,t.priority].some(v=>String(v||'').toLowerCase().includes(q));});
@@ -55,7 +57,7 @@ body{background:#f5f6f8;color:#16213e}.shell{max-width:1180px;margin:auto}.navy{
    const meta=document.createElement('p');meta.className='muted text-xs mt-3';meta.textContent='Due: '+(t.due_date||'No date')+' · Assigned to: '+(t.assigned_to||'Unassigned');left.append(meta);
    const actions=document.createElement('div');actions.className='flex flex-wrap gap-2';
    const makeButton=(label,cls,handler)=>{const b=document.createElement('button');b.type='button';b.className='btn '+cls;b.textContent=label;b.addEventListener('click',handler);return b;};
-   actions.append(makeButton('Edit','btn-secondary',()=>openEdit(t)),makeButton(t.status==='completed'?'Reopen':t.status==='in_progress'?'Complete':'Start','btn-primary',()=>changeStatus(t)),makeButton('Delete','btn-secondary',()=>removeTask(t)));
+   const session=OOES_AUTH.getSession(),isAdmin=['administrator','manager','super_admin'].includes(session?.role),canEdit=isAdmin||t.owner_id===session?.id||t.assigned_to_user_id===session?.id,canDelete=isAdmin||t.owner_id===session?.id;if(canEdit){actions.append(makeButton('Edit','btn-secondary',()=>openEdit(t)),makeButton(t.status==='completed'?'Reopen':t.status==='in_progress'?'Complete':'Start','btn-primary',()=>changeStatus(t)));}if(canDelete)actions.append(makeButton('Delete','btn-secondary',()=>removeTask(t)));
    top.append(left,actions);card.append(top);
    const details=document.createElement('details');details.className='mt-4 border-t pt-3 text-sm muted';const summary=document.createElement('summary');summary.className='cursor-pointer font-semibold';summary.textContent='More details';const body=document.createElement('p');body.className='mt-2';body.textContent='Created '+(t.created_at?new Date(t.created_at).toLocaleString('en-KE'):'date unavailable')+' · Task ID '+t.id;details.append(summary,body);card.append(details);
    list.append(card);
@@ -70,26 +72,26 @@ body{background:#f5f6f8;color:#16213e}.shell{max-width:1180px;margin:auto}.navy{
  async function loadTasks(){
   $('loadStatus').textContent='Loading tasks…';
   try{
-   const {data,error}=await supabase.from('tasks').select('id,title,description,status,priority,assigned_to,due_date,owner_id,organization_id,created_at').order('due_date',{ascending:true});
+   const {data,error}=await supabase.from('tasks').select('id,title,description,status,priority,assigned_to,assigned_to_user_id,due_date,owner_id,organization_id,created_at').order('due_date',{ascending:true});
    if(error)throw error;
    tasks=data||[];updateCounts();render();
   }catch(error){console.error('Tasks load failed',error);$('loadStatus').textContent='Tasks could not be loaded. Refresh or contact your administrator.';notice('Could not load tasks. Please retry.','error');}
  }
- function openNew(){editingId=null;$('taskForm').reset();$('taskPriority').value='medium';$('modalTitle').textContent='Create task';$('saveTask').textContent='Create task';$('taskModal').classList.add('open');$('taskTitle').focus();}
- function openEdit(t){editingId=t.id;$('taskTitle').value=t.title||'';$('taskDescription').value=t.description||'';$('taskPriority').value=['low','medium','high'].includes(t.priority)?t.priority:'medium';$('taskDueDate').value=t.due_date||'';$('taskAssignee').value=t.assigned_to||'';$('modalTitle').textContent='Edit task';$('saveTask').textContent='Save changes';$('taskModal').classList.add('open');$('taskTitle').focus();}
+ function openNew(){editingId=null;$('taskForm').reset();$('taskPriority').value='medium';$('taskAssignee').value='';$('modalTitle').textContent='Create task';$('saveTask').textContent='Create task';$('taskModal').classList.add('open');$('taskTitle').focus();}
+ function openEdit(t){editingId=t.id;$('taskTitle').value=t.title||'';$('taskDescription').value=t.description||'';$('taskPriority').value=['low','medium','high'].includes(t.priority)?t.priority:'medium';$('taskDueDate').value=t.due_date||'';const select=$('taskAssignee'),assignee=t.assigned_to_user_id;if(assignee&&!Array.from(select.options).some(o=>o.value===assignee))select.append(makeOption(t.assigned_to||'Current assignee',assignee));select.value=assignee||'';$('modalTitle').textContent='Edit task';$('saveTask').textContent='Save changes';$('taskModal').classList.add('open');$('taskTitle').focus();}
  function closeModal(){$('taskModal').classList.remove('open');editingId=null;}
  async function save(event){
   event.preventDefault();
   const session=OOES_AUTH.getSession();if(!session?.organization_id){notice('Your organization session is not ready. Please sign in again.','error');return;}
   const title=$('taskTitle').value.trim();if(!title){notice('Enter a task title.','error');return;}
-  const payload={title,description:$('taskDescription').value.trim()||null,priority:$('taskPriority').value,due_date:$('taskDueDate').value||null,assigned_to:$('taskAssignee').value.trim()||null};
-  $('saveTask').disabled=true;
+  const payload={title,description:$('taskDescription').value.trim()||null,priority:$('taskPriority').value,due_date:$('taskDueDate').value||null,assigned_to_user_id:$('taskAssignee').value||null};
+  const wasEditing=editingId!==null;$('saveTask').disabled=true;
   try{
-   const result=editingId!==null
+   const result=wasEditing
     ? await supabase.from('tasks').update(payload).eq('id',editingId).select('id').single()
     : await supabase.from('tasks').insert([{...payload,status:'pending',owner_id:session.id,organization_id:session.organization_id}]).select('id').single();
    if(result.error)throw result.error;
-   closeModal();notice(editingId!==null?'Task updated.':'Task created.','success');await loadTasks();
+   closeModal();notice(wasEditing?'Task updated.':'Task created.','success');await loadTasks();
   }catch(error){console.error('Task save failed',error);notice('Task was not saved. Check your permissions and retry.','error');}
   finally{$('saveTask').disabled=false;}
  }
@@ -115,7 +117,7 @@ body{background:#f5f6f8;color:#16213e}.shell{max-width:1180px;margin:auto}.navy{
   $('newTask').addEventListener('click',openNew);$('closeModal').addEventListener('click',closeModal);$('cancelModal').addEventListener('click',closeModal);
   $('taskForm').addEventListener('submit',save);$('searchTasks').addEventListener('input',render);$('filterStatus').addEventListener('change',render);$('filterPriority').addEventListener('change',render);$('exportTasks').addEventListener('click',exportCsv);
   $('taskModal').addEventListener('click',event=>{if(event.target===$('taskModal'))closeModal();});
-  await loadTasks();
+  await loadAssignees();await loadTasks();
  });
 })();
 </script>
