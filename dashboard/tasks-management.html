@@ -526,7 +526,7 @@
             document.getElementById('taskModal').classList.add('active');
         }
         function closeTaskModal() { document.getElementById('taskModal').classList.remove('active'); }
-        async function saveTask(event) {
+        async async function saveTask(event) {
             event.preventDefault();
             const errorEl = document.getElementById('taskFormError');
             const session = window.OOES_AUTH && OOES_AUTH.getSession();
