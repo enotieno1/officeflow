@@ -1,637 +1,160 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head><script>/* OfficeFlow integration honesty */location.replace('integration-center.html');</script><script>(function(){if(!localStorage.getItem("ooesSession")){window.location.href="/dashboard/auth.html";}})();</script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Office Calendar System - OOES</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        .calendar-day { transition: all 0.3s ease; cursor: pointer; }
-        .calendar-day:hover { transform: scale(1.05); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-        .calendar-day.today { background: linear-gradient(135deg, #16213E 0%, #1F2C4F 100%); }
-        .calendar-day.has-event { border-left: 4px solid #10b981; }
-        .calendar-day.selected { border: 2px solid #16213E; }
-        .event-item { transition: all 0.3s ease; cursor: pointer; }
-        .event-item:hover { transform: translateX(5px); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); backdrop-filter: blur(5px); }
-        .modal.active { display: flex; align-items: center; justify-content: center; }
-        .view-btn { transition: all 0.3s ease; }
-        .view-btn.active { background: #16213E; color: white; }
-        .category-badge { transition: all 0.2s ease; }
-        .category-badge:hover { transform: scale(1.1); }
-    </style>
-<link rel="stylesheet" href="css/mobile.css">
-<link rel="stylesheet" href="css/executive-theme.css"></head>
-<body class="bg-gray-50">
-<div id="sidebar" class="fixed inset-y-0 left-0 w-56 text-white z-50 flex flex-col overflow-y-auto" style="background:linear-gradient(135deg,#16213E 0%,#1F2C4F 100%);transition:transform 0.3s ease">
-<div class="p-4 border-b border-white border-opacity-20"><a href="/dashboard/index.html" style="color:white;text-decoration:none;font-size:18px;font-weight:bold">OfficeFlow</a></div>
-<nav class="flex-1 p-2 space-y-1 text-sm">
-<a href="/dashboard/index.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-home" style="width:16px;margin-right:8px"></i>Dashboard</a>
-<a href="/dashboard/hr-system.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-users" style="width:16px;margin-right:8px"></i>HR</a>
-<a href="/dashboard/financial-management.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-chart-line" style="width:16px;margin-right:8px"></i>Finance</a>
-<a href="/dashboard/tasks-management.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-tasks" style="width:16px;margin-right:8px"></i>Tasks</a>
-<a href="/dashboard/document-management.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-file-alt" style="width:16px;margin-right:8px"></i>Documents</a>
-<a href="/dashboard/email-system.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-envelope" style="width:16px;margin-right:8px"></i>Email</a>
-<a href="/dashboard/calendar-system.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-calendar" style="width:16px;margin-right:8px"></i>Calendar</a>
-<a href="/dashboard/ai-features.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-robot" style="width:16px;margin-right:8px"></i>AI Features</a>
-<a href="/dashboard/reports.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-chart-bar" style="width:16px;margin-right:8px"></i>Reports</a>
-<a href="/dashboard/security-center.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-shield-alt" style="width:16px;margin-right:8px"></i>Security</a>
-<div style="border-top:1px solid rgba(255,255,255,0.2);margin:8px 0"></div>
-<p style="font-size:10px;color:rgba(165,180,252,0.7);padding:4px 12px;text-transform:uppercase;letter-spacing:0.05em">Departments</p>
-<a href="/dashboard/communication-department.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-comments" style="width:16px;margin-right:8px"></i>Communication</a>
-<a href="/dashboard/operations-department.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-cog" style="width:16px;margin-right:8px"></i>Operations</a>
-<a href="/dashboard/sales-department.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-handshake" style="width:16px;margin-right:8px"></i>Sales</a>
-<a href="/dashboard/accounting-tools.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-calculator" style="width:16px;margin-right:8px"></i>Accounting</a>
-<a href="/dashboard/automation.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-magic" style="width:16px;margin-right:8px"></i>Automation</a>
-<div style="border-top:1px solid rgba(255,255,255,0.2);margin:8px 0"></div>
-<p style="font-size:10px;color:rgba(165,180,252,0.7);padding:4px 12px;text-transform:uppercase;letter-spacing:0.05em">Tools</p>
-<a href="/dashboard/excel-system.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-file-excel" style="width:16px;margin-right:8px"></i>Excel</a>
-<a href="/dashboard/google-drive.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-cloud" style="width:16px;margin-right:8px"></i>Google Drive</a>
-<a href="/dashboard/gmail-system.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-envelope-open" style="width:16px;margin-right:8px"></i>Gmail</a>
-<a href="/dashboard/trello-management.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fab fa-trello" style="width:16px;margin-right:8px"></i>Trello</a>
-<a href="/dashboard/data-management.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-database" style="width:16px;margin-right:8px"></i>Data</a>
-<a href="/dashboard/it-compliance.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-shield-alt" style="width:16px;margin-right:8px"></i>IT Compliance</a>
-<a href="/dashboard/pricing.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-tags" style="width:16px;margin-right:8px"></i>Pricing</a>
-<a href="/dashboard/contact.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-phone" style="width:16px;margin-right:8px"></i>Contact</a>
-</nav>
-<div class="p-3 border-t border-white border-opacity-20" style="font-size:12px">
-<p data-user-name style="font-weight:600;color:white">User</p>
-<p data-user-role style="color:rgba(165,180,252,0.8)"></p>
-<button onclick="OOES_AUTH.logout()" style="color:rgba(252,165,165,1);background:none;border:none;cursor:pointer;margin-top:4px"><i class="fas fa-sign-out-alt"></i> Logout</button>
-</div>
-</div>
-<div style="margin-left:224px">
-
-    <!-- Header -->
-    <header class="bg-gradient-to-r from-[#16213E] to-blue-600 text-white shadow-lg">
-        <div class="container mx-auto px-6 py-6">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center">
-                    <i class="fas fa-calendar-alt text-3xl mr-4"></i>
-                    <div>
-                        <h1 class="text-2xl font-bold">Office Calendar System</h1>
-                        <p class="text-[#EFEAE0]">Manage your schedule, events, and tasks</p>
-                    </div>
-                </div>
-                <button onclick="goBack()" class="bg-white text-[#A6823D] px-4 py-2 rounded hover:bg-gray-100 transition font-semibold">
-                    <i class="fas fa-arrow-left mr-2"></i>Back to Dashboard
-                </button>
-            </div>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Calendar & Scheduling | OfficeFlow</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/executive-theme.css">
+  <link rel="stylesheet" href="css/mobile.css">
+  <style>
+    body{background:#f7f6f2;color:#16213e}.of-calendar-day{min-height:82px;border:1px solid #e4e1d8;border-radius:10px;background:white;text-align:left;padding:8px;overflow:hidden}.of-calendar-day:hover{border-color:#a6823d}.of-calendar-day.selected{outline:2px solid #16213e}.of-calendar-day.outside{opacity:.45}.of-calendar-day.today .day-number{background:#16213e;color:white;border-radius:50%;width:27px;height:27px;display:inline-flex;align-items:center;justify-content:center}.of-event-dot{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11px;background:#e9e3d5;border-left:3px solid #a6823d;padding:2px 4px;margin-top:4px;border-radius:3px}.of-modal{display:none;position:fixed;inset:0;background:#0f172a88;z-index:100;align-items:center;justify-content:center;padding:16px}.of-modal.open{display:flex}
+    @media(max-width:640px){.of-calendar-day{min-height:60px;padding:4px}.of-event-dot{font-size:9px}.of-weekday{font-size:10px}}
+  </style>
+</head>
+<body>
+  <header class="of-header px-4 md:px-6 py-4 flex flex-wrap gap-3 justify-between items-center">
+    <div><div class="of-eyebrow">OFFICEFLOW · OPERATIONS</div><h1 class="of-serif text-2xl font-semibold">Calendar & Scheduling</h1><p class="text-sm text-gray-500 mt-1">Plan work with organization-scoped events and clear access boundaries.</p></div>
+    <div class="flex gap-2"><a href="index.html" class="rounded-lg border px-4 py-2 text-sm">Dashboard</a><button id="newEventBtn" class="rounded-lg bg-[#16213e] text-white px-4 py-2 text-sm"><i class="fas fa-plus mr-2"></i>New event</button></div>
+  </header>
+  <main class="max-w-7xl mx-auto p-4 md:p-6 space-y-5">
+    <div id="pageError" role="alert" class="hidden rounded-lg border border-red-200 bg-red-50 text-red-800 p-4"></div>
+    <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1.6fr)_minmax(300px,1fr)] gap-5">
+      <section class="of-card p-4 md:p-5">
+        <div class="flex justify-between items-center gap-3 mb-4">
+          <div><h2 id="monthLabel" class="text-xl font-semibold">Loading calendar…</h2><p class="text-sm text-gray-500">Select a day to view its events</p></div>
+          <div class="flex gap-2"><button id="prevMonth" aria-label="Previous month" class="rounded-lg border px-3 py-2"><i class="fas fa-chevron-left"></i></button><button id="todayBtn" class="rounded-lg border px-3 py-2 text-sm">Today</button><button id="nextMonth" aria-label="Next month" class="rounded-lg border px-3 py-2"><i class="fas fa-chevron-right"></i></button></div>
         </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="container mx-auto px-6 py-8">
-        <!-- Calendar Controls -->
-        <section class="mb-8">
-            <div class="bg-white rounded-lg shadow-md p-6">
-                <div class="flex flex-col md:flex-row justify-between items-center gap-4">
-                    <div class="flex items-center gap-4">
-                        <button onclick="previousMonth()" class="bg-gray-100 hover:bg-gray-200 p-2 rounded-lg transition">
-                            <i class="fas fa-chevron-left"></i>
-                        </button>
-                        <h2 class="text-2xl font-bold text-gray-800" id="currentMonth">November 2024</h2>
-                        <button onclick="nextMonth()" class="bg-gray-100 hover:bg-gray-200 p-2 rounded-lg transition">
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
-                        <button onclick="goToToday()" class="bg-[#EFEAE0] hover:bg-[#E4E1D8] text-[#1F2C4F] px-4 py-2 rounded-lg transition font-semibold">
-                            Today
-                        </button>
-                    </div>
-                    
-                    <div class="flex gap-2">
-                        <button onclick="setView('month')" class="view-btn active px-4 py-2 rounded-lg font-semibold" id="monthView">
-                            <i class="fas fa-calendar mr-2"></i>Month
-                        </button>
-                        <button onclick="setView('week')" class="view-btn px-4 py-2 rounded-lg font-semibold" id="weekView">
-                            <i class="fas fa-calendar-week mr-2"></i>Week
-                        </button>
-                        <button onclick="setView('day')" class="view-btn px-4 py-2 rounded-lg font-semibold" id="dayView">
-                            <i class="fas fa-calendar-day mr-2"></i>Day
-                        </button>
-                        <button onclick="openEventModal()" class="bg-[#16213E] hover:bg-[#1F2C4F] text-white px-4 py-2 rounded-lg transition font-semibold">
-                            <i class="fas fa-plus mr-2"></i>New Event
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Calendar Grid -->
-        <section class="mb-8">
-            <div class="bg-white rounded-lg shadow-md p-6">
-                <!-- Week Days Header -->
-                <div class="grid grid-cols-7 gap-2 mb-4">
-                    <div class="text-center font-semibold text-gray-700 py-2">Sun</div>
-                    <div class="text-center font-semibold text-gray-700 py-2">Mon</div>
-                    <div class="text-center font-semibold text-gray-700 py-2">Tue</div>
-                    <div class="text-center font-semibold text-gray-700 py-2">Wed</div>
-                    <div class="text-center font-semibold text-gray-700 py-2">Thu</div>
-                    <div class="text-center font-semibold text-gray-700 py-2">Fri</div>
-                    <div class="text-center font-semibold text-gray-700 py-2">Sat</div>
-                </div>
-                
-                <!-- Calendar Days Grid -->
-                <div class="grid grid-cols-7 gap-2" id="calendarGrid">
-                    <!-- Calendar days will be generated by JavaScript -->
-                </div>
-            </div>
-        </section>
-
-        <!-- Events Section -->
-        <section class="mb-8">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Upcoming Events -->
-                <div class="lg:col-span-2">
-                    <div class="bg-white rounded-lg shadow-md p-6">
-                        <div class="flex justify-between items-center mb-6">
-                            <h3 class="text-xl font-bold text-gray-800">Upcoming Events</h3>
-                            <select onchange="filterEvents(this.value)" class="px-4 py-2 border border-gray-300 rounded-lg">
-                                <option value="all">All Events</option>
-                                <option value="meeting">Meetings</option>
-                                <option value="task">Tasks</option>
-                                <option value="deadline">Deadlines</option>
-                                <option value="holiday">Holidays</option>
-                            </select>
-                        </div>
-                        <div id="upcomingEvents" class="space-y-3">
-                            <!-- Events will be populated by JavaScript -->
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Categories & Stats -->
-                <div class="space-y-6">
-                    <!-- Event Categories -->
-                    <div class="bg-white rounded-lg shadow-md p-6">
-                        <h3 class="text-xl font-bold text-gray-800 mb-4">Event Categories</h3>
-                        <div class="space-y-3">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center">
-                                    <span class="category-badge w-4 h-4 bg-blue-500 rounded-full mr-3"></span>
-                                    <span class="text-sm font-medium">Meetings</span>
-                                </div>
-                                <span class="text-sm text-gray-600" id="meetingCount">0</span>
-                            </div>
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center">
-                                    <span class="category-badge w-4 h-4 bg-green-500 rounded-full mr-3"></span>
-                                    <span class="text-sm font-medium">Tasks</span>
-                                </div>
-                                <span class="text-sm text-gray-600" id="taskCount">0</span>
-                            </div>
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center">
-                                    <span class="category-badge w-4 h-4 bg-red-500 rounded-full mr-3"></span>
-                                    <span class="text-sm font-medium">Deadlines</span>
-                                </div>
-                                <span class="text-sm text-gray-600" id="deadlineCount">0</span>
-                            </div>
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center">
-                                    <span class="category-badge w-4 h-4 bg-[#A6823D] rounded-full mr-3"></span>
-                                    <span class="text-sm font-medium">Holidays</span>
-                                </div>
-                                <span class="text-sm text-gray-600" id="holidayCount">0</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Quick Stats -->
-                    <div class="bg-white rounded-lg shadow-md p-6">
-                        <h3 class="text-xl font-bold text-gray-800 mb-4">This Month</h3>
-                        <div class="space-y-3">
-                            <div class="flex justify-between">
-                                <span class="text-sm text-gray-600">Total Events</span>
-                                <span class="font-bold text-gray-800" id="totalEvents">0</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-sm text-gray-600">Completed</span>
-                                <span class="font-bold text-green-600" id="completedEvents">0</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-sm text-gray-600">Pending</span>
-                                <span class="font-bold text-orange-600" id="pendingEvents">0</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Event Modal -->
-    <div id="eventModal" class="modal">
-        <div class="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-hidden m-4">
-            <div class="bg-gradient-to-r from-[#16213E] to-blue-600 text-white p-6">
-                <div class="flex justify-between items-center">
-                    <h3 class="text-xl font-bold">Create New Event</h3>
-                    <button onclick="closeEventModal()" class="text-white hover:text-gray-200">
-                        <i class="fas fa-times text-2xl"></i>
-                    </button>
-                </div>
-            </div>
-            <div class="p-8 overflow-y-auto" style="max-height: calc(90vh - 180px);">
-                <form id="eventForm" class="space-y-6" onsubmit="return validateForm(this)">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Event Title *</label>
-                        <input type="text" id="eventTitle" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#A6823D]" placeholder="Enter event title" required>
-                    </div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Date *</label>
-                            <input type="date" id="eventDate" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#A6823D]" required>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Time</label>
-                            <input type="time" id="eventTime" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#A6823D]">
-                        </div>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Category *</label>
-                        <select id="eventCategory" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#A6823D]" required>
-                            <option value="">Select category</option>
-                            <option value="meeting">Meeting</option>
-                            <option value="task">Task</option>
-                            <option value="deadline">Deadline</option>
-                            <option value="holiday">Holiday</option>
-                        </select>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Location</label>
-                        <input type="text" id="eventLocation" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#A6823D]" placeholder="Event location (optional)">
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
-                        <textarea id="eventDescription" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#A6823D]" placeholder="Event description (optional)"></textarea>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Attendees</label>
-                        <input type="text" id="eventAttendees" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#A6823D]" placeholder="Enter email addresses separated by commas">
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Reminder</label>
-                        <select id="eventReminder" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#A6823D]">
-                            <option value="none">No reminder</option>
-                            <option value="15">15 minutes before</option>
-                            <option value="30">30 minutes before</option>
-                            <option value="60">1 hour before</option>
-                            <option value="1440">1 day before</option>
-                        </select>
-                    </div>
-                    
-                    <div class="flex justify-end space-x-4">
-                        <button type="button" onclick="closeEventModal()" class="bg-gray-500 text-white px-6 py-3 rounded hover:bg-gray-600 transition font-semibold">
-                            Cancel
-                        </button>
-                        <button type="button" onclick="saveEvent()" class="bg-[#16213E] text-white px-6 py-3 rounded hover:bg-[#1F2C4F] transition font-semibold">
-                            <i class="fas fa-save mr-2"></i>Save Event
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
+        <div class="grid grid-cols-7 gap-1 mb-2 text-center text-xs font-semibold text-gray-500"><div class="of-weekday">Sun</div><div class="of-weekday">Mon</div><div class="of-weekday">Tue</div><div class="of-weekday">Wed</div><div class="of-weekday">Thu</div><div class="of-weekday">Fri</div><div class="of-weekday">Sat</div></div>
+        <div id="calendarGrid" class="grid grid-cols-7 gap-1" aria-live="polite"><div class="col-span-7 p-8 text-center text-gray-500">Loading events…</div></div>
+        <p class="text-xs text-gray-500 mt-4">Private events are visible to their creator and authorized administrators. Department and organization visibility follow database access policies.</p>
+      </section>
+      <section class="of-card p-4 md:p-5">
+        <div class="flex justify-between items-center gap-2"><div><div class="of-eyebrow">AGENDA</div><h2 id="agendaLabel" class="text-xl font-semibold mt-1">Upcoming events</h2></div><button id="refreshBtn" class="rounded-lg border px-3 py-2 text-sm"><i class="fas fa-rotate-right mr-1"></i>Refresh</button></div>
+        <div id="eventList" class="space-y-3 mt-4"><p class="text-sm text-gray-500">Loading events…</p></div>
+      </section>
     </div>
+  </main>
 
-    <script>
-        // Calendar state
-        let currentDate = new Date();
-        let currentView = 'month';
-        let selectedDate = null;
-        let events = [];
-
-        // Sample events data
-        const sampleEvents = [
-            {
-                id: 1,
-                title: 'Team Meeting',
-                date: '2024-11-15',
-                time: '10:00',
-                category: 'meeting',
-                location: 'Conference Room A',
-                description: 'Weekly team sync meeting',
-                attendees: ['john@company.com', 'sarah@company.com'],
-                reminder: 15
-            },
-            {
-                id: 2,
-                title: 'Project Deadline',
-                date: '2024-11-20',
-                time: '17:00',
-                category: 'deadline',
-                location: 'Office',
-                description: 'Q4 Project submission deadline',
-                attendees: [],
-                reminder: 1440
-            },
-            {
-                id: 3,
-                title: 'Client Presentation',
-                date: '2024-11-25',
-                time: '14:00',
-                category: 'meeting',
-                location: 'Client Office',
-                description: 'Product demo for new client',
-                attendees: ['client@company.com'],
-                reminder: 60
-            }
-        ];
-
-        // Initialize calendar
-        function initCalendar() {
-            events = [...sampleEvents];
-            renderCalendar();
-            updateEventStats();
-            displayUpcomingEvents();
-        }
-
-        // Render calendar
-        function renderCalendar() {
-            const year = currentDate.getFullYear();
-            const month = currentDate.getMonth();
-            const firstDay = new Date(year, month, 1).getDay();
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-            const today = new Date();
-            
-            // Update month display
-            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
-                              'July', 'August', 'September', 'October', 'November', 'December'];
-            document.getElementById('currentMonth').textContent = `${monthNames[month]} ${year}`;
-            
-            // Clear calendar grid
-            const calendarGrid = document.getElementById('calendarGrid');
-            calendarGrid.innerHTML = '';
-            
-            // Add empty cells for days before month starts
-            for (let i = 0; i < firstDay; i++) {
-                const emptyDay = document.createElement('div');
-                emptyDay.className = 'p-4 border border-gray-100 rounded-lg';
-                calendarGrid.appendChild(emptyDay);
-            }
-            
-            // Add days of the month
-            for (let day = 1; day <= daysInMonth; day++) {
-                const dayElement = document.createElement('div');
-                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                const dayEvents = events.filter(event => event.date === dateStr);
-                const isToday = today.getDate() === day && today.getMonth() === month && today.getFullYear() === year;
-                
-                dayElement.className = `calendar-day p-4 border border-gray-200 rounded-lg relative ${
-                    isToday ? 'today text-white' : 'bg-white'
-                } ${dayEvents.length > 0 ? 'has-event' : ''} ${selectedDate === dateStr ? 'selected' : ''}`;
-                
-                dayElement.innerHTML = `
-                    <div class="font-semibold ${isToday ? 'text-white' : 'text-gray-800'}">${day}</div>
-                    ${dayEvents.length > 0 ? `
-                        <div class="mt-2">
-                            <div class="text-xs ${isToday ? 'text-[#EFEAE0]' : 'text-gray-600'}">${dayEvents.length} event${dayEvents.length > 1 ? 's' : ''}</div>
-                        </div>
-                    ` : ''}
-                `;
-                
-                dayElement.onclick = () => selectDate(dateStr, dayEvents);
-                calendarGrid.appendChild(dayElement);
-            }
-        }
-
-        // Select date
-        function selectDate(dateStr, dayEvents) {
-            selectedDate = dateStr;
-            renderCalendar();
-            
-            if (dayEvents.length > 0) {
-                displayDayEvents(dateStr, dayEvents);
-            } else {
-                openEventModal(dateStr);
-            }
-        }
-
-        // Display day events
-        function displayDayEvents(dateStr, dayEvents) {
-            const eventsHtml = dayEvents.map(event => `
-                <div class="event-item bg-gray-50 p-4 rounded-lg mb-3" onclick="editEvent(${event.id})">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h4 class="font-semibold text-gray-800">${event.title}</h4>
-                            <p class="text-sm text-gray-600">${event.time || 'All day'}</p>
-                            ${event.location ? `<p class="text-sm text-gray-500"><i class="fas fa-map-marker-alt mr-1"></i>${event.location}</p>` : ''}
-                        </div>
-                        <span class="px-2 py-1 text-xs rounded-full ${getCategoryColor(event.category)}">
-                            ${event.category}
-                        </span>
-                    </div>
-                </div>
-            `).join('');
-            
-            showNotification(`Events for ${dateStr}`, 'info');
-        }
-
-        // Get category color
-        function getCategoryColor(category) {
-            const colors = {
-                meeting: 'bg-blue-100 text-blue-800',
-                task: 'bg-green-100 text-green-800',
-                deadline: 'bg-red-100 text-red-800',
-                holiday: 'bg-[#EFEAE0] text-[#16213E]'
-            };
-            return colors[category] || 'bg-gray-100 text-gray-800';
-        }
-
-        // Navigation functions
-        function previousMonth() {
-            currentDate.setMonth(currentDate.getMonth() - 1);
-            renderCalendar();
-        }
-
-        function nextMonth() {
-            currentDate.setMonth(currentDate.getMonth() + 1);
-            renderCalendar();
-        }
-
-        function goToToday() {
-            currentDate = new Date();
-            renderCalendar();
-        }
-
-        // View functions
-        function setView(view) {
-            currentView = view;
-            document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById(`${view}View`).classList.add('active');
-            showNotification(`${view.charAt(0).toUpperCase() + view.slice(1)} view activated`, 'info');
-        }
-
-        // Event modal functions
-        function openEventModal(date = null) {
-            document.getElementById('eventModal').classList.add('active');
-            if (date) {
-                document.getElementById('eventDate').value = date;
-            }
-        }
-
-        function closeEventModal() {
-            document.getElementById('eventModal').classList.remove('active');
-            document.getElementById('eventForm').reset();
-        }
-
-        function saveEvent() {
-            const title = document.getElementById('eventTitle').value;
-            const date = document.getElementById('eventDate').value;
-            const time = document.getElementById('eventTime').value;
-            const category = document.getElementById('eventCategory').value;
-            const location = document.getElementById('eventLocation').value;
-            const description = document.getElementById('eventDescription').value;
-            const attendees = document.getElementById('eventAttendees').value.split(',').map(email => email.trim()).filter(email => email);
-            const reminder = document.getElementById('eventReminder').value;
-            
-            if (!title || !date || !category) {
-                showNotification('Please fill in all required fields', 'error');
-                return;
-            }
-            
-            const newEvent = {
-                id: events.length + 1,
-                title,
-                date,
-                time,
-                category,
-                location,
-                description,
-                attendees,
-                reminder: reminder === 'none' ? null : parseInt(reminder)
-            };
-            
-            events.push(newEvent);
-            closeEventModal();
-            renderCalendar();
-            updateEventStats();
-            displayUpcomingEvents();
-            showNotification('Event created successfully!', 'success');
-        }
-
-        // Display upcoming events
-        function displayUpcomingEvents(filter = 'all') {
-            const upcomingEvents = events
-                .filter(event => new Date(event.date) >= new Date())
-                .sort((a, b) => new Date(a.date) - new Date(b.date))
-                .filter(event => filter === 'all' || event.category === filter)
-                .slice(0, 10);
-            
-            const eventsHtml = upcomingEvents.map(event => `
-                <div class="event-item bg-gray-50 p-4 rounded-lg" onclick="editEvent(${event.id})">
-                    <div class="flex justify-between items-start">
-                        <div class="flex-1">
-                            <h4 class="font-semibold text-gray-800">${event.title}</h4>
-                            <p class="text-sm text-gray-600">${event.date} ${event.time || 'All day'}</p>
-                            ${event.location ? `<p class="text-sm text-gray-500"><i class="fas fa-map-marker-alt mr-1"></i>${event.location}</p>` : ''}
-                            ${event.description ? `<p class="text-sm text-gray-500 mt-2">${event.description}</p>` : ''}
-                        </div>
-                        <span class="px-2 py-1 text-xs rounded-full ${getCategoryColor(event.category)}">
-                            ${event.category}
-                        </span>
-                    </div>
-                </div>
-            `).join('');
-            
-            document.getElementById('upcomingEvents').innerHTML = eventsHtml || '<p class="text-gray-500 text-center py-8">No upcoming events</p>';
-        }
-
-        // Filter events
-        function filterEvents(category) {
-            displayUpcomingEvents(category);
-        }
-
-        // Update event statistics
-        function updateEventStats() {
-            const today = new Date();
-            const currentMonth = today.getMonth();
-            const currentYear = today.getFullYear();
-            
-            const monthEvents = events.filter(event => {
-                const eventDate = new Date(event.date);
-                return eventDate.getMonth() === currentMonth && eventDate.getFullYear() === currentYear;
-            });
-            
-            const categories = {
-                meeting: monthEvents.filter(e => e.category === 'meeting').length,
-                task: monthEvents.filter(e => e.category === 'task').length,
-                deadline: monthEvents.filter(e => e.category === 'deadline').length,
-                holiday: monthEvents.filter(e => e.category === 'holiday').length
-            };
-            
-            document.getElementById('meetingCount').textContent = categories.meeting;
-            document.getElementById('taskCount').textContent = categories.task;
-            document.getElementById('deadlineCount').textContent = categories.deadline;
-            document.getElementById('holidayCount').textContent = categories.holiday;
-            document.getElementById('totalEvents').textContent = monthEvents.length;
-            
-            const completed = monthEvents.filter(e => new Date(e.date) < today).length;
-            const pending = monthEvents.filter(e => new Date(e.date) >= today).length;
-            
-            document.getElementById('completedEvents').textContent = completed;
-            document.getElementById('pendingEvents').textContent = pending;
-        }
-
-        // Edit event (placeholder)
-        function editEvent(eventId) {
-            const event = events.find(e => e.id === eventId);
-            if (event) {
-                showNotification(`Editing: ${event.title}`, 'info');
-                // In a real application, this would open an edit modal
-            }
-        }
-
-        // Notification function
-        function showNotification(message, type) {
-            const notification = document.createElement('div');
-            notification.className = `fixed top-4 right-4 px-6 py-4 rounded-lg shadow-lg z-50 ${
-                type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : 'bg-blue-500'
-            } text-white`;
-            notification.innerHTML = `
-                <div class="flex items-center">
-                    <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'} mr-3"></i>
-                    <span>${message}</span>
-                </div>
-            `;
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.remove();
-            }, 3000);
-        }
-
-        // Go back to dashboard
-        function goBack() {
-            window.location.href = 'index.html';
-        }
-
-        // Initialize on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            initCalendar();
-        });
-    
-        function closeModal(element) {
-            const modal = element ? element.closest('.modal, .fixed') : document.querySelector('.modal.active, .fixed.inset-0');
-            if (modal) {
-                modal.classList.remove('active');
-                modal.style.display = 'none';
-            }
-        }
-</script>
-<script>function toggleMobileNav(){var s=document.getElementById("sidebarNav");var o=document.getElementById("mobileOverlay");if(s){s.classList.toggle("active");}if(!o){var ov=document.createElement("div");ov.id="mobileOverlay";ov.className="mobile-overlay";ov.onclick=toggleMobileNav;document.body.appendChild(ov);}else{o.classList.toggle("active");}}document.addEventListener("DOMContentLoaded",function(){var btn=document.getElementById("mobileMenuBtn");if(btn){btn.style.display="flex";btn.onclick=toggleMobileNav;}});</script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="/dashboard/js/config.js"></script><script src="/dashboard/js/db.js"></script><script src="/dashboard/js/ooes-auth.js"></script>
-<script src="/dashboard/js/ooes-core.js"></script>
-</div>
+  <div id="eventModal" class="of-modal" role="dialog" aria-modal="true" aria-labelledby="eventModalTitle">
+    <div class="bg-white rounded-xl shadow-xl w-full max-w-xl max-h-[92vh] overflow-y-auto p-5 md:p-6">
+      <div class="flex items-center justify-between gap-3 mb-5"><h2 id="eventModalTitle" class="text-xl font-semibold">Create event</h2><button id="closeModalBtn" aria-label="Close" class="rounded-lg border px-3 py-2"><i class="fas fa-times"></i></button></div>
+      <form id="eventForm" class="space-y-4">
+        <div><label for="eventTitle" class="block text-sm font-medium mb-1">Event title *</label><input id="eventTitle" maxlength="200" required class="w-full rounded-lg border p-3" placeholder="e.g. Finance review meeting"></div>
+        <div><label for="eventDescription" class="block text-sm font-medium mb-1">Description</label><textarea id="eventDescription" maxlength="10000" rows="3" class="w-full rounded-lg border p-3" placeholder="Agenda, preparation, or notes"></textarea></div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div><label for="eventStart" class="block text-sm font-medium mb-1">Starts *</label><input id="eventStart" type="datetime-local" required class="w-full rounded-lg border p-3"></div><div><label for="eventEnd" class="block text-sm font-medium mb-1">Ends *</label><input id="eventEnd" type="datetime-local" required class="w-full rounded-lg border p-3"></div></div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div><label for="eventVisibility" class="block text-sm font-medium mb-1">Who can see this?</label><select id="eventVisibility" class="w-full rounded-lg border p-3"><option value="private">Private — me and administrators</option><option value="department">My department</option><option value="organization">Entire organization (managers/admins)</option></select></div><div class="rounded-lg bg-gray-50 border p-3 text-sm"><div class="font-medium">Time zone</div><div class="text-gray-600 mt-1">Africa/Nairobi (East Africa Time, EAT)</div></div></div>
+        <div id="eventFormError" role="alert" class="hidden text-sm text-red-700"></div>
+        <div class="flex justify-end gap-2 pt-2"><button type="button" id="cancelModalBtn" class="rounded-lg border px-4 py-2">Close</button><button id="saveEventBtn" type="submit" class="rounded-lg bg-[#16213e] text-white px-4 py-2">Save event</button></div>
+      </form>
+    </div>
+  </div>
+  <script src="/dashboard/js/config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>var supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);</script>
+  <script src="/dashboard/js/ooes-auth.js"></script>
+  <script>
+    const $ = id => document.getElementById(id);
+    const escapeHtml = value => String(value == null ? '' : value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    let session = null, events = [], monthCursor = nairobiMonth(new Date()), selectedDay = dateKeyInZone(new Date()), editingEvent = null;
+    function zonedParts(value){const p=new Intl.DateTimeFormat('en-CA',{timeZone:'Africa/Nairobi',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date(value));return Object.fromEntries(p.filter(x=>x.type!=='literal').map(x=>[x.type,x.value]));}
+    function dateKeyInZone(value){const p=zonedParts(value);return p.year+'-'+p.month+'-'+p.day;}
+    function nairobiMonth(value){const p=zonedParts(value);return new Date(Number(p.year),Number(p.month)-1,1);}
+    function localInputToIso(value){const [date,time]=value.split('T'),[y,m,d]=date.split('-').map(Number),[h,min]=time.split(':').map(Number);const target=Date.UTC(y,m-1,d,h,min);const guess=new Date(target);const p=zonedParts(guess);const represented=Date.UTC(Number(p.year),Number(p.month)-1,Number(p.day),Number(p.hour),Number(p.minute));return new Date(target-(represented-target)).toISOString();}
+    function isoToLocalInput(value){const p=zonedParts(value);return p.year+'-'+p.month+'-'+p.day+'T'+p.hour+':'+p.minute;}
+    function displayTime(value){return new Intl.DateTimeFormat(undefined,{timeZone:'Africa/Nairobi',hour:'numeric',minute:'2-digit'}).format(new Date(value));}
+    function displayDate(value){return new Intl.DateTimeFormat(undefined,{timeZone:'Africa/Nairobi',weekday:'short',month:'short',day:'numeric',year:'numeric'}).format(new Date(value));}
+    function showError(message){$('pageError').textContent=message;$('pageError').classList.remove('hidden');}
+    function hideError(){$('pageError').classList.add('hidden');}
+    function canManage(event){return !!session && (event.created_by===session.id || ['administrator','super_admin'].includes(session.role));}
+    async function loadEvents(){
+      hideError();
+      try{
+        if(window.OOES_AUTH && OOES_AUTH.ready) await OOES_AUTH.ready;
+        session=window.OOES_AUTH && OOES_AUTH.getSession();
+        if(!session || !session.organization_id){showError('Your session or organization could not be verified. Please sign in again.');return;}
+        const start=new Date(Date.UTC(monthCursor.getFullYear(),monthCursor.getMonth(),1)-3*60*60*1000);
+        const end=new Date(Date.UTC(monthCursor.getFullYear(),monthCursor.getMonth()+1,1)-3*60*60*1000);
+        const {data,error}=await supabase.from('calendar_events').select('id,organization_id,created_by,unit_id,title,description,start_at,end_at,timezone,visibility,status,created_at,updated_at').gte('start_at',start.toISOString()).lt('start_at',end.toISOString()).order('start_at',{ascending:true});
+        if(error) throw error;
+        events=data||[];
+        renderCalendar();
+      }catch(e){console.error('Calendar load failed',e);showError('Calendar data could not be loaded. If this is the first deployment, the calendar database migration must be applied. Otherwise check your access and connection, then retry.');$('calendarGrid').innerHTML='<div class="col-span-7 p-8 text-center text-gray-500">Calendar unavailable.</div>';$('eventList').innerHTML='<button onclick="loadEvents()" class="rounded-lg border px-4 py-2">Retry</button>';}
+    }
+    function renderCalendar(){
+      $('monthLabel').textContent=new Intl.DateTimeFormat(undefined,{month:'long',year:'numeric'}).format(monthCursor);
+      const first=new Date(monthCursor.getFullYear(),monthCursor.getMonth(),1);
+      const gridStart=new Date(first);gridStart.setDate(first.getDate()-first.getDay());
+      const today=dateKeyInZone(new Date());
+      let html='';
+      for(let i=0;i<42;i++){
+        const day=new Date(gridStart);day.setDate(gridStart.getDate()+i);
+        const key=day.getFullYear()+'-'+String(day.getMonth()+1).padStart(2,'0')+'-'+String(day.getDate()).padStart(2,'0'), dayEvents=events.filter(e=>dateKeyInZone(e.start_at)===key);
+        html+='<button type="button" class="of-calendar-day '+(day.getMonth()!==monthCursor.getMonth()?'outside ':'')+(key===today?'today ':'')+(key===selectedDay?'selected':'')+'" data-day="'+key+'" aria-label="'+escapeHtml(key+', '+dayEvents.length+' events')+'"><span class="day-number text-sm font-semibold">'+day.getDate()+'</span>'+dayEvents.slice(0,2).map(e=>'<span class="of-event-dot">'+escapeHtml(e.title)+'</span>').join('')+(dayEvents.length>2?'<span class="text-xs text-gray-500">+'+(dayEvents.length-2)+' more</span>':'')+'</button>';
+      }
+      $('calendarGrid').innerHTML=html;
+      $('calendarGrid').querySelectorAll('[data-day]').forEach(btn=>btn.addEventListener('click',()=>{selectedDay=btn.dataset.day;renderCalendar();renderAgenda();}));
+      renderAgenda();
+    }
+    function renderAgenda(){
+      const dayEvents=events.filter(e=>dateKeyInZone(e.start_at)===selectedDay);
+      $('agendaLabel').textContent=new Intl.DateTimeFormat(undefined,{month:'short',day:'numeric'}).format(new Date(selectedDay+'T12:00:00+03:00'))+' agenda';
+      const list=dayEvents.length?dayEvents:events.filter(e=>new Date(e.start_at)>=new Date()&&e.status!=='cancelled').slice(0,8);
+      if(!list.length){$('eventList').innerHTML='<div class="rounded-lg border border-dashed p-6 text-center"><i class="far fa-calendar text-2xl text-gray-400"></i><p class="font-medium mt-2">No events for this day</p><p class="text-sm text-gray-500 mt-1">Create an event to schedule work.</p></div>';return;}
+      $('eventList').innerHTML=list.map(e=>'<article class="rounded-lg border p-4 '+(e.status==='cancelled'?'opacity-60':'')+'"><div class="flex justify-between items-start gap-3"><div class="min-w-0"><div class="text-xs text-gray-500">'+escapeHtml(displayDate(e.start_at))+' · '+escapeHtml(displayTime(e.start_at))+'–'+escapeHtml(displayTime(e.end_at))+'</div><h3 class="font-semibold mt-1 break-words">'+escapeHtml(e.title)+'</h3><p class="text-sm text-gray-600 mt-1 whitespace-pre-wrap">'+escapeHtml(e.description||'No description')+'</p><div class="flex flex-wrap gap-2 mt-2 text-xs"><span class="rounded-full bg-gray-100 px-2 py-1">'+escapeHtml(e.visibility)+'</span><span class="rounded-full '+(e.status==='cancelled'?'bg-red-100 text-red-800':'bg-green-100 text-green-800')+' px-2 py-1">'+escapeHtml(e.status)+'</span></div></div>'+(canManage(e)&&e.status!=='cancelled'?'<div class="flex gap-1 shrink-0"><button class="rounded border px-2 py-1 text-xs" data-edit="'+escapeHtml(e.id)+'">Edit</button><button class="rounded border px-2 py-1 text-xs text-red-700" data-cancel="'+escapeHtml(e.id)+'">Cancel</button></div>':'')+'</div></article>').join('');
+      $('eventList').querySelectorAll('[data-edit]').forEach(b=>b.addEventListener('click',()=>openModal(events.find(e=>e.id===b.dataset.edit))));
+      $('eventList').querySelectorAll('[data-cancel]').forEach(b=>b.addEventListener('click',()=>cancelEvent(b.dataset.cancel)));
+    }
+    function openModal(event=null){
+      editingEvent=event; $('eventForm').reset(); $('eventFormError').classList.add('hidden');
+      $('eventModalTitle').textContent=event?'Edit event':'Create event';
+      $('eventTitle').value=event?event.title:'';
+      $('eventDescription').value=event?event.description||'':'';
+      $('eventStart').value=event?isoToLocalInput(event.start_at):isoToLocalInput(new Date(Date.now()+3600000).toISOString());
+      $('eventEnd').value=event?isoToLocalInput(event.end_at):isoToLocalInput(new Date(Date.now()+7200000).toISOString());
+     
+      $('eventVisibility').value=event?event.visibility:'private';
+      const unitId=session&&session.unit_id;
+      const departmentOption=$('eventVisibility').querySelector('option[value="department"]');
+      departmentOption.disabled=!unitId;
+      if(!unitId && $('eventVisibility').value==='department') $('eventVisibility').value='private';
+      $('eventVisibility').querySelector('option[value="organization"]').disabled=!session||!['manager','administrator','super_admin'].includes(session.role);
+      $('eventModal').classList.add('open');
+    }
+    function closeModal(){$('eventModal').classList.remove('open');editingEvent=null;}
+    async function saveEvent(e){
+      e.preventDefault();const err=$('eventFormError');const btn=$('saveEventBtn');err.classList.add('hidden');
+      const title=$('eventTitle').value.trim(), start=$('eventStart').value, end=$('eventEnd').value;
+      if(!title){err.textContent='Enter an event title.';err.classList.remove('hidden');return;}
+      if(!start||!end||new Date(end)<=new Date(start)){err.textContent='The end time must be later than the start time.';err.classList.remove('hidden');return;}
+      if(!session||!session.organization_id){err.textContent='Your organization profile is unavailable. Sign in again.';err.classList.remove('hidden');return;}
+      const visibility=$('eventVisibility').value;
+      const payload={title,description:$('eventDescription').value.trim()||null,start_at:localInputToIso(start),end_at:localInputToIso(end),timezone:'Africa/Nairobi',visibility,unit_id:visibility==='department'?session.unit_id:null,updated_at:new Date().toISOString()};
+      btn.disabled=true;
+      try{
+        let result;
+        if(editingEvent){result=await supabase.from('calendar_events').update(payload).eq('id',editingEvent.id).select('id').single();}
+        else{result=await supabase.from('calendar_events').insert([{...payload,organization_id:session.organization_id,created_by:session.id,status:'scheduled'}]).select('id').single();}
+        if(result.error)throw result.error;
+        closeModal();await loadEvents();
+      }catch(ex){console.error('Event save failed',ex);err.textContent='Event was not saved. Check your permissions and connection, then retry.';err.classList.remove('hidden');}
+      finally{btn.disabled=false;}
+    }
+    async function cancelEvent(id){
+      if(!confirm('Cancel this event? It will remain in the calendar as cancelled.'))return;
+      try{const {error}=await supabase.from('calendar_events').update({status:'cancelled',updated_at:new Date().toISOString()}).eq('id',id);if(error)throw error;await loadEvents();}
+      catch(e){console.error('Event cancel failed',e);showError('The event could not be cancelled. Check your permissions and retry.');}
+    }
+    $('newEventBtn').addEventListener('click',()=>openModal());
+    $('closeModalBtn').addEventListener('click',closeModal);$('cancelModalBtn').addEventListener('click',closeModal);
+    $('eventModal').addEventListener('click',e=>{if(e.target===$('eventModal'))closeModal();});
+    $('eventForm').addEventListener('submit',saveEvent);
+    $('prevMonth').addEventListener('click',()=>{monthCursor=new Date(monthCursor.getFullYear(),monthCursor.getMonth()-1,1);selectedDay=monthCursor.getFullYear()+'-'+String(monthCursor.getMonth()+1).padStart(2,'0')+'-01';loadEvents();});
+    $('nextMonth').addEventListener('click',()=>{monthCursor=new Date(monthCursor.getFullYear(),monthCursor.getMonth()+1,1);selectedDay=monthCursor.getFullYear()+'-'+String(monthCursor.getMonth()+1).padStart(2,'0')+'-01';loadEvents();});
+    $('todayBtn').addEventListener('click',()=>{const now=new Date();monthCursor=nairobiMonth(now);selectedDay=dateKeyInZone(now);loadEvents();});
+    $('refreshBtn').addEventListener('click',loadEvents);
+    document.addEventListener('DOMContentLoaded',loadEvents);
+  </script>
 </body>
 </html>
-
-
-
-
-
