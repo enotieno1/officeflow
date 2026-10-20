@@ -45,9 +45,12 @@
   }
   if(planRes.error){plans.textContent='Plans could not be loaded. Please retry.';}else if(!planRes.data.length){plans.textContent='No subscription prices have been published yet. Checkout is intentionally unavailable until OfficeFlow approves its pricing and activates plans.';}else{
    plans.replaceChildren();
-   planRes.data.forEach(plan=>{
+   const requestedPlanId=new URLSearchParams(location.search).get('plan');
+   const orderedPlans=[...planRes.data].sort((a,b)=>Number(b.id===requestedPlanId)-Number(a.id===requestedPlanId));
+   orderedPlans.forEach(plan=>{
     const card=cell('article','', 'border border-slate-200 rounded-xl p-5 flex flex-col');
     card.append(cell('h3',plan.name,'font-bold text-lg'));
+    if(plan.id===requestedPlanId)card.append(cell('p','Selected plan','text-xs font-bold uppercase tracking-wider brass mt-1'));
     card.append(cell('p',plan.description||'OfficeFlow subscription','text-sm text-slate-600 mt-2'));
     card.append(cell('p',money(plan.amount,plan.currency),'text-2xl font-bold mt-4'));
     card.append(cell('p','per '+(Number(plan.interval_count)>1?plan.interval_count+' ':'')+plan.interval_unit,'text-sm text-slate-500'));
