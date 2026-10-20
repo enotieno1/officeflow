@@ -1748,19 +1748,42 @@
             }
         }
 
-        function approveLeave(leaveId) {
-            showNotification('Approving leave request...', 'info');
-            setTimeout(() => {
-                showNotification('Leave request approved', 'success');
-            }, 1000);
+        async function approveLeave(leaveId) {
+            await decideLeaveRequest(leaveId, 'approved');
         }
 
-        function rejectLeave(leaveId) {
-            if (confirm('Are you sure you want to reject this leave request?')) {
-                showNotification('Rejecting leave request...', 'info');
-                setTimeout(() => {
-                    showNotification('Leave request rejected', 'success');
-                }, 1000);
+        async function rejectLeave(leaveId) {
+            if (window.confirm('Are you sure you want to reject this leave request?')) {
+                await decideLeaveRequest(leaveId, 'rejected');
+            }
+        }
+
+        async function decideLeaveRequest(leaveId, decision) {
+            const session = window.OOES_AUTH && OOES_AUTH.getSession();
+            if (!session || !session.id || !session.organization_id) {
+                showNotification('Your organization profile is not ready. Sign in again.', 'error');
+                return;
+            }
+            if (!leaveId) {
+                showNotification('A valid leave request ID is required.', 'error');
+                return;
+            }
+            try {
+                const { data, error } = await supabase.from('hr_leave_requests')
+                    .update({ status: decision, reviewed_by: session.id, reviewed_at: new Date().toISOString(), updated_at: new Date().toISOString() })
+                    .eq('id', leaveId)
+                    .eq('organization_id', session.organization_id)
+                    .eq('status', 'pending')
+                    .select('id,status')
+                    .maybeSingle();
+                if (error) throw error;
+                if (!data) {
+                    showNotification('No pending leave request was updated. It may already be reviewed or you may lack permission.', 'warning');
+                    return;
+                }
+                showNotification('Leave request ' + decision + ' and saved.', 'success');
+            } catch (err) {
+                showNotification('Could not update leave request: ' + (err.message || 'Please retry.'), 'error');
             }
         }
 
@@ -1873,9 +1896,42 @@
             }
         }
 
-        function submitLeaveRequest() {
-            showNotification('This legacy leave form is not connected to the workflow engine. Open Work Center and submit the published Leave Request workflow instead.', 'warning');
-            window.location.href = '/dashboard/workflow.html';
+        async function submitLeaveRequest() {
+            const form = document.getElementById('leaveForm');
+            const employeeId = Number(document.getElementById('leaveEmployeeId')?.value);
+            const session = window.OOES_AUTH && OOES_AUTH.getSession();
+            if (!form || !employeeId || !session || !session.id || !session.organization_id) {
+                showNotification('Select an employee and ensure your organization profile is ready.', 'error');
+                return false;
+            }
+            const values = new FormData(form);
+            const typeMap = { Annual: 'annual', Sick: 'sick', Maternity: 'maternity', Paternity: 'paternity', Emergency: 'other' };
+            const leaveType = typeMap[values.get('leaveType')] || 'other';
+            const startDate = String(values.get('startDate') || '');
+            const endDate = String(values.get('endDate') || startDate);
+            const reason = String(values.get('reason') || '').trim();
+            if (!startDate || !endDate || endDate < startDate || !reason) {
+                showNotification('Enter valid leave dates and a reason.', 'error');
+                return false;
+            }
+            try {
+                const { data, error } = await supabase.from('hr_leave_requests').insert({
+                    organization_id: session.organization_id,
+                    employee_id: employeeId,
+                    leave_type: leaveType,
+                    start_date: startDate,
+                    end_date: endDate,
+                    reason,
+                    requested_by: session.id
+                }).select('id,status').single();
+                if (error) throw error;
+                showNotification('Leave request submitted and saved. Status: ' + data.status + '.', 'success');
+                closeModal(document.querySelector('#leaveModal button[onclick*="closeModal"]'));
+                form.reset();
+            } catch (err) {
+                showNotification('Leave request was not submitted: ' + (err.message || 'Please retry.'), 'error');
+            }
+            return false;
         }
 
         function openPayrollModal() {
