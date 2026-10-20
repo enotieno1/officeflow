@@ -68,7 +68,7 @@
     function showError(message){$('pageError').textContent=message;$('pageError').classList.remove('hidden');}
     function hideError(){$('pageError').classList.add('hidden');}
     function canManage(event){return !!session && (event.created_by===session.id || ['administrator','super_admin'].includes(session.role));}
-    async async function loadEvents(){
+    async function loadEvents(){
       hideError();
       try{
         if(window.OOES_AUTH && OOES_AUTH.ready) await OOES_AUTH.ready;
@@ -123,7 +123,7 @@
       $('eventModal').classList.add('open');
     }
     function closeModal(){$('eventModal').classList.remove('open');editingEvent=null;}
-    async async function saveEvent(e){
+    async function saveEvent(e){
       e.preventDefault();const err=$('eventFormError');const btn=$('saveEventBtn');err.classList.add('hidden');
       const title=$('eventTitle').value.trim(), start=$('eventStart').value, end=$('eventEnd').value;
       if(!title){err.textContent='Enter an event title.';err.classList.remove('hidden');return;}
@@ -141,7 +141,7 @@
       }catch(ex){console.error('Event save failed',ex);err.textContent='Event was not saved. Check your permissions and connection, then retry.';err.classList.remove('hidden');}
       finally{btn.disabled=false;}
     }
-    async async function cancelEvent(id){
+    async function cancelEvent(id){
       if(!confirm('Cancel this event? It will remain in the calendar as cancelled.'))return;
       try{const {error}=await supabase.from('calendar_events').update({status:'cancelled',updated_at:new Date().toISOString()}).eq('id',id);if(error)throw error;await loadEvents();}
       catch(e){console.error('Event cancel failed',e);showError('The event could not be cancelled. Check your permissions and retry.');}
