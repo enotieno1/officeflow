@@ -45,6 +45,12 @@ test("billing page redirects unauthenticated visitors and preserves the return p
   expect(url.searchParams.get("next")).toBe("/dashboard/billing.html");
 });
 
+test("cancellation endpoint refuses unauthenticated requests", async ({ request }) => {
+  const response = await request.post(baseURL + "/functions/v1/billing-cancel", { data: {} });
+  expect([401, 403]).toContain(response.status());
+  expect((await response.text()).toLowerCase()).not.toContain('"status":"cancelled"');
+});
+
 test("checkout endpoint refuses unauthenticated requests", async ({ request }) => {
   test.skip(!supabaseURL, "Set SUPABASE_URL to a dedicated staging project; endpoint tests never default to production.");
   const response = await request.post(supabaseURL + "/functions/v1/billing-checkout", {
@@ -65,7 +71,7 @@ test("signed-in organization administrator sees database-backed published plans"
   await expect(page.getByText(/no subscription prices have been published/i)).toHaveCount(0);
 });
 
-test("optional sandbox card checkout redirects to IntaSend and does not claim payment success", async ({ page }) => {
+test("optional sandbox card subscription setup redirects to IntaSend and does not claim payment success", async ({ page }) => {
   test.skip(process.env.RUN_BILLING_SANDBOX_HANDOFF !== "1" || /(^|\.)officeflow\.co\.ke$|(^|\.)office-sort\.vercel\.app$/.test(new URL(baseURL).hostname), "Opt-in only on a dedicated preview/staging app with sandbox merchant credentials.");
   await signIn(page);
   await page.goto(baseURL + "/dashboard/billing.html");
