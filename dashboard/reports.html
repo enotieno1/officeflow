@@ -70,6 +70,9 @@
 <script>
 var ch={};
 async function loadReports(){
+await OOES_AUTH.ready;
+if(!OOES_AUTH.isLoggedIn()){window.location.href="/dashboard/auth.html";return;}
+if(!["administrator","super_admin"].includes(OOES_AUTH.getRole())){alert("Reports are restricted to organization administrators and top leadership.");window.location.href="/dashboard/index.html";return;}
 try{
 var t=await getTransactions();
 var inc=t.filter(function(x){return parseFloat(x.amount)>0;}).reduce(function(s,x){return s+parseFloat(x.amount);},0);
