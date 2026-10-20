@@ -53,7 +53,7 @@ body { background: #0a0f1e; color: white; font-family: 'Inter', -apple-system, B
 <!-- HERO -->
 <section style="min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:120px 24px 80px;position:relative;overflow:hidden;">
   <!-- Background glows -->
-  <div style="position:absolute;top:20%;left:10%;width:400px;height:400px;background:radial-gradient(circle,rgba(37,99,235,0.15),transparent);border-radius:50%;pointer-events:none;"></div>
+  <div style="position:absolute;top:20%;left:10%;width:400px;height:400px;background:radial-gradient(circle,rgba(166,130,61,0.15),transparent);border-radius:50%;pointer-events:none;"></div>
   <div style="position:absolute;bottom:20%;right:10%;width:300px;height:300px;background:radial-gradient(circle,rgba(210,180,109,0.1),transparent);border-radius:50%;pointer-events:none;"></div>
 
   <div style="max-width:900px;margin:0 auto;" class="fadein">
@@ -486,7 +486,7 @@ document.getElementById('contactEmailButton')?.addEventListener('click', functio
     status.textContent = 'Please enter your name, email and message before opening your email app.';
     return;
   }
-  const subject = encodeURIComponent('OfficeFlow inquiry: ' + topic);
+  if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)) { status.textContent = 'Please enter a valid email address.'; return; }\n  const subject = encodeURIComponent('OfficeFlow inquiry: ' + topic);
   const body = encodeURIComponent('Name: ' + name + '\nEmail: ' + email + '\nCompany: ' + company + '\nTopic: ' + topic + '\n\n' + message);
   status.textContent = 'Your email app should open. OfficeFlow has not received this message until you send it from your email app.';
   window.location.href = 'mailto:info@officeflow.co.ke?subject=' + subject + '&body=' + body;
