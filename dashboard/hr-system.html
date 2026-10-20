@@ -124,7 +124,14 @@
     <!-- Main Content -->
     <main class="container mx-auto px-6 py-8">
         <!-- HR Overview -->
-        <section class="mb-12">
+        <nav id="hr-section-tabs" aria-label="HR sections" class="sticky top-0 z-30 bg-white border border-gray-200 rounded-xl shadow-sm p-2 mb-6 flex flex-wrap gap-2">
+<a href="#hr-overview" class="hr-section-tab px-4 py-2 rounded-lg text-sm font-semibold bg-[#16213E] text-white">Overview</a>
+<a href="#hr-employees" class="hr-section-tab px-4 py-2 rounded-lg text-sm font-semibold text-gray-700 hover:bg-gray-100">Employees</a>
+<a href="#hr-payroll" class="hr-section-tab px-4 py-2 rounded-lg text-sm font-semibold text-gray-700 hover:bg-gray-100">Payroll</a>
+<a href="#hr-attendance" class="hr-section-tab px-4 py-2 rounded-lg text-sm font-semibold text-gray-700 hover:bg-gray-100">Attendance</a>
+<a href="#hr-reports" class="hr-section-tab px-4 py-2 rounded-lg text-sm font-semibold text-gray-700 hover:bg-gray-100">Reports & Compliance</a>
+</nav>
+<section id="hr-overview" class="mb-12 scroll-mt-28">
             <div class="bg-white rounded-lg shadow-md p-8">
                 <h2 class="text-2xl font-bold mb-6 text-gray-800">
                     <i class="fas fa-users-cog mr-3 text-green-600"></i>
@@ -176,7 +183,7 @@
         </section>
 
         <!-- Employee Management -->
-        <section class="mb-12">
+        <section id="hr-employees" class="mb-12 scroll-mt-28">
             <div class="bg-white rounded-lg shadow-md p-8">
                 <h2 class="text-2xl font-bold mb-6 text-gray-800">
                     <i class="fas fa-user-tie mr-3 text-blue-600"></i>
@@ -225,7 +232,7 @@
         </section>
 
         <!-- Payroll Processing -->
-        <section class="mb-12">
+        <section id="hr-payroll" class="mb-12 scroll-mt-28">
             <div class="bg-white rounded-lg shadow-md p-8">
                 <h2 class="text-2xl font-bold mb-6 text-gray-800">
                     <i class="fas fa-money-bill-wave mr-3 text-green-600"></i>
@@ -288,7 +295,7 @@
         </section>
 
         <!-- Attendance Tracking -->
-        <section class="mb-12">
+        <section id="hr-attendance" class="mb-12 scroll-mt-28">
             <div class="bg-white rounded-lg shadow-md p-8">
                 <h2 class="text-2xl font-bold mb-6 text-gray-800">
                     <i class="fas fa-calendar-check mr-3 text-blue-600"></i>
@@ -333,7 +340,7 @@
         </section>
 
         <!-- HR Reports -->
-        <section class="mb-12">
+        <section id="hr-reports" class="mb-12 scroll-mt-28">
             <div class="bg-white rounded-lg shadow-md p-8 hr-card" onclick="showHRAnalyticsDashboard()">
                 <h2 class="text-2xl font-bold mb-6 text-gray-800 cursor-pointer hover:text-[#A6823D] transition">
                     <i class="fas fa-file-alt mr-3 text-[#A6823D]"></i>
@@ -1680,6 +1687,31 @@
         }
 
         function switchTab(tabName) {
+            // Legacy tab calls now navigate to the matching live HR section.
+            const aliases = { overview: 'hr-overview', employees: 'hr-employees', employeeManagement: 'hr-employees', payroll: 'hr-payroll', attendance: 'hr-attendance', reports: 'hr-reports' };
+            const targetId = aliases[tabName] || tabName;
+            const target = document.getElementById(targetId);
+            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            document.querySelectorAll('.hr-section-tab').forEach(link => {
+                const active = link.getAttribute('href') === '#' + targetId;
+                link.classList.toggle('bg-[#16213E]', active);
+                link.classList.toggle('text-white', active);
+                link.classList.toggle('text-gray-700', !active);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const tabs = document.querySelectorAll('.hr-section-tab');
+            tabs.forEach(link => link.addEventListener('click', function () {
+                const targetId = this.getAttribute('href').slice(1);
+                document.querySelectorAll('.hr-section-tab').forEach(item => {
+                    const active = item === this;
+                    item.classList.toggle('bg-[#16213E]', active);
+                    item.classList.toggle('text-white', active);
+                    item.classList.toggle('text-gray-700', !active);
+                });
+            }));
+        });
             // Hide all tabs
             document.querySelectorAll('.tab-content').forEach(tab => {
                 tab.classList.add('hidden');
