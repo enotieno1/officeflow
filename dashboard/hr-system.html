@@ -687,11 +687,9 @@
         }
 
         function runPayroll() {
-            alert('Processing payroll for all employees...');
-            // Simulate payroll processing
-            setTimeout(() => {
-                alert('Payroll processed successfully! Salaries have been distributed to all employees.');
-            }, 2000);
+            // Safety fix: this screen has no verified payroll ledger or payment integration.
+            // Never claim that salaries were processed or distributed when no payment occurred.
+            showNotification('Payroll is not yet enabled. No salaries have been calculated or paid. Please use the payroll workspace once approved and configured.', 'warning');
         }
 
         function processPayroll() {
