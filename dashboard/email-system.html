@@ -716,22 +716,8 @@ contact@ooes.co.ke`
 
         // Quick Actions Functions
         function checkEmail(button) {
-            // Add visual feedback to button
-            button.classList.add('opacity-75', 'scale-95');
-            showNotification('Checking for new emails...', 'info');
-            
-            // Simulate email checking
-            setTimeout(() => {
-                const newEmails = Math.floor(Math.random() * 5) + 1;
-                showNotification(`Found ${newEmails} new email${newEmails > 1 ? 's' : ''}!`, 'success');
-                button.classList.remove('opacity-75', 'scale-95');
-                
-                // Update inbox count
-                const inboxCount = document.querySelector('.font-bold.text-blue-600');
-                if (inboxCount) {
-                    inboxCount.textContent = parseInt(inboxCount.textContent) + newEmails;
-                }
-            }, 2000);
+            if (button) button.classList.remove('opacity-75', 'scale-95');
+            showNotification('Mailbox connection is not configured. No inbox was checked.', 'warning');
         }
 
         function composeNew(button) {
