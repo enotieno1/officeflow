@@ -613,7 +613,7 @@
             const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''));
 
             // The public "Start Free Trial" links should land directly on sign-up.
-            if (params.get('mode') === 'signup') {
+            if (params.get('mode') === 'signup' && !params.get('department')) {
                 document.getElementById('signInForm').classList.add('hidden');
                 document.getElementById('signUpForm').classList.remove('hidden');
             }
