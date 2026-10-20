@@ -33,11 +33,10 @@
   if(new URLSearchParams(location.search).get('payment')==='pending')note('Payment is pending provider verification. This page will show an active subscription only after OfficeFlow verifies payment with IntaSend.','info');
   const current=$('current'),plans=$('plans'),payments=$('payments');
   if(!isAdmin){current.textContent='Only your organization administrator can view or change billing.';plans.textContent='Ask your organization administrator to manage its subscription.';payments.textContent='Payment history is restricted to organization administrators.';return;}
-  const [subRes,planRes,payRes]=await Promise.all([
-   supabase.from('billing_subscriptions').select('id,status,current_period_start,current_period_end,plan:billing_plans(name,amount,currency,interval_unit)').in('status',['pending','active','past_due']).order('created_at',{ascending:false}).limit(1),
-   supabase.from('billing_plans').select('id,name,description,amount,currency,interval_unit,interval_count,seat_limit').eq('is_active',true).order('amount'),
-   supabase.from('billing_payment_attempts').select('api_ref,amount,currency,payment_method,status,provider_state,created_at').order('created_at',{ascending:false}).limit(10)
-  ]);
+  const {data:overview,error:overviewErr}=await supabase.rpc('fn_get_billing_overview');
+  const subRes={data:overview?.subscription?[overview.subscription]:[],error:overviewErr};
+  const planRes={data:overview?.plans||[],error:overviewErr};
+  const payRes={data:overview?.payments||[],error:overviewErr};
   if(subRes.error){current.textContent='Could not load subscription status. Refresh or contact support.';}else if(!subRes.data.length){current.textContent='No active subscription is recorded for this organization.';}else{
    const sub=subRes.data[0],plan=sub.plan||{};current.replaceChildren();
    current.append(cell('p',(plan.name||'OfficeFlow plan')+' · '+sub.status.toUpperCase(),'font-semibold '+(sub.status==='active'?'text-green-700':'text-amber-700')));
