@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OfficeFlow | Legal & Compliance Sign In</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/dashboard/js/config.js"></script>
+<script>var supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);</script>
+<link rel="stylesheet" href="/dashboard/css/executive-theme.css">
+<link rel="stylesheet" href="/dashboard/css/mobile.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:#f5f6f8;color:#152238;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;display:flex;align-items:center;justify-content:center;padding:24px}
+.portal{width:100%;max-width:460px;background:#fff;border:1px solid #e5e7eb;border-top:4px solid #a6823d;border-radius:16px;padding:32px;box-shadow:0 18px 50px rgba(16,30,54,.09)}
+.brand{font-size:25px;font-weight:750;letter-spacing:-.5px;color:#14243a}.brand span{color:#a6823d}.eyebrow{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#8a6b2f;margin-top:25px}
+.department-icon{width:54px;height:54px;display:grid;place-items:center;border-radius:13px;background:#f3efe6;color:#14243a;font-size:23px;margin:12px 0}
+h1{font-size:26px;line-height:1.2;margin:0 0 8px;color:#14243a}.desc{color:#647084;font-size:14px;line-height:1.6;margin:0 0 25px}
+label{display:block;font-size:13px;font-weight:650;margin:16px 0 7px}input{width:100%;padding:13px 14px;border:1px solid #d5dbe4;border-radius:8px;font:inherit;color:#152238}input:focus{outline:2px solid #d9c18c;border-color:#a6823d}
+button{width:100%;margin-top:22px;border:0;border-radius:8px;padding:14px;background:#14243a;color:white;font:inherit;font-weight:700;cursor:pointer}button:disabled{opacity:.65;cursor:wait}
+.message{margin-top:16px;padding:12px;border-radius:8px;font-size:13px;line-height:1.5}.message[hidden]{display:none}.message.info{background:#eef3f9;color:#26435e}.message.error{background:#fff0f0;color:#9c2424}.message.success{background:#edf7f0;color:#21643b}
+.footer{border-top:1px solid #edf0f4;margin-top:25px;padding-top:18px;font-size:12px;color:#687487;line-height:1.7}.footer a{color:#8a6b2f;text-decoration:none;font-weight:650}
+</style>
+</head>
+<body data-department-code="LEGAL">
+<main class="portal">
+<div class="brand">Office<span>Flow</span></div>
+<div class="eyebrow">Department access portal</div>
+<div class="department-icon"><i id="department-icon" class="fa-solid fa-scale-balanced" aria-hidden="true"></i></div>
+<h1 id="department-name">Legal & Compliance</h1>
+<p id="department-description" class="desc">Legal, compliance and policy workflows.</p>
+<form id="department-login-form">
+<label for="email">Work email</label>
+<input id="email" name="email" type="email" autocomplete="username" required placeholder="you@organization.com">
+<label for="password">Password</label>
+<input id="password" name="password" type="password" autocomplete="current-password" required placeholder="Enter your password">
+<button id="login-submit" type="submit">Sign in to Legal & Compliance</button>
+<div id="login-message" class="message info" role="status" aria-live="polite" hidden></div>
+</form>
+<div class="footer">
+Access is limited to users assigned to this department and authorized administrators. Your permissions are checked against your OfficeFlow account.<br><br>
+Need an account or department assignment? Contact your organization administrator.<br>
+<a href="/dashboard/auth.html">Main OfficeFlow sign-in</a> · <a href="/">OfficeFlow home</a>
+</div>
+</main>
+<script src="/dashboard/js/department-login.js"></script>
+</body>
+</html>
