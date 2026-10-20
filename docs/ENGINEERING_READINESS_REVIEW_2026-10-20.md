@@ -116,3 +116,16 @@ The following code-level defects were found while reviewing the first implementa
 - The most recent 24-hour log sample contained 294 successful gateway requests, 2 HTTP 400 responses, 3 HTTP 403 responses and 2 HTTP 429 responses. The sample included expected authorization denials and signup rate limiting, but the workflow decision 400s need correlation with user actions before being called expected.
 - Fifteen database-level billing/task/document/auth regression assertions passed during this second pass. These are structural/security checks; they do not prove browser journeys, payment settlement, tenant isolation under real identities or module acceptance.
 - The security advisor still flags leaked-password protection and 15 authenticated GraphQL table exposures. Those remain open until auth configuration is reviewed and each exposed object is mapped to its intended role/RLS contract.
+
+
+## Request-detail RLS incident found and repaired
+
+A review of production PostgreSQL logs found a concrete workflow defect: request detail and approval-step SELECTs were returning HTTP 403 because the RLS policies invoked `fn_is_current_step_approver`, `fn_is_request_submitter` and `fn_has_decided_request` without granting the authenticated role EXECUTE permission. This made a core workflow detail screen fail even though the tables and rows existed.
+
+- Applied a production migration granting EXECUTE to `authenticated` only for those three SECURITY DEFINER predicates; `anon` remains denied.
+- Rebuilt the request and request-step SELECT policies so the organization predicate encloses every authorization branch. This removes the previous trailing-OR structure that could bypass the tenant predicate for a submitter whose profile had later moved organizations.
+- Added `tests/request_policy_regression_checks.sql`.
+- Ran a transaction-scoped database test using the authenticated role and a manager identity. The request and step SELECTs completed without the prior permission-denied failure and returned the rows visible under that role's policy.
+- Removed a duplicate request fetch from `requestDetail.html` to avoid loading the same record twice.
+
+This repair is applied to the production database. The matching migration and UI cleanup are in the draft implementation PR; the updated frontend still needs to be deployed and browser-tested. A true two-organization isolation test is still required before sign-off.
