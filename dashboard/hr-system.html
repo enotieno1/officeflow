@@ -625,7 +625,7 @@
             document.getElementById('employeeModal').classList.remove('active');
         }
 
-        async async function saveEmployee() {
+        async function saveEmployee() {
             const session = window.OOES_AUTH && OOES_AUTH.getSession();
             const fn = document.getElementById('firstName').value.trim();
             const ln = document.getElementById('lastName').value.trim();
