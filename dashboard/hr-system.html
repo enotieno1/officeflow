@@ -1885,18 +1885,48 @@
             }
         }
 
-        function savePerformanceReview() {
+        async function savePerformanceReview() {
             const form = document.getElementById('performanceForm');
-            if (form) {
-                showNotification('Saving performance review...', 'info');
-                setTimeout(() => {
-                    showNotification('Performance review saved successfully!', 'success');
-                    closeModal(document.querySelector('#performanceModal button[onclick*="closeModal"]'));
-                }, 1500);
+            const session = window.OOES_AUTH && OOES_AUTH.getSession();
+            if (!form || !session || !session.id || !session.organization_id) {
+                showNotification('Sign in with an organization account before saving a review.', 'error');
+                return;
+            }
+            if (!form.reportValidity()) return;
+            const values = new FormData(form);
+            const employeeId = Number(values.get('employeeId'));
+            const quality = Number(values.get('quality'));
+            const teamwork = Number(values.get('teamwork'));
+            const communication = Number(values.get('communication'));
+            const punctuality = Number(values.get('punctuality'));
+            const reviewPeriod = String(values.get('reviewPeriod') || '').trim();
+            if (!employeeId || !reviewPeriod || [quality, teamwork, communication, punctuality].some(n => !Number.isInteger(n) || n < 1 || n > 10)) {
+                showNotification('Select an employee and review period, and enter all four scores from 1 to 10.', 'error');
+                return;
+            }
+            try {
+                const { error } = await supabase.from('hr_performance_reviews').insert({
+                    organization_id: session.organization_id,
+                    employee_id: employeeId,
+                    review_period: reviewPeriod,
+                    rating: ((quality + teamwork + communication + punctuality) / 4) / 2,
+                    quality_score: quality,
+                    teamwork_score: teamwork,
+                    communication_score: communication,
+                    punctuality_score: punctuality,
+                    comments: String(values.get('comments') || '').trim() || null,
+                    reviewer_id: session.id
+                });
+                if (error) throw error;
+                showNotification('Performance review saved to the organization record.', 'success');
+                form.reset();
+                closeModal(document.querySelector('#performanceModal button[onclick*="closeModal"]'));
+            } catch (err) {
+                showNotification('Performance review was not saved: ' + (err.message || 'Please retry.'), 'error');
             }
         }
 
-        async function submitLeaveRequest() {
+        async function submitLeaveRequest()        async function submitLeaveRequest() {
             const form = document.getElementById('leaveForm');
             const employeeId = Number(document.getElementById('leaveEmployeeId')?.value);
             const session = window.OOES_AUTH && OOES_AUTH.getSession();
@@ -1941,28 +1971,95 @@
             }, 1000);
         }
 
-        function openRecruitmentModal() {
-            showNotification('Opening recruitment module...', 'info');
-            setTimeout(() => {
-                showNotification('Recruitment module ready', 'success');
-            }, 1000);
+        async function openRecruitmentModal() {
+            const session = window.OOES_AUTH && OOES_AUTH.getSession();
+            if (!session || !session.id || !session.organization_id) { showNotification('Sign in with an organization account first.', 'error'); return; }
+            const fullName = window.prompt('Candidate full name (required):');
+            if (fullName === null) return;
+            if (!fullName.trim()) { showNotification('Candidate name is required.', 'error'); return; }
+            const position = window.prompt('Position applied for (required):');
+            if (position === null) return;
+            if (!position.trim()) { showNotification('Position applied for is required.', 'error'); return; }
+            const email = window.prompt('Candidate email (optional):');
+            if (email === null) return;
+            const phone = window.prompt('Candidate phone (optional):');
+            if (phone === null) return;
+            const notes = window.prompt('Recruitment notes (optional):');
+            if (notes === null) return;
+            try {
+                const { data, error } = await supabase.from('hr_recruitment_candidates').insert({
+                    organization_id: session.organization_id, full_name: fullName.trim(),
+                    position_applied: position.trim(), email: email.trim() || null,
+                    phone: phone.trim() || null, notes: notes.trim() || null, created_by: session.id
+                }).select('id,stage').single();
+                if (error) throw error;
+                showNotification('Candidate saved. Reference: ' + data.id + '. Stage: ' + data.stage + '.', 'success');
+            } catch (err) { showNotification('Candidate was not saved: ' + (err.message || 'Please retry.'), 'error'); }
         }
 
-        function openTrainingModal() {
-            showNotification('Opening training management...', 'info');
-            setTimeout(() => {
-                showNotification('Training module ready', 'success');
-            }, 1000);
+        async function openTrainingModal() {
+            const session = window.OOES_AUTH && OOES_AUTH.getSession();
+            if (!session || !session.id || !session.organization_id) { showNotification('Sign in with an organization account first.', 'error'); return; }
+            const employee = chooseEmployeeForHRAction('training record');
+            if (!employee) return;
+            const title = window.prompt('Training title (required):');
+            if (title === null) return;
+            if (!title.trim()) { showNotification('Training title is required.', 'error'); return; }
+            const provider = window.prompt('Training provider (optional):');
+            if (provider === null) return;
+            const date = window.prompt('Training date YYYY-MM-DD (optional):');
+            if (date === null) return;
+            if (date.trim() && !/^\\d{4}-\\d{2}-\\d{2}$/.test(date.trim())) { showNotification('Use YYYY-MM-DD for the training date.', 'error'); return; }
+            const status = (window.prompt('Status: planned, in_progress, completed, or cancelled', 'planned') || '').trim().toLowerCase();
+            if (!['planned','in_progress','completed','cancelled'].includes(status)) { showNotification('Invalid training status.', 'error'); return; }
+            const notes = window.prompt('Training notes (optional):');
+            if (notes === null) return;
+            try {
+                const { error } = await supabase.from('hr_training_records').insert({
+                    organization_id: session.organization_id, employee_id: employee.id, training_title: title.trim(),
+                    provider: provider.trim() || null, training_date: date.trim() || null,
+                    completion_status: status, notes: notes.trim() || null, created_by: session.id
+                });
+                if (error) throw error;
+                showNotification('Training record saved for ' + employee.label + '.', 'success');
+            } catch (err) { showNotification('Training record was not saved: ' + (err.message || 'Please retry.'), 'error'); }
         }
 
-        function openBenefitsModal() {
-            showNotification('Opening benefits management...', 'info');
-            setTimeout(() => {
-                showNotification('Benefits module ready', 'success');
-            }, 1000);
+        async function openBenefitsModal() {
+            const session = window.OOES_AUTH && OOES_AUTH.getSession();
+            if (!session || !session.id || !session.organization_id) { showNotification('Sign in with an organization account first.', 'error'); return; }
+            const employee = chooseEmployeeForHRAction('employee benefit');
+            if (!employee) return;
+            const name = window.prompt('Benefit name (required):');
+            if (name === null) return;
+            if (!name.trim()) { showNotification('Benefit name is required.', 'error'); return; }
+            const provider = window.prompt('Benefit provider (optional):');
+            if (provider === null) return;
+            const amountInput = window.prompt('Benefit amount in KSh (optional):');
+            if (amountInput === null) return;
+            const amount = amountInput.trim() ? Number(amountInput) : null;
+            if (amount !== null && (!Number.isFinite(amount) || amount < 0)) { showNotification('Enter a valid non-negative amount.', 'error'); return; }
+            const start = window.prompt('Effective from YYYY-MM-DD (optional):');
+            if (start === null) return;
+            const end = window.prompt('Effective to YYYY-MM-DD (optional):');
+            if (end === null) return;
+            if ((start.trim() && !/^\\d{4}-\\d{2}-\\d{2}$/.test(start.trim())) || (end.trim() && !/^\\d{4}-\\d{2}-\\d{2}$/.test(end.trim())) || (start.trim() && end.trim() && end < start)) {
+                showNotification('Enter valid effective dates in YYYY-MM-DD format.', 'error'); return;
+            }
+            const notes = window.prompt('Benefit notes (optional):');
+            if (notes === null) return;
+            try {
+                const { error } = await supabase.from('hr_benefit_records').insert({
+                    organization_id: session.organization_id, employee_id: employee.id, benefit_name: name.trim(),
+                    provider: provider.trim() || null, amount, effective_from: start.trim() || null,
+                    effective_to: end.trim() || null, notes: notes.trim() || null, created_by: session.id
+                });
+                if (error) throw error;
+                showNotification('Benefit record saved for ' + employee.label + '.', 'success');
+            } catch (err) { showNotification('Benefit record was not saved: ' + (err.message || 'Please retry.'), 'error'); }
         }
 
-        function openComplianceModal() {
+        function openComplianceModal()        function openComplianceModal() {
             showNotification('Opening compliance management...', 'info');
             setTimeout(() => {
                 showNotification('Compliance module ready', 'success');
