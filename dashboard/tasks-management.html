@@ -461,11 +461,13 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="form-label" for="taskAssignee">Assignee label (optional)</label>
-                        <input id="taskAssignee" name="assigned_to" type="text" class="form-input" maxlength="160" placeholder="Name or team label">
+                        <label class="form-label" for="taskAssignee">Assign to</label>
+                        <select id="taskAssignee" name="assigned_to_user_id" class="form-select">
+                            <option value="">Unassigned</option>
+                        </select>
                     </div>
                 </div>
-                <p class="text-xs text-gray-500 -mt-2 mb-4">The assignee label is descriptive only. Assigning to a staff account requires the secure staff-directory workflow.</p>
+                <p id="taskAssigneeHelp" class="text-xs text-gray-500 -mt-2 mb-4">Assignments are linked to real OfficeFlow accounts and limited by your role.</p>
                 <div id="taskFormError" role="alert" class="hidden text-sm text-red-700 mb-3"></div>
                 <div class="flex items-center gap-3 justify-end">
                     <button type="button" onclick="closeTaskModal()" class="action-btn action-btn-secondary">Cancel</button>
@@ -479,6 +481,8 @@
         let taskRecords = [];
         let activeTaskTab = 'all';
         let editingTaskId = null;
+        let taskAssignees = [];
+        let taskAssigneesLoadedFor = null;
         const taskStatus = t => {
             const s = String(t.status || 'pending').toLowerCase().replace(/[ -]+/g, '_');
             if (s === 'inprogress') return 'in_progress';
@@ -502,7 +506,19 @@
             document.getElementById('taskDescription').value = task ? task.description || '' : '';
             document.getElementById('taskPriority').value = priorityValue(task && task.priority);
             document.getElementById('taskDueDate').value = task && task.due_date ? task.due_date : '';
-            document.getElementById('taskAssignee').value = task ? task.assigned_to || '' : '';
+            const assigneeSelect = document.getElementById('taskAssignee');
+            const assigneeHelp = document.getElementById('taskAssigneeHelp');
+            const canAssignOthers = ['administrator','super_admin'].includes(OOES_AUTH.getRole());
+            assigneeSelect.disabled = !!task && !canAssignOthers;
+            if (task && task.assigned_to_user_id && !Array.from(assigneeSelect.options).some(o => o.value === task.assigned_to_user_id)) {
+                const currentOption = document.createElement('option');
+                currentOption.value = task.assigned_to_user_id;
+                currentOption.textContent = task.assigned_to || 'Current assignee';
+                currentOption.selected = true;
+                assigneeSelect.appendChild(currentOption);
+            }
+            assigneeSelect.value = task ? task.assigned_to_user_id || '' : '';
+            assigneeHelp.textContent = canAssignOthers ? 'Choose a staff account in your organization. The database validates tenant membership.' : (task ? 'Only organization administrators can reassign an existing task. Other task details can still be edited.' : 'You may leave this unassigned or assign the task to your own account.');
             document.getElementById('taskCategory').value = task && task.category ? String(task.category).toLowerCase() : 'operations';
             document.querySelector('#taskModal h2').textContent = task ? 'Edit Task' : 'Create New Task';
             document.getElementById('taskSubmitButton').innerHTML = task ? '<i class="fas fa-save"></i> Save Changes' : '<i class="fas fa-save"></i> Create Task';
@@ -525,9 +541,10 @@
                 description: document.getElementById('taskDescription').value.trim() || null,
                 priority: document.getElementById('taskPriority').value,
                 due_date: document.getElementById('taskDueDate').value || null,
-                assigned_to: document.getElementById('taskAssignee').value.trim() || null,
                 category: document.getElementById('taskCategory').value
             };
+            const canAssignOthers = ['administrator','super_admin'].includes(OOES_AUTH.getRole());
+            if (!editingTaskId || canAssignOthers) payload.assigned_to_user_id = document.getElementById('taskAssignee').value || null;
             const button = document.getElementById('taskSubmitButton');
             button.disabled = true;
             try {
@@ -639,6 +656,34 @@
                   '<button class="action-btn action-btn-secondary" onclick="deleteTask(' + JSON.stringify(String(t.id)) + ')">Delete</button></div></div></article>';
             }).join('');
         }
+        async function loadTaskAssignees(session) {
+            if (taskAssigneesLoadedFor === session.id) return;
+            taskAssigneesLoadedFor = session.id;
+            const select = document.getElementById('taskAssignee');
+            select.innerHTML = '<option value="">Unassigned</option>';
+            taskAssignees = [];
+            if (['administrator','super_admin'].includes(session.role)) {
+                try {
+                    const {data,error} = await supabase.rpc('fn_list_task_assignees');
+                    if (error) throw error;
+                    taskAssignees = data || [];
+                    taskAssignees.forEach(person => {
+                        const option = document.createElement('option');
+                        option.value = person.user_id;
+                        option.textContent = (person.display_name || person.email || person.user_id) + ' · ' + person.role;
+                        select.appendChild(option);
+                    });
+                } catch (err) {
+                    console.error('Assignee directory failed',err);
+                    showNotification('Warning','Staff directory could not be loaded. Tasks can still be saved unassigned.','warning');
+                }
+            } else {
+                const option = document.createElement('option');
+                option.value = session.id;
+                option.textContent = 'Assign to me';
+                select.appendChild(option);
+            }
+        }
         async function syncTasks() {
             const container = document.getElementById('tasksContainer');
             try {
@@ -648,6 +693,7 @@
                 const {data,error} = await supabase.from('tasks').select('id,title,description,status,priority,assigned_to,assigned_to_user_id,category,due_date,created_at,owner_id,organization_id').order('due_date',{ascending:true,nullsFirst:false});
                 if (error) throw error;
                 taskRecords = data || [];
+                await loadTaskAssignees(session);
                 renderTasks();
             } catch(err) {
                 console.error('Tasks could not be loaded',err);
