@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><script>/* OfficeFlow integration honesty */location.replace('integration-center.html');</script><script>(function(){if(!localStorage.getItem("ooesSession")){window.location.href="/dashboard/auth.html";}})();</script>
+<head><script>(function(){if(!localStorage.getItem("ooesSession")){window.location.href="/dashboard/auth.html";}})();</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Excel System - OOES</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64,AAABAAEAEBAAAAEAIAAoBAAAAAQAAAAEAAAABAAgAQABAAAAAAAEAIAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA">
     <style>
@@ -253,7 +254,7 @@
         
         .spreadsheet-grid {
             display: grid;
-            grid-template-columns: repeat(10, 1fr);
+            grid-template-columns: repeat(11, minmax(80px, 1fr));
             width: 100%;
             overflow: auto;
             max-height: 400px;
@@ -330,7 +331,7 @@
             }
             
             .spreadsheet-grid {
-                grid-template-columns: repeat(5, 1fr);
+                grid-template-columns: repeat(11, minmax(80px, 1fr));
             }
         }
     </style>
@@ -469,7 +470,9 @@
                 <!-- File Info -->
                 <div class="file-info">
                     <div>
-                        <div class="file-name">Untitled Spreadsheet</div>
+                        <input id="spreadsheetName" class="file-name" aria-label="Spreadsheet name" value="Untitled Spreadsheet" style="border:0;background:transparent;width:100%;font-size:1rem;font-weight:600;outline:1px solid transparent;">
+                        <div style="margin-top:8px"><select id="savedSpreadsheets" aria-label="Open saved spreadsheet" style="max-width:100%;padding:6px;border:1px solid var(--color-border);border-radius:6px"><option value="">Open a saved workbook…</option></select></div>
+                        <div id="excelStatus" role="status" aria-live="polite" style="font-size:.8rem;color:var(--color-success);margin-top:6px">Connecting to OfficeFlow…</div>
                         <div style="color: var(--color-text-secondary); font-size: 0.875rem;">
                             Last saved: <span id="lastSaved">Never</span>
                         </div>
@@ -539,6 +542,8 @@
                         <div style="width: 80px;">F</div>
                         <div style="width: 80px;">G</div>
                         <div style="width: 80px;">H</div>
+                        <div style="width: 80px;">I</div>
+                        <div style="width: 80px;">J</div>
                     </div>
                     <div class="spreadsheet-grid" id="spreadsheetGrid">
                         <!-- Grid will be populated by JavaScript -->
@@ -549,28 +554,27 @@
     </div>
 
     <script>
-        // Authentication check
-        document.addEventListener('DOMContentLoaded', function() {
-            const token = localStorage.getItem('ooes_token');
-            
-            if (!token || !isValidToken(token)) {
-                window.location.href = '../auth.html';
-                return;
-            }
-            
-            // Initialize spreadsheet
-            initializeSpreadsheet();
-            setupNavigation();
-        });
-        
-        function isValidToken(token) {
+        let currentSpreadsheetId = null;
+        let spreadsheetDirty = false;
+        document.addEventListener('DOMContentLoaded', async function() {
             try {
-                const payload = JSON.parse(atob(token.split('.')[1]));
-                const now = Date.now() / 1000;
-                return payload.exp > now;
-            } catch (error) {
-                return false;
+                if (window.OOES_AUTH && OOES_AUTH.ready) await OOES_AUTH.ready;
+                if (!window.supabase || !window.OOES_AUTH || !OOES_AUTH.getSession()) {
+                    window.location.replace('/dashboard/auth.html');
+                    return;
+                }
+                initializeSpreadsheet();
+                setupNavigation();
+                OOES_AUTH.renderUserInfo();
+                await loadSpreadsheetList();
+                setExcelStatus('Connected. Changes are saved when you press Save.', 'success');
+            } catch (e) {
+                setExcelStatus('Could not initialize workbook: ' + (e.message || 'Unknown error'), 'error');
             }
+        });
+        function setExcelStatus(message, type) {
+            const el = document.getElementById('excelStatus');
+            if (el) { el.textContent = message; el.style.color = type === 'error' ? 'var(--color-error)' : type === 'warning' ? 'var(--color-warning)' : 'var(--color-success)'; }
         }
         
         let spreadsheetData = {};
@@ -582,38 +586,28 @@
         function initializeSpreadsheet() {
             const grid = document.getElementById('spreadsheetGrid');
             grid.innerHTML = '';
-            
-            // Create 100x20 grid (A1-T100)
             for (let row = 0; row < 100; row++) {
+                const rowHeader = document.createElement('div');
+                rowHeader.className = 'cell cell-header';
+                rowHeader.textContent = row + 1;
+                rowHeader.contentEditable = 'false';
+                grid.appendChild(rowHeader);
                 for (let col = 0; col < 10; col++) {
                     const cell = document.createElement('div');
                     cell.className = 'cell';
                     cell.contentEditable = true;
+                    cell.spellcheck = false;
                     cell.dataset.row = row;
                     cell.dataset.col = col;
                     cell.dataset.address = String.fromCharCode(65 + col) + (row + 1);
-                    
-                    // Add row header
-                    if (col === 0) {
-                        cell.className = 'cell cell-header';
-                        cell.textContent = row + 1;
-                        cell.contentEditable = false;
-                    }
-                    
-                    // Add column headers for first row
-                    if (row === 0 && col > 0) {
-                        cell.className = 'cell cell-header';
-                        cell.textContent = String.fromCharCode(65 + col);
-                        cell.contentEditable = false;
-                    }
-                    
                     cell.addEventListener('click', selectCell);
                     cell.addEventListener('input', updateCell);
                     cell.addEventListener('keydown', handleCellKeydown);
-                    
                     grid.appendChild(cell);
                 }
             }
+            refreshGrid();
+            if (!history.length) { history = [JSON.parse(JSON.stringify(spreadsheetData))]; historyIndex = 0; }
         }
         
         function selectCell(event) {
@@ -630,16 +624,11 @@
         function updateCell(event) {
             const address = event.target.dataset.address;
             const value = event.target.textContent;
-            
-            if (!spreadsheetData[address]) {
-                spreadsheetData[address] = '';
-            }
-            
-            // Only save if value changed
             if (spreadsheetData[address] !== value) {
                 spreadsheetData[address] = value;
+                spreadsheetDirty = true;
                 addToHistory();
-                updateLastSaved();
+                setExcelStatus('Unsaved changes', 'warning');
             }
         }
         
@@ -756,55 +745,88 @@
         }
         
         function refreshGrid() {
-            const grid = document.getElementById('spreadsheetGrid');
-            const cells = grid.querySelectorAll('.cell');
-            
-            cells.forEach(cell => {
-                if (cell.dataset.address && spreadsheetData[cell.dataset.address] !== undefined) {
-                    cell.textContent = spreadsheetData[cell.dataset.address];
-                }
-            });
+            const cells = document.querySelectorAll('#spreadsheetGrid .cell[data-address]');
+            cells.forEach(cell => { cell.textContent = spreadsheetData[cell.dataset.address] !== undefined ? spreadsheetData[cell.dataset.address] : ''; });
         }
         
         function newSpreadsheet() {
-            if (confirm('Create a new spreadsheet? Any unsaved changes will be lost.')) {
-                spreadsheetData = {};
-                history = [{}];
-                historyIndex = 0;
-                initializeSpreadsheet();
-                updateLastSaved();
-            }
+            if (spreadsheetDirty && !confirm('You have unsaved changes. Create a new workbook anyway?')) return;
+            spreadsheetData = {}; currentSpreadsheetId = null; spreadsheetDirty = false;
+            document.getElementById('spreadsheetName').value = 'Untitled Spreadsheet';
+            history = [{}]; historyIndex = 0;
+            refreshGrid(); document.getElementById('savedSpreadsheets').value = '';
+            document.getElementById('lastSaved').textContent = 'Not saved yet';
+            setExcelStatus('New workbook ready. Press Save to store it in OfficeFlow.', 'success');
         }
         
-        function saveSpreadsheet() {
-            const token = localStorage.getItem('ooes_token');
-            
-            fetch('/api/excel/save', {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    name: 'Untitled Spreadsheet',
-                    data: spreadsheetData
-                })
-            })
-            .then(response => {
-                if (response.ok) {
-                    updateLastSaved();
-                    showNotification('Spreadsheet saved successfully', 'success');
+        async function saveSpreadsheet() {
+            const session = OOES_AUTH && OOES_AUTH.getSession();
+            if (!session || !window.supabase) { setExcelStatus('Please sign in again before saving.', 'error'); return; }
+            const name = (document.getElementById('spreadsheetName').value || 'Untitled Spreadsheet').trim().slice(0,120);
+            const payload = { name, data: spreadsheetData, updated_at: new Date().toISOString() };
+            setExcelStatus('Saving workbook securely…', 'warning');
+            try {
+                let result;
+                if (currentSpreadsheetId) {
+                    result = await supabase.from('officeflow_spreadsheets').update(payload).eq('id', currentSpreadsheetId).select('id').single();
                 } else {
-                    showNotification('Failed to save spreadsheet', 'error');
+                    result = await supabase.from('officeflow_spreadsheets').insert({...payload, organization_id: session.organization_id, created_by: session.id}).select('id').single();
                 }
-            })
-            .catch(error => {
-                console.error('Save error:', error);
-                showNotification('Failed to save spreadsheet', 'error');
+                if (result.error) throw result.error;
+                currentSpreadsheetId = result.data.id;
+                spreadsheetDirty = false;
+                updateLastSaved();
+                await loadSpreadsheetList();
+                document.getElementById('savedSpreadsheets').value = currentSpreadsheetId;
+                setExcelStatus('Saved to OfficeFlow cloud for your organization.', 'success');
+                showNotification('Workbook saved to OfficeFlow', 'success');
+            } catch (error) {
+                console.error('Workbook save failed', error);
+                setExcelStatus('Save failed: ' + (error.message || 'Check your connection and organization access.'), 'error');
+                showNotification('Workbook was not saved. Please retry.', 'error');
+            }
+        }
+        async function loadSpreadsheetList() {
+            const select = document.getElementById('savedSpreadsheets');
+            if (!select || !window.supabase) return;
+            const { data, error } = await supabase.from('officeflow_spreadsheets').select('id,name,updated_at').order('updated_at', {ascending:false}).limit(100);
+            if (error) { setExcelStatus('Workbook list unavailable: ' + error.message, 'error'); return; }
+            select.innerHTML = '<option value="">Open a saved workbook…</option>';
+            (data || []).forEach(item => {
+                const opt = document.createElement('option'); opt.value = item.id; opt.textContent = item.name + ' — ' + new Date(item.updated_at).toLocaleString(); select.appendChild(opt);
             });
+            select.onchange = async function() {
+                if (!this.value) return;
+                const {data:book,error:loadError} = await supabase.from('officeflow_spreadsheets').select('id,name,data,updated_at').eq('id',this.value).single();
+                if (loadError) { setExcelStatus('Could not open workbook: ' + loadError.message, 'error'); return; }
+                currentSpreadsheetId = book.id;
+                spreadsheetData = book.data || {};
+                document.getElementById('spreadsheetName').value = book.name || 'Untitled Spreadsheet';
+                history = [JSON.parse(JSON.stringify(spreadsheetData))]; historyIndex = 0;
+                refreshGrid(); updateLastSaved(); spreadsheetDirty = false;
+                setExcelStatus('Opened cloud workbook.', 'success');
+            };
         }
         
         function exportSpreadsheet() {
+            if (window.XLSX) {
+                const rows = [];
+                for (let row = 0; row < 100; row++) {
+                    const values = [];
+                    for (let col = 0; col < 10; col++) {
+                        const address = String.fromCharCode(65 + col) + (row + 1);
+                        values.push(spreadsheetData[address] || '');
+                    }
+                    rows.push(values);
+                }
+                const ws = XLSX.utils.aoa_to_sheet(rows);
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+                const safeName = (document.getElementById('spreadsheetName').value || 'OfficeFlow-Workbook').replace(/[^a-z0-9_-]/gi,'_');
+                XLSX.writeFile(wb, safeName + '.xlsx');
+                showNotification('Workbook exported as Excel (.xlsx)', 'success');
+                return;
+            }
             // Create CSV content
             let csv = '';
             for (let row = 0; row < 100; row++) {
@@ -898,6 +920,39 @@
         // Initialize history
         history = [{}];
         historyIndex = 0;
+        
+        async function importSpreadsheetFile(file) {
+            if (!file) return;
+            try {
+                const buffer = await file.arrayBuffer();
+                let rows;
+                if (window.XLSX) {
+                    const workbook = XLSX.read(buffer, {type:'array'});
+                    rows = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], {header:1, raw:false});
+                } else throw new Error('Excel import library did not load. Check your internet connection and retry.');
+                spreadsheetData = {};
+                rows.slice(0,100).forEach((row,r) => (row || []).slice(0,10).forEach((value,col) => {
+                    if (value !== undefined && value !== null && String(value) !== '') spreadsheetData[String.fromCharCode(65+col)+(r+1)] = String(value);
+                }));
+                currentSpreadsheetId = null;
+                document.getElementById('spreadsheetName').value = file.name.replace(/\.(xlsx|xls|csv)$/i,'').slice(0,120);
+                history = [JSON.parse(JSON.stringify(spreadsheetData))]; historyIndex = 0;
+                refreshGrid(); spreadsheetDirty = true;
+                setExcelStatus('Imported ' + file.name + '. Save to store this workbook in OfficeFlow.', 'success');
+            } catch (error) { setExcelStatus('Import failed: ' + error.message, 'error'); }
+        }
+        function installImportControl() {
+            const area = document.querySelector('.content-area');
+            if (!area || document.getElementById('excelImportInput')) return;
+            const bar = document.createElement('div');
+            bar.style.cssText = 'display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:0 0 16px;padding:12px;background:#f7f6f2;border:1px solid #e4e1d8;border-radius:10px';
+            bar.innerHTML = '<label for="excelImportInput" class="action-button" style="cursor:pointer"><i class="fas fa-file-import"></i>Import Excel/CSV</label><input id="excelImportInput" type="file" accept=".xlsx,.xls,.csv" style="display:none"><span style="font-size:.85rem;color:#5B6472">Edit cells, import .xlsx/.xls/.csv, save to your organization, or export .xlsx</span>';
+            area.insertBefore(bar, area.firstChild);
+            document.getElementById('excelImportInput').addEventListener('change', e => { importSpreadsheetFile(e.target.files[0]); e.target.value = ''; });
+        }
+        window.addEventListener('beforeunload', function(e) { if (spreadsheetDirty) { e.preventDefault(); e.returnValue = ''; } });
+
+        document.addEventListener('DOMContentLoaded', installImportControl);
     </script>
 <script>function toggleMobileNav(){var s=document.getElementById("sidebarNav");var o=document.getElementById("mobileOverlay");if(s){s.classList.toggle("active");}if(!o){var ov=document.createElement("div");ov.id="mobileOverlay";ov.className="mobile-overlay";ov.onclick=toggleMobileNav;document.body.appendChild(ov);}else{o.classList.toggle("active");}}document.addEventListener("DOMContentLoaded",function(){var btn=document.getElementById("mobileMenuBtn");if(btn){btn.style.display="flex";btn.onclick=toggleMobileNav;}});</script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="/dashboard/js/config.js"></script><script src="/dashboard/js/db.js"></script><script src="/dashboard/js/ooes-auth.js"></script>
 <script src="/dashboard/js/ooes-core.js"></script>
