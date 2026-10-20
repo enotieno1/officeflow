@@ -104,15 +104,29 @@ var OOES_AUTH = {
   },
 
   async requireAuth() {
-    var { data } = await supabase.auth.getSession();
-    if (!data.session) {
+    try {
+      var { data, error } = await supabase.auth.getSession();
+      if (error) throw error;
+      if (!data || !data.session) {
+        this._session = null;
+        localStorage.removeItem('ooesSession');
+        window.location.replace('/dashboard/auth.html');
+        return false;
+      }
+      await this._loadProfile(data.session.user);
+      localStorage.setItem('ooesSession', '1'); // UI hint only; Supabase/RLS remain authoritative.
+      return true;
+    } catch (error) {
+      // Always let the page's ready promise resolve. A transient profile/network
+      // error must not leave every protected page stuck on "Loading…".
+      this._session = null;
       localStorage.removeItem('ooesSession');
-      window.location.replace('/dashboard/auth.html');
+      console.error('OfficeFlow session verification failed', error);
+      if (!window.location.pathname.endsWith('/auth.html')) {
+        window.location.replace('/dashboard/auth.html?reason=session');
+      }
       return false;
     }
-    await this._loadProfile(data.session.user);
-    localStorage.setItem('ooesSession', '1'); // keep the pre-render guard flag in sync
-    return true;
   },
 
   renderUserInfo: function () {
@@ -129,9 +143,17 @@ OOES_AUTH.ready = new Promise(function (resolve) { OOES_AUTH._readyResolve = res
 (function () {
   if (!window.location.pathname.includes('auth.html')) {
     document.addEventListener('DOMContentLoaded', async function () {
-      var ok = await OOES_AUTH.requireAuth();
-      if (ok) OOES_AUTH.renderUserInfo();
-      OOES_AUTH._readyResolve(ok);
+      var ok = false;
+      try {
+        ok = await OOES_AUTH.requireAuth();
+        if (ok) OOES_AUTH.renderUserInfo();
+      } catch (error) {
+        // Defensive final guard: never leave OOES_AUTH.ready unresolved.
+        console.error('OfficeFlow auth initialization failed', error);
+        OOES_AUTH._session = null;
+      } finally {
+        OOES_AUTH._readyResolve(ok);
+      }
     });
   } else {
     OOES_AUTH._readyResolve(false);
