@@ -173,4 +173,4 @@ Deno.serve(async (req: Request) => {
   return reply(200, { received: true, status: syncResult?.status ?? status.toLowerCase(), duplicate: syncResult?.duplicate === true });
 });
 
-const allowedSubscriptionStates = ["PENDING", "ACTIVE", "CANCELED", "COMPLETE", "FAILED"];
+const allowedSubscriptionStates = ["PENDING", "ACTIVE", "CANCELED", "CANCELLED", "COMPLETE", "FAILED"];
