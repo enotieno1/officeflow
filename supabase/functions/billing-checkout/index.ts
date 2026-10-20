@@ -128,6 +128,12 @@ Deno.serve(async (req: Request) => {
         checkout_url: existing.provider_setup_url, reference: existing.id
       });
     }
+    if (existing?.status === "pending" && existing.provider_subscription_id && !existing.provider_setup_url) {
+      return reply(req, 409, {
+        error: "The provider subscription exists but its secure setup URL is unavailable. Do not create another subscription; contact support.",
+        reference: existing.id
+      });
+    }
     if (existing?.status === "pending" && !existing.provider_subscription_id) {
       const safeRetry = typeof existing.provider_subscription_failure_reason === "string" &&
         (existing.provider_subscription_failure_reason.includes("no card subscription was created") ||
@@ -152,7 +158,7 @@ Deno.serve(async (req: Request) => {
       return reply(req, 502, { error: "Card customer setup failed. No successful payment was recorded; contact support before retrying.", reference: subId });
     }
     const customerData = customerResult.data;
-    const customerId = String(customerData.customer_id ?? (customerData.customer as Record<string, unknown> | undefined)?.customer_id ?? customerData.id ?? "");
+    const customerId = String(customerData.customer_id ?? (customerData.customer as Record<string, unknown> | undefined)?.customer_id ?? (customerData.customer as Record<string, unknown> | undefined)?.id ?? customerData.id ?? "");
     if (!customerId) return reply(req, 502, { error: "IntaSend returned no customer reference. Contact support before retrying.", reference: subId });
 
     const intervalUnit = plan.interval_unit === "year" ? "Y" : "M";
@@ -171,7 +177,7 @@ Deno.serve(async (req: Request) => {
       }).eq("id", subId).is("provider_subscription_id", null);
       return reply(req, 502, { error: "Card plan setup failed. No card subscription was created; contact support before retrying.", reference: subId });
     }
-    const providerPlanId = String(providerPlanResult.data.plan_id ?? (providerPlanResult.data.plan as Record<string, unknown> | undefined)?.plan_id ?? providerPlanResult.data.id ?? "");
+    const providerPlanId = String(providerPlanResult.data.plan_id ?? (providerPlanResult.data.plan as Record<string, unknown> | undefined)?.plan_id ?? (providerPlanResult.data.plan as Record<string, unknown> | undefined)?.id ?? providerPlanResult.data.id ?? "");
     if (!providerPlanId) return reply(req, 502, { error: "IntaSend returned no recurring plan reference. Contact support before retrying.", reference: subId });
 
     const { error: localPlanErr } = await db.from("billing_subscriptions").update({
