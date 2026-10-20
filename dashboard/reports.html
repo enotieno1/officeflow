@@ -1,111 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>OfficeFlow - Reports</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="/dashboard/js/config.js"></script>
-<script>var supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);</script>
-<script src="/dashboard/js/ooes-auth.js"></script>
-<style>.gradient-bg{background:linear-gradient(135deg,#16213E 0%,#1F2C4F 100%);}.card{background:white;border-radius:12px;padding:24px;box-shadow:0 1px 3px rgba(0,0,0,0.1);margin-bottom:24px;}</style>
-<link rel="stylesheet" href="css/executive-theme.css">
-</head>
-<body class="bg-gray-50">
-<div id="sidebar" class="fixed inset-y-0 left-0 w-56 text-white z-50 flex flex-col overflow-y-auto" style="background:linear-gradient(135deg,#16213E 0%,#1F2C4F 100%);transition:transform 0.3s ease">
-<div class="p-4 border-b border-white border-opacity-20"><a href="/dashboard/index.html" style="color:white;text-decoration:none;font-size:18px;font-weight:bold">OfficeFlow</a></div>
-<nav class="flex-1 p-2 space-y-1 text-sm">
-<a href="/dashboard/index.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-home" style="width:16px;margin-right:8px"></i>Dashboard</a>
-<a href="/dashboard/hr-system.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-users" style="width:16px;margin-right:8px"></i>HR</a>
-<a href="/dashboard/financial-management.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-chart-line" style="width:16px;margin-right:8px"></i>Finance</a>
-<a href="/dashboard/tasks-management.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-tasks" style="width:16px;margin-right:8px"></i>Tasks</a>
-<a href="/dashboard/document-management.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-file-alt" style="width:16px;margin-right:8px"></i>Documents</a>
-<a href="/dashboard/email-system.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-envelope" style="width:16px;margin-right:8px"></i>Email</a>
-<a href="/dashboard/calendar-system.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-calendar" style="width:16px;margin-right:8px"></i>Calendar</a>
-<a href="/dashboard/ai-features.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-robot" style="width:16px;margin-right:8px"></i>AI Features</a>
-<a href="/dashboard/reports.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-chart-bar" style="width:16px;margin-right:8px"></i>Reports</a>
-<a href="/dashboard/security-center.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-shield-alt" style="width:16px;margin-right:8px"></i>Security</a>
-<div style="border-top:1px solid rgba(255,255,255,0.2);margin:8px 0"></div>
-<p style="font-size:10px;color:rgba(165,180,252,0.7);padding:4px 12px;text-transform:uppercase;letter-spacing:0.05em">Departments</p>
-<a href="/dashboard/communication-department.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-comments" style="width:16px;margin-right:8px"></i>Communication</a>
-<a href="/dashboard/operations-department.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-cog" style="width:16px;margin-right:8px"></i>Operations</a>
-<a href="/dashboard/sales-department.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-handshake" style="width:16px;margin-right:8px"></i>Sales</a>
-<a href="/dashboard/accounting-tools.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-calculator" style="width:16px;margin-right:8px"></i>Accounting</a>
-<a href="/dashboard/automation.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-magic" style="width:16px;margin-right:8px"></i>Automation</a>
-<div style="border-top:1px solid rgba(255,255,255,0.2);margin:8px 0"></div>
-<p style="font-size:10px;color:rgba(165,180,252,0.7);padding:4px 12px;text-transform:uppercase;letter-spacing:0.05em">Tools</p>
-<a href="/dashboard/excel-system.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-file-excel" style="width:16px;margin-right:8px"></i>Excel</a>
-<a href="/dashboard/google-drive.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-cloud" style="width:16px;margin-right:8px"></i>Google Drive</a>
-<a href="/dashboard/gmail-system.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-envelope-open" style="width:16px;margin-right:8px"></i>Gmail</a>
-<a href="/dashboard/trello-management.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fab fa-trello" style="width:16px;margin-right:8px"></i>Trello</a>
-<a href="/dashboard/data-management.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-database" style="width:16px;margin-right:8px"></i>Data</a>
-<a href="/dashboard/it-compliance.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-shield-alt" style="width:16px;margin-right:8px"></i>IT Compliance</a>
-<a href="/dashboard/pricing.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-tags" style="width:16px;margin-right:8px"></i>Pricing</a>
-<a href="/dashboard/contact.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-phone" style="width:16px;margin-right:8px"></i>Contact</a>
-</nav>
-<div class="p-3 border-t border-white border-opacity-20" style="font-size:12px">
-<p data-user-name style="font-weight:600;color:white">User</p>
-<p data-user-role style="color:rgba(165,180,252,0.8)"></p>
-<button onclick="OOES_AUTH.logout()" style="color:rgba(252,165,165,1);background:none;border:none;cursor:pointer;margin-top:4px"><i class="fas fa-sign-out-alt"></i> Logout</button>
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>OfficeFlow — Workflow Reports</title>
+<script src="https://cdn.tailwindcss.com"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="/dashboard/js/config.js"></script><script>var supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);</script><script src="/dashboard/js/ooes-auth.js"></script>
+<link rel="stylesheet" href="/dashboard/css/executive-theme.css"><link rel="stylesheet" href="/dashboard/css/mobile.css">
+<style>body{background:#f5f6f8;color:#16213e}.shell{max-width:1120px;margin:auto}.panel{background:#fff;border:1px solid #e5e7eb;border-radius:14px;box-shadow:0 4px 18px rgba(22,33,62,.04)}.brass{color:#a6823d}.metric{font-size:30px;font-weight:750;letter-spacing:-.03em}.muted{color:#667085}</style></head>
+<body class="min-h-screen">
+<header class="bg-[#16213e] text-white"><div class="shell px-5 py-5 flex flex-wrap justify-between items-center gap-4"><a href="/dashboard/index.html" class="text-xl font-bold text-white no-underline">OfficeFlow</a><nav class="flex flex-wrap gap-4 text-sm"><a href="/dashboard/index.html" class="text-white">Dashboard</a><a href="/dashboard/workflow.html" class="text-white">Work Center</a><a href="/dashboard/control-tower.html" class="text-white">Control Tower</a><a href="/dashboard/billing.html" class="text-white">Billing</a></nav></div></header>
+<main class="shell px-5 py-8">
+<div class="flex flex-wrap justify-between items-end gap-4 mb-7"><div><p class="text-xs uppercase tracking-widest brass font-bold">Operations reporting</p><h1 class="text-3xl font-bold mt-2">Workflow Reports</h1><p class="muted mt-2">Saved request, approval and SLA activity for your organization.</p></div><div class="flex gap-3"><button id="export" class="px-4 py-2 border border-slate-300 rounded-lg bg-white font-semibold text-sm" disabled>Export CSV</button><button id="refresh" class="px-4 py-2 rounded-lg bg-[#16213e] text-white font-semibold text-sm">Refresh</button></div></div>
+<div class="panel p-4 mb-6 text-sm muted">This report covers workflow operations only. It is not a general ledger, financial statement, payroll report or fraud-detection report. No sample transactions are substituted for missing data.</div>
+<div id="message" class="hidden panel p-4 mb-6 text-sm" role="status" aria-live="polite"></div>
+<div id="metrics" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+<div class="panel p-5"><p class="muted text-sm">Total requests</p><p id="total" class="metric mt-2">—</p></div>
+<div class="panel p-5"><p class="muted text-sm">Pending requests</p><p id="pending" class="metric mt-2">—</p></div>
+<div class="panel p-5"><p class="muted text-sm">Completed requests</p><p id="completed" class="metric mt-2">—</p></div>
+<div class="panel p-5"><p class="muted text-sm">Rejected requests</p><p id="rejected" class="metric mt-2">—</p></div>
+<div class="panel p-5"><p class="muted text-sm">Overdue approval steps</p><p id="overdue" class="metric mt-2">—</p></div>
+<div class="panel p-5"><p class="muted text-sm">Escalated approval steps</p><p id="escalated" class="metric mt-2">—</p></div>
 </div>
-</div>
-<div style="margin-left:224px">
-
-<header class="gradient-bg text-white py-6 px-8 flex items-center justify-between"><div class="flex items-center space-x-4"><a href="index.html" class="text-white"><i class="fas fa-arrow-left mr-2"></i>Dashboard</a><h1 class="text-2xl font-bold ml-4"><i class="fas fa-chart-bar mr-2"></i>Reports</h1></div><button onclick="loadReports()" class="bg-white text-[#A6823D] px-4 py-2 rounded-lg font-semibold">Refresh</button></header>
-<main class="max-w-7xl mx-auto px-6 py-8">
-<div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
-<div class="card text-center"><p class="text-gray-500 text-sm mb-1">Total Revenue</p><p class="text-3xl font-bold text-green-600" id="r-revenue">--</p></div>
-<div class="card text-center"><p class="text-gray-500 text-sm mb-1">Total Expenses</p><p class="text-3xl font-bold text-red-600" id="r-expenses">--</p></div>
-<div class="card text-center"><p class="text-gray-500 text-sm mb-1">Net Profit</p><p class="text-3xl font-bold text-[#A6823D]" id="r-profit">--</p></div>
-<div class="card text-center"><p class="text-gray-500 text-sm mb-1">Total Employees</p><p class="text-3xl font-bold text-[#A6823D]" id="r-employees">--</p></div>
-</div>
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6"><div class="card"><h3 class="text-lg font-semibold text-gray-800 mb-4">Revenue vs Expenses</h3><canvas id="revenueChart"></canvas></div><div class="card"><h3 class="text-lg font-semibold text-gray-800 mb-4">Task Status</h3><canvas id="taskChart"></canvas></div></div>
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="card"><h3 class="text-lg font-semibold text-gray-800 mb-4">Employees by Department</h3><canvas id="deptChart"></canvas></div><div class="card"><h3 class="text-lg font-semibold text-gray-800 mb-4">Transaction Trend</h3><canvas id="txnChart"></canvas></div></div>
+<p id="updated" class="muted text-xs mt-5">Not yet refreshed.</p>
 </main>
-<script src="/dashboard/js/config.js"></script>
-<script src="/dashboard/js/db.js"></script>
-<script src="/dashboard/js/ooes-core.js"></script>
 <script>
-var ch={};
-async function loadReports(){
-try{
-var t=await getTransactions();
-var inc=t.filter(function(x){return parseFloat(x.amount)>0;}).reduce(function(s,x){return s+parseFloat(x.amount);},0);
-var exp=t.filter(function(x){return parseFloat(x.amount)<0;}).reduce(function(s,x){return s+Math.abs(parseFloat(x.amount));},0);
-document.getElementById("r-revenue").textContent="KES "+inc.toLocaleString();
-document.getElementById("r-expenses").textContent="KES "+exp.toLocaleString();
-document.getElementById("r-profit").textContent="KES "+(inc-exp).toLocaleString();
-var lbs=t.slice(0,8).map(function(x){return x.description||"Txn";});
-var ams=t.slice(0,8).map(function(x){return Math.abs(parseFloat(x.amount)||0);});
-var cls=t.slice(0,8).map(function(x){return parseFloat(x.amount)>=0?"rgba(16,185,129,0.7)":"rgba(239,68,68,0.7)";});
-if(ch.r)ch.r.destroy();
-ch.r=new Chart(document.getElementById("revenueChart"),{type:"bar",data:{labels:lbs,datasets:[{label:"KES",data:ams,backgroundColor:cls,borderRadius:6}]},options:{responsive:true,plugins:{legend:{display:false}}}});
-var tl=t.slice(0,6).map(function(x){return x.date||"Date";});
-var td=t.slice(0,6).map(function(x){return parseFloat(x.amount)||0;});
-if(ch.tx)ch.tx.destroy();
-ch.tx=new Chart(document.getElementById("txnChart"),{type:"line",data:{labels:tl,datasets:[{label:"KES",data:td,borderColor:"#16213E",backgroundColor:"rgba(102,126,234,0.1)",fill:true,tension:0.4}]},options:{responsive:true}});
-}catch(e){}
-try{
-var k=await getTasks();
-var p=k.filter(function(x){return x.status=="pending";}).length;
-var i=k.filter(function(x){return x.status=="in-progress";}).length;
-var d=k.filter(function(x){return x.status=="completed";}).length;
-if(ch.k)ch.k.destroy();
-ch.k=new Chart(document.getElementById("taskChart"),{type:"doughnut",data:{labels:["Pending","In Progress","Completed"],datasets:[{data:[p,i,d],backgroundColor:["#F59E0B","#3B82F6","#10B981"],borderWidth:2}]},options:{responsive:true}});
-}catch(e){}
-try{
-var e=await getEmployees();
-document.getElementById("r-employees").textContent=e.length;
-var depts={};
-e.forEach(function(x){depts[x.department||"Other"]=(depts[x.department||"Other"]||0)+1;});
-if(ch.d)ch.d.destroy();
-ch.d=new Chart(document.getElementById("deptChart"),{type:"bar",data:{labels:Object.keys(depts),datasets:[{label:"Staff",data:Object.values(depts),backgroundColor:"rgba(99,102,241,0.7)",borderRadius:6}]},options:{responsive:true,plugins:{legend:{display:false}}}});
-}catch(e){}
-}
-document.addEventListener("DOMContentLoaded",loadReports);
-</script>
-</div>
-</body>
-</html>
+(function(){
+ const ids=['total','pending','completed','rejected','overdue','escalated'];
+ let snapshot=null;
+ function message(text,error){const el=document.getElementById('message');el.textContent=text;el.className='panel p-4 mb-6 text-sm '+(error?'text-red-800 border-red-200 bg-red-50':'text-slate-700');}
+ async function load(){
+  const refresh=document.getElementById('refresh');refresh.disabled=true;refresh.textContent='Loading…';
+  try{
+   await OOES_AUTH.ready;
+   const account=OOES_AUTH.getSession();
+   if(!account){return;}
+   if(!['administrator','super_admin'].includes(account.role)){message('Workflow reports are restricted to organization administrators. No data was loaded.',true);return;}
+   const {data,error}=await supabase.rpc('fn_control_tower',{p_unit_id:null});
+   if(error)throw error;
+   const x=(data||[])[0]||{};
+   snapshot={total_requests:Number(x.total_requests||0),pending_requests:Number(x.pending_requests||0),completed_requests:Number(x.completed_requests||0),rejected_requests:Number(x.rejected_requests||0),overdue_steps:Number(x.overdue_steps||0),escalated_steps:Number(x.escalated_steps||0)};
+   const values=[snapshot.total_requests,snapshot.pending_requests,snapshot.completed_requests,snapshot.rejected_requests,snapshot.overdue_steps,snapshot.escalated_steps];
+   ids.forEach((id,i)=>document.getElementById(id).textContent=String(values[i]));
+   document.getElementById('updated').textContent='Last refreshed '+new Date().toLocaleString('en-KE')+'.';
+   document.getElementById('export').disabled=false;
+   message('Report loaded from the workflow database.',false);
+  }catch(e){message('Could not load workflow reports. Check your administrator access or retry. No sample data is displayed.',true);}
+  finally{refresh.disabled=false;refresh.textContent='Refresh';}
+ }
+ document.getElementById('refresh').addEventListener('click',load);
+ document.getElementById('export').addEventListener('click',function(){
+  if(!snapshot)return;
+  const rows=[['Metric','Value'],['Total requests',snapshot.total_requests],['Pending requests',snapshot.pending_requests],['Completed requests',snapshot.completed_requests],['Rejected requests',snapshot.rejected_requests],['Overdue approval steps',snapshot.overdue_steps],['Escalated approval steps',snapshot.escalated_steps]];
+  const csv=rows.map(row=>row.map(value=>'"'+String(value).replace(/"/g,'""')+'"').join(',')).join('\r\n');
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download='officeflow-workflow-report-'+new Date().toISOString().slice(0,10)+'.csv';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
+ });
+ document.addEventListener('DOMContentLoaded',load);
+})();
+</script></body></html>

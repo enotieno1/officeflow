@@ -70,7 +70,20 @@
       }
       showMessage('Workspace created. Opening OfficeFlow…', false);
       await OOES_AUTH._loadProfile((await supabase.auth.getUser()).data.user);
-      setTimeout(function() { window.location.replace('/dashboard/index.html'); }, 600);
+      var nextTarget = new URLSearchParams(window.location.search).get('next');
+      var destination = '/dashboard/index.html';
+      if (nextTarget && nextTarget.charAt(0) === '/') {
+        try {
+          var target = new URL(nextTarget, window.location.origin);
+          if (target.origin === window.location.origin &&
+              target.pathname.startsWith('/dashboard/') &&
+              target.pathname !== '/dashboard/auth.html' &&
+              target.pathname !== '/dashboard/organization-setup.html') {
+            destination = target.pathname + target.search + target.hash;
+          }
+        } catch (ignore) {}
+      }
+      setTimeout(function() { window.location.replace(destination); }, 600);
     } catch (error) {
       showMessage('OfficeFlow could not complete workspace setup. Check your connection and try again.', true);
     } finally {

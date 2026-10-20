@@ -1,795 +1,131 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head><script>(function(){if(!localStorage.getItem("ooesSession")){window.location.href="/dashboard/auth.html";}})();</script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task Management | OfficeFlow Dashboard</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --primary-white: #FFFFFF;
-            --primary-light-gray: #F7F6F2;
-            --secondary-light-gray: #E4E1D8;
-            --text-primary: #16213E;
-            --text-secondary: #5B6472;
-            --accent-blue: #A6823D;
-            --accent-green: #2F6E4E;
-            --accent-red: #A13D3D;
-            --accent-yellow: #A97C1F;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--primary-light-gray);
-            margin: 0;
-            padding: 0;
-        }
-
-        .page-header {
-            background: var(--primary-white);
-            border-bottom: 1px solid var(--secondary-light-gray);
-            padding: 1rem 0;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .breadcrumb {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-            font-size: 0.875rem;
-        }
-
-        .breadcrumb-item {
-            color: var(--text-secondary);
-            text-decoration: none;
-            transition: color 0.2s ease;
-        }
-
-        .breadcrumb-item:hover {
-            color: var(--accent-blue);
-        }
-
-        .breadcrumb-current {
-            color: var(--text-primary);
-            font-weight: 600;
-        }
-
-        .task-card {
-            background: var(--primary-white);
-            border: 1px solid var(--secondary-light-gray);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 1rem;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .task-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-        }
-
-        .task-priority {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.25rem;
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-
-        .priority-high {
-            background: rgba(239, 68, 68, 0.1);
-            color: var(--accent-red);
-        }
-
-        .priority-medium {
-            background: rgba(245, 158, 11, 0.1);
-            color: var(--accent-yellow);
-        }
-
-        .priority-low {
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--accent-green);
-        }
-
-        .task-status {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.25rem;
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-
-        .status-pending {
-            background: rgba(107, 114, 128, 0.1);
-            color: #6B7280;
-        }
-
-        .status-in-progress {
-            background: rgba(59, 130, 246, 0.1);
-            color: var(--accent-blue);
-        }
-
-        .status-completed {
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--accent-green);
-        }
-
-        .action-btn {
-            background: var(--accent-blue);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 0.5rem 1rem;
-            font-size: 0.875rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .action-btn:hover {
-            background: #2563EB;
-            transform: translateY(-1px);
-        }
-
-        .action-btn-secondary {
-            background: var(--primary-white);
-            color: var(--text-secondary);
-            border: 1px solid var(--secondary-light-gray);
-        }
-
-        .action-btn-secondary:hover {
-            background: var(--primary-light-gray);
-            border-color: var(--accent-blue);
-            color: var(--accent-blue);
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .stat-card {
-            background: var(--primary-white);
-            border: 1px solid var(--secondary-light-gray);
-            border-radius: 12px;
-            padding: 1.5rem;
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-label {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-            font-weight: 500;
-        }
-
-        .tab-nav {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 2rem;
-            border-bottom: 1px solid var(--secondary-light-gray);
-        }
-
-        .tab-btn {
-            background: none;
-            border: none;
-            padding: 1rem 1.5rem;
-            font-size: 0.875rem;
-            font-weight: 500;
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: all 0.2s ease;
-            border-bottom: 2px solid transparent;
-        }
-
-        .tab-btn:hover {
-            color: var(--accent-blue);
-        }
-
-        .tab-btn.active {
-            color: var(--accent-blue);
-            border-bottom-color: var(--accent-blue);
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: var(--primary-white);
-            border-radius: 12px;
-            padding: 2rem;
-            width: 90%;
-            max-width: 500px;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .form-group {
-            margin-bottom: 1rem;
-        }
-
-        .form-label {
-            display: block;
-            font-size: 0.875rem;
-            font-weight: 500;
-            color: var(--text-primary);
-            margin-bottom: 0.5rem;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid var(--secondary-light-gray);
-            border-radius: 8px;
-            font-size: 0.875rem;
-            transition: all 0.2s ease;
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: var(--accent-blue);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-
-        .form-select {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid var(--secondary-light-gray);
-            border-radius: 8px;
-            font-size: 0.875rem;
-            background: var(--primary-white);
-            cursor: pointer;
-        }
-
-        .form-textarea {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid var(--secondary-light-gray);
-            border-radius: 8px;
-            font-size: 0.875rem;
-            resize: vertical;
-            min-height: 100px;
-        }
-    </style>
-<link rel="stylesheet" href="css/mobile.css">
-<link rel="stylesheet" href="css/executive-theme.css"></head>
-<body>
-<div id="sidebar" class="fixed inset-y-0 left-0 w-56 text-white z-50 flex flex-col overflow-y-auto" style="background:linear-gradient(135deg,#16213E 0%,#1F2C4F 100%);transition:transform 0.3s ease">
-<div class="p-4 border-b border-white border-opacity-20"><a href="/dashboard/index.html" style="color:white;text-decoration:none;font-size:18px;font-weight:bold">OfficeFlow</a></div>
-<nav class="flex-1 p-2 space-y-1 text-sm">
-<a href="/dashboard/index.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-home" style="width:16px;margin-right:8px"></i>Dashboard</a>
-<a href="/dashboard/hr-system.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-users" style="width:16px;margin-right:8px"></i>HR</a>
-<a href="/dashboard/financial-management.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-chart-line" style="width:16px;margin-right:8px"></i>Finance</a>
-<a href="/dashboard/tasks-management.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-tasks" style="width:16px;margin-right:8px"></i>Tasks</a>
-<a href="/dashboard/document-management.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-file-alt" style="width:16px;margin-right:8px"></i>Documents</a>
-<a href="/dashboard/email-system.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-envelope" style="width:16px;margin-right:8px"></i>Email</a>
-<a href="/dashboard/calendar-system.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-calendar" style="width:16px;margin-right:8px"></i>Calendar</a>
-<a href="/dashboard/ai-features.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-robot" style="width:16px;margin-right:8px"></i>AI Features</a>
-<a href="/dashboard/reports.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-chart-bar" style="width:16px;margin-right:8px"></i>Reports</a>
-<a href="/dashboard/security-center.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-shield-alt" style="width:16px;margin-right:8px"></i>Security</a>
-<div style="border-top:1px solid rgba(255,255,255,0.2);margin:8px 0"></div>
-<p style="font-size:10px;color:rgba(165,180,252,0.7);padding:4px 12px;text-transform:uppercase;letter-spacing:0.05em">Departments</p>
-<a href="/dashboard/communication-department.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-comments" style="width:16px;margin-right:8px"></i>Communication</a>
-<a href="/dashboard/operations-department.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-cog" style="width:16px;margin-right:8px"></i>Operations</a>
-<a href="/dashboard/sales-department.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-handshake" style="width:16px;margin-right:8px"></i>Sales</a>
-<a href="/dashboard/accounting-tools.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-calculator" style="width:16px;margin-right:8px"></i>Accounting</a>
-<a href="/dashboard/automation.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-magic" style="width:16px;margin-right:8px"></i>Automation</a>
-<div style="border-top:1px solid rgba(255,255,255,0.2);margin:8px 0"></div>
-<p style="font-size:10px;color:rgba(165,180,252,0.7);padding:4px 12px;text-transform:uppercase;letter-spacing:0.05em">Tools</p>
-<a href="/dashboard/excel-system.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-file-excel" style="width:16px;margin-right:8px"></i>Excel</a>
-<a href="/dashboard/google-drive.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-cloud" style="width:16px;margin-right:8px"></i>Google Drive</a>
-<a href="/dashboard/gmail-system.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-envelope-open" style="width:16px;margin-right:8px"></i>Gmail</a>
-<a href="/dashboard/trello-management.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fab fa-trello" style="width:16px;margin-right:8px"></i>Trello</a>
-<a href="/dashboard/data-management.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-database" style="width:16px;margin-right:8px"></i>Data</a>
-<a href="/dashboard/it-compliance.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-shield-alt" style="width:16px;margin-right:8px"></i>IT Compliance</a>
-<a href="/dashboard/pricing.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-tags" style="width:16px;margin-right:8px"></i>Pricing</a>
-<a href="/dashboard/contact.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-phone" style="width:16px;margin-right:8px"></i>Contact</a>
-</nav>
-<div class="p-3 border-t border-white border-opacity-20" style="font-size:12px">
-<p data-user-name style="font-weight:600;color:white">User</p>
-<p data-user-role style="color:rgba(165,180,252,0.8)"></p>
-<button onclick="OOES_AUTH.logout()" style="color:rgba(252,165,165,1);background:none;border:none;cursor:pointer;margin-top:4px"><i class="fas fa-sign-out-alt"></i> Logout</button>
-</div>
-</div>
-<div style="margin-left:224px">
-
-    <!-- Page Header -->
-    <header class="page-header">
-        <div class="container mx-auto px-4">
-            <!-- Breadcrumb -->
-            <nav class="breadcrumb">
-                <a href="index.html" class="breadcrumb-item">
-                    <i class="fas fa-home"></i>
-                    Dashboard
-                </a>
-                <span class="text-gray-400">/</span>
-                <a href="index.html" class="breadcrumb-item">Widgets</a>
-                <span class="text-gray-400">/</span>
-                <span class="breadcrumb-current">Task Management</span>
-            </nav>
-
-            <!-- Header Content -->
-            <div class="flex items-center justify-between">
-                <div>
-                    <h1 class="text-2xl font-bold text-gray-900 mb-2">
-                        <i class="fas fa-tasks mr-2"></i>
-                        Task Management
-                    </h1>
-                    <p class="text-gray-600">Manage and track all your tasks in one place</p>
-                </div>
-                
-                <div class="flex items-center gap-3">
-                    <button class="action-btn action-btn-secondary" onclick="exportTasks()">
-                        <i class="fas fa-download"></i>
-                        Export
-                    </button>
-                    <button class="action-btn" onclick="openTaskModal()">
-                        <i class="fas fa-plus"></i>
-                        New Task
-                    </button>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="container mx-auto px-4 py-6">
-        <!-- Statistics -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-value">23</div>
-                <div class="stat-label">Pending Tasks</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value">15</div>
-                <div class="stat-label">In Progress</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value">47</div>
-                <div class="stat-label">Completed Today</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value">3</div>
-                <div class="stat-label">Overdue</div>
-            </div>
-        </div>
-
-        <!-- Tabs -->
-        <div class="tab-nav">
-            <button class="tab-btn active" onclick="switchTab('all')">All Tasks</button>
-            <button class="tab-btn" onclick="switchTab('pending')">Pending</button>
-            <button class="tab-btn" onclick="switchTab('in-progress')">In Progress</button>
-            <button class="tab-btn" onclick="switchTab('completed')">Completed</button>
-            <button class="tab-btn" onclick="switchTab('overdue')">Overdue</button>
-        </div>
-
-        <!-- Search and Filter -->
-        <div class="flex items-center gap-4 mb-6">
-            <div class="flex-1">
-                <input type="text" placeholder="Search tasks..." class="form-input" id="taskSearch">
-            </div>
-            <select class="form-select" style="width: 200px;">
-                <option>All Priorities</option>
-                <option>High Priority</option>
-                <option>Medium Priority</option>
-                <option>Low Priority</option>
-            </select>
-            <select class="form-select" style="width: 200px;">
-                <option>All Assignees</option>
-                <option>Me</option>
-                <option>Unassigned</option>
-                <option>Team A</option>
-                <option>Team B</option>
-            </select>
-        </div>
-
-        <!-- Tasks List -->
-        <div id="tasksList">
-            <!-- High Priority Task -->
-            <div class="task-card" onclick="openTaskDetail(1)">
-                <div class="flex items-start justify-between">
-                    <div class="flex-1">
-                        <div class="flex items-center gap-3 mb-2">
-                            <h3 class="text-lg font-semibold text-gray-900">Q4 Financial Report Preparation</h3>
-                            <span class="task-priority priority-high">
-                                <i class="fas fa-exclamation-triangle"></i>
-                                High Priority
-                            </span>
-                            <span class="task-status status-in-progress">
-                                <i class="fas fa-clock"></i>
-                                In Progress
-                            </span>
-                        </div>
-                        <p class="text-gray-600 mb-3">Prepare comprehensive financial report for Q4 2024 including revenue analysis, expense breakdown, and profit margins.</p>
-                        <div class="flex items-center gap-4 text-sm text-gray-500">
-                            <span><i class="fas fa-calendar"></i> Due: Dec 15, 2024</span>
-                            <span><i class="fas fa-user"></i> Assigned to: John Doe</span>
-                            <span><i class="fas fa-folder"></i> Finance</span>
-                            <span><i class="fas fa-comments"></i> 3 comments</span>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <button class="action-btn action-btn-secondary" onclick="event.stopPropagation(); editTask(1)">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="action-btn action-btn-secondary" onclick="event.stopPropagation(); deleteTask(1)">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Medium Priority Task -->
-            <div class="task-card" onclick="openTaskDetail(2)">
-                <div class="flex items-start justify-between">
-                    <div class="flex-1">
-                        <div class="flex items-center gap-3 mb-2">
-                            <h3 class="text-lg font-semibold text-gray-900">Employee Performance Reviews</h3>
-                            <span class="task-priority priority-medium">
-                                <i class="fas fa-minus-circle"></i>
-                                Medium Priority
-                            </span>
-                            <span class="task-status status-pending">
-                                <i class="fas fa-pause-circle"></i>
-                                Pending
-                            </span>
-                        </div>
-                        <p class="text-gray-600 mb-3">Conduct annual performance reviews for all team members, including goal setting and feedback sessions.</p>
-                        <div class="flex items-center gap-4 text-sm text-gray-500">
-                            <span><i class="fas fa-calendar"></i> Due: Dec 20, 2024</span>
-                            <span><i class="fas fa-user"></i> Assigned to: Sarah Johnson</span>
-                            <span><i class="fas fa-folder"></i> HR</span>
-                            <span><i class="fas fa-comments"></i> 5 comments</span>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <button class="action-btn action-btn-secondary" onclick="event.stopPropagation(); editTask(2)">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="action-btn action-btn-secondary" onclick="event.stopPropagation(); deleteTask(2)">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Low Priority Task -->
-            <div class="task-card" onclick="openTaskDetail(3)">
-                <div class="flex items-start justify-between">
-                    <div class="flex-1">
-                        <div class="flex items-center gap-3 mb-2">
-                            <h3 class="text-lg font-semibold text-gray-900">Office Supplies Inventory</h3>
-                            <span class="task-priority priority-low">
-                                <i class="fas fa-check-circle"></i>
-                                Low Priority
-                            </span>
-                            <span class="task-status status-completed">
-                                <i class="fas fa-check"></i>
-                                Completed
-                            </span>
-                        </div>
-                        <p class="text-gray-600 mb-3">Update office supplies inventory and create purchase orders for items running low.</p>
-                        <div class="flex items-center gap-4 text-sm text-gray-500">
-                            <span><i class="fas fa-calendar"></i> Completed: Dec 10, 2024</span>
-                            <span><i class="fas fa-user"></i> Assigned to: Mike Wilson</span>
-                            <span><i class="fas fa-folder"></i> Operations</span>
-                            <span><i class="fas fa-comments"></i> 2 comments</span>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <button class="action-btn action-btn-secondary" onclick="event.stopPropagation(); editTask(3)">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="action-btn action-btn-secondary" onclick="event.stopPropagation(); deleteTask(3)">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Overdue Task -->
-            <div class="task-card" onclick="openTaskDetail(4)">
-                <div class="flex items-start justify-between">
-                    <div class="flex-1">
-                        <div class="flex items-center gap-3 mb-2">
-                            <h3 class="text-lg font-semibold text-gray-900">Client Contract Renewal</h3>
-                            <span class="task-priority priority-high">
-                                <i class="fas fa-exclamation-triangle"></i>
-                                High Priority
-                            </span>
-                            <span class="task-status status-pending" style="background: rgba(239, 68, 68, 0.1); color: var(--accent-red);">
-                                <i class="fas fa-exclamation-circle"></i>
-                                Overdue
-                            </span>
-                        </div>
-                        <p class="text-gray-600 mb-3">Renew annual contract with ABC Corporation and negotiate terms for next year.</p>
-                        <div class="flex items-center gap-4 text-sm text-gray-500">
-                            <span><i class="fas fa-calendar" style="color: var(--accent-red);"></i> Was due: Dec 5, 2024</span>
-                            <span><i class="fas fa-user"></i> Assigned to: Lisa Chen</span>
-                            <span><i class="fas fa-folder"></i> Sales</span>
-                            <span><i class="fas fa-comments"></i> 8 comments</span>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <button class="action-btn action-btn-secondary" onclick="event.stopPropagation(); editTask(4)">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="action-btn action-btn-secondary" onclick="event.stopPropagation(); deleteTask(4)">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <!-- Task Modal -->
-    <div id="taskModal" class="modal">
-        <div class="modal-content">
-            <div class="flex items-center justify-between mb-6">
-                <h2 class="text-xl font-bold text-gray-900">Create New Task</h2>
-                <button onclick="closeTaskModal()" class="text-gray-400 hover:text-gray-600">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-
-            <form onsubmit="saveTask(event)" onsubmit="return validateForm(this)">
-                <div class="form-group">
-                    <label class="form-label">Task Title</label>
-                    <input type="text" class="form-input" placeholder="Enter task title" required>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Description</label>
-                    <textarea class="form-textarea" placeholder="Enter task description"></textarea>
-                </div>
-
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="form-group">
-                        <label class="form-label">Priority</label>
-                        <select class="form-select">
-                            <option>Low Priority</option>
-                            <option>Medium Priority</option>
-                            <option>High Priority</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Due Date</label>
-                        <input type="date" class="form-input">
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="form-group">
-                        <label class="form-label">Assignee</label>
-                        <select class="form-select">
-                            <option>Unassigned</option>
-                            <option>John Doe</option>
-                            <option>Sarah Johnson</option>
-                            <option>Mike Wilson</option>
-                            <option>Lisa Chen</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Category</label>
-                        <select class="form-select">
-                            <option>Finance</option>
-                            <option>HR</option>
-                            <option>Operations</option>
-                            <option>Sales</option>
-                            <option>Marketing</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="flex items-center gap-3 justify-end">
-                    <button type="button" onclick="closeTaskModal()" class="action-btn action-btn-secondary">
-                        Cancel
-                    </button>
-                    <button type="submit" class="action-btn">
-                        <i class="fas fa-save"></i>
-                        Create Task
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <script>
-        // Tab switching
-        function switchTab(tab) {
-            const tabs = document.querySelectorAll('.tab-btn');
-            tabs.forEach(t => t.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            // Filter tasks based on tab
-            console.log(`Switching to ${tab} tab`);
-        }
-
-        // Modal functions
-        function openTaskModal() {
-            document.getElementById('taskModal').classList.add('active');
-        }
-
-        function closeTaskModal() {
-            document.getElementById('taskModal').classList.remove('active');
-        }
-
-        async function saveTask(event) {
-            event.preventDefault();
-            var title = document.getElementById('taskTitle') ? document.getElementById('taskTitle').value : '';
-            var desc = document.getElementById('taskDescription') ? document.getElementById('taskDescription').value : '';
-            var priority = document.getElementById('taskPriority') ? document.getElementById('taskPriority').value : 'normal';
-            var due = document.getElementById('taskDueDate') ? document.getElementById('taskDueDate').value : '';
-            var assigned = document.getElementById('taskAssignee') ? document.getElementById('taskAssignee').value : '';
-            var newTask = {title:title, description:desc, priority:priority, due_date:due, assigned_to:assigned, status:'pending'};
-            try {
-                var r = await supabase.from('tasks').insert([newTask]).select();
-                if (r.error) throw r.error;
-                showNotification('Success', 'Task created!', 'success');
-            } catch(err) { showNotification('Error', 'Task was not saved. Please retry.', 'error'); }
-            closeTaskModal();
-            setTimeout(syncTasks, 500);
-        }
-        function openTaskDetail(taskId) { showNotification('Info', 'Task details coming soon!', 'info'); }
-        function editTask(taskId) { showNotification('Info', 'Edit task coming soon!', 'info'); }
-        async function deleteTask(taskId) {
-            if (confirm('Delete this task?')) {
-                try { await supabase.from('tasks').delete().eq('id', taskId); showNotification('Deleted', 'Task deleted.', 'success'); } catch(err) { showNotification('Error', 'Could not delete.', 'error'); }
-                setTimeout(syncTasks, 500);
-            }
-        }
-        function exportTasks() { showNotification('Info', 'Export coming soon!', 'info'); }
-        }
-
-        function exportTasks() {
-            alert('Exporting tasks to Excel...');
-        }
-
-        // Search functionality
-        document.getElementById('taskSearch').addEventListener('input', function(e) {
-            var query = e.target.value.toLowerCase();
-            var container = document.getElementById('tasksContainer');
-            var cards = container.querySelectorAll('.bg-white.rounded-lg');
-            cards.forEach(function(card) {
-                var text = card.textContent.toLowerCase();
-                card.style.display = text.includes(query) ? '' : 'none';
-            });
-        });
-
-        // Close modal when clicking outside
-        document.getElementById('taskModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeTaskModal();
-            }
-        });
-    
-        function goBack() {
-            window.location.href = 'index.html';
-        }
-
-        function showNotification(message, type = 'info') {
-            const notification = document.createElement('div');
-            notification.className = `fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 max-w-sm ${
-                type === 'success' ? 'bg-green-500 text-white' :
-                type === 'error' ? 'bg-red-500 text-white' :
-                type === 'warning' ? 'bg-yellow-500 text-white' :
-                'bg-blue-500 text-white'
-            }`;
-            notification.innerHTML = `
-                <div class="flex items-center">
-                    <i class="fas ${
-                        type === 'success' ? 'fa-check-circle' :
-                        type === 'error' ? 'fa-exclamation-circle' :
-                        type === 'warning' ? 'fa-exclamation-triangle' :
-                        'fa-info-circle'
-                    } mr-3"></i>
-                    <div class="font-medium">${message}</div>
-                </div>
-            `;
-            
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.remove();
-            }, 3000);
-        }
-
-        function closeModal(element) {
-            const modal = element ? element.closest('.modal, .fixed') : document.querySelector('.modal.active, .fixed.inset-0');
-            if (modal) {
-                modal.classList.remove('active');
-                modal.style.display = 'none';
-            }
-        }
-</script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="/dashboard/js/config.js"></script>
-<script src="/dashboard/js/db.js"></script>
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OfficeFlow — Tasks</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="/dashboard/css/executive-theme.css"><link rel="stylesheet" href="/dashboard/css/mobile.css">
+<style>
+body{background:#f5f6f8;color:#16213e}.shell{max-width:1180px;margin:auto}.navy{background:#16213e}.brass{color:#a6823d}.panel{background:#fff;border:1px solid #e3e7ee;border-radius:14px;box-shadow:0 4px 18px rgba(22,33,62,.04)}.btn{border-radius:8px;padding:9px 13px;font-size:14px;font-weight:600}.btn-primary{background:#16213e;color:#fff}.btn-secondary{background:#fff;border:1px solid #d6dbe4;color:#344054}.field{width:100%;border:1px solid #d0d5dd;border-radius:8px;padding:10px 12px;background:#fff;color:#16213e}.field:focus{outline:2px solid #a6823d;outline-offset:1px}.modal{display:none;position:fixed;inset:0;z-index:60;background:rgba(16,24,40,.55);padding:18px;overflow:auto}.modal.open{display:grid;place-items:center}.pill{font-size:12px;font-weight:700;padding:4px 8px;border-radius:999px}.task-card{border:1px solid #e4e7ec;border-radius:12px;background:#fff;padding:18px}.muted{color:#667085}
+</style>
+</head>
+<body class="min-h-screen">
+<header class="navy text-white"><div class="shell px-5 py-4 flex items-center justify-between gap-4"><a href="/dashboard/index.html" class="text-white no-underline font-bold text-xl">OfficeFlow</a><nav class="flex items-center gap-4 text-sm"><a class="text-white underline" href="/dashboard/index.html">Dashboard</a><a class="text-white underline" href="/dashboard/billing.html">Billing</a><span data-user-name></span><button id="signOut" class="underline">Sign out</button></nav></div></header>
+<main class="shell px-5 py-8">
+<div class="flex flex-wrap items-end justify-between gap-4 mb-7"><div><p class="brass uppercase tracking-widest text-xs font-bold">Work management</p><h1 class="text-3xl font-bold mt-2">Tasks</h1><p class="muted mt-2">Create, assign, update and complete tasks for your organization.</p></div><div class="flex gap-2"><button id="exportTasks" class="btn btn-secondary">Export CSV</button><button id="newTask" class="btn btn-primary">+ New task</button></div></div>
+<div id="notice" class="hidden rounded-lg border p-3 mb-5 text-sm" role="status" aria-live="polite"></div>
+<section class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+<div class="panel p-4"><p class="muted text-sm">Pending</p><p id="countPending" class="text-2xl font-bold mt-1">—</p></div>
+<div class="panel p-4"><p class="muted text-sm">In progress</p><p id="countProgress" class="text-2xl font-bold mt-1">—</p></div>
+<div class="panel p-4"><p class="muted text-sm">Completed</p><p id="countCompleted" class="text-2xl font-bold mt-1">—</p></div>
+<div class="panel p-4"><p class="muted text-sm">Overdue</p><p id="countOverdue" class="text-2xl font-bold mt-1">—</p></div>
+</section>
+<section class="panel p-4 mb-5"><div class="grid grid-cols-1 md:grid-cols-3 gap-3"><input id="searchTasks" class="field" placeholder="Search tasks"><select id="filterStatus" class="field"><option value="">All statuses</option><option value="pending">Pending</option><option value="in_progress">In progress</option><option value="completed">Completed</option><option value="overdue">Overdue</option></select><select id="filterPriority" class="field"><option value="">All priorities</option><option value="high">High</option><option value="medium">Medium</option><option value="low">Low</option></select></div></section>
+<div id="loadStatus" class="muted text-sm mb-3" role="status" aria-live="polite">Loading tasks…</div>
+<section id="taskList" class="space-y-3"></section>
+</main>
+<div id="taskModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="panel p-6 w-full max-w-xl"><div class="flex items-start justify-between gap-3 mb-5"><div><p class="brass uppercase tracking-widest text-xs font-bold">Task record</p><h2 id="modalTitle" class="text-xl font-bold mt-1">Create task</h2></div><button id="closeModal" class="btn btn-secondary">Close</button></div>
+<form id="taskForm" class="space-y-4"><label class="block text-sm font-semibold">Task title<input id="taskTitle" class="field mt-1" maxlength="200" required></label><label class="block text-sm font-semibold">Description<textarea id="taskDescription" class="field mt-1" rows="4" maxlength="5000"></textarea></label><div class="grid grid-cols-1 md:grid-cols-2 gap-3"><label class="block text-sm font-semibold">Priority<select id="taskPriority" class="field mt-1"><option value="low">Low</option><option value="medium" selected>Medium</option><option value="high">High</option></select></label><label class="block text-sm font-semibold">Due date<input id="taskDueDate" type="date" class="field mt-1"></label></div><label class="block text-sm font-semibold">Assign to<select id="taskAssignee" class="field mt-1"><option value="">Unassigned</option></select><span id="assigneeHelp" class="muted text-xs font-normal block mt-1">Managers and administrators can assign tasks to organization members.</span></label><div class="flex justify-end gap-2 pt-2"><button type="button" id="cancelModal" class="btn btn-secondary">Cancel</button><button type="submit" id="saveTask" class="btn btn-primary">Create task</button></div></form></div></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="/dashboard/js/config.js"></script><script src="/dashboard/js/db.js"></script><script src="/dashboard/js/ooes-auth.js"></script>
 <script>
-async function syncTasks() {
-  try {
-    const { data, error } = await supabase.from('tasks').select('*').order('due_date', { ascending: true });
-    if (error || !data) return;
-    
-    const pending = data.filter(t => t.status === 'pending').length;
-    const completed = data.filter(t => t.status === 'completed').length;
-    const overdue = data.filter(t => t.status === 'overdue').length;
-    
-    document.querySelectorAll('.pending-tasks').forEach(el => el.textContent = pending);
-    document.querySelectorAll('.completed-tasks').forEach(el => el.textContent = completed);
-    document.querySelectorAll('.overdue-tasks').forEach(el => el.textContent = overdue);
-    
-    const container = document.getElementById('tasksContainer');
-    if (container) {
-      container.innerHTML = data.map(t => `
-        <div class="bg-white rounded-lg p-4 shadow border-l-4 ${t.priority === 'high' ? 'border-red-500' : t.priority === 'medium' ? 'border-yellow-500' : 'border-green-500'} mb-3">
-          <div class="flex justify-between items-start">
-            <h4 class="font-semibold text-gray-800">${t.title}</h4>
-            <span class="px-2 py-1 rounded text-xs ${t.status === 'completed' ? 'bg-green-100 text-green-800' : t.status === 'overdue' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800'}">${t.status}</span>
-          </div>
-          <p class="text-sm text-gray-600 mt-1">${t.description || ''}</p>
-          <div class="flex justify-between mt-2 text-xs text-gray-500">
-            <span>Assigned to: ${t.assigned_to || 'Unassigned'}</span>
-            <span>Due: ${t.due_date || 'No date'}</span>
-          </div>
-        </div>
-      `).join('');
-    }
-  } catch(err) {
-    console.log('Tasks sync failed', err);
-  }
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-  setTimeout(syncTasks, 500);
-});
-</script><script>function toggleMobileNav(){var s=document.getElementById("sidebarNav");var o=document.getElementById("mobileOverlay");if(s){s.classList.toggle("active");}if(!o){var ov=document.createElement("div");ov.id="mobileOverlay";ov.className="mobile-overlay";ov.onclick=toggleMobileNav;document.body.appendChild(ov);}else{o.classList.toggle("active");}}document.addEventListener("DOMContentLoaded",function(){var btn=document.getElementById("mobileMenuBtn");if(btn){btn.style.display="flex";btn.onclick=toggleMobileNav;}});</script><script src="/dashboard/js/ooes-auth.js"></script>
-<script src="/dashboard/js/ooes-core.js"></script>
-</div>
+(function(){
+ const $=id=>document.getElementById(id);
+ let tasks=[],members=[],editingId=null;
+ const escape=v=>String(v??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+ const today=()=>{const d=new Date();d.setHours(0,0,0,0);return d;};
+ const overdue=t=>t.status!=='completed'&&!!t.due_date&&new Date(t.due_date+'T00:00:00')<today();
+ function notice(message,type='info'){const el=$('notice');el.textContent=message;el.className='rounded-lg border p-3 mb-5 text-sm '+(type==='error'?'bg-red-50 border-red-200 text-red-800':type==='success'?'bg-green-50 border-green-200 text-green-800':'bg-blue-50 border-blue-200 text-blue-800');}
+ function statusText(t){return overdue(t)?'Overdue':String(t.status||'pending').replace('_',' ').replace(/^./,x=>x.toUpperCase());}
+ function makeOption(label,value){const o=document.createElement('option');o.value=value;o.textContent=label;return o;}
+ async function loadAssignees(){const select=$('taskAssignee'),session=OOES_AUTH.getSession();select.replaceChildren(makeOption('Unassigned',''));if(!session)return;if(['administrator','manager','super_admin'].includes(session.role)){const {data,error}=await supabase.rpc('fn_list_task_assignees');if(error){$('assigneeHelp').textContent='Member list unavailable; tasks can still be saved unassigned.';return;}members=data||[];members.forEach(m=>select.append(makeOption((m.display_name||m.email)+(m.email&&m.display_name!==m.email?' · '+m.email:''),m.user_id)));}else{select.append(makeOption('Me — '+(session.name||session.email),session.id));$('assigneeHelp').textContent='You can assign a task to yourself. Ask a manager to assign tasks to others.';}}
+ function render(){
+  const q=$('searchTasks').value.trim().toLowerCase(),status=$('filterStatus').value,priority=$('filterPriority').value;
+  const rows=tasks.filter(t=>{if(status==='overdue'&&!overdue(t))return false;if(status&&status!=='overdue'&&(t.status||'pending')!==status)return false;if(priority&&t.priority!==priority)return false;return !q||[t.title,t.description,t.assigned_to,t.status,t.priority].some(v=>String(v||'').toLowerCase().includes(q));});
+  $('loadStatus').textContent=rows.length+' task'+(rows.length===1?'':'s')+' shown';
+  const list=$('taskList');list.replaceChildren();
+  if(!rows.length){const empty=document.createElement('div');empty.className='panel p-8 text-center';const h=document.createElement('h2');h.className='font-bold text-lg';h.textContent=tasks.length?'No tasks match these filters':'No tasks yet';const p=document.createElement('p');p.className='muted text-sm mt-2';p.textContent=tasks.length?'Try changing the filters or search term.':'Create your first task to start tracking work in OfficeFlow.';empty.append(h,p);list.append(empty);return;}
+  rows.forEach(t=>{
+   const card=document.createElement('article');card.className='task-card';
+   const top=document.createElement('div');top.className='flex flex-col md:flex-row md:items-start md:justify-between gap-3';
+   const left=document.createElement('div');left.className='min-w-0 flex-1';
+   const line=document.createElement('div');line.className='flex flex-wrap items-center gap-2';
+   const title=document.createElement('h2');title.className='font-bold text-lg break-words';title.textContent=t.title||'(Untitled task)';
+   const pr=document.createElement('span');pr.className='pill '+(t.priority==='high'?'bg-red-100 text-red-800':t.priority==='low'?'bg-green-100 text-green-800':'bg-amber-100 text-amber-800');pr.textContent=(t.priority||'medium')+' priority';
+   const st=document.createElement('span');st.className='pill '+(overdue(t)?'bg-red-100 text-red-800':t.status==='completed'?'bg-green-100 text-green-800':t.status==='in_progress'?'bg-blue-100 text-blue-800':'bg-slate-100 text-slate-700');st.textContent=statusText(t);
+   line.append(title,pr,st);left.append(line);
+   const desc=document.createElement('p');desc.className='muted text-sm mt-2 whitespace-pre-wrap';desc.textContent=t.description||'No description provided.';left.append(desc);
+   const meta=document.createElement('p');meta.className='muted text-xs mt-3';meta.textContent='Due: '+(t.due_date||'No date')+' · Assigned to: '+(t.assigned_to||'Unassigned');left.append(meta);
+   const actions=document.createElement('div');actions.className='flex flex-wrap gap-2';
+   const makeButton=(label,cls,handler)=>{const b=document.createElement('button');b.type='button';b.className='btn '+cls;b.textContent=label;b.addEventListener('click',handler);return b;};
+   const session=OOES_AUTH.getSession(),isAdmin=['administrator','manager','super_admin'].includes(session?.role),canEdit=isAdmin||t.owner_id===session?.id||t.assigned_to_user_id===session?.id,canDelete=isAdmin||t.owner_id===session?.id;if(canEdit){actions.append(makeButton('Edit','btn-secondary',()=>openEdit(t)),makeButton(t.status==='completed'?'Reopen':t.status==='in_progress'?'Complete':'Start','btn-primary',()=>changeStatus(t)));}if(canDelete)actions.append(makeButton('Delete','btn-secondary',()=>removeTask(t)));
+   top.append(left,actions);card.append(top);
+   const details=document.createElement('details');details.className='mt-4 border-t pt-3 text-sm muted';const summary=document.createElement('summary');summary.className='cursor-pointer font-semibold';summary.textContent='More details';const body=document.createElement('p');body.className='mt-2';body.textContent='Created '+(t.created_at?new Date(t.created_at).toLocaleString('en-KE'):'date unavailable')+' · Task ID '+t.id;details.append(summary,body);card.append(details);
+   list.append(card);
+  });
+ }
+ function updateCounts(){
+  $('countPending').textContent=tasks.filter(t=>(t.status||'pending')==='pending'&&!overdue(t)).length;
+  $('countProgress').textContent=tasks.filter(t=>t.status==='in_progress').length;
+  $('countCompleted').textContent=tasks.filter(t=>t.status==='completed').length;
+  $('countOverdue').textContent=tasks.filter(overdue).length;
+ }
+ async function loadTasks(){
+  $('loadStatus').textContent='Loading tasks…';
+  try{
+   const {data,error}=await supabase.from('tasks').select('id,title,description,status,priority,assigned_to,assigned_to_user_id,due_date,owner_id,organization_id,created_at').order('due_date',{ascending:true});
+   if(error)throw error;
+   tasks=data||[];updateCounts();render();
+  }catch(error){console.error('Tasks load failed',error);$('loadStatus').textContent='Tasks could not be loaded. Refresh or contact your administrator.';notice('Could not load tasks. Please retry.','error');}
+ }
+ function openNew(){editingId=null;$('taskForm').reset();$('taskPriority').value='medium';$('taskAssignee').disabled=false;$('taskAssignee').value='';$('modalTitle').textContent='Create task';$('saveTask').textContent='Create task';$('taskModal').classList.add('open');$('taskTitle').focus();}
+ function openEdit(t){editingId=t.id;const session=OOES_AUTH.getSession(),canManageAssignment=['administrator','manager','super_admin'].includes(session?.role)||t.owner_id===session?.id;$('taskAssignee').disabled=!canManageAssignment;$('taskTitle').value=t.title||'';$('taskDescription').value=t.description||'';$('taskPriority').value=['low','medium','high'].includes(t.priority)?t.priority:'medium';$('taskDueDate').value=t.due_date||'';const select=$('taskAssignee'),assignee=t.assigned_to_user_id;if(assignee&&!Array.from(select.options).some(o=>o.value===assignee))select.append(makeOption(t.assigned_to||'Current assignee',assignee));select.value=assignee||'';$('modalTitle').textContent='Edit task';$('saveTask').textContent='Save changes';$('taskModal').classList.add('open');$('taskTitle').focus();}
+ function closeModal(){$('taskModal').classList.remove('open');$('taskAssignee').disabled=false;editingId=null;}
+ async function save(event){
+  event.preventDefault();
+  const session=OOES_AUTH.getSession();if(!session?.organization_id){notice('Your organization session is not ready. Please sign in again.','error');return;}
+  const title=$('taskTitle').value.trim();if(!title){notice('Enter a task title.','error');return;}
+  const currentTask=editingId!==null?tasks.find(t=>String(t.id)===String(editingId)):null;const payload={title,description:$('taskDescription').value.trim()||null,priority:$('taskPriority').value,due_date:$('taskDueDate').value||null,assigned_to_user_id:$('taskAssignee').disabled?(currentTask?.assigned_to_user_id||null):($('taskAssignee').value||null)};
+  const wasEditing=editingId!==null;$('saveTask').disabled=true;
+  try{
+   const result=wasEditing
+    ? await supabase.from('tasks').update(payload).eq('id',editingId).select('id').single()
+    : await supabase.from('tasks').insert([{...payload,status:'pending',owner_id:session.id,organization_id:session.organization_id}]).select('id').single();
+   if(result.error)throw result.error;
+   closeModal();notice(wasEditing?'Task updated.':'Task created.','success');await loadTasks();
+  }catch(error){console.error('Task save failed',error);notice('Task was not saved. Check your permissions and retry.','error');}
+  finally{$('saveTask').disabled=false;}
+ }
+ async function changeStatus(t){
+  const next=t.status==='completed'?'pending':t.status==='in_progress'?'completed':'in_progress';
+  try{const {error}=await supabase.from('tasks').update({status:next}).eq('id',t.id);if(error)throw error;notice('Task status updated.','success');await loadTasks();}
+  catch(error){console.error('Task status update failed',error);notice('Task status could not be updated.','error');}
+ }
+ async function removeTask(t){
+  if(!confirm('Delete “'+(t.title||'this task')+'” permanently?'))return;
+  try{const {error}=await supabase.from('tasks').delete().eq('id',t.id);if(error)throw error;notice('Task deleted.','success');await loadTasks();}
+  catch(error){console.error('Task deletion failed',error);notice('Task could not be deleted. Check your permissions.','error');}
+ }
+ function exportCsv(){
+  const rows=[['Title','Description','Status','Priority','Assigned to','Due date'],...tasks.map(t=>[t.title,t.description,t.status,t.priority,t.assigned_to,t.due_date])];
+  const csvCell=value=>{
+   let text=String(value??'');
+   // Prevent spreadsheet formula injection when exported text is opened in Excel/Sheets.
+   if(/^[\t\r ]*[=+@-]/.test(text))text="'"+text;
+   return '"'+text.replace(/"/g,'""')+'"';
+  };
+  const csv=rows.map(row=>row.map(csvCell).join(',')).join('\r\n');
+  const url=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='officeflow-tasks.csv';a.click();URL.revokeObjectURL(url);
+ }
+ document.addEventListener('DOMContentLoaded',async()=>{
+  await OOES_AUTH.ready;
+  if(!OOES_AUTH.getSession())return;
+  $('signOut').addEventListener('click',()=>OOES_AUTH.logout());
+  $('newTask').addEventListener('click',openNew);$('closeModal').addEventListener('click',closeModal);$('cancelModal').addEventListener('click',closeModal);
+  $('taskForm').addEventListener('submit',save);$('searchTasks').addEventListener('input',render);$('filterStatus').addEventListener('change',render);$('filterPriority').addEventListener('change',render);$('exportTasks').addEventListener('click',exportCsv);
+  $('taskModal').addEventListener('click',event=>{if(event.target===$('taskModal'))closeModal();});
+  await loadAssignees();await loadTasks();
+ });
+})();
+</script>
 </body>
 </html>
-
-
-
-
-
-
-

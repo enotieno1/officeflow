@@ -1,3 +1,107 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>OfficeFlow — Documents</title><script src="/dashboard/js/config.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>var supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);</script><script src="https://cdn.tailwindcss.com"></script><link rel="stylesheet" href="css/executive-theme.css"><link rel="stylesheet" href="css/mobile.css"></head><body class="bg-gray-50"><header class="of-header px-6 py-4 flex justify-between items-center"><div><div class="of-eyebrow">OfficeFlow</div><h1 class="of-serif text-2xl font-semibold">Documents</h1><p class="text-sm text-gray-500 mt-1">Organization documents from the live database.</p></div><a href="index.html" class="text-sm">Dashboard</a></header><main class="max-w-6xl mx-auto p-6 space-y-6"><section class="of-card p-5"><div class="flex flex-wrap justify-between items-center gap-3"><div><h2 class="of-serif text-xl font-semibold">Document folders</h2><p class="text-sm text-gray-500 mt-1">Choose a folder to filter records from your live document register.</p></div><button id="open-scan" class="px-4 py-2 rounded text-white text-sm" style="background:var(--of-navy)">Scan / Import Document</button></div><div id="folders" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 mt-4"></div></section><section class="of-card p-5"><div class="grid md:grid-cols-2 gap-3"><input id="doc-search" class="border rounded p-2 text-sm" placeholder="Search document name, type or folder"><select id="doc-type-filter" class="border rounded p-2 text-sm"><option value="">All types</option></select></div></section><div id="error" class="hidden text-red-600 mb-4"></div><section class="of-card p-6"><div class="flex justify-between items-center mb-5"><div><h2 class="of-serif text-xl font-semibold">Document register</h2><p class="text-sm text-gray-500">This view no longer uses demo/localStorage files.</p></div><button id="refresh" class="text-sm" style="color:var(--of-brass)">Refresh</button></div><div id="list"><p class="text-gray-500">Loading…</p></div><p id="result-count" class="text-xs text-gray-500 mt-3"></p></section></main><div id="scan-panel" class="hidden fixed inset-0 z-50 overflow-y-auto" style="background:rgba(10,20,36,.6)"><div class="min-h-full flex items-center justify-center p-4"><section class="bg-white rounded-lg p-6 w-full max-w-2xl"><div class="flex justify-between items-center"><h2 class="of-serif text-xl font-semibold">Scan and sort a document</h2><button id="close-scan" class="text-sm">Close ✕</button></div><p class="text-sm text-gray-500 mt-2">Choose or take a photo of a typed or handwritten page.</p><input id="scan-file" type="file" accept="image/*" capture="environment" class="block w-full border rounded p-2 mt-4"><img id="scan-preview" class="hidden max-h-64 mx-auto my-4" alt="Document preview"><div class="grid md:grid-cols-2 gap-3"><label class="text-sm">Document name<input id="scan-name" class="border rounded p-2 w-full mt-1" placeholder="Document name"></label><label class="text-sm">Suggested folder<select id="scan-folder" class="border rounded p-2 w-full mt-1"><option>HR</option><option>Finance</option><option>Legal</option><option>Procurement</option><option>IT</option><option>Administration</option><option>Contracts</option><option>Policies</option><option>General</option></select></label></div><div class="flex flex-wrap gap-2 mt-4"><button id="run-ocr" class="px-4 py-2 rounded text-white text-sm" style="background:var(--of-navy)" disabled>Recognize text & sort</button><button id="make-pdf" class="px-4 py-2 rounded border text-sm" disabled>Convert photo to PDF</button><button id="download-text" class="px-4 py-2 rounded border text-sm" disabled>Download transcript</button></div><p id="scan-status" class="text-sm text-gray-600 mt-3">Select an image to begin.</p><label class="block text-sm font-medium mt-3">Recognized text — check handwriting manually<textarea id="ocr-text" class="border rounded p-3 w-full mt-2" rows="7" placeholder="Recognized text will appear here."></textarea></label><p class="text-xs text-gray-500 mt-3">Privacy: this scanner processes the selected image in your browser and downloads outputs. It does not upload scans to the live database.</p></section></div></div><script src="/dashboard/js/ooes-auth.js"></script><script src="/dashboard/js/document-scanner.js"></script><script>const $=x=>document.getElementById(x),esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));let allDocuments=[];let activeFolder="";
-function renderDocuments(){const q=$('doc-search').value.trim().toLowerCase();const type=$('doc-type-filter').value;const rows=allDocuments.filter(x=>(!activeFolder||String(x.folder||'General')===activeFolder)&&(!type||String(x.mime_type||x.type||'').toLowerCase()===type)&&(!q||[x.name,x.file_name,x.type,x.mime_type,x.folder].some(v=>String(v||'').toLowerCase().includes(q))));$('result-count').textContent=rows.length+' document(s) shown';$('list').innerHTML=rows.length?'<div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="text-left border-b"><th class="py-3 pr-3">Name</th><th class="py-3 pr-3">Type</th><th class="py-3 pr-3">Folder</th><th class="py-3 pr-3">Uploaded</th></tr></thead><tbody>'+rows.map(x=>'<tr class="border-b"><td class="py-3 pr-3 font-medium">'+esc(x.name||x.file_name||'Document')+'</td><td class="py-3 pr-3">'+esc(x.mime_type||x.type||'—')+'</td><td class="py-3 pr-3">'+esc(x.folder||'General')+'</td><td class="py-3 pr-3">'+esc(x.created_at?new Date(x.created_at).toLocaleString('en-KE'):'—')+'</td></tr>').join('')+'</tbody></table></div>':'<div class="text-center py-12 text-gray-500">No documents match these filters.</div>';}
-async function load(){try{await OOES_AUTH.ready;if(!OOES_AUTH.isLoggedIn())return;const {data,error}=await supabase.from('documents').select('*').order('created_at',{ascending:false}).limit(200);if(error)throw error;allDocuments=data||[];const types=[...new Set(allDocuments.map(x=>String(x.mime_type||x.type||'').trim()).filter(Boolean))].sort();$('doc-type-filter').innerHTML='<option value="">All types</option>'+types.map(t=>'<option value="'+esc(t.toLowerCase())+'">'+esc(t)+'</option>').join('');const counts={};allDocuments.forEach(x=>{const f=x.folder||'General';counts[f]=(counts[f]||0)+1;});$('folders').innerHTML=Object.keys(counts).length?'<button data-folder="" class="border rounded-lg p-3 text-left"><div class="font-semibold text-sm">All documents</div><div class="text-xs text-gray-500 mt-1">'+allDocuments.length+' records</div></button>'+Object.keys(counts).sort().map(f=>'<button data-folder="'+esc(f)+'" class="border rounded-lg p-3 text-left"><div class="font-semibold text-sm">'+esc(f)+'</div><div class="text-xs text-gray-500 mt-1">'+counts[f]+' record(s)</div></button>').join(''):'<p class="text-sm text-gray-500">Folders will appear when documents are registered.</p>';$('folders').querySelectorAll('[data-folder]').forEach(b=>b.addEventListener('click',()=>{activeFolder=b.dataset.folder;renderDocuments();}));renderDocuments();}catch(e){$('error').textContent=e.message||'Unable to load documents.';$('error').classList.remove('hidden');}}$('refresh').onclick=load;$('doc-search').addEventListener('input',renderDocuments);$('doc-type-filter').addEventListener('change',renderDocuments);document.addEventListener('DOMContentLoaded',load);</script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OfficeFlow — Documents</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="/dashboard/css/executive-theme.css"><link rel="stylesheet" href="/dashboard/css/mobile.css">
+<style>body{background:#f5f6f8;color:#16213e}.shell{max-width:1180px;margin:auto}.navy{background:#16213e}.brass{color:#a6823d}.panel{background:#fff;border:1px solid #e3e7ee;border-radius:14px;box-shadow:0 4px 18px rgba(22,33,62,.04)}.btn{border-radius:8px;padding:9px 13px;font-size:14px;font-weight:600}.btn-primary{background:#16213e;color:#fff}.btn-secondary{background:#fff;border:1px solid #d6dbe4;color:#344054}.field{width:100%;border:1px solid #d0d5dd;border-radius:8px;padding:10px 12px;background:#fff;color:#16213e}.muted{color:#667085}.pill{font-size:12px;font-weight:700;padding:4px 8px;border-radius:999px}</style>
+</head>
+<body class="min-h-screen">
+<header class="navy text-white"><div class="shell px-5 py-4 flex items-center justify-between gap-4"><a href="/dashboard/index.html" class="text-white no-underline font-bold text-xl">OfficeFlow</a><nav class="flex items-center gap-4 text-sm"><a class="text-white underline" href="/dashboard/index.html">Dashboard</a><a class="text-white underline" href="/dashboard/billing.html">Billing</a><span data-user-name></span><button id="signOut" class="underline">Sign out</button></nav></div></header>
+<main class="shell px-5 py-8">
+<div class="flex flex-wrap items-end justify-between gap-4 mb-7"><div><p class="brass uppercase tracking-widest text-xs font-bold">Records & files</p><h1 class="text-3xl font-bold mt-2">Documents</h1><p class="muted mt-2">Upload files to private organization storage and download them through short-lived signed links.</p></div><button id="uploadButton" class="btn btn-primary">+ Upload document</button></div>
+<div id="notice" class="hidden rounded-lg border p-3 mb-5 text-sm" role="status" aria-live="polite"></div>
+<section class="panel p-4 mb-5"><div class="grid grid-cols-1 md:grid-cols-2 gap-3"><input id="search" class="field" placeholder="Search name, type, folder or uploader"><select id="folderFilter" class="field"><option value="">All folders</option></select></div><p class="muted text-xs mt-3">Private uploads: up to 10 MB per file. Supported types include PDF, Office documents, text and common image formats.</p></section>
+<div id="loadStatus" class="muted text-sm mb-3" role="status" aria-live="polite">Loading documents…</div>
+<section id="documentList" class="space-y-3"></section>
+</main>
+<div id="uploadModal" class="hidden fixed inset-0 z-50 overflow-y-auto p-4" style="background:rgba(16,24,40,.55)" role="dialog" aria-modal="true" aria-labelledby="uploadTitle"><div class="min-h-full flex items-center justify-center"><section class="panel p-6 w-full max-w-xl"><div class="flex justify-between items-start gap-3"><div><p class="brass uppercase tracking-widest text-xs font-bold">Private storage</p><h2 id="uploadTitle" class="text-xl font-bold mt-1">Upload document</h2></div><button id="closeUpload" class="btn btn-secondary">Close</button></div><form id="uploadForm" class="space-y-4 mt-5"><label class="block text-sm font-semibold">Document name<input id="docName" class="field mt-1" maxlength="200" required placeholder="e.g. Procurement policy"></label><label class="block text-sm font-semibold">Folder<select id="docFolder" class="field mt-1"><option>General</option><option>HR</option><option>Finance</option><option>Legal</option><option>Procurement</option><option>IT</option><option>Administration</option><option>Contracts</option><option>Policies</option></select></label><label class="block text-sm font-semibold">File<input id="docFile" class="field mt-1" type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.jpg,.jpeg,.png,.webp" required><span class="muted text-xs font-normal block mt-1">Do not upload files you do not have permission to store. Maximum size 10 MB.</span></label><div class="flex justify-end gap-2"><button type="button" id="cancelUpload" class="btn btn-secondary">Cancel</button><button type="submit" id="saveUpload" class="btn btn-primary">Upload securely</button></div></form></section></div></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="/dashboard/js/config.js"></script><script src="/dashboard/js/db.js"></script><script src="/dashboard/js/ooes-auth.js"></script>
+<script>
+(function(){
+ const $=id=>document.getElementById(id);let documents=[];
+ const allowed=new Set(['application/pdf','image/jpeg','image/png','image/webp','text/plain','application/msword','application/vnd.openxmlformats-officedocument.wordprocessingml.document','application/vnd.ms-excel','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet','application/vnd.ms-powerpoint','application/vnd.openxmlformats-officedocument.presentationml.presentation']);
+ function notice(message,type='info'){const el=$('notice');el.textContent=message;el.className='rounded-lg border p-3 mb-5 text-sm '+(type==='error'?'bg-red-50 border-red-200 text-red-800':type==='success'?'bg-green-50 border-green-200 text-green-800':'bg-blue-50 border-blue-200 text-blue-800');}
+ function formatSize(value){const n=Number(value);if(!Number.isFinite(n)||n<0)return '—';return n<1024? n+' B':n<1048576?(n/1024).toFixed(1)+' KB':(n/1048576).toFixed(1)+' MB';}
+ function render(){
+  const q=$('search').value.trim().toLowerCase(),folder=$('folderFilter').value;
+  const rows=documents.filter(d=>(!folder||d.folder===folder)&&(!q||[d.name,d.type,d.folder,d.uploaded_by].some(v=>String(v||'').toLowerCase().includes(q))));
+  $('loadStatus').textContent=rows.length+' document'+(rows.length===1?'':'s')+' shown';
+  const list=$('documentList');list.replaceChildren();
+  if(!rows.length){const empty=document.createElement('div');empty.className='panel p-8 text-center';const h=document.createElement('h2');h.className='font-bold text-lg';h.textContent=documents.length?'No documents match your search':'No documents uploaded yet';const p=document.createElement('p');p.className='muted text-sm mt-2';p.textContent=documents.length?'Try a different search or folder.':'Upload your first file. Files are private and downloads use temporary signed links.';empty.append(h,p);list.append(empty);return;}
+  const session=OOES_AUTH.getSession(),isAdmin=['administrator','super_admin'].includes(session?.role);
+  rows.forEach(d=>{
+   const card=document.createElement('article');card.className='panel p-5';
+   const row=document.createElement('div');row.className='flex flex-col md:flex-row md:items-center md:justify-between gap-4';
+   const info=document.createElement('div');info.className='min-w-0 flex-1';
+   const title=document.createElement('h2');title.className='font-bold text-lg break-words';title.textContent=d.name||'Untitled document';
+   const meta=document.createElement('p');meta.className='muted text-sm mt-2';meta.textContent=(d.type||'File')+' · '+formatSize(d.size)+' · '+(d.folder||'General');
+   const by=document.createElement('p');by.className='muted text-xs mt-1';by.textContent='Uploaded by '+(d.uploaded_by||'Unknown')+' · '+(d.created_at?new Date(d.created_at).toLocaleString('en-KE'):'date unavailable');
+   info.append(title,meta,by);
+   const actions=document.createElement('div');actions.className='flex gap-2';
+   const download=document.createElement('button');download.type='button';download.className='btn btn-primary';download.textContent='Download';download.addEventListener('click',()=>downloadDocument(d));
+   actions.append(download);
+   if(d.owner_id===session?.id||isAdmin){const del=document.createElement('button');del.type='button';del.className='btn btn-secondary';del.textContent='Delete';del.addEventListener('click',()=>deleteDocument(d));actions.append(del);}
+   row.append(info,actions);card.append(row);list.append(card);
+  });
+ }
+ async function loadDocuments(){
+  $('loadStatus').textContent='Loading documents…';
+  try{
+   const {data,error}=await supabase.from('documents').select('id,name,type,size,folder,uploaded_by,url,created_at,owner_id,organization_id').order('created_at',{ascending:false}).limit(200);
+   if(error)throw error;documents=data||[];
+   const folders=[...new Set(documents.map(d=>d.folder).filter(Boolean))].sort();const filter=$('folderFilter'),selected=filter.value;filter.replaceChildren(new Option('All folders',''));folders.forEach(f=>filter.append(new Option(f,f)));filter.value=folders.includes(selected)?selected:'';
+   render();
+  }catch(error){console.error('Documents load failed',error);$('loadStatus').textContent='Documents could not be loaded. Refresh or contact your administrator.';notice('Unable to load documents.','error');}
+ }
+ function openUpload(){$('uploadForm').reset();$('uploadModal').classList.remove('hidden');$('docName').focus();}
+ function closeUpload(){$('uploadModal').classList.add('hidden');}
+ async function uploadDocument(event){
+  event.preventDefault();const session=OOES_AUTH.getSession(),file=$('docFile').files[0],name=$('docName').value.trim(),folder=$('docFolder').value;
+  if(!session?.organization_id){notice('Your organization session is not ready. Sign in again.','error');return;}
+  if(!file||!name){notice('Enter a document name and choose a file.','error');return;}
+  if(file.size>10485760){notice('This file is larger than 10 MB. Choose a smaller file.','error');return;}
+  if(!allowed.has(file.type)){notice('This file type is not supported. Use PDF, Office, text or common image formats.','error');return;}
+  const safeName=file.name.replace(/[^a-zA-Z0-9._-]+/g,'_').slice(-120),path=session.organization_id+'/'+session.id+'/'+crypto.randomUUID()+'_'+safeName;
+  $('saveUpload').disabled=true;$('saveUpload').textContent='Uploading…';
+  let uploaded=false;
+  try{
+   const {error:storageError}=await supabase.storage.from('officeflow-documents').upload(path,file,{contentType:file.type,upsert:false});
+   if(storageError)throw storageError;uploaded=true;
+   const {error:metaError}=await supabase.from('documents').insert([{name,type:file.type,size:String(file.size),folder,uploaded_by:session.name||session.email,url:path,owner_id:session.id,organization_id:session.organization_id}]);
+   if(metaError)throw metaError;
+   closeUpload();notice('Document uploaded securely. Downloads are generated on demand.','success');await loadDocuments();
+  }catch(error){
+   console.error('Document upload failed',error);
+   if(uploaded){const {error:cleanupError}=await supabase.storage.from('officeflow-documents').remove([path]);if(cleanupError)console.error('Document cleanup failed',cleanupError);}
+   notice('Upload failed. No document was registered; please retry.','error');
+  }finally{$('saveUpload').disabled=false;$('saveUpload').textContent='Upload securely';}
+ }
+ async function downloadDocument(doc){
+  if(!doc.url){notice('This record has no stored file path. Contact your administrator.','error');return;}
+  if(/^https?:\/\//i.test(doc.url)){notice('This is a legacy external link; it cannot be downloaded as a private OfficeFlow file.','error');return;}
+  const tab=window.open('about:blank','_blank');
+  try{
+   const {data,error}=await supabase.storage.from('officeflow-documents').createSignedUrl(doc.url,60);
+   if(error)throw error;
+   if(tab){tab.opener=null;tab.location.href=data.signedUrl;}else{window.location.assign(data.signedUrl);}
+  }catch(error){if(tab)tab.close();console.error('Document download failed',error);notice('Download is not permitted or the file is unavailable.','error');}
+ }
+ async function deleteDocument(doc){
+  if(!confirm('Delete “'+(doc.name||'this document')+'” and its stored file?'))return;
+  try{
+   if(doc.url&&!/^https?:\/\//i.test(doc.url)){const {error}=await supabase.storage.from('officeflow-documents').remove([doc.url]);if(error)throw error;}
+   const {error:metaError}=await supabase.from('documents').delete().eq('id',doc.id);if(metaError)throw metaError;
+   notice('Document deleted.','success');await loadDocuments();
+  }catch(error){console.error('Document deletion failed',error);notice('Document could not be deleted. Check your permissions or contact your administrator.','error');}
+ }
+ document.addEventListener('DOMContentLoaded',async()=>{
+  await OOES_AUTH.ready;if(!OOES_AUTH.getSession())return;
+  $('signOut').addEventListener('click',()=>OOES_AUTH.logout());$('uploadButton').addEventListener('click',openUpload);$('closeUpload').addEventListener('click',closeUpload);$('cancelUpload').addEventListener('click',closeUpload);$('uploadForm').addEventListener('submit',uploadDocument);$('search').addEventListener('input',render);$('folderFilter').addEventListener('change',render);
+  $('uploadModal').addEventListener('click',event=>{if(event.target===$('uploadModal'))closeUpload();});
+  await loadDocuments();
+ });
+})();
+</script>
+</body></html>

@@ -16,10 +16,10 @@ async function load(){
  if(!id){$('error').textContent='Missing request id.';$('error').classList.remove('hidden');return;}
  try{
   await OOES_AUTH.ready;if(!OOES_AUTH.isLoggedIn())return;
-  const [r,steps,defs,myWork]=await Promise.all([
-   OfficeFlowWorkflow.request(id),
+  const r=await OfficeFlowWorkflow.request(id);
+  const [steps,defs,myWork]=await Promise.all([
    OfficeFlowWorkflow.steps(id),
-   OfficeFlowWorkflow.stepDefinitions((await OfficeFlowWorkflow.request(id)).workflow_version_id),
+   OfficeFlowWorkflow.stepDefinitions(r.workflow_version_id),
    supabase.rpc('fn_my_work')
   ]);
   if(myWork.error)throw myWork.error;

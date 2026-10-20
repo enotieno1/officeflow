@@ -343,7 +343,7 @@
                 </div>
 
                 <!-- Quick Account Benefits -->
-                <div class="mt-8 glass-effect rounded-xl p-6"><h3 class="text-lg font-semibold text-gray-800 mb-3">Department sign-in portals</h3><div class="grid grid-cols-2 gap-2 text-sm mb-5"><a class="rounded border p-2" href="/dashboard/portals/hr.html">Human Resources</a><a class="rounded border p-2" href="/dashboard/portals/finance.html">Finance</a><a class="rounded border p-2" href="/dashboard/portals/procurement.html">Procurement</a><a class="rounded border p-2" href="/dashboard/portals/administration.html">Administration</a><a class="rounded border p-2" href="/dashboard/portals/it.html">Information Technology</a><a class="rounded border p-2" href="/dashboard/portals/legal.html">Legal & Compliance</a><a class="rounded border p-2" href="/dashboard/portals/corporate-operations.html">Corporate Operations</a></div><h3 class="text-lg font-semibold text-gray-800 mb-3">Department sign-in portals</h3><div class="grid grid-cols-2 gap-2 text-sm mb-5"><a class="rounded border p-2" href="/dashboard/portals/hr.html">Human Resources</a><a class="rounded border p-2" href="/dashboard/portals/finance.html">Finance</a><a class="rounded border p-2" href="/dashboard/portals/procurement.html">Procurement</a><a class="rounded border p-2" href="/dashboard/portals/administration.html">Administration</a><a class="rounded border p-2" href="/dashboard/portals/it.html">Information Technology</a><a class="rounded border p-2" href="/dashboard/portals/legal.html">Legal & Compliance</a><a class="rounded border p-2" href="/dashboard/portals/corporate-operations.html">Corporate Operations</a></div>
+                <div class="mt-8 glass-effect rounded-xl p-6"><h3 class="text-lg font-semibold text-gray-800 mb-3">Department sign-in portals</h3><div class="grid grid-cols-2 gap-2 text-sm mb-5"><a class="rounded border p-2" href="/dashboard/portals/hr.html">Human Resources</a><a class="rounded border p-2" href="/dashboard/portals/finance.html">Finance</a><a class="rounded border p-2" href="/dashboard/portals/procurement.html">Procurement</a><a class="rounded border p-2" href="/dashboard/portals/administration.html">Administration</a><a class="rounded border p-2" href="/dashboard/portals/it.html">Information Technology</a><a class="rounded border p-2" href="/dashboard/portals/legal.html">Legal &amp; Compliance</a><a class="rounded border p-2" href="/dashboard/portals/corporate-operations.html">Corporate Operations</a></div></div>
                     <h3 class="text-lg font-semibold text-gray-800 mb-4">
                         <i class="fas fa-gift mr-2 text-[color:var(--of-brass)]"></i>
                         Why Choose OfficeFlow?
@@ -449,11 +449,26 @@
           return true;
         }
 
+        function safeNextDestination() {
+            var candidate = new URLSearchParams(window.location.search).get('next');
+            if (!candidate || candidate.charAt(0) !== '/') return null;
+            try {
+                var target = new URL(candidate, window.location.origin);
+                if (target.origin !== window.location.origin || !target.pathname.startsWith('/dashboard/')) return null;
+                if (target.pathname === '/dashboard/auth.html' || target.pathname === '/dashboard/organization-setup.html') return null;
+                return target.pathname + target.search + target.hash;
+            } catch (error) {
+                return null;
+            }
+        }
+
         function destinationForAccount(account) {
             var bootstrapOrgId = '00000000-0000-0000-0000-000000000001';
-            return account && account.role === 'employee' && account.organization_id === bootstrapOrgId
-                ? '/dashboard/organization-setup.html'
-                : '/dashboard/index.html';
+            var next = safeNextDestination();
+            if (account && account.role === 'employee' && account.organization_id === bootstrapOrgId) {
+                return '/dashboard/organization-setup.html' + (next ? '?next=' + encodeURIComponent(next) : '');
+            }
+            return next || '/dashboard/index.html';
         }
 
         // Form Toggle
@@ -538,7 +553,12 @@
             showNotification('Creating Account', 'Please wait...', 'info');
             try {
                 var phone = document.getElementById('signUpPhone').value.trim();
-                var result = await OOES_AUTH.register(fn, ln, email, pw, window.location.origin + '/dashboard/auth.html' + (portalCode ? '?department=' + encodeURIComponent(portalCode) : ''), phone);
+                var callbackParams = new URLSearchParams();
+                if (portalCode) callbackParams.set('department', portalCode);
+                var nextTarget = new URLSearchParams(window.location.search).get('next');
+                if (nextTarget) callbackParams.set('next', nextTarget);
+                var confirmationUrl = window.location.origin + '/dashboard/auth.html' + (callbackParams.toString() ? '?' + callbackParams.toString() : '');
+                var result = await OOES_AUTH.register(fn, ln, email, pw, confirmationUrl, phone);
                 if (!result || result.error) {
                     showNotification('Sign Up Failed', (result && result.error) || 'Unable to create your account. Please try again.', 'error');
                     return;

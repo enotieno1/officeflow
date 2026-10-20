@@ -104,15 +104,31 @@ var OOES_AUTH = {
   },
 
   async requireAuth() {
-    var { data } = await supabase.auth.getSession();
-    if (!data.session) {
+    try {
+      var { data, error } = await supabase.auth.getSession();
+      if (error) throw error;
+      if (!data || !data.session) {
+        this._session = null;
+        localStorage.removeItem('ooesSession');
+        var returnTo = window.location.pathname + window.location.search;
+        window.location.replace('/dashboard/auth.html?next=' + encodeURIComponent(returnTo));
+        return false;
+      }
+      await this._loadProfile(data.session.user);
+      localStorage.setItem('ooesSession', '1'); // UI hint only; Supabase/RLS remain authoritative.
+      return true;
+    } catch (error) {
+      // Always let the page's ready promise resolve. A transient profile/network
+      // error must not leave every protected page stuck on "Loading…".
+      this._session = null;
       localStorage.removeItem('ooesSession');
-      window.location.replace('/dashboard/auth.html');
+      console.error('OfficeFlow session verification failed', error);
+      if (!window.location.pathname.endsWith('/auth.html')) {
+        var returnTo = window.location.pathname + window.location.search;
+        window.location.replace('/dashboard/auth.html?reason=session&next=' + encodeURIComponent(returnTo));
+      }
       return false;
     }
-    await this._loadProfile(data.session.user);
-    localStorage.setItem('ooesSession', '1'); // keep the pre-render guard flag in sync
-    return true;
   },
 
   renderUserInfo: function () {
@@ -127,13 +143,41 @@ var OOES_AUTH = {
 OOES_AUTH.ready = new Promise(function (resolve) { OOES_AUTH._readyResolve = resolve; });
 
 (function () {
-  if (!window.location.pathname.includes('auth.html')) {
-    document.addEventListener('DOMContentLoaded', async function () {
-      var ok = await OOES_AUTH.requireAuth();
-      if (ok) OOES_AUTH.renderUserInfo();
-      OOES_AUTH._readyResolve(ok);
-    });
-  } else {
+  var path = window.location.pathname;
+  var isAuthPage = path.endsWith('/auth.html');
+  var isPublicPage = path.endsWith('/pricing.html') || path.endsWith('/contact.html');
+
+  if (isAuthPage) {
     OOES_AUTH._readyResolve(false);
+    return;
   }
+
+  document.addEventListener('DOMContentLoaded', async function () {
+    var ok = false;
+    try {
+      if (isPublicPage) {
+        // Public marketing pages must remain accessible while signed out.
+        // If a session exists, load its profile so CTA routing and user info work.
+        var sessionResult = await supabase.auth.getSession();
+        if (!sessionResult.error && sessionResult.data && sessionResult.data.session) {
+          await OOES_AUTH._loadProfile(sessionResult.data.session.user);
+          ok = true;
+          OOES_AUTH.renderUserInfo();
+        }
+      } else {
+        ok = await OOES_AUTH.requireAuth();
+        if (ok) OOES_AUTH.renderUserInfo();
+      }
+    } catch (error) {
+      console.error('OfficeFlow auth initialization failed', error);
+      OOES_AUTH._session = null;
+      if (!isPublicPage) {
+        localStorage.removeItem('ooesSession');
+        window.location.replace('/dashboard/auth.html?reason=session');
+      }
+    } finally {
+      // Resolve for every route, even when auth/profile requests fail.
+      OOES_AUTH._readyResolve(ok);
+    }
+  });
 })();
