@@ -207,11 +207,11 @@
 
                     <!-- Social Sign In -->
                     <div class="grid grid-cols-2 gap-4 mb-6">
-                        <button onclick="socialSignIn('google')" class="social-btn bg-white border border-gray-300 rounded-lg py-3 px-4 flex items-center justify-center hover:bg-gray-50">
+                        <button type="button" onclick="socialSignIn('google')" class="social-btn bg-white border border-gray-300 rounded-lg py-3 px-4 flex items-center justify-center hover:bg-gray-50">
                             <i class="fab fa-google text-red-500 mr-2"></i>
                             <span class="text-gray-700">Google</span>
                         </button>
-                        <button onclick="socialSignIn('microsoft')" class="social-btn bg-white border border-gray-300 rounded-lg py-3 px-4 flex items-center justify-center hover:bg-gray-50">
+                        <button type="button" onclick="socialSignIn('microsoft')" class="social-btn bg-white border border-gray-300 rounded-lg py-3 px-4 flex items-center justify-center hover:bg-gray-50">
                             <i class="fab fa-microsoft text-blue-500 mr-2"></i>
                             <span class="text-gray-700">Microsoft</span>
                         </button>
@@ -269,11 +269,11 @@
 
                     <!-- Social Sign Up -->
                     <div class="grid grid-cols-2 gap-4 mb-6">
-                        <button onclick="socialSignUp('google')" class="social-btn bg-white border border-gray-300 rounded-lg py-3 px-4 flex items-center justify-center hover:bg-gray-50">
+                        <button type="button" onclick="socialSignUp('google')" class="social-btn bg-white border border-gray-300 rounded-lg py-3 px-4 flex items-center justify-center hover:bg-gray-50">
                             <i class="fab fa-google text-red-500 mr-2"></i>
                             <span class="text-gray-700">Google</span>
                         </button>
-                        <button onclick="socialSignUp('microsoft')" class="social-btn bg-white border border-gray-300 rounded-lg py-3 px-4 flex items-center justify-center hover:bg-gray-50">
+                        <button type="button" onclick="socialSignUp('microsoft')" class="social-btn bg-white border border-gray-300 rounded-lg py-3 px-4 flex items-center justify-center hover:bg-gray-50">
                             <i class="fab fa-microsoft text-blue-500 mr-2"></i>
                             <span class="text-gray-700">Microsoft</span>
                         </button>
@@ -567,14 +567,38 @@
             }
         }
 
-        // Social authentication is intentionally disabled until the provider is configured in Supabase.
-        function socialSignIn(provider) {
-            showNotification('Not Available Yet', provider.charAt(0).toUpperCase() + provider.slice(1) + ' sign-in is not configured yet. Please use email and password.', 'info');
+        // OAuth is handled by Supabase Auth. Microsoft is the Supabase "azure" provider.
+        // The provider must also be enabled in the Supabase dashboard with valid client credentials.
+        async function startSocialAuth(provider, intent) {
+            const providerKey = provider === 'microsoft' ? 'azure' : provider;
+            const providerName = provider === 'microsoft' ? 'Microsoft' : 'Google';
+            if (!['google', 'azure'].includes(providerKey)) {
+                showNotification('Sign-in unavailable', 'This sign-in provider is not supported.', 'error');
+                return;
+            }
+            showNotification('Connecting to ' + providerName, 'Opening secure ' + providerName + ' sign-in...', 'info');
+            try {
+                const options = {
+                    redirectTo: window.location.origin + '/dashboard/auth.html',
+                    skipBrowserRedirect: false
+                };
+                if (providerKey === 'azure') options.scopes = 'email profile openid';
+                else options.scopes = 'email profile';
+
+                const { error } = await supabase.auth.signInWithOAuth({
+                    provider: providerKey,
+                    options: options
+                });
+                if (error) {
+                    showNotification(providerName + ' sign-in unavailable', error.message || 'Check the provider configuration and try again.', 'error');
+                }
+            } catch (error) {
+                showNotification(providerName + ' sign-in failed', error && error.message ? error.message : 'Check your connection and try again.', 'error');
+            }
         }
 
-        function socialSignUp(provider) {
-            showNotification('Not Available Yet', provider.charAt(0).toUpperCase() + provider.slice(1) + ' sign-up is not configured yet. Please use email and password.', 'info');
-        }
+        function socialSignIn(provider) { return startSocialAuth(provider, 'signin'); }
+        function socialSignUp(provider) { return startSocialAuth(provider, 'signup'); }
 
         async function handleForgotPassword() {
             var email = document.getElementById('signInEmail').value.trim();
@@ -624,20 +648,25 @@
                 showNotification('Authentication Link Problem', authError, 'error');
             }
 
-            // When an email confirmation returns a valid session, continue into OfficeFlow.
-            if (hashParams.get('access_token') && hashParams.get('type') !== 'recovery') {
+            // Complete email-confirmation and Google/Microsoft OAuth callbacks.
+            // Supabase JS exchanges the OAuth code and stores the session during client initialization.
+            const isOAuthCallback = params.has('code');
+            const isEmailConfirmation = hashParams.has('access_token') && hashParams.get('type') !== 'recovery';
+            if (isOAuthCallback || isEmailConfirmation) {
                 try {
                     const { data, error } = await supabase.auth.getSession();
-                    if (!error && data.session) {
+                    if (error) throw error;
+                    if (data.session && data.session.user) {
                         var account = await OOES_AUTH._loadProfile(data.session.user);
                         localStorage.setItem('ooesSession', '1');
-                        showNotification('Email Confirmed', 'Your email is confirmed. Opening OfficeFlow...', 'success');
+                        showNotification('Signed In', 'Welcome to OfficeFlow. Opening your workspace...', 'success');
                         window.history.replaceState({}, document.title, window.location.pathname);
-                        setTimeout(function() { window.location.replace(destinationForAccount(account)); }, 900);
+                        setTimeout(function() { window.location.replace(destinationForAccount(account)); }, 700);
                         return;
                     }
+                    showNotification('Sign-in incomplete', 'No active session was returned. Please try signing in again.', 'error');
                 } catch (e) {
-                    showNotification('Email Confirmation', 'Your link was opened, but OfficeFlow could not complete sign-in. Please sign in with your email and password.', 'info');
+                    showNotification('Sign-in could not finish', e && e.message ? e.message : 'Your identity was verified, but OfficeFlow could not load your account profile. Please contact your administrator.', 'error');
                 }
             }
 
