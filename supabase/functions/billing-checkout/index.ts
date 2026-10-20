@@ -27,21 +27,32 @@ Deno.serve(async (req: Request) => {
  if(existing?.status==="active") return reply(409,{error:"Organization already has an active subscription."});
  if(existing?.status==="past_due") return reply(409,{error:"Resolve the outstanding subscription before starting another."});
  if(existing?.status==="pending"&&existing.plan_id!==plan.id) return reply(409,{error:"A different subscription setup is already pending."});
+ const apiRef="of-"+crypto.randomUUID(), origin=app.replace(/\/$/,""), meta=(user.user_metadata??{}) as Record<string,unknown>, names=(typeof meta.full_name==="string"?meta.full_name:"OfficeFlow Customer").trim().split(/\s+/);
  const subId=existing?.id??crypto.randomUUID();
  if(!existing){const {error}=await db.from("billing_subscriptions").insert({id:subId,organization_id:profile.organization_id,plan_id:plan.id,status:"pending",payment_method:method,provider:"intasend",created_by:user.id}); if(error)return reply(500,{error:"Could not start subscription setup."});}
- const apiRef="of-"+crypto.randomUUID(), origin=app.replace(/\/$/,""), meta=(user.user_metadata??{}) as Record<string,unknown>, names=(typeof meta.full_name==="string"?meta.full_name:"OfficeFlow Customer").trim().split(/\s+/);
+ const {data:inFlight,error:flightErr}=await db.from("billing_payment_attempts").select("id,api_ref,created_at").eq("subscription_id",subId).in("status",["pending","processing"]).gte("created_at",new Date(Date.now()-15*60*1000).toISOString()).limit(1).maybeSingle();
+ if(flightErr)return reply(500,{error:"Could not check existing payment attempts."});
+ if(inFlight)return reply(409,{error:"A payment attempt is already pending or processing. Check its status before trying again.",reference:inFlight.api_ref});
+ const {error:attemptErr}=await db.from("billing_payment_attempts").insert({organization_id:profile.organization_id,subscription_id:subId,plan_id:plan.id,initiated_by:user.id,provider:"intasend",payment_method:method,api_ref:apiRef,amount:plan.amount,currency:plan.currency,status:"pending"});
+ if(attemptErr)return reply(500,{error:"Could not create a payment attempt. No payment was initiated."});
  const payload={amount:Number(plan.amount),currency:plan.currency,email:user.email??"",first_name:names[0]||"OfficeFlow",last_name:names.slice(1).join(" ")||"Customer",phone_number:phone??undefined,api_ref:apiRef,redirect_url:origin+"/dashboard/billing.html?payment=pending",host:origin};
  let response:Response;
  try {
   response=method==="mpesa"
    ? await fetch("https://api.intasend.com/api/v1/payment/mpesa-stk-push/",{method:"POST",headers:{Authorization:"Bearer "+secret,"Content-Type":"application/json"},body:JSON.stringify(payload)})
    : await fetch("https://api.intasend.com/api/v1/checkout/",{method:"POST",headers:{"X-IntaSend-Public-API-Key":pub,"Content-Type":"application/json"},body:JSON.stringify(payload)});
- } catch { return reply(502,{error:"Payment provider unreachable. No successful payment recorded."}); }
+ } catch {
+  await db.from("billing_payment_attempts").update({status:"processing",failure_reason:"Provider response was uncertain; reconcile this reference before retrying.",updated_at:new Date().toISOString()}).eq("api_ref",apiRef);
+  return reply(502,{error:"Payment provider response was uncertain. Do not retry yet; contact support with the reference so it can be reconciled.",reference:apiRef});
+ }
  const provider=await response.json().catch(()=>({}));
- if(!response.ok) return reply(502,{error:"Payment provider rejected the request. No successful payment recorded."});
+ if(!response.ok) {
+  await db.from("billing_payment_attempts").update({status:"failed",failure_reason:"Provider rejected checkout request.",updated_at:new Date().toISOString()}).eq("api_ref",apiRef);
+  return reply(502,{error:"Payment provider rejected the request. No successful payment recorded."});
+ }
  const invoiceId=provider.invoice_id??provider.invoice?.invoice_id??provider.id, checkoutUrl=provider.url??provider.checkout_url??null;
  if(!invoiceId) return reply(502,{error:"Provider returned no payment reference."});
- const {error:payErr}=await db.from("billing_payment_attempts").insert({organization_id:profile.organization_id,subscription_id:subId,plan_id:plan.id,initiated_by:user.id,provider:"intasend",payment_method:method,api_ref:apiRef,provider_invoice_id:String(invoiceId),amount:plan.amount,currency:plan.currency,status:"processing",provider_state:"PROCESSING",checkout_url:checkoutUrl});
- if(payErr) return reply(500,{error:"Provider may have started a payment prompt but OfficeFlow could not record it. Contact support before retrying.",reference:apiRef});
+ const {error:payErr}=await db.from("billing_payment_attempts").update({provider_invoice_id:String(invoiceId),status:"processing",provider_state:"PROCESSING",checkout_url:checkoutUrl,updated_at:new Date().toISOString()}).eq("api_ref",apiRef);
+ if(payErr) return reply(500,{error:"Provider may have started a payment prompt. The attempt is retained for reconciliation; do not retry yet.",reference:apiRef});
  return reply(200,{status:"processing",message:method==="mpesa"?"Complete the M-Pesa prompt on your phone. OfficeFlow will verify payment.":"Complete payment on the secure hosted checkout. OfficeFlow will verify payment.",checkout_url:checkoutUrl,reference:apiRef});
 });
