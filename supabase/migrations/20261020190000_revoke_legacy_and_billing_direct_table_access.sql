@@ -1,6 +1,6 @@
 -- Legacy employee/transaction/fraud registers are not active customer-facing modules.
 -- Organization provisioning, billing and audit operations must go through guarded RPCs.
-REVOKE ALL ON TABLE public.audit_events, public.organizations FROM PUBLIC, anon, authenticated;
+REVOKE ALL ON TABLE public.employees, public.transactions, public.fraud_alerts, public.audit_events, public.organizations FROM PUBLIC, anon, authenticated;
 
 -- Billing rows contain subscription and provider metadata. Clients read their own
 -- organization overview only through fn_get_billing_overview().
