@@ -31,8 +31,35 @@
         
         .auth-card { border-top: 2px solid var(--of-brass); }
         
+        /* Keep authentication controls above decorative layers and tappable on mobile. */
+        .slide-in,
+        #signInForm,
+        #signUpForm {
+            position: relative;
+            z-index: 10;
+            pointer-events: auto;
+        }
+
+        #signInForm input:not([type="checkbox"]),
+        #signUpForm input:not([type="checkbox"]) {
+            position: relative;
+            z-index: 11;
+            display: block;
+            width: 100%;
+            pointer-events: auto;
+            user-select: text;
+            -webkit-user-select: text;
+            touch-action: manipulation;
+            opacity: 1;
+        }
+
         .input-group {
             position: relative;
+        }
+
+        .input-group label.floating-label {
+            z-index: 1;
+            pointer-events: none;
         }
         
         .input-group input:focus + label,
@@ -226,7 +253,7 @@
                         </div>
                     </div>
 
-                    <form onsubmit="handleSignIn(event)">
+                    <form id="officeFlowSignInForm" onsubmit="handleSignIn(event)">
                         <div class="space-y-6">
                             <div class="input-group">
                                 <input type="email" id="signInEmail" placeholder=" " required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[color:var(--of-brass)] focus:border-transparent outline-none">
@@ -288,7 +315,7 @@
                         </div>
                     </div>
 
-                    <form onsubmit="handleSignUp(event)">
+                    <form id="officeFlowSignUpForm" onsubmit="handleSignUp(event)">
                         <div class="space-y-6">
                             <div class="grid grid-cols-2 gap-4">
                                 <div class="input-group">
