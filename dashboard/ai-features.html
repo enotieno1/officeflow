@@ -160,7 +160,7 @@
                     </div>
                 </div>
                 <div class="flex items-center space-x-4">
-                    <span class="ai-badge">AI provider not connected</span>
+                    <span class="ai-badge" id="aiProviderStatus">AI service setup required</span>
                     <button class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition">
                         <i class="fas fa-cog mr-2"></i>Configure
                     </button>
@@ -213,6 +213,7 @@
         </section>
 
         <!-- AI Features Grid -->
+        <div class="mb-6 rounded-lg border border-yellow-700 bg-yellow-900 bg-opacity-20 p-4 text-sm text-yellow-100">AI tools use the secure OfficeFlow AI service. Live AI answers require an administrator to configure the provider secret. Usage metrics and organization-wide data analysis are not enabled until separately integrated.</div>
         <section class="mb-8">
             <h2 class="text-2xl font-bold text-white mb-6">
                 <i class="fas fa-microchip mr-3 text-red-500"></i>
@@ -599,33 +600,33 @@
             messages.innerHTML += '<div id="' + loadingId + '" class="flex justify-start mb-4"><div class="bg-gray-700 text-gray-400 px-4 py-3 rounded-xl text-sm">Thinking...</div></div>';
             messages.scrollTop = messages.scrollHeight;
 
-            // Build history
+            // Send to the authenticated Supabase Edge Function. Never fake an AI response.
             aiChatHistory.push({role: 'user', content: msg});
             try {
-                var reply = getAIResponse(currentFeature, msg);
-                aiChatHistory.push({role: "assistant", content: reply});
-                var responseNode=document.createElement('div');responseNode.className='flex justify-start mb-4';var responseBubble=document.createElement('div');responseBubble.className='bg-gray-700 text-gray-100 px-4 py-3 rounded-xl max-w-sm text-sm';responseBubble.style.whiteSpace='pre-wrap';responseBubble.textContent=reply;responseNode.appendChild(responseBubble);document.getElementById(loadingId).replaceWith(responseNode);
+                if (typeof supabase === 'undefined' || !supabase.functions) throw new Error('OfficeFlow AI connection is unavailable. Refresh and sign in again.');
+                const { data: sessionData } = await supabase.auth.getSession();
+                if (!sessionData || !sessionData.session) throw new Error('Your session has expired. Please sign in again.');
+                const { data, error } = await supabase.functions.invoke('officeflow-ai', { body: { feature: currentFeature, messages: aiChatHistory } });
+                if (error) {
+                    let detail = error.message || 'AI request failed.';
+                    if (error.context && typeof error.context.json === 'function') { try { const body = await error.context.json(); if (body && body.error) detail = body.error; } catch (_) {} }
+                    throw new Error(detail);
+                }
+                if (!data || !data.reply) throw new Error((data && data.error) || 'No response received from the AI service.');
+                const reply = data.reply;
+                aiChatHistory.push({role: 'assistant', content: reply});
+                var responseNode=document.createElement('div'); responseNode.className='flex justify-start mb-4';
+                var responseBubble=document.createElement('div'); responseBubble.className='bg-gray-700 text-gray-100 px-4 py-3 rounded-xl max-w-sm text-sm'; responseBubble.style.whiteSpace='pre-wrap'; responseBubble.textContent=reply; responseNode.appendChild(responseBubble);
+                document.getElementById(loadingId).replaceWith(responseNode);
             } catch(err) {
-                var errorNode=document.createElement('div');errorNode.className='flex justify-start mb-4';var errorBubble=document.createElement('div');errorBubble.className='bg-red-900 text-red-200 px-4 py-3 rounded-xl max-w-xs text-sm';errorBubble.textContent='The local helper could not respond.';errorNode.appendChild(errorBubble);document.getElementById(loadingId).replaceWith(errorNode);
+                aiChatHistory.pop();
+                var errorNode=document.createElement('div'); errorNode.className='flex justify-start mb-4';
+                var errorBubble=document.createElement('div'); errorBubble.className='bg-red-900 text-red-200 px-4 py-3 rounded-xl max-w-sm text-sm'; errorBubble.textContent=(err && err.message) ? err.message : 'OfficeFlow AI could not respond. Please try again.'; errorNode.appendChild(errorBubble);
+                document.getElementById(loadingId).replaceWith(errorNode);
             }
         }
 
-
-        function getAIResponse(feature, msg) {
-            var text = String(msg || '').trim();
-            var lower = text.toLowerCase();
-            var templates = {
-                'document-processing': 'Document helper: paste only non-sensitive text. This page cannot yet extract or verify documents automatically. A useful summary format is: purpose, key dates, amounts, obligations, risks and next actions.',
-                'workflow-automation': 'Workflow planning template: trigger → required fields → validation → approver(s) → SLA → escalation → completion evidence → audit log. Use Workflow Builder to configure it. This helper has not analysed live workflow data.',
-                'virtual-assistant': 'Email draft template:\nSubject: [Clear subject]\n\nDear [Recipient],\n\n[State the purpose, relevant facts and requested action.]\n\nPlease let me know if further information is required.\n\nKind regards,\n[Your name]\n\nThis is a template, not an email that has been sent.',
-                'financial-intelligence': 'Live financial analysis is not connected to this helper. Use Finance and Reports for saved records, and verify totals against source documents before making decisions. This response is not a calculation of your organisation’s actual performance.',
-                'hr-analytics': 'Live HR analytics is not connected to this helper. Use the HR module for employee records and confirm applicable Kenyan employment requirements before acting on policy or payroll questions.',
-                'compliance-monitor': 'Live compliance monitoring is not connected to this helper. Use verified official guidance and your organisation’s compliance records; this page has not checked filings, permits or deadlines.'
-            };
-            if (!text) return 'Enter a question or describe the task you want help with.';
-            if (lower.includes('draft') || lower.includes('email')) return templates['virtual-assistant'];
-            return templates[feature] || 'This productivity helper is running in limited template mode. The AI provider is not configured, so it has not generated an AI response or analysed live organisation data.';
-        }
+        function getAIResponse(feature, msg) { return 'AI responses are provided by the secure OfficeFlow AI service. Please try again if the service is temporarily unavailable.'; }
 
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Enter' && !e.shiftKey && document.getElementById('aiModal') && document.getElementById('aiModal').style.display !== 'none') {
