@@ -53,6 +53,30 @@
     current.append(cell('p','M-Pesa renewals require a customer-confirmed STK prompt. Renewal opens seven days before the paid period ends.','mt-3 text-sm text-slate-600'));
    }
    if(currentSub.provider_subscription_failure_reason)current.append(cell('p','Billing needs attention: '+currentSub.provider_subscription_failure_reason,'mt-3 text-sm text-red-700'));
+   if(currentSub.status==='cancelled')current.append(cell('p','Subscription billing is cancelled. The recorded paid-period end date has been preserved.','mt-3 text-sm text-slate-600'));
+   if(currentSub.cancel_at_period_end&&currentSub.status!=='cancelled')current.append(cell('p','Cancellation has been requested; waiting for provider confirmation. Do not assume recurring billing has stopped until the provider status is confirmed.','mt-3 text-sm text-amber-700'));
+   if(currentSub.status==='pending'&&currentSub.payment_method==='mpesa')current.append(cell('p','A customer-confirmed M-Pesa prompt may still be processing. Wait for its final status before taking another billing action.','mt-3 text-sm text-amber-700'));
+   if(currentSub.status==='pending'&&currentSub.payment_method==='card'&&!currentSub.provider_subscription_id)current.append(cell('p','Card setup is awaiting provider reconciliation. Contact support before retrying or cancelling.','mt-3 text-sm text-amber-700'));
+   const canCancel=!currentSub.cancel_at_period_end&&(
+     currentSub.status==='active'||currentSub.status==='past_due'||
+     (currentSub.status==='pending'&&currentSub.payment_method==='card'&&!!currentSub.provider_subscription_id)
+   );
+   if(canCancel){
+    const cancelButton=cell('button','Cancel subscription','mt-4 px-4 py-2 rounded-lg border border-red-200 text-red-700 font-semibold text-sm self-start');
+    cancelButton.type='button';
+    cancelButton.addEventListener('click',async()=>{
+     if(!confirm('Cancel this subscription? Card cancellation is sent to IntaSend for verification; M-Pesa has no automatic charge but this stops future manual renewals.'))return;
+     cancelButton.disabled=true;cancelButton.textContent='Requesting cancellation…';
+     try{
+      const {data,error}=await supabase.functions.invoke('billing-cancel',{body:{}});
+      if(error){let msg='Cancellation could not be confirmed. Do not assume recurring billing has stopped.';try{const e=await error.context.json();if(e.error)msg=e.error;}catch{}note(msg,'error');}
+      else if(data?.status==='cancelled'){note(data.message||'Cancellation confirmed.','success');setTimeout(()=>location.reload(),900);}
+      else note(data?.message||'Cancellation is pending provider confirmation.','info');
+     }catch{note('Network error requesting cancellation. Do not assume recurring billing has stopped.','error');}
+     finally{cancelButton.disabled=false;cancelButton.textContent='Cancel subscription';}
+    });
+    current.append(cancelButton);
+   }
   }
   if(!planData.length){plans.textContent='No subscription prices have been published. Checkout is unavailable until pricing is approved.';}
   else{
