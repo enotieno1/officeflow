@@ -23,7 +23,7 @@ test("protected task page redirects a signed-out visitor", async ({ page }) => {
 });
 
 test("authenticated user can create, update and delete their own task", async ({ page }) => {
-  test.skip(process.env.RUN_MUTATING_E2E !== "1", "Set RUN_MUTATING_E2E=1 only for a dedicated test organization.");
+  test.skip(process.env.RUN_MUTATING_E2E !== "1" || /(^|\\.)officeflow\\.co\\.ke$|(^|\\.)office-sort\\.vercel\\.app$/.test(new URL(baseURL).hostname), "Mutating tests are allowed only against a dedicated staging/preview app and test organization.");
   await signIn(page);
   await page.goto(baseURL + "/dashboard/tasks-management.html");
   await expect(page.getByRole("heading", { name: "Tasks" })).toBeVisible();
