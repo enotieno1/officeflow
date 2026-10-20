@@ -625,27 +625,32 @@
             document.getElementById('employeeModal').classList.remove('active');
         }
 
-        async function saveEmployee() {
-            var fn = document.getElementById('firstName').value;
-            var ln = document.getElementById('lastName').value;
-            var email = document.getElementById('email').value;
-            var phone = document.getElementById('phone').value;
-            var dept = document.getElementById('department').value;
-            var pos = document.getElementById('position').value;
-            var salary = parseFloat(document.getElementById('salary').value) || 0;
-            var newEmp = { name: fn+' '+ln, email: email, phone: phone, department: dept, salary: salary, status: 'active' };
+        async async function saveEmployee() {
+            const session = window.OOES_AUTH && OOES_AUTH.getSession();
+            const fn = document.getElementById('firstName').value.trim();
+            const ln = document.getElementById('lastName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const dept = document.getElementById('department').value;
+            const pos = document.getElementById('position').value.trim();
+            const salary = Number(document.getElementById('salary').value) || 0;
+            if (!session || !session.id || !session.organization_id) { showNotification('Your organization profile is not ready. Sign in again.', 'error'); return; }
+            if (!fn || !ln || !email) { showNotification('Enter the employee name and email address.', 'error'); return; }
             try {
-                var result = await supabase.from('employees').insert([newEmp]).select();
-                if (result.error) throw result.error;
-                showNotification('Success', fn+' '+ln+' added successfully!', 'success');
+                const {data,error} = await supabase.from('employees').insert([{
+                    name: fn + ' ' + ln, email, phone: phone || null, department: dept || null,
+                    position: pos || null, salary, status: 'Active',
+                    owner_id: session.id, organization_id: session.organization_id,
+                    hire_date: new Date().toISOString().slice(0,10)
+                }]).select().single();
+                if (error) throw error;
+                await loadEmployees();
+                showNotification(fn + ' ' + ln + ' added to the organization records.', 'success');
+                closeEmployeeModal();
             } catch(err) {
-                console.log('Supabase error, saving locally:', err);
-                showNotification('Saved', fn+' '+ln+' added locally.', 'info');
+                console.error('Employee save failed:', err);
+                showNotification('Employee was not saved. Check permissions and required fields, then retry.', 'error');
             }
-            employees.push({id:employees.length+1, firstName:fn, lastName:ln, email:email, phone:phone, department:dept, salary:salary, status:'active', avatar:'https://ui-avatars.com/api/?name='+encodeURIComponent(fn+' '+ln)+'&background=3B82F6&color=fff'});
-            renderEmployeeTable();
-            updateHRStats();
-            closeEmployeeModal();
         }
 
         function viewEmployee(id) {
@@ -680,11 +685,7 @@
         }
 
         function processPayroll() {
-            alert('Initiating payroll processing...');
-            // Update payroll status
-            setTimeout(() => {
-                alert('Payroll processing completed. All employees have been paid.');
-            }, 3000);
+            showNotification('Payroll calculation is available, but payroll payment is not integrated. No employees have been paid from this screen.', 'warning');
         }
 
         function viewAttendance() {
@@ -699,19 +700,12 @@
         }
 
         function markAttendance() {
-            alert('Marking all employees as present for today...');
-            // Update attendance status
-            employees.forEach(emp => {
-                if (emp.status === 'active') {
-                    // Mark as present
-                }
-            });
-            renderEmployeeTable();
-            updateHRStats();
+            showNotification('Attendance persistence is not configured yet. No attendance records were changed.', 'warning');
         }
 
         function requestLeave() {
-            alert('Leave request system would open here...');
+            showNotification('Use Work Center and select the published Leave Request workflow. This legacy form does not submit a request.', 'warning');
+            window.location.href = '/dashboard/workflow.html';
         }
 
         function calculatePayroll() {
@@ -1733,14 +1727,8 @@
         }
 
         function submitLeaveRequest() {
-            const form = document.getElementById('leaveForm');
-            if (form) {
-                showNotification('Submitting leave request...', 'info');
-                setTimeout(() => {
-                    showNotification('Leave request submitted successfully!', 'success');
-                    closeModal(document.querySelector('#leaveModal button[onclick*="closeModal"]'));
-                }, 1500);
-            }
+            showNotification('This legacy leave form is not connected to the workflow engine. Open Work Center and submit the published Leave Request workflow instead.', 'warning');
+            window.location.href = '/dashboard/workflow.html';
         }
 
         function openPayrollModal() {
