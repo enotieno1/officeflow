@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><script>/* OfficeFlow live-module routing */location.replace('operational-module.html?category=Communication');</script><script>(function(){if(!localStorage.getItem("ooesSession")){window.location.href="/dashboard/auth.html";}})();</script>
+<head><script>/* OfficeFlow live-module routing */</script><script>(function(){if(!localStorage.getItem("ooesSession")){window.location.href="/dashboard/auth.html";}})();</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Professional Email System - OOES</title>
@@ -788,7 +788,10 @@ contact@ooes.co.ke`
         }
 
         // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', async function() {
+            await OOES_AUTH.ready;
+            if (!OOES_AUTH.isLoggedIn()) { window.location.href='/dashboard/auth.html'; return; }
+            if (!['administrator','super_admin'].includes(OOES_AUTH.getRole())) { window.location.replace('operational-module.html?category=Communication'); return; }
             // Load saved draft if exists
             const savedDraft = localStorage.getItem('emailDraft');
             if (savedDraft) {
