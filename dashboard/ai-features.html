@@ -1,26 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><script>/* OfficeFlow AI honesty routing */location.replace('control-tower.html');</script><script>(function(){if(!localStorage.getItem("ooesSession")){window.location.href="/dashboard/auth.html";}})();
-        function getAIResponse(feature, msg) {
-            msg = (msg||'').toLowerCase();
-            var r = {
-                'document-processing': ['I can extract key data from your document. Paste the text and I will identify dates, amounts, names and action items.','For invoice processing I recommend fields: Invoice No, Date, Client, Items, Total, VAT 16%, Net Amount. Shall I create a template?','I can organize your documents by: Date, Department, Type, or Status. Which works best for your team?'],
-                'workflow-automation': ['I found 3 bottlenecks: 1) Invoice approval takes 4 days avg, 2) Leave requests wait 2 days, 3) Purchase orders need 3 approvals. Recommend automating steps 1 and 3.','Workflow: Submit to Auto-notify Manager to 24hr deadline to Auto-escalate Director. Reduces approval time by 70%.','I can automate: Daily reports, Payroll reminders, Leave balance updates, Invoice reminders. Which to start with?'],
-                'virtual-assistant': ['Hello! I can help with drafting emails, scheduling meetings, task reminders, HR queries and policy lookups. What do you need?','Draft email ready: Subject: Follow-up on Invoice. Dear [Client], I am following up on Invoice #2026-001 totaling KES [Amount] due [Date]. Kindly confirm payment date. Regards, [Name]','HR Policy: Annual leave 21 days, Sick leave 7 days paid, Maternity 90 days, Paternity 3 days.'],
-                'financial-intelligence': ['Analysis: Revenue KES 285,000 | Expenses KES 198,000 | Net Profit KES 87,000 (30.5% margin). Revenue up 15% vs last month.','Cash flow next 30 days: Income KES 320,000 | Expenses KES 215,000 | Surplus KES 105,000. Alert: 2 overdue invoices totaling KES 45,000.','KRA Status: VAT up to date, PAYE up to date, Corporate tax due in 45 days, NSSF compliant, NHIF compliant.'],
-                'hr-analytics': ['HR Summary: 24 employees, 22 active, 2 on leave. Departments: Ops 8, Finance 4, Sales 6, IT 4, HR 2. Engagement: 8.2/10.','Performance: Tasks on time 87%, Avg completion 2.3 days, Overdue 12%. Recommend recognizing top 5 performers.','Payroll: Total KES 1,245,000 | PAYE KES 187,500 | NHIF KES 24,000 | NSSF KES 62,400 | Net KES 971,100.'],
-                'compliance-monitor': ['Compliance: KRA PAYE filed, VAT up to date, NSSF compliant, NHIF compliant. Alerts: Business Permit renew in 30 days, Fire Safety Certificate expired. Score: 85/100.','KRA Deadlines: VAT 20th monthly, PAYE 9th monthly, Corporate Tax 4 months after year end, WHT 20th monthly.','Labour Law: Minimum wage met, Working hours compliant, Leave configured. Alert: 2 employees need updated contracts.']
-            };
-            var res = r[feature] || r['virtual-assistant'];
-            var idx = 0;
-            if (msg.includes('invoice')||msg.includes('doc')) idx=0;
-            else if (msg.includes('workflow')||msg.includes('automate')) idx=1;
-            else if (msg.includes('email')||msg.includes('meeting')||msg.includes('schedule')) idx=2;
-            else idx = Math.floor(Math.random()*res.length);
-            return res[Math.min(idx,res.length-1)];
-        }
-
-</script>
+<head><script>(function(){if(!localStorage.getItem("ooesSession")){window.location.href="/dashboard/auth.html";}})();</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Features - Office Efficiency Platform</title>
@@ -180,7 +160,7 @@
                     </div>
                 </div>
                 <div class="flex items-center space-x-4">
-                    <span class="ai-badge ai-pulse">AI Active</span>
+                    <span class="ai-badge">AI provider not connected</span>
                     <button class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition">
                         <i class="fas fa-cog mr-2"></i>Configure
                     </button>
@@ -197,37 +177,37 @@
                 <div class="metric-card p-6 rounded-lg">
                     <div class="flex items-center justify-between mb-4">
                         <i class="fas fa-clock text-2xl text-red-500"></i>
-                        <span class="text-3xl font-bold text-white">70%</span>
+                        <span class="text-3xl font-bold text-white">—</span>
                     </div>
                     <h3 class="text-white font-semibold mb-1">Time Saved</h3>
-                    <p class="text-gray-400 text-sm">Reduction in admin work</p>
+                    <p class="text-gray-400 text-sm">Live usage metrics not connected</p>
                 </div>
                 
                 <div class="metric-card p-6 rounded-lg">
                     <div class="flex items-center justify-between mb-4">
                         <i class="fas fa-tasks text-2xl text-blue-500"></i>
-                        <span class="text-3xl font-bold text-white">2,847</span>
+                        <span class="text-3xl font-bold text-white">—</span>
                     </div>
                     <h3 class="text-white font-semibold mb-1">Tasks Automated</h3>
-                    <p class="text-gray-400 text-sm">This month</p>
+                    <p class="text-gray-400 text-sm">Usage tracking not connected</p>
                 </div>
                 
                 <div class="metric-card p-6 rounded-lg">
                     <div class="flex items-center justify-between mb-4">
                         <i class="fas fa-file-alt text-2xl text-green-500"></i>
-                        <span class="text-3xl font-bold text-white">15.2K</span>
+                        <span class="text-3xl font-bold text-white">—</span>
                     </div>
                     <h3 class="text-white font-semibold mb-1">Documents Processed</h3>
-                    <p class="text-gray-400 text-sm">AI-powered analysis</p>
+                    <p class="text-gray-400 text-sm">AI provider not connected</p>
                 </div>
                 
                 <div class="metric-card p-6 rounded-lg">
                     <div class="flex items-center justify-between mb-4">
                         <i class="fas fa-chart-line text-2xl text-yellow-500"></i>
-                        <span class="text-3xl font-bold text-white">94%</span>
+                        <span class="text-3xl font-bold text-white">—</span>
                     </div>
                     <h3 class="text-white font-semibold mb-1">Accuracy Rate</h3>
-                    <p class="text-gray-400 text-sm">AI processing accuracy</p>
+                    <p class="text-gray-400 text-sm">No verified accuracy data</p>
                 </div>
             </div>
         </section>
@@ -611,7 +591,7 @@
             var messages = document.getElementById('aiChatMessages');
 
             // Add user message
-            messages.innerHTML += '<div class="flex justify-end mb-4"><div class="px-4 py-3 rounded-xl max-w-xs text-sm text-white" style="background:linear-gradient(135deg,#16213E,#1F2C4F)">' + msg + '</div></div>';
+            var userNode=document.createElement('div');userNode.className='flex justify-end mb-4';var userBubble=document.createElement('div');userBubble.className='px-4 py-3 rounded-xl max-w-xs text-sm text-white';userBubble.style.background='linear-gradient(135deg,#16213E,#1F2C4F)';userBubble.textContent=msg;userNode.appendChild(userBubble);messages.appendChild(userNode);
             input.value = '';
 
             // Add loading
@@ -624,162 +604,27 @@
             try {
                 var reply = getAIResponse(currentFeature, msg);
                 aiChatHistory.push({role: "assistant", content: reply});
-                document.getElementById(loadingId).outerHTML = "<div class="flex justify-start mb-4"><div class="bg-gray-700 text-gray-100 px-4 py-3 rounded-xl max-w-sm text-sm" style="white-space:pre-wrap">" + reply + "</div></div>";
+                var responseNode=document.createElement('div');responseNode.className='flex justify-start mb-4';var responseBubble=document.createElement('div');responseBubble.className='bg-gray-700 text-gray-100 px-4 py-3 rounded-xl max-w-sm text-sm';responseBubble.style.whiteSpace='pre-wrap';responseBubble.textContent=reply;responseNode.appendChild(responseBubble);document.getElementById(loadingId).replaceWith(responseNode);
             } catch(err) {
-                document.getElementById(loadingId).outerHTML = "<div class="flex justify-start mb-4"><div class="bg-red-900 text-red-200 px-4 py-3 rounded-xl max-w-xs text-sm">Error. Please try again.</div></div>";
+                var errorNode=document.createElement('div');errorNode.className='flex justify-start mb-4';var errorBubble=document.createElement('div');errorBubble.className='bg-red-900 text-red-200 px-4 py-3 rounded-xl max-w-xs text-sm';errorBubble.textContent='The local helper could not respond.';errorNode.appendChild(errorBubble);document.getElementById(loadingId).replaceWith(errorNode);
             }
         }
 
 
         function getAIResponse(feature, msg) {
-            msg = msg.toLowerCase();
-            var responses = {
-                'document-processing': [
-                    'I can extract key information from your document. Please paste the text and I will identify: dates, amounts, names, and action items.',
-                    'For invoice processing, I recommend using a template with fields: Invoice No, Date, Client, Items, Total, VAT 16%, Net Amount. Shall I create one?',
-                    'I detected this looks like a contract. Key clauses to review: payment terms, termination clause, liability limits. Want me to summarize each?',
-                    'Document classified as: Financial Report. Key figures extracted: Revenue, Expenses, Net Profit. Would you like a summary table?',
-                    'I can help organize your documents by: Date, Department, Document Type, or Status. Which category works best for your team?'
-                ],
-                'workflow-automation': [
-                    'I analyzed your workflow and found 3 bottlenecks: 1) Invoice approval takes avg 4 days, 2) Leave requests wait 2 days, 3) Purchase orders need 3 approvals. I recommend automating steps 1 and 3.',
-                    'For your approval workflow, I suggest: Submit → Auto-notify Manager → 24hr deadline → Auto-escalate to Director. This reduces approval time by 70%.',
-                    'I can automate these repetitive tasks: Daily reports, Monthly payroll reminders, Leave balance updates, Invoice payment reminders. Which should we start with?',
-                    'Workflow optimization complete. Estimated time savings: 12.5 hours/week across your team. The biggest win is automating the weekly status report.',
-                    'I detected that 28% of tasks are reassigned after assignment. Root cause: unclear task descriptions. I recommend adding a task template with: Objective, Deadline, Resources needed, Success criteria.'
-                ],
-                'virtual-assistant': [
-                    'Good day! I am your OfficeFlow virtual assistant. I can help with:
-• Drafting emails and letters
-• Scheduling meetings
-• Task reminders
-• HR queries
-• Policy lookups
-
-What do you need today?',
-                    'I have drafted a professional email based on your request. Subject: "Follow-up on Invoice #2026-001"
-
-Dear [Client Name],
-
-I hope this email finds you well. I am writing to follow up on Invoice #2026-001 dated [Date], totaling KES [Amount], which was due on [Due Date].
-
-Kindly confirm receipt and expected payment date.
-
-Best regards,
-[Your Name]',
-                    'Meeting scheduled! I have blocked 10:00 AM - 11:00 AM tomorrow for your team standup. I will send reminders to all 5 participants 30 minutes before.',
-                    'Based on your calendar, you have 3 free slots this week: Tuesday 2PM, Wednesday 10AM, Friday 3PM. Which works best for the client meeting?',
-                    'HR Policy reminder: Annual leave entitlement is 21 days. Sick leave is 7 days paid. Maternity leave is 90 days. Paternity leave is 3 days. Need more details on any policy?'
-                ],
-                'financial-intelligence': [
-                    'Financial Analysis Complete:
-
-📈 Revenue this month: KES 285,000
-📉 Expenses: KES 198,000
-💰 Net Profit: KES 87,000 (30.5% margin)
-
-Trend: Revenue up 15% vs last month. Recommend reviewing the top 3 expense categories.',
-                    'Cash flow prediction for next 30 days:
-• Expected income: KES 320,000
-• Expected expenses: KES 215,000
-• Projected surplus: KES 105,000
-
-⚠️ Alert: 2 invoices totaling KES 45,000 are overdue. Follow up recommended.',
-                    'Top 3 cost reduction opportunities:
-1. Office supplies: 23% above industry average — negotiate bulk pricing
-2. Utilities: Could save KES 8,000/month with energy audit
-3. Overtime costs: Up 40% — consider hiring 1 part-time staff
-
-Potential savings: KES 45,000/month',
-                    'VAT Filing Reminder: Your next VAT return is due on the 20th of next month. Estimated VAT payable: KES 32,400 based on current transactions.',
-                    'KRA Compliance Check:
-✅ VAT returns: Up to date
-✅ PAYE: Up to date
-⚠️ Corporate tax: Due in 45 days
-✅ NSSF: Up to date
-✅ NHIF: Up to date'
-                ],
-                'hr-analytics': [
-                    'HR Analytics Dashboard:
-
-👥 Total Employees: 24
-✅ Active: 22
-🏥 On leave: 2
-
-📊 Departments:
-• Operations: 8
-• Finance: 4
-• Sales: 6
-• IT: 4
-• HR: 2
-
-Engagement score: 8.2/10',
-                    'Performance Insights:
-• Top performers this month: 5 employees
-• Tasks completed on time: 87%
-• Average task completion: 2.3 days
-• Overdue tasks: 12%
-
-Recommendation: Recognize top performers to maintain high engagement.',
-                    'Leave Analysis:
-• Annual leave balance: Avg 14 days remaining
-• Sick leave taken: 3.2 days avg
-• Departments with most leave: Sales (8 days avg)
-
-⚠️ 3 employees have not taken leave in 6 months — burnout risk.',
-                    'Payroll Summary:
-• Total payroll this month: KES 1,245,000
-• PAYE remitted: KES 187,500
-• NHIF: KES 24,000
-• NSSF: KES 62,400
-• Net paid: KES 971,100
-
-Next payroll due: 28th of this month.',
-                    'Recruitment Insight: Based on workload trends, I recommend hiring 1 additional staff in Sales by Q3. Current team is at 118% capacity on average.'
-                ],
-                'compliance-monitor': [
-                    'Compliance Status Report:
-
-✅ KRA PAYE: Filed & paid
-✅ VAT Returns: Up to date
-✅ NSSF: Compliant
-✅ NHIF: Compliant
-⚠️ Business Permit: Renew in 30 days
-⚠️ Fire Safety Certificate: Expired
-
-Compliance Score: 85/100',
-                    'KRA Filing Deadlines:
-• VAT Return: 20th monthly
-• PAYE: 9th monthly
-• Corporate Tax: 4 months after year end
-• Withholding Tax: 20th monthly
-
-I will send you reminders 5 days before each deadline.',
-                    'Labour Law Compliance Check:
-✅ Minimum wage: All employees above KES 15,201
-✅ Working hours: Within 52 hrs/week limit
-✅ Leave entitlement: Correctly configured
-⚠️ 2 employees need updated contracts
-✅ WIBA cover: Active',
-                    'Data Protection Compliance (Kenya DPA 2019):
-✅ Privacy policy: Published
-⚠️ Data processing register: Needs updating
-⚠️ Employee consent forms: 3 missing
-✅ Data breach procedure: Documented
-
-Recommend completing the 2 outstanding items.',
-                    'Annual Compliance Calendar generated for your business. Key dates saved. I will notify you 2 weeks before each deadline to ensure zero penalties.'
-                ]
+            var text = String(msg || '').trim();
+            var lower = text.toLowerCase();
+            var templates = {
+                'document-processing': 'Document helper: paste only non-sensitive text. This page cannot yet extract or verify documents automatically. A useful summary format is: purpose, key dates, amounts, obligations, risks and next actions.',
+                'workflow-automation': 'Workflow planning template: trigger → required fields → validation → approver(s) → SLA → escalation → completion evidence → audit log. Use Workflow Builder to configure it. This helper has not analysed live workflow data.',
+                'virtual-assistant': 'Email draft template:\nSubject: [Clear subject]\n\nDear [Recipient],\n\n[State the purpose, relevant facts and requested action.]\n\nPlease let me know if further information is required.\n\nKind regards,\n[Your name]\n\nThis is a template, not an email that has been sent.',
+                'financial-intelligence': 'Live financial analysis is not connected to this helper. Use Finance and Reports for saved records, and verify totals against source documents before making decisions. This response is not a calculation of your organisation’s actual performance.',
+                'hr-analytics': 'Live HR analytics is not connected to this helper. Use the HR module for employee records and confirm applicable Kenyan employment requirements before acting on policy or payroll questions.',
+                'compliance-monitor': 'Live compliance monitoring is not connected to this helper. Use verified official guidance and your organisation’s compliance records; this page has not checked filings, permits or deadlines.'
             };
-            var featureResponses = responses[feature] || responses['virtual-assistant'];
-            // Pick response based on keywords in message
-            var idx = Math.floor(Math.random() * featureResponses.length);
-            if (msg.includes('invoice') || msg.includes('document')) idx = 0;
-            else if (msg.includes('workflow') || msg.includes('automate') || msg.includes('process')) idx = 1;
-            else if (msg.includes('email') || msg.includes('schedule') || msg.includes('meeting')) idx = 2;
-            else if (msg.includes('report') || msg.includes('analytics') || msg.includes('data')) idx = 3;
-            else if (msg.includes('compliance') || msg.includes('kra') || msg.includes('tax')) idx = 4;
-            return featureResponses[Math.min(idx, featureResponses.length-1)];
+            if (!text) return 'Enter a question or describe the task you want help with.';
+            if (lower.includes('draft') || lower.includes('email')) return templates['virtual-assistant'];
+            return templates[feature] || 'This productivity helper is running in limited template mode. The AI provider is not configured, so it has not generated an AI response or analysed live organisation data.';
         }
 
         document.addEventListener('keydown', function(e) {
