@@ -124,7 +124,8 @@ var OOES_AUTH = {
       localStorage.removeItem('ooesSession');
       console.error('OfficeFlow session verification failed', error);
       if (!window.location.pathname.endsWith('/auth.html')) {
-        window.location.replace('/dashboard/auth.html?reason=session');
+        var returnTo = window.location.pathname + window.location.search;
+        window.location.replace('/dashboard/auth.html?reason=session&next=' + encodeURIComponent(returnTo));
       }
       return false;
     }
