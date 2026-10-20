@@ -372,19 +372,19 @@
         <!-- Statistics -->
         <div class="stats-grid">
             <div class="stat-card">
-                <div class="stat-value">23</div>
+                <div class="stat-value pending-tasks">—</div>
                 <div class="stat-label">Pending Tasks</div>
             </div>
             <div class="stat-card">
-                <div class="stat-value">15</div>
+                <div class="stat-value in-progress-tasks">—</div>
                 <div class="stat-label">In Progress</div>
             </div>
             <div class="stat-card">
-                <div class="stat-value">47</div>
+                <div class="stat-value completed-tasks">—</div>
                 <div class="stat-label">Completed Today</div>
             </div>
             <div class="stat-card">
-                <div class="stat-value">3</div>
+                <div class="stat-value overdue-tasks">—</div>
                 <div class="stat-label">Overdue</div>
             </div>
         </div>
@@ -403,158 +403,22 @@
             <div class="flex-1">
                 <input type="text" placeholder="Search tasks..." class="form-input" id="taskSearch">
             </div>
-            <select class="form-select" style="width: 200px;">
-                <option>All Priorities</option>
-                <option>High Priority</option>
-                <option>Medium Priority</option>
-                <option>Low Priority</option>
+            <select id="priorityFilter" class="form-select" aria-label="Filter by priority" style="width: 200px;">
+                <option value="all">All Priorities</option>
+                <option value="high">High Priority</option>
+                <option value="medium">Medium Priority</option>
+                <option value="low">Low Priority</option>
             </select>
-            <select class="form-select" style="width: 200px;">
-                <option>All Assignees</option>
-                <option>Me</option>
-                <option>Unassigned</option>
-                <option>Team A</option>
-                <option>Team B</option>
+            <select id="assigneeFilter" class="form-select" aria-label="Filter by assignee" style="width: 200px;">
+                <option value="all">All Assignees</option>
+                <option value="me">Assigned to me</option>
+                <option value="unassigned">Unassigned</option>
             </select>
         </div>
 
-        <!-- Tasks List -->
-        <div id="tasksList">
-            <!-- High Priority Task -->
-            <div class="task-card" onclick="openTaskDetail(1)">
-                <div class="flex items-start justify-between">
-                    <div class="flex-1">
-                        <div class="flex items-center gap-3 mb-2">
-                            <h3 class="text-lg font-semibold text-gray-900">Q4 Financial Report Preparation</h3>
-                            <span class="task-priority priority-high">
-                                <i class="fas fa-exclamation-triangle"></i>
-                                High Priority
-                            </span>
-                            <span class="task-status status-in-progress">
-                                <i class="fas fa-clock"></i>
-                                In Progress
-                            </span>
-                        </div>
-                        <p class="text-gray-600 mb-3">Prepare comprehensive financial report for Q4 2024 including revenue analysis, expense breakdown, and profit margins.</p>
-                        <div class="flex items-center gap-4 text-sm text-gray-500">
-                            <span><i class="fas fa-calendar"></i> Due: Dec 15, 2024</span>
-                            <span><i class="fas fa-user"></i> Assigned to: John Doe</span>
-                            <span><i class="fas fa-folder"></i> Finance</span>
-                            <span><i class="fas fa-comments"></i> 3 comments</span>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <button class="action-btn action-btn-secondary" onclick="event.stopPropagation(); editTask(1)">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="action-btn action-btn-secondary" onclick="event.stopPropagation(); deleteTask(1)">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Medium Priority Task -->
-            <div class="task-card" onclick="openTaskDetail(2)">
-                <div class="flex items-start justify-between">
-                    <div class="flex-1">
-                        <div class="flex items-center gap-3 mb-2">
-                            <h3 class="text-lg font-semibold text-gray-900">Employee Performance Reviews</h3>
-                            <span class="task-priority priority-medium">
-                                <i class="fas fa-minus-circle"></i>
-                                Medium Priority
-                            </span>
-                            <span class="task-status status-pending">
-                                <i class="fas fa-pause-circle"></i>
-                                Pending
-                            </span>
-                        </div>
-                        <p class="text-gray-600 mb-3">Conduct annual performance reviews for all team members, including goal setting and feedback sessions.</p>
-                        <div class="flex items-center gap-4 text-sm text-gray-500">
-                            <span><i class="fas fa-calendar"></i> Due: Dec 20, 2024</span>
-                            <span><i class="fas fa-user"></i> Assigned to: Sarah Johnson</span>
-                            <span><i class="fas fa-folder"></i> HR</span>
-                            <span><i class="fas fa-comments"></i> 5 comments</span>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <button class="action-btn action-btn-secondary" onclick="event.stopPropagation(); editTask(2)">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="action-btn action-btn-secondary" onclick="event.stopPropagation(); deleteTask(2)">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Low Priority Task -->
-            <div class="task-card" onclick="openTaskDetail(3)">
-                <div class="flex items-start justify-between">
-                    <div class="flex-1">
-                        <div class="flex items-center gap-3 mb-2">
-                            <h3 class="text-lg font-semibold text-gray-900">Office Supplies Inventory</h3>
-                            <span class="task-priority priority-low">
-                                <i class="fas fa-check-circle"></i>
-                                Low Priority
-                            </span>
-                            <span class="task-status status-completed">
-                                <i class="fas fa-check"></i>
-                                Completed
-                            </span>
-                        </div>
-                        <p class="text-gray-600 mb-3">Update office supplies inventory and create purchase orders for items running low.</p>
-                        <div class="flex items-center gap-4 text-sm text-gray-500">
-                            <span><i class="fas fa-calendar"></i> Completed: Dec 10, 2024</span>
-                            <span><i class="fas fa-user"></i> Assigned to: Mike Wilson</span>
-                            <span><i class="fas fa-folder"></i> Operations</span>
-                            <span><i class="fas fa-comments"></i> 2 comments</span>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <button class="action-btn action-btn-secondary" onclick="event.stopPropagation(); editTask(3)">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="action-btn action-btn-secondary" onclick="event.stopPropagation(); deleteTask(3)">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Overdue Task -->
-            <div class="task-card" onclick="openTaskDetail(4)">
-                <div class="flex items-start justify-between">
-                    <div class="flex-1">
-                        <div class="flex items-center gap-3 mb-2">
-                            <h3 class="text-lg font-semibold text-gray-900">Client Contract Renewal</h3>
-                            <span class="task-priority priority-high">
-                                <i class="fas fa-exclamation-triangle"></i>
-                                High Priority
-                            </span>
-                            <span class="task-status status-pending" style="background: rgba(239, 68, 68, 0.1); color: var(--accent-red);">
-                                <i class="fas fa-exclamation-circle"></i>
-                                Overdue
-                            </span>
-                        </div>
-                        <p class="text-gray-600 mb-3">Renew annual contract with ABC Corporation and negotiate terms for next year.</p>
-                        <div class="flex items-center gap-4 text-sm text-gray-500">
-                            <span><i class="fas fa-calendar" style="color: var(--accent-red);"></i> Was due: Dec 5, 2024</span>
-                            <span><i class="fas fa-user"></i> Assigned to: Lisa Chen</span>
-                            <span><i class="fas fa-folder"></i> Sales</span>
-                            <span><i class="fas fa-comments"></i> 8 comments</span>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <button class="action-btn action-btn-secondary" onclick="event.stopPropagation(); editTask(4)">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="action-btn action-btn-secondary" onclick="event.stopPropagation(); deleteTask(4)">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
+        <!-- Tasks are rendered from the authenticated tenant's database records. -->
+        <div id="tasksContainer" aria-live="polite" class="space-y-3">
+            <div class="rounded-lg border bg-white p-6 text-gray-500">Loading your tasks…</div>
         </div>
     </main>
 
@@ -568,220 +432,242 @@
                 </button>
             </div>
 
-            <form onsubmit="saveTask(event)" onsubmit="return validateForm(this)">
+            <form id="taskForm" onsubmit="saveTask(event)">
                 <div class="form-group">
-                    <label class="form-label">Task Title</label>
-                    <input type="text" class="form-input" placeholder="Enter task title" required>
+                    <label class="form-label" for="taskTitle">Task title</label>
+                    <input id="taskTitle" name="title" type="text" class="form-input" placeholder="Enter task title" maxlength="200" required>
                 </div>
-
                 <div class="form-group">
-                    <label class="form-label">Description</label>
-                    <textarea class="form-textarea" placeholder="Enter task description"></textarea>
+                    <label class="form-label" for="taskDescription">Description</label>
+                    <textarea id="taskDescription" name="description" class="form-textarea" placeholder="Describe the work, expected outcome and context" maxlength="10000"></textarea>
                 </div>
-
                 <div class="grid grid-cols-2 gap-4">
                     <div class="form-group">
-                        <label class="form-label">Priority</label>
-                        <select class="form-select">
-                            <option>Low Priority</option>
-                            <option>Medium Priority</option>
-                            <option>High Priority</option>
+                        <label class="form-label" for="taskPriority">Priority</label>
+                        <select id="taskPriority" name="priority" class="form-select">
+                            <option value="low">Low</option><option value="medium" selected>Medium</option><option value="high">High</option>
                         </select>
                     </div>
-
                     <div class="form-group">
-                        <label class="form-label">Due Date</label>
-                        <input type="date" class="form-input">
+                        <label class="form-label" for="taskDueDate">Due date</label>
+                        <input id="taskDueDate" name="due_date" type="date" class="form-input">
                     </div>
                 </div>
-
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="form-group">
-                        <label class="form-label">Assignee</label>
-                        <select class="form-select">
-                            <option>Unassigned</option>
-                            <option>John Doe</option>
-                            <option>Sarah Johnson</option>
-                            <option>Mike Wilson</option>
-                            <option>Lisa Chen</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Category</label>
-                        <select class="form-select">
-                            <option>Finance</option>
-                            <option>HR</option>
-                            <option>Operations</option>
-                            <option>Sales</option>
-                            <option>Marketing</option>
-                        </select>
-                    </div>
+                <div class="form-group">
+                    <label class="form-label" for="taskAssignee">Assignee label (optional)</label>
+                    <input id="taskAssignee" name="assigned_to" type="text" class="form-input" maxlength="160" placeholder="Name or team label">
+                    <p class="text-xs text-gray-500 mt-1">This is a display label, not an account assignment. Secure staff-account assignment is a separate access-controlled workflow.</p>
                 </div>
-
+                <div id="taskFormError" role="alert" class="hidden text-sm text-red-700 mb-3"></div>
                 <div class="flex items-center gap-3 justify-end">
-                    <button type="button" onclick="closeTaskModal()" class="action-btn action-btn-secondary">
-                        Cancel
-                    </button>
-                    <button type="submit" class="action-btn">
-                        <i class="fas fa-save"></i>
-                        Create Task
-                    </button>
+                    <button type="button" onclick="closeTaskModal()" class="action-btn action-btn-secondary">Cancel</button>
+                    <button id="taskSubmitButton" type="submit" class="action-btn"><i class="fas fa-save"></i> Create Task</button>
                 </div>
             </form>
         </div>
     </div>
 
     <script>
-        // Tab switching
+        let taskRecords = [];
+        let activeTaskTab = 'all';
+        let editingTaskId = null;
+        const taskStatus = t => {
+            const s = String(t.status || 'pending').toLowerCase().replace(/[ -]+/g, '_');
+            if (s === 'inprogress') return 'in_progress';
+            if (s === 'overdue' || (t.due_date && t.due_date < new Date().toISOString().slice(0,10) && !['completed','cancelled'].includes(s))) return 'overdue';
+            return s;
+        };
+        const esc = value => String(value == null ? '' : value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+        const priorityValue = value => {
+            const v = String(value || 'medium').toLowerCase();
+            return v.includes('high') ? 'high' : v.includes('low') ? 'low' : 'medium';
+        };
         function switchTab(tab) {
-            const tabs = document.querySelectorAll('.tab-btn');
-            tabs.forEach(t => t.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            // Filter tasks based on tab
-            console.log(`Switching to ${tab} tab`);
+            activeTaskTab = tab;
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.toggle('active', (btn.getAttribute('onclick') || '').includes("'" + tab + "'")));
+            renderTasks();
         }
-
-        // Modal functions
-        function openTaskModal() {
+        function openTaskModal(task) {
+            editingTaskId = task ? task.id : null;
+            document.getElementById('taskForm').reset();
+            document.getElementById('taskTitle').value = task ? task.title || '' : '';
+            document.getElementById('taskDescription').value = task ? task.description || '' : '';
+            document.getElementById('taskPriority').value = priorityValue(task && task.priority);
+            document.getElementById('taskDueDate').value = task && task.due_date ? task.due_date : '';
+            document.getElementById('taskAssignee').value = task ? task.assigned_to || '' : '';
+            document.querySelector('#taskModal h2').textContent = task ? 'Edit Task' : 'Create New Task';
+            document.getElementById('taskSubmitButton').innerHTML = task ? '<i class="fas fa-save"></i> Save Changes' : '<i class="fas fa-save"></i> Create Task';
+            document.getElementById('taskFormError').classList.add('hidden');
             document.getElementById('taskModal').classList.add('active');
         }
-
-        function closeTaskModal() {
-            document.getElementById('taskModal').classList.remove('active');
-        }
-
+        function closeTaskModal() { document.getElementById('taskModal').classList.remove('active'); }
         async function saveTask(event) {
             event.preventDefault();
-            var title = document.getElementById('taskTitle') ? document.getElementById('taskTitle').value : '';
-            var desc = document.getElementById('taskDescription') ? document.getElementById('taskDescription').value : '';
-            var priority = document.getElementById('taskPriority') ? document.getElementById('taskPriority').value : 'normal';
-            var due = document.getElementById('taskDueDate') ? document.getElementById('taskDueDate').value : '';
-            var assigned = document.getElementById('taskAssignee') ? document.getElementById('taskAssignee').value : '';
-            var newTask = {title:title, description:desc, priority:priority, due_date:due, assigned_to:assigned, status:'pending'};
+            const errorEl = document.getElementById('taskFormError');
+            const session = window.OOES_AUTH && OOES_AUTH.getSession();
+            const title = document.getElementById('taskTitle').value.trim();
+            if (!session || !session.id || !session.organization_id) {
+                errorEl.textContent = 'Your organization profile is not ready. Sign in again or contact your administrator.';
+                errorEl.classList.remove('hidden'); return;
+            }
+            if (!title) { errorEl.textContent = 'Enter a task title.'; errorEl.classList.remove('hidden'); return; }
+            const payload = {
+                title,
+                description: document.getElementById('taskDescription').value.trim() || null,
+                priority: document.getElementById('taskPriority').value,
+                due_date: document.getElementById('taskDueDate').value || null,
+                assigned_to: document.getElementById('taskAssignee').value.trim() || null
+            };
+            const button = document.getElementById('taskSubmitButton');
+            button.disabled = true;
             try {
-                var r = await supabase.from('tasks').insert([newTask]).select();
-                if (r.error) throw r.error;
-                showNotification('Success', 'Task created!', 'success');
-            } catch(err) { showNotification('Error', 'Task was not saved. Please retry.', 'error'); }
-            closeTaskModal();
-            setTimeout(syncTasks, 500);
-        }
-        function openTaskDetail(taskId) { showNotification('Info', 'Task details coming soon!', 'info'); }
-        function editTask(taskId) { showNotification('Info', 'Edit task coming soon!', 'info'); }
-        async function deleteTask(taskId) {
-            if (confirm('Delete this task?')) {
-                try { await supabase.from('tasks').delete().eq('id', taskId); showNotification('Deleted', 'Task deleted.', 'success'); } catch(err) { showNotification('Error', 'Could not delete.', 'error'); }
-                setTimeout(syncTasks, 500);
-            }
-        }
-        function exportTasks() { showNotification('Info', 'Export coming soon!', 'info'); }
-        }
-
-        function exportTasks() {
-            alert('Exporting tasks to Excel...');
-        }
-
-        // Search functionality
-        document.getElementById('taskSearch').addEventListener('input', function(e) {
-            var query = e.target.value.toLowerCase();
-            var container = document.getElementById('tasksContainer');
-            var cards = container.querySelectorAll('.bg-white.rounded-lg');
-            cards.forEach(function(card) {
-                var text = card.textContent.toLowerCase();
-                card.style.display = text.includes(query) ? '' : 'none';
-            });
-        });
-
-        // Close modal when clicking outside
-        document.getElementById('taskModal').addEventListener('click', function(e) {
-            if (e.target === this) {
+                let result;
+                if (editingTaskId) {
+                    result = await supabase.from('tasks').update(payload).eq('id', editingTaskId).select('id').single();
+                } else {
+                    result = await supabase.from('tasks').insert([{...payload, status:'pending', owner_id:session.id, organization_id:session.organization_id}]).select('id').single();
+                }
+                if (result.error) throw result.error;
                 closeTaskModal();
-            }
-        });
-    
-        function goBack() {
-            window.location.href = 'index.html';
+                showNotification('Success', editingTaskId ? 'Task updated.' : 'Task created.', 'success');
+                editingTaskId = null;
+                await syncTasks();
+            } catch (err) {
+                console.error('Task save failed', err);
+                errorEl.textContent = 'The task could not be saved. Check your access and connection, then retry.';
+                errorEl.classList.remove('hidden');
+            } finally { button.disabled = false; }
         }
-
+        function openTaskDetail(taskId) {
+            const task = taskRecords.find(t => String(t.id) === String(taskId));
+            if (!task) return;
+            const due = task.due_date ? task.due_date : 'No due date';
+            alert('Task: ' + (task.title || '') + '\n\nDescription: ' + (task.description || 'No description') + '\nStatus: ' + taskStatus(task) + '\nPriority: ' + priorityValue(task.priority) + '\nAssignee label: ' + (task.assigned_to || 'Unassigned') + '\nDue: ' + due);
+        }
+        function editTask(taskId) {
+            const task = taskRecords.find(t => String(t.id) === String(taskId));
+            if (task) openTaskModal(task);
+        }
+        async function updateTaskStatus(taskId, status) {
+            try {
+                const {error} = await supabase.from('tasks').update({status}).eq('id', taskId);
+                if (error) throw error;
+                showNotification('Success', 'Task status updated.', 'success');
+                await syncTasks();
+            } catch (err) {
+                console.error('Task status update failed', err);
+                showNotification('Error', 'Status was not changed. Check your permissions and retry.', 'error');
+                await syncTasks();
+            }
+        }
+        async function deleteTask(taskId) {
+            const task = taskRecords.find(t => String(t.id) === String(taskId));
+            if (!task || !confirm('Delete "' + (task.title || 'this task') + '"? This cannot be undone.')) return;
+            try {
+                const {error} = await supabase.from('tasks').delete().eq('id', taskId);
+                if (error) throw error;
+                showNotification('Deleted', 'Task deleted.', 'success');
+                await syncTasks();
+            } catch(err) {
+                console.error('Task deletion failed', err);
+                showNotification('Error', 'Task was not deleted. Check your permissions and retry.', 'error');
+            }
+        }
+        function exportTasks() {
+            const rows = [['Title','Description','Status','Priority','Assignee label','Due date','Created at'], ...filteredTasks().map(t => [t.title,t.description,taskStatus(t),priorityValue(t.priority),t.assigned_to,t.due_date,t.created_at])];
+            const csv = rows.map(row => row.map(v => '"' + String(v == null ? '' : v).replace(/"/g,'""') + '"').join(',')).join('\r\n');
+            const blob = new Blob(['\ufeff' + csv], {type:'text/csv;charset=utf-8;'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a'); a.href = url; a.download = 'officeflow-tasks.csv'; a.click();
+            URL.revokeObjectURL(url);
+        }
+        function filteredTasks() {
+            const query = (document.getElementById('taskSearch').value || '').trim().toLowerCase();
+            const priority = document.getElementById('priorityFilter').value;
+            const assignee = document.getElementById('assigneeFilter').value;
+            const session = window.OOES_AUTH && OOES_AUTH.getSession();
+            return taskRecords.filter(t => {
+                const status = taskStatus(t);
+                const matchesTab = activeTaskTab === 'all' || (activeTaskTab === 'in-progress' ? status === 'in_progress' : status === activeTaskTab);
+                const matchesPriority = priority === 'all' || priorityValue(t.priority) === priority;
+                const matchesAssignee = assignee === 'all' || (assignee === 'unassigned' ? !t.assigned_to && !t.assigned_to_user_id : assignee === 'me' ? t.owner_id === (session && session.id) || t.assigned_to_user_id === (session && session.id) : true);
+                const haystack = [t.title,t.description,t.assigned_to,status,t.priority].join(' ').toLowerCase();
+                return matchesTab && matchesPriority && matchesAssignee && haystack.includes(query);
+            });
+        }
+        function renderTasks() {
+            const container = document.getElementById('tasksContainer');
+            const rows = filteredTasks();
+            const counts = {
+                pending: taskRecords.filter(t => taskStatus(t) === 'pending').length,
+                in_progress: taskRecords.filter(t => taskStatus(t) === 'in_progress').length,
+                completed: taskRecords.filter(t => taskStatus(t) === 'completed').length,
+                overdue: taskRecords.filter(t => taskStatus(t) === 'overdue').length
+            };
+            document.querySelectorAll('.pending-tasks').forEach(el => el.textContent = counts.pending);
+            document.querySelectorAll('.in-progress-tasks').forEach(el => el.textContent = counts.in_progress);
+            document.querySelectorAll('.completed-tasks').forEach(el => el.textContent = counts.completed);
+            document.querySelectorAll('.overdue-tasks').forEach(el => el.textContent = counts.overdue);
+            if (!rows.length) {
+                container.innerHTML = '<div class="rounded-lg border bg-white p-8 text-center text-gray-500"><i class="fas fa-clipboard-list text-2xl mb-3"></i><p class="font-semibold">No tasks found</p><p class="text-sm mt-1">Create a task or adjust your filters.</p></div>';
+                return;
+            }
+            container.innerHTML = rows.map(t => {
+                const status = taskStatus(t), priority = priorityValue(t.priority);
+                const statusLabel = status.replace('_',' ').replace(/\b\w/g,c=>c.toUpperCase());
+                const overdue = status === 'overdue';
+                return '<article class="task-card" data-task-id="' + esc(t.id) + '">' +
+                  '<div class="flex flex-wrap items-start justify-between gap-3"><div class="flex-1 min-w-0">' +
+                  '<h3 class="text-lg font-semibold text-gray-900 break-words">' + esc(t.title || 'Untitled task') + '</h3>' +
+                  '<div class="flex flex-wrap items-center gap-2 mt-2"><span class="task-priority priority-' + priority + '">' + priority.toUpperCase() + ' PRIORITY</span>' +
+                  '<span class="task-status ' + (status === 'completed' ? 'status-completed' : overdue ? 'status-overdue' : 'status-in-progress') + '">' + esc(statusLabel) + '</span></div>' +
+                  '<p class="text-gray-600 mt-3 whitespace-pre-wrap break-words">' + esc(t.description || 'No description provided.') + '</p>' +
+                  '<div class="flex flex-wrap gap-x-5 gap-y-2 text-sm text-gray-500 mt-3"><span><i class="fas fa-user mr-1"></i>' + esc(t.assigned_to || 'Unassigned') + '</span><span><i class="fas fa-calendar mr-1"></i>' + esc(t.due_date || 'No due date') + '</span></div></div>' +
+                  '<div class="flex flex-wrap gap-2 items-center"><select aria-label="Change task status" class="form-select" onchange="updateTaskStatus(' + JSON.stringify(String(t.id)) + ', this.value)">' +
+                  ['pending','in_progress','completed','cancelled'].map(s=>'<option value="' + s + '"' + (status===s?' selected':'') + '>' + s.replace('_',' ') + '</option>').join('') + '</select>' +
+                  '<button class="action-btn action-btn-secondary" onclick="editTask(' + JSON.stringify(String(t.id)) + ')">Edit</button>' +
+                  '<button class="action-btn action-btn-secondary" onclick="deleteTask(' + JSON.stringify(String(t.id)) + ')">Delete</button></div></div></article>';
+            }).join('');
+        }
+        async function syncTasks() {
+            const container = document.getElementById('tasksContainer');
+            try {
+                if (window.OOES_AUTH && OOES_AUTH.ready) await OOES_AUTH.ready;
+                const session = window.OOES_AUTH && OOES_AUTH.getSession();
+                if (!session) { container.innerHTML = '<div class="rounded-lg border bg-white p-6 text-red-700">Your session could not be verified. Please sign in again.</div>'; return; }
+                const {data,error} = await supabase.from('tasks').select('id,title,description,status,priority,assigned_to,assigned_to_user_id,due_date,created_at,owner_id,organization_id').order('due_date',{ascending:true,nullsFirst:false});
+                if (error) throw error;
+                taskRecords = data || [];
+                renderTasks();
+            } catch(err) {
+                console.error('Tasks could not be loaded',err);
+                container.innerHTML = '<div class="rounded-lg border bg-white p-6 text-red-700"><p class="font-semibold">Tasks could not be loaded.</p><p class="text-sm mt-1">Check your connection and access permissions, then refresh.</p><button class="action-btn mt-3" onclick="syncTasks()">Retry</button></div>';
+            }
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('taskSearch').addEventListener('input', renderTasks);
+            document.getElementById('priorityFilter').addEventListener('change', renderTasks);
+            document.getElementById('assigneeFilter').addEventListener('change', renderTasks);
+            document.getElementById('taskModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeTaskModal(); });
+            syncTasks();
+        });
+        function goBack() { window.location.href = 'index.html'; }
         function showNotification(message, type = 'info') {
             const notification = document.createElement('div');
-            notification.className = `fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 max-w-sm ${
-                type === 'success' ? 'bg-green-500 text-white' :
-                type === 'error' ? 'bg-red-500 text-white' :
-                type === 'warning' ? 'bg-yellow-500 text-white' :
-                'bg-blue-500 text-white'
-            }`;
-            notification.innerHTML = `
-                <div class="flex items-center">
-                    <i class="fas ${
-                        type === 'success' ? 'fa-check-circle' :
-                        type === 'error' ? 'fa-exclamation-circle' :
-                        type === 'warning' ? 'fa-exclamation-triangle' :
-                        'fa-info-circle'
-                    } mr-3"></i>
-                    <div class="font-medium">${message}</div>
-                </div>
-            `;
-            
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.remove();
-            }, 3000);
+            notification.className = 'fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 max-w-sm ' + (type === 'success' ? 'bg-green-500 text-white' : type === 'error' ? 'bg-red-500 text-white' : type === 'warning' ? 'bg-yellow-500 text-white' : 'bg-blue-500 text-white');
+            const textNode = document.createElement('div'); textNode.className = 'font-medium'; textNode.textContent = message;
+            notification.appendChild(textNode); document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 3500);
         }
-
         function closeModal(element) {
             const modal = element ? element.closest('.modal, .fixed') : document.querySelector('.modal.active, .fixed.inset-0');
-            if (modal) {
-                modal.classList.remove('active');
-                modal.style.display = 'none';
-            }
+            if (modal) { modal.classList.remove('active'); modal.style.display = 'none'; }
         }
-</script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="/dashboard/js/config.js"></script>
 <script src="/dashboard/js/db.js"></script>
-<script>
-async function syncTasks() {
-  try {
-    const { data, error } = await supabase.from('tasks').select('*').order('due_date', { ascending: true });
-    if (error || !data) return;
-    
-    const pending = data.filter(t => t.status === 'pending').length;
-    const completed = data.filter(t => t.status === 'completed').length;
-    const overdue = data.filter(t => t.status === 'overdue').length;
-    
-    document.querySelectorAll('.pending-tasks').forEach(el => el.textContent = pending);
-    document.querySelectorAll('.completed-tasks').forEach(el => el.textContent = completed);
-    document.querySelectorAll('.overdue-tasks').forEach(el => el.textContent = overdue);
-    
-    const container = document.getElementById('tasksContainer');
-    if (container) {
-      container.innerHTML = data.map(t => `
-        <div class="bg-white rounded-lg p-4 shadow border-l-4 ${t.priority === 'high' ? 'border-red-500' : t.priority === 'medium' ? 'border-yellow-500' : 'border-green-500'} mb-3">
-          <div class="flex justify-between items-start">
-            <h4 class="font-semibold text-gray-800">${t.title}</h4>
-            <span class="px-2 py-1 rounded text-xs ${t.status === 'completed' ? 'bg-green-100 text-green-800' : t.status === 'overdue' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800'}">${t.status}</span>
-          </div>
-          <p class="text-sm text-gray-600 mt-1">${t.description || ''}</p>
-          <div class="flex justify-between mt-2 text-xs text-gray-500">
-            <span>Assigned to: ${t.assigned_to || 'Unassigned'}</span>
-            <span>Due: ${t.due_date || 'No date'}</span>
-          </div>
-        </div>
-      `).join('');
-    }
-  } catch(err) {
-    console.log('Tasks sync failed', err);
-  }
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-  setTimeout(syncTasks, 500);
-});
-</script><script>function toggleMobileNav(){var s=document.getElementById("sidebarNav");var o=document.getElementById("mobileOverlay");if(s){s.classList.toggle("active");}if(!o){var ov=document.createElement("div");ov.id="mobileOverlay";ov.className="mobile-overlay";ov.onclick=toggleMobileNav;document.body.appendChild(ov);}else{o.classList.toggle("active");}}document.addEventListener("DOMContentLoaded",function(){var btn=document.getElementById("mobileMenuBtn");if(btn){btn.style.display="flex";btn.onclick=toggleMobileNav;}});</script><script src="/dashboard/js/ooes-auth.js"></script>
+<script>function toggleMobileNav(){var s=document.getElementById("sidebarNav");var o=document.getElementById("mobileOverlay");if(s){s.classList.toggle("active");}if(!o){var ov=document.createElement("div");ov.id="mobileOverlay";ov.className="mobile-overlay";ov.onclick=toggleMobileNav;document.body.appendChild(ov);}else{o.classList.toggle("active");}}document.addEventListener("DOMContentLoaded",function(){var btn=document.getElementById("mobileMenuBtn");if(btn){btn.style.display="flex";btn.onclick=toggleMobileNav;}});</script><script src="/dashboard/js/ooes-auth.js"></script>
 <script src="/dashboard/js/ooes-core.js"></script>
 </div>
 </body>
