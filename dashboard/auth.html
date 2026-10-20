@@ -393,25 +393,36 @@
         const portalCode = new URLSearchParams(window.location.search).get('department');
         const selectedPortal = portalCode ? DEPARTMENT_PORTALS[portalCode.toUpperCase()] : null;
         document.addEventListener('DOMContentLoaded', function () {
+          const mode = new URLSearchParams(window.location.search).get('mode');
+          const signIn = document.getElementById('signInForm');
+          const signUp = document.getElementById('signUpForm');
+
+          // The authentication page is for signing in or creating an account.
+          // Department selection lives on /dashboard/portals/index.html, not here.
           if (!selectedPortal) {
-            const signIn = document.getElementById('signInForm');
-            const signUp = document.getElementById('signUpForm');
-            if (signIn) signIn.classList.add('hidden');
-            if (signUp) signUp.classList.add('hidden');
-            const host = document.querySelector('.slide-in');
-            const picker = document.createElement('section');
-            picker.className = 'auth-card glass-effect rounded-2xl p-8 shadow-2xl';
-            picker.innerHTML = '<div class="text-center mb-6"><h2 class="of-serif text-3xl font-semibold text-gray-800 mb-2">Choose your department</h2><p class="text-gray-600">Sign in through your department’s secure portal.</p></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-3">' +
-              Object.keys(DEPARTMENT_PORTALS).map(function(code) { return '<a class="border rounded-lg p-4 hover:border-[color:var(--of-brass)] flex items-center gap-3" style="border-color:var(--of-border)" href="/dashboard/auth.html?department=' + code + '"><i class="fas ' + DEPARTMENT_PORTALS[code].icon + ' text-xl" style="color:var(--of-navy)"></i><span class="font-medium text-gray-800">' + DEPARTMENT_PORTALS[code].name + '<span class="block text-xs text-gray-500 mt-1">Open secure sign-in →</span></span></a>'; }).join('') +
-              '</div><p class="text-xs text-gray-500 mt-5">Access is controlled by your organization’s assigned department and role. Human Resources is restricted to Administrator and Super Admin.</p>';
-            if (host) host.insertBefore(picker, host.firstChild);
             if (portalCode) {
-              const title = picker.querySelector('h2');
-              if (title) title.textContent = 'Department portal not found';
+              if (signIn) signIn.classList.add('hidden');
+              if (signUp) signUp.classList.add('hidden');
+              const host = document.querySelector('.slide-in');
+              const error = document.createElement('section');
+              error.className = 'auth-card glass-effect rounded-2xl p-8 shadow-2xl';
+              error.innerHTML = '<h2 class="text-2xl font-semibold text-gray-800 mb-3">Department portal not found</h2><p class="text-gray-600 mb-5">Please choose a valid department portal.</p><a class="font-semibold" style="color:var(--of-brass)" href="/dashboard/portals/index.html">View department portals</a>';
+              if (host) host.insertBefore(error, host.firstChild);
+              return;
+            }
+            if (mode === 'signup') {
+              if (signIn) signIn.classList.add('hidden');
+              if (signUp) signUp.classList.remove('hidden');
+            } else {
+              if (signIn) signIn.classList.remove('hidden');
+              if (signUp) signUp.classList.add('hidden');
             }
             return;
           }
           document.title = 'OfficeFlow — ' + selectedPortal.name + ' Sign In';
+          if (signUp) signUp.classList.add('hidden');
+          const signupToggle = document.querySelector('#signInForm button[onclick="toggleForm()"]');
+          if (signupToggle) signupToggle.closest('p').textContent = 'Need access? Ask your organization administrator to create your account and assign your department.';
           const heading = document.querySelector('#signInForm h2');
           const subtitle = document.querySelector('#signInForm .text-center p');
           if (heading) heading.textContent = selectedPortal.name + ' Portal';
