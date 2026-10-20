@@ -74,6 +74,7 @@
 <a href="/dashboard/trello-management.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fab fa-trello" style="width:16px;margin-right:8px"></i>Trello</a>
 <a href="/dashboard/data-management.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-database" style="width:16px;margin-right:8px"></i>Data</a>
 <a href="/dashboard/it-compliance.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-shield-alt" style="width:16px;margin-right:8px"></i>IT Compliance</a>
+<a href="/dashboard/billing.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;"><i class="fas fa-credit-card" style="width:16px;margin-right:8px"></i>Subscription & Billing</a>
 <a href="/dashboard/pricing.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-tags" style="width:16px;margin-right:8px"></i>Pricing</a>
 <a href="/dashboard/contact.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-phone" style="width:16px;margin-right:8px"></i>Contact</a>
 </nav>
@@ -965,7 +966,7 @@ let selectedAddOns = [];
                     return false;
                 }
             } else if (currentStep === 2) {
-                showNotification('Subscription checkout is not enabled. No payment has been taken.', 'error');
+                window.location.href = '/dashboard/billing.html'; return false;
                 return false;
             }
             
@@ -1026,7 +1027,7 @@ let selectedAddOns = [];
 
         function confirmPackage() {
             // Never collect or log payment credentials. Provider-backed checkout is not implemented.
-            showNotification('Checkout is not enabled. No payment has been taken and no subscription has been activated.', 'error');
+            window.location.href = '/dashboard/billing.html';
         }
 
         function calculateTotalPrice() {
@@ -1039,7 +1040,7 @@ let selectedAddOns = [];
 
         function processPayment() {
             // Fail closed until a verified payment provider and server-side webhook exist.
-            showNotification('Checkout is not enabled. No payment has been processed.', 'error');
+            window.location.href = '/dashboard/billing.html';
         }
 
         function resetForm() {
