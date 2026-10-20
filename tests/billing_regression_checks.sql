@@ -22,7 +22,7 @@ select 'BILL-T05 no direct authenticated billing table reads' as test,
 select 'BILL-T06 scoped overview RPC is authenticated-only' as test,
  has_function_privilege('authenticated','public.fn_get_billing_overview()','EXECUTE')
  and not has_function_privilege('anon','public.fn_get_billing_overview()','EXECUTE')
- and not has_function_privilege('public','public.fn_get_billing_overview()','EXECUTE') as pass;
+ and not exists (select 1 from pg_proc p join pg_namespace n on n.oid=p.pronamespace cross join lateral aclexplode(coalesce(p.proacl, acldefault('f',p.proowner))) a where n.nspname='public' and p.proname='fn_get_billing_overview' and a.grantee=0 and a.privilege_type='EXECUTE') as pass;
 select 'BILL-T07 reconciliation RPC is service-role-only' as test,
  has_function_privilege('service_role','public.fn_reconcile_intasend_payment(text,text,text,text,text,text,numeric,text,text)','EXECUTE')
  and not has_function_privilege('authenticated','public.fn_reconcile_intasend_payment(text,text,text,text,text,text,numeric,text,text)','EXECUTE')
