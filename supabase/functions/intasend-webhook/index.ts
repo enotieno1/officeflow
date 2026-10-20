@@ -62,8 +62,9 @@ Deno.serve(async (req: Request) => {
   }
 
   if (topic !== "subscription_event") return reply(200, { received: true, ignored: true });
-  const providerSubscriptionId = typeof body.subscription_id === "string" ? body.subscription_id : "";
-  const reference = typeof body.reference === "string" ? body.reference : "";
+  const subscriptionEvent = (body.subscription && typeof body.subscription === "object" ? body.subscription : body) as Record<string, unknown>;
+  const providerSubscriptionId = typeof subscriptionEvent.subscription_id === "string" ? subscriptionEvent.subscription_id : "";
+  const reference = typeof subscriptionEvent.reference === "string" ? subscriptionEvent.reference : "";
   if (!providerSubscriptionId || !reference) return reply(400, { error: "Subscription reference missing" });
 
   let local = (await db.from("billing_subscriptions").select(
@@ -117,7 +118,7 @@ Deno.serve(async (req: Request) => {
     if (saveSubIdErr) return reply(503, { error: "Could not save provider subscription mapping; retry webhook" });
   }
 
-  const payments = Array.isArray(body.payments) ? body.payments
+  const payments = Array.isArray(subscriptionEvent.payments) ? subscriptionEvent.payments
     : Array.isArray(verifiedSub.payments) ? verifiedSub.payments : [];
   for (const item of payments) {
     if (!item || typeof item !== "object") continue;
