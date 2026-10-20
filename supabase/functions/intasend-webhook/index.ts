@@ -68,7 +68,7 @@ Deno.serve(async (req: Request) => {
   if (!providerSubscriptionId || !reference) return reply(400, { error: "Subscription reference missing" });
 
   let local = (await db.from("billing_subscriptions").select(
-    "id,organization_id,plan_id,status,payment_method,created_by,provider_subscription_id,provider_plan_id,provider_customer_id"
+    "id,organization_id,plan_id,status,payment_method,created_by,provider_subscription_id,provider_plan_id,provider_customer_id,provider_setup_url"
   ).eq("provider_subscription_id", providerSubscriptionId).maybeSingle()).data;
   if (!local) {
     const { data } = await db.from("billing_subscriptions").select(
@@ -108,15 +108,24 @@ Deno.serve(async (req: Request) => {
   const cycles = Number.isInteger(Number(verifiedSub.completed_cycles)) ? Number(verifiedSub.completed_cycles) : 0;
   const failReason = typeof verifiedSub.fail_reason === "string" ? verifiedSub.fail_reason : null;
 
-  if (!local.provider_subscription_id) {
-    const { error: saveSubIdErr } = await db.from("billing_subscriptions").update({
-      provider_subscription_id: providerSubscriptionId,
-      provider_subscription_status: status,
-      next_billing_at: nextDate,
-      updated_at: new Date().toISOString()
-    }).eq("id", local.id).is("provider_subscription_id", null);
-    if (saveSubIdErr) return reply(503, { error: "Could not save provider subscription mapping; retry webhook" });
+  const customerObj = (verifiedSub.customer && typeof verifiedSub.customer === "object" ? verifiedSub.customer : {}) as Record<string, unknown>;
+  const providerCustomerId = String(customerObj.customer_id ?? "");
+  const setupUrl = String(verifiedSub.setup_url ?? "");
+  if (setupUrl && !/^https:\/\/(payment\.)?intasend\.com\//i.test(setupUrl)) {
+    return reply(409, { error: "Provider returned an unexpected card setup URL" });
   }
+  const { error: saveSubIdErr } = await db.from("billing_subscriptions").update({
+    provider_subscription_id: providerSubscriptionId,
+    provider_customer_id: providerCustomerId || local.provider_customer_id,
+    provider_plan_id: providerPlanId,
+    provider_setup_url: setupUrl || local.provider_setup_url,
+    provider_subscription_status: status,
+    next_billing_at: nextDate,
+    completed_cycles: cycles,
+    provider_subscription_failure_reason: failReason,
+    updated_at: new Date().toISOString()
+  }).eq("id", local.id);
+  if (saveSubIdErr) return reply(503, { error: "Could not save provider subscription mapping; retry webhook" });
 
   const payments = Array.isArray(subscriptionEvent.payments) ? subscriptionEvent.payments
     : Array.isArray(verifiedSub.payments) ? verifiedSub.payments : [];
