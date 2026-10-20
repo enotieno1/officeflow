@@ -129,3 +129,19 @@ A review of production PostgreSQL logs found a concrete workflow defect: request
 - Removed a duplicate request fetch from `requestDetail.html` to avoid loading the same record twice.
 
 This repair is applied to the production database. The matching migration and UI cleanup are in the draft implementation PR; the updated frontend still needs to be deployed and browser-tested. A true two-organization isolation test is still required before sign-off.
+
+
+## Public funnel, reporting and legacy-page cleanup
+
+- Merged the latest `main` changes into this branch as a two-parent merge commit; the branch is now based on current `main`, including the department portal pages and department-login helper.
+- Updated the public landing page to remove unsupported trial, payroll, AI, broad finance, customer-count and time-saved claims; aligned the accent palette to navy/brass; routed Starter/Professional CTAs through signup and billing; replaced the fake contact-form success alert with a mailto handoff that explicitly tells the visitor OfficeFlow has not received the message until they send it.
+- Replaced legacy AI, email, calendar, spreadsheet, Drive, Gmail, Trello, database-console, HR and finance screens that contained sample/randomized data or duplicate local systems with honest notices/routes to supported workflow modules.
+- Replaced the legacy finance chart page that queried the old transactions register with a live workflow report using the guarded `fn_control_tower` RPC. The report clearly says it is not a general ledger, payroll report or fraud detector.
+- Removed the legacy `getEmployees()` and `getTransactions()` browser helpers, redirected the HR navigation to the configured HR workflow catalogue, and removed the unimplemented fraud-alert screen from dashboard navigation.
+- Verified the private `officeflow-documents` bucket is not public and enforces a 10 MiB object limit with organization/user-folder policies.
+- Re-ran inline JavaScript syntax checks on the changed auth, billing, pricing, dashboard, report and legacy-notice pages; no syntax failures were found in those checked pages.
+- Eleven read-only production checks passed for RLS, billing-table direct-access revocation, RPC grants, request-policy tenant grouping, plan prices, empty live payment records, compatibility grants, and RPC-only organization/audit access.
+
+## Temporary compatibility and release order
+
+The current production frontend is still on `main` and contains old reports/HR/fraud pages. To avoid breaking those screens before the replacement frontend is deployed, a temporary production migration restored SELECT on `employees` and `transactions`, plus SELECT/UPDATE on `fraud_alerts`, under their existing RLS policies. The matching migration is tracked in the branch. After the replacement frontend is deployed and smoke-tested, apply `20261020200000_revoke_legacy_module_table_access_after_frontend_release.sql` to remove those legacy direct grants. Do not apply that final revocation before the frontend rollout.
