@@ -15,20 +15,33 @@
 <div class="p-6 border-b border-white border-opacity-10"><h1 class="brand-mark">OfficeFlow</h1><p class="brand-sub mt-1">Office Operations</p><div class="brand-rule"></div></div>
 <nav class="flex-1 p-3 space-y-1">
 <a href="index.html" class="sidebar-link active bg-white bg-opacity-20"><i class="fas fa-home w-5 mr-3"></i>Dashboard</a>
+<div class="border-t border-white border-opacity-20 my-3"></div>
+<p class="section-label px-3 pt-1">Department Modules</p>
+<a href="hr-system.html" class="sidebar-link"><i class="fas fa-users w-5 mr-3"></i>01. Human Resources</a>
+<a href="financial-management.html" class="sidebar-link"><i class="fas fa-coins w-5 mr-3"></i>02. Finance</a>
+<a href="operational-module.html?category=Administration" class="sidebar-link"><i class="fas fa-briefcase w-5 mr-3"></i>03. Administration</a>
+<a href="tasks-management.html" class="sidebar-link"><i class="fas fa-list-check w-5 mr-3"></i>04. Tasks &amp; Workflows</a>
+<a href="document-management.html" class="sidebar-link"><i class="fas fa-file-alt w-5 mr-3"></i>05. Document Management</a>
+<a href="email-system.html" class="sidebar-link"><i class="fas fa-envelope w-5 mr-3"></i>06. Email &amp; Communication</a>
+<a href="calendar-system.html" class="sidebar-link"><i class="fas fa-calendar-days w-5 mr-3"></i>07. Calendar &amp; Scheduling</a>
+<a href="reports.html" class="sidebar-link" data-admin-only-module><i class="fas fa-chart-bar w-5 mr-3"></i>08. Reports &amp; Insights</a>
+<a href="ai-features.html" class="sidebar-link"><i class="fas fa-wand-magic-sparkles w-5 mr-3"></i>09. AI Productivity</a>
+<a href="security-center.html" class="sidebar-link" data-admin-only-module><i class="fas fa-shield-alt w-5 mr-3"></i>10. Security &amp; Access</a>
+<div class="border-t border-white border-opacity-20 my-3"></div>
+<p class="section-label px-3 pt-1">My Workspace</p>
 <a href="my-work.html" class="sidebar-link"><i class="fas fa-inbox w-5 mr-3"></i>My Work</a>
 <a href="notifications.html" class="sidebar-link"><i class="fas fa-bell w-5 mr-3"></i>Notifications</a>
 <a href="workflow.html" class="sidebar-link"><i class="fas fa-route w-5 mr-3"></i>Work Center</a>
+<a href="officeflow-module-center.html" class="sidebar-link"><i class="fas fa-layer-group w-5 mr-3"></i>Module Workbench</a>
+<div class="border-t border-white border-opacity-20 my-3"></div>
+<p class="section-label px-3 pt-1">Management &amp; Oversight</p>
 <a href="control-tower.html" class="sidebar-link"><i class="fas fa-chart-line w-5 mr-3"></i>Control Tower</a>
 <a href="workflow-builder.html" class="sidebar-link"><i class="fas fa-sitemap w-5 mr-3"></i>Workflow Builder</a>
 <a href="automation.html" class="sidebar-link"><i class="fas fa-bolt w-5 mr-3"></i>Automation Engine</a>
-<a href="reports.html" class="sidebar-link"><i class="fas fa-chart-bar w-5 mr-3"></i>Reports</a>
-<a href="security-center.html" class="sidebar-link"><i class="fas fa-shield-alt w-5 mr-3"></i>Security</a>
 <a href="fraud-detection.html" class="sidebar-link"><i class="fas fa-triangle-exclamation w-5 mr-3"></i>Fraud Alerts</a>
-<div class="border-t border-white border-opacity-20 my-2"></div>
-<p class="section-label">Organization</p>
-<a href="departments.html" class="sidebar-link"><i class="fas fa-building w-5 mr-3"></i>Departments</a>
-<a href="hr-system.html" class="sidebar-link"><i class="fas fa-users w-5 mr-3"></i>People</a>
-<a href="document-management.html" class="sidebar-link"><i class="fas fa-file-alt w-5 mr-3"></i>Documents</a>
+<div class="border-t border-white border-opacity-20 my-3"></div>
+<p class="section-label px-3 pt-1">Organization Setup</p>
+<a href="departments.html" class="sidebar-link"><i class="fas fa-building w-5 mr-3"></i>Departments &amp; Teams</a>
 </nav>
 <div class="p-4 border-t border-white border-opacity-20">
 <p class="text-sm font-medium" data-user-name>User</p>
@@ -54,16 +67,23 @@
 <div class="stat-card of-rule-top p-6"><p class="of-stat-label">Overdue</p><p class="of-stat-value text-3xl mt-2" id="stat-overdue">--</p><p class="text-xs text-gray-400 mt-2" id="stat-overdue-sub">Loading...</p></div>
 <div class="stat-card of-rule-top p-6"><p class="of-stat-label">Escalated</p><p class="of-stat-value text-3xl mt-2" id="stat-escalated">--</p><p class="text-xs text-gray-400 mt-2" id="stat-escalated-sub">Loading...</p></div>
 </div>
+<section class="of-card p-6 mb-8"><div class="flex flex-wrap items-end justify-between gap-3 mb-5"><div><p class="of-eyebrow mb-1">Workspace</p><h3 class="of-serif text-xl font-semibold">Department Modules</h3><p class="text-sm text-gray-500 mt-1">Start with Human Resources, then move through the organization’s core work areas.</p></div><a href="officeflow-module-center.html" class="text-sm font-medium" style="color:var(--of-brass)">Open module workbench →</a></div><div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
+<a href="hr-system.html" class="border rounded-lg p-4 hover:border-[var(--of-brass)] transition" style="border-color:var(--of-border)"><div class="flex items-center gap-3"><span class="flex items-center justify-center rounded-lg w-10 h-10" style="background:#eef1f7;color:var(--of-navy)"><i class="fas fa-users"></i></span><div><p class="font-semibold text-sm">01 · Human Resources</p><p class="text-xs text-gray-500 mt-1">People and employee records</p></div></div></a>
+<a href="financial-management.html" class="border rounded-lg p-4 hover:border-[var(--of-brass)] transition" style="border-color:var(--of-border)"><div class="flex items-center gap-3"><span class="flex items-center justify-center rounded-lg w-10 h-10" style="background:#eef1f7;color:var(--of-navy)"><i class="fas fa-coins"></i></span><div><p class="font-semibold text-sm">02 · Finance</p><p class="text-xs text-gray-500 mt-1">Financial operations</p></div></div></a>
+<a href="operational-module.html?category=Administration" class="border rounded-lg p-4 hover:border-[var(--of-brass)] transition" style="border-color:var(--of-border)"><div class="flex items-center gap-3"><span class="flex items-center justify-center rounded-lg w-10 h-10" style="background:#eef1f7;color:var(--of-navy)"><i class="fas fa-briefcase"></i></span><div><p class="font-semibold text-sm">03 · Administration</p><p class="text-xs text-gray-500 mt-1">Office operations</p></div></div></a>
+<a href="tasks-management.html" class="border rounded-lg p-4 hover:border-[var(--of-brass)] transition" style="border-color:var(--of-border)"><div class="flex items-center gap-3"><span class="flex items-center justify-center rounded-lg w-10 h-10" style="background:#eef1f7;color:var(--of-navy)"><i class="fas fa-list-check"></i></span><div><p class="font-semibold text-sm">04 · Tasks &amp; Workflows</p><p class="text-xs text-gray-500 mt-1">Requests, tasks and approvals</p></div></div></a>
+<a href="document-management.html" class="border rounded-lg p-4 hover:border-[var(--of-brass)] transition" style="border-color:var(--of-border)"><div class="flex items-center gap-3"><span class="flex items-center justify-center rounded-lg w-10 h-10" style="background:#eef1f7;color:var(--of-navy)"><i class="fas fa-file-alt"></i></span><div><p class="font-semibold text-sm">05 · Documents</p><p class="text-xs text-gray-500 mt-1">Document records and access</p></div></div></a>
+<a href="email-system.html" class="border rounded-lg p-4 hover:border-[var(--of-brass)] transition" style="border-color:var(--of-border)"><div class="flex items-center gap-3"><span class="flex items-center justify-center rounded-lg w-10 h-10" style="background:#eef1f7;color:var(--of-navy)"><i class="fas fa-envelope"></i></span><div><p class="font-semibold text-sm">06 · Communication</p><p class="text-xs text-gray-500 mt-1">Internal communication</p></div></div></a>
+<a href="calendar-system.html" class="border rounded-lg p-4 hover:border-[var(--of-brass)] transition" style="border-color:var(--of-border)"><div class="flex items-center gap-3"><span class="flex items-center justify-center rounded-lg w-10 h-10" style="background:#eef1f7;color:var(--of-navy)"><i class="fas fa-calendar-days"></i></span><div><p class="font-semibold text-sm">07 · Calendar &amp; Scheduling</p><p class="text-xs text-gray-500 mt-1">Events and schedules</p></div></div></a>
+<a href="reports.html" class="border rounded-lg p-4 hover:border-[var(--of-brass)] transition" style="border-color:var(--of-border)" data-admin-only-module><div class="flex items-center gap-3"><span class="flex items-center justify-center rounded-lg w-10 h-10" style="background:#eef1f7;color:var(--of-navy)"><i class="fas fa-chart-bar"></i></span><div><p class="font-semibold text-sm">08 · Reports &amp; Insights</p><p class="text-xs text-gray-500 mt-1">Performance and oversight</p></div></div></a>
+<a href="ai-features.html" class="border rounded-lg p-4 hover:border-[var(--of-brass)] transition" style="border-color:var(--of-border)"><div class="flex items-center gap-3"><span class="flex items-center justify-center rounded-lg w-10 h-10" style="background:#eef1f7;color:var(--of-navy)"><i class="fas fa-wand-magic-sparkles"></i></span><div><p class="font-semibold text-sm">09 · AI Productivity</p><p class="text-xs text-gray-500 mt-1">Productivity tools</p></div></div></a>
+<a href="security-center.html" class="border rounded-lg p-4 hover:border-[var(--of-brass)] transition" style="border-color:var(--of-border)" data-admin-only-module><div class="flex items-center gap-3"><span class="flex items-center justify-center rounded-lg w-10 h-10" style="background:#eef1f7;color:var(--of-navy)"><i class="fas fa-shield-halved"></i></span><div><p class="font-semibold text-sm">Security &amp; Access</p><p class="text-xs text-gray-500 mt-1">Permissions and audit controls</p></div></div></a>
+</div></section>
 <div class="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-8">
 <div class="of-card p-6"><div class="flex items-center justify-between mb-4"><h3 class="of-serif text-lg font-semibold">My Work</h3><a href="my-work.html" class="text-sm" style="color:var(--of-brass)">My Work →</a></div><div id="tasks-list"><p class="text-center text-gray-500 py-8">Use <a href="my-work.html" style="color:var(--of-brass)">My Work</a> to review approvals assigned to you.</p></div></div>
 <div class="of-card p-6"><div class="flex items-center justify-between mb-4"><h3 class="of-serif text-lg font-semibold">Operational Status</h3><a href="control-tower.html" class="text-sm" style="color:var(--of-brass)">Control Tower →</a></div><div id="transactions-list"><p class="text-center text-gray-500 py-8">Use the <a href="control-tower.html" style="color:var(--of-brass)">Control Tower</a> to monitor workflow performance.</p></div></div>
 </div>
-<section class="of-card p-6 mb-8"><div class="flex items-center justify-between mb-4"><div><h3 class="of-serif text-lg font-semibold">Departments</h3><p class="text-sm text-gray-500 mt-1">Access the work areas available to your organization.</p></div><a href="departments.html" class="text-sm" style="color:var(--of-brass)">View all →</a></div><div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-<a href="operational-module.html?category=HR" class="border rounded-lg p-4 hover:border-[var(--of-brass)]" style="border-color:var(--of-border)"><i class="fas fa-users text-lg mb-2" style="color:var(--of-navy)"></i><p class="font-medium text-sm">Human Resources</p><p class="text-xs text-gray-500 mt-1">Restricted access</p></a>
-<a href="operational-module.html?category=Finance" class="border rounded-lg p-4 hover:border-[var(--of-brass)]" style="border-color:var(--of-border)"><i class="fas fa-coins text-lg mb-2" style="color:var(--of-navy)"></i><p class="font-medium text-sm">Finance</p><p class="text-xs text-gray-500 mt-1">Finance workflows</p></a>
-<a href="operational-module.html?category=Procurement" class="border rounded-lg p-4 hover:border-[var(--of-brass)]" style="border-color:var(--of-border)"><i class="fas fa-cart-shopping text-lg mb-2" style="color:var(--of-navy)"></i><p class="font-medium text-sm">Procurement</p><p class="text-xs text-gray-500 mt-1">Purchase workflows</p></a>
-<a href="operational-module.html?category=Administration" class="border rounded-lg p-4 hover:border-[var(--of-brass)]" style="border-color:var(--of-border)"><i class="fas fa-building text-lg mb-2" style="color:var(--of-navy)"></i><p class="font-medium text-sm">Administration</p><p class="text-xs text-gray-500 mt-1">Office operations</p></a>
-</div></section>
+
 <div class="of-card p-6"><h3 class="of-serif text-lg font-semibold mb-4">Quick Actions</h3><div class="grid grid-cols-2 md:grid-cols-5 gap-4">
 <a href="workflow.html" class="flex flex-col items-center p-4 rounded border hover:border-[var(--of-brass)] transition" style="border-color:var(--of-border)"><i class="fas fa-user-plus text-xl mb-2" style="color:var(--of-navy)"></i><p class="text-sm text-gray-700">New Request</p></a>
 <a href="my-work.html" class="flex flex-col items-center p-4 rounded border hover:border-[var(--of-brass)] transition" style="border-color:var(--of-border)"><i class="fas fa-plus-circle text-xl mb-2" style="color:var(--of-navy)"></i><p class="text-sm text-gray-700">My Work</p></a>
@@ -79,7 +99,7 @@
 <script src="/dashboard/js/ooes-auth.js"></script>
 <script src="/dashboard/js/ooes-core.js"></script>
 <script>
-function applyRoleNavigation(){const role=OOES_AUTH.getRole();const isAdmin=["administrator","super_admin"].includes(role);document.querySelectorAll('a[href="control-tower.html"],a[href="workflow-builder.html"],a[href="automation.html"],a[href="reports.html"],a[href="security-center.html"],a[href="fraud-detection.html"]').forEach(a=>{if(!isAdmin){a.style.display="none";a.setAttribute("aria-hidden","true");}});document.querySelectorAll('a[href="control-tower.html"]').forEach(a=>{const card=a.closest(".of-card");if(card&&!isAdmin)card.style.display="none";});document.querySelectorAll('a[href="workflow-builder.html"]').forEach(a=>{if(!isAdmin)a.style.display="none";});document.querySelectorAll('a[href="automation.html"],a[href="reports.html"]').forEach(a=>{if(!isAdmin)a.style.display="none";});}
+function applyRoleNavigation(){const role=OOES_AUTH.getRole();const isAdmin=["administrator","super_admin"].includes(role);document.querySelectorAll('a[href="control-tower.html"],a[href="workflow-builder.html"],a[href="automation.html"],a[href="reports.html"],a[href="security-center.html"],a[href="fraud-detection.html"]').forEach(a=>{if(!isAdmin){a.style.display="none";a.setAttribute("aria-hidden","true");}});document.querySelectorAll('a[href="control-tower.html"]').forEach(a=>{const card=a.closest(".of-card");if(card&&!isAdmin)card.style.display="none";});document.querySelectorAll('a[href="workflow-builder.html"]').forEach(a=>{if(!isAdmin)a.style.display="none";});document.querySelectorAll('a[href="automation.html"],a[href="reports.html"]').forEach(a=>{if(!isAdmin)a.style.display="none";});document.querySelectorAll('[data-admin-only-module]').forEach(a=>{if(!isAdmin){a.style.display="none";a.setAttribute("aria-hidden","true");}});}
 document.getElementById("current-date").textContent=new Date().toLocaleDateString("en-KE",{weekday:"long",year:"numeric",month:"long",day:"numeric"});
 async function loadDashboard(){
 try{
