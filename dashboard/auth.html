@@ -255,7 +255,7 @@
                     <div class="mt-6 text-center">
                         <p class="text-gray-600">
                             Don't have an account? 
-                            <button onclick="toggleForm()" class="text-[color:var(--of-brass)] hover:text-[color:var(--of-navy)] font-semibold">Sign Up</button>
+                            <button type="button" onclick="toggleForm(); return false;" class="text-[color:var(--of-brass)] hover:text-[color:var(--of-navy)] font-semibold">Sign Up</button>
                         </p>
                     </div>
                 </div>
@@ -337,7 +337,7 @@
                     <div class="mt-6 text-center">
                         <p class="text-gray-600">
                             Already have an account? 
-                            <button onclick="toggleForm()" class="text-[color:var(--of-brass)] hover:text-[color:var(--of-navy)] font-semibold">Sign In</button>
+                            <button type="button" onclick="toggleForm(); return false;" class="text-[color:var(--of-brass)] hover:text-[color:var(--of-navy)] font-semibold">Sign In</button>
                         </p>
                     </div>
                 </div>
@@ -422,7 +422,7 @@
           document.title = 'OfficeFlow — ' + selectedPortal.name + ' Sign In';
           if (signUp) signUp.classList.add('hidden');
           const signupToggle = document.querySelector('#signInForm button[onclick="toggleForm()"]');
-          if (signupToggle) signupToggle.closest('p').textContent = 'Need access? Ask your organization administrator to create your account and assign your department.';
+          if (signupToggle) signupToggle.closest('p').innerHTML = 'Need access? Ask your organization administrator to create your account and assign your department.';
           const heading = document.querySelector('#signInForm h2');
           const subtitle = document.querySelector('#signInForm .text-center p');
           if (heading) heading.textContent = selectedPortal.name + ' Portal';
@@ -471,14 +471,14 @@
         function toggleForm() {
             const signInForm = document.getElementById('signInForm');
             const signUpForm = document.getElementById('signUpForm');
-            
-            if (signInForm.classList.contains('hidden')) {
-                signInForm.classList.remove('hidden');
-                signUpForm.classList.add('hidden');
-            } else {
-                signInForm.classList.add('hidden');
-                signUpForm.classList.remove('hidden');
-            }
+            if (!signInForm || !signUpForm) return false;
+            const showingSignIn = !signInForm.classList.contains('hidden');
+            signInForm.classList.toggle('hidden', showingSignIn);
+            signUpForm.classList.toggle('hidden', !showingSignIn);
+            const target = showingSignIn ? signUpForm : signInForm;
+            const firstInput = target.querySelector('input');
+            if (firstInput) firstInput.focus({ preventScroll: true });
+            return false;
         }
 
         // Notification System
