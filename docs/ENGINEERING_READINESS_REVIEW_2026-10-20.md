@@ -28,7 +28,7 @@ This review separates evidence from assumptions. A table, RPC, or page existing 
 **Foundation implemented; end-to-end billing not signed off.**
 
 - The billing page, scoped billing read RPC, migrations, Playwright test specification and package-selection redirect are on draft PR #17 and are not yet part of the default branch.
-- The deployed checkout Edge Function is still version 1; an attempt to deploy the hardened branch revision was blocked by the execution safety check. Do not assume the latest checkout reliability fix is live.
+- The deployed checkout Edge Function is still version 1; an attempt to deploy the hardened branch revision was blocked by the execution safety check. Do not assume the latest checkout reliability fix is live. The official checkout API returns a hosted checkout-session ID, which is distinct from the collection invoice ID; a separate `provider_checkout_id` column and corrected branch handling have been added, but that checkout code is not yet deployed.
 - Merchant sandbox/live keys, webhook registration and actual provider callback delivery have not been verified in this review.
 - No authenticated browser test or real sandbox payment was completed.
 - Automatic recurring card subscriptions, M-Pesa renewal collection/scheduling, cancellation lifecycle, failed-renewal grace handling and plan entitlement enforcement remain unfinished. IntaSend has a separate recurring-card subscription API and subscription-event webhook; those are not integrated yet.
