@@ -393,7 +393,7 @@
             { id: 'INV-2026-005', client: 'Local Business', amount: 95000, dueDate: '2026-02-18', status: 'pending' }
         ];
 
-        async async function initializeFinancialSystem() {
+        async function initializeFinancialSystem() {
             try {
                 if (window.OOES_AUTH && OOES_AUTH.ready) await OOES_AUTH.ready;
                 const session = window.OOES_AUTH && OOES_AUTH.getSession();
