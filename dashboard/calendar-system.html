@@ -152,7 +152,7 @@
     $('eventForm').addEventListener('submit',saveEvent);
     $('prevMonth').addEventListener('click',()=>{monthCursor=new Date(monthCursor.getFullYear(),monthCursor.getMonth()-1,1);selectedDay=monthCursor.getFullYear()+'-'+String(monthCursor.getMonth()+1).padStart(2,'0')+'-01';loadEvents();});
     $('nextMonth').addEventListener('click',()=>{monthCursor=new Date(monthCursor.getFullYear(),monthCursor.getMonth()+1,1);selectedDay=monthCursor.getFullYear()+'-'+String(monthCursor.getMonth()+1).padStart(2,'0')+'-01';loadEvents();});
-    $('todayBtn').addEventListener('click',()=>{const now=new Date();monthCursor=new Date(now.getFullYear(),now.getMonth(),1);selectedDay=dateKeyInZone(now);loadEvents();});
+    $('todayBtn').addEventListener('click',()=>{const now=new Date();monthCursor=nairobiMonth(now);selectedDay=dateKeyInZone(now);loadEvents();});
     $('refreshBtn').addEventListener('click',loadEvents);
     document.addEventListener('DOMContentLoaded',loadEvents);
   </script>
