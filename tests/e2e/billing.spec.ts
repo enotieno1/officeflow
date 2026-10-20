@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 
 const baseURL = (process.env.OFFICEFLOW_BASE_URL || "").replace(/\/$/, "");
-const supabaseURL = (process.env.SUPABASE_URL || "https://oghowrilrhummzvrljdt.supabase.co").replace(/\/$/, "");
+const supabaseURL = (process.env.SUPABASE_URL || "").replace(/\/$/, "");
 test.beforeEach(() => {
   test.skip(!baseURL, "Set OFFICEFLOW_BASE_URL to the deployed branch-preview URL; tests must not guess which deployment is live.");
 });
@@ -23,6 +23,7 @@ test("billing page redirects unauthenticated visitors to sign-in", async ({ page
 });
 
 test("checkout endpoint refuses unauthenticated requests", async ({ request }) => {
+  test.skip(!supabaseURL, "Set SUPABASE_URL to a dedicated staging project; endpoint tests never default to production.");
   const response = await request.post(supabaseURL + "/functions/v1/billing-checkout", {
     data: { plan_id: "starter_monthly", payment_method: "card" }
   });
@@ -42,7 +43,7 @@ test("signed-in organization administrator sees database-backed published plans"
 });
 
 test("optional sandbox card checkout redirects to IntaSend and does not claim payment success", async ({ page }) => {
-  test.skip(process.env.RUN_BILLING_SANDBOX_HANDOFF !== "1", "Opt-in only: use a sandbox merchant and test account.");
+  test.skip(process.env.RUN_BILLING_SANDBOX_HANDOFF !== "1" || /(^|\\.)officeflow\\.co\\.ke$|(^|\\.)office-sort\\.vercel\\.app$/.test(new URL(baseURL).hostname), "Opt-in only on a dedicated preview/staging app with sandbox merchant credentials.");
   await signIn(page);
   await page.goto(baseURL + "/dashboard/billing.html");
   const cardSelect = page.locator("select").first();
@@ -56,7 +57,7 @@ test("optional sandbox card checkout redirects to IntaSend and does not claim pa
 });
 
 test("webhook rejects an invalid challenge once provider secrets are configured", async ({ request }) => {
-  test.skip(process.env.RUN_BILLING_WEBHOOK_E2E !== "1", "Enable only after setting IntaSend sandbox secrets and registering the webhook.");
+  test.skip(process.env.RUN_BILLING_WEBHOOK_E2E !== "1" || !supabaseURL, "Enable only against a dedicated staging Supabase project after setting sandbox secrets.");
   const response = await request.post(supabaseURL + "/functions/v1/intasend-webhook", {
     data: { topic: "collection_event", challenge: "deliberately-wrong", invoice_id: "not-a-real-invoice", api_ref: "not-a-real-reference", state: "COMPLETE" }
   });
