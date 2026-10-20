@@ -2060,10 +2060,12 @@
         }
 
         function openComplianceModal() {
-            showNotification('Opening compliance management...', 'info');
-            setTimeout(() => {
-                showNotification('Compliance module ready', 'success');
-            }, 1000);
+            // Generate the existing compliance report instead of showing a fake success toast.
+            if (typeof generateComplianceReport === 'function') {
+                generateComplianceReport();
+            } else {
+                showNotification('Compliance reporting is not available on this page yet.', 'warning');
+            }
         }
 
         function exportEmployeeData() {
