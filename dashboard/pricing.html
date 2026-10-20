@@ -6,45 +6,36 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="/dashboard/js/config.js"></script><script src="/dashboard/js/db.js"></script><script src="/dashboard/js/ooes-auth.js"></script>
-<style>.gradient-bg{background:linear-gradient(135deg,#16213E 0%,#1F2C4F 100%);}.card-hover{transition:all 0.3s ease;}.card-hover:hover{transform:translateY(-8px);}}</style>
+<style>.gradient-bg{background:linear-gradient(135deg,#16213E 0%,#1F2C4F 100%);}.card-hover{transition:all 0.3s ease;}.card-hover:hover{transform:translateY(-8px);}.pricing-nav{display:flex;align-items:center;gap:9px;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;}.pricing-nav:hover{background:rgba(255,255,255,.12);}.pricing-nav i{width:16px;}.pricing-divider{border-top:1px solid rgba(255,255,255,.2);margin:8px 0;}.pricing-section{font-size:10px;color:rgba(165,180,252,.7);padding:4px 12px;text-transform:uppercase;letter-spacing:.05em;}</style>
 <link rel="stylesheet" href="css/executive-theme.css">
 </head>
 <body class="bg-gray-50">
 <div id="sidebar" class="fixed inset-y-0 left-0 w-56 text-white z-50 flex flex-col overflow-y-auto" style="background:linear-gradient(135deg,#16213E 0%,#1F2C4F 100%);transition:transform 0.3s ease">
 <div class="p-4 border-b border-white border-opacity-20"><a href="/dashboard/index.html" style="color:white;text-decoration:none;font-size:18px;font-weight:bold">OfficeFlow</a></div>
 <nav class="flex-1 p-2 space-y-1 text-sm">
-<a href="/dashboard/index.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-home" style="width:16px;margin-right:8px"></i>Dashboard</a>
-<a href="/dashboard/hr-system.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-users" style="width:16px;margin-right:8px"></i>HR</a>
-<a href="/dashboard/financial-management.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-chart-line" style="width:16px;margin-right:8px"></i>Finance</a>
-<a href="/dashboard/tasks-management.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-tasks" style="width:16px;margin-right:8px"></i>Tasks</a>
-<a href="/dashboard/document-management.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-file-alt" style="width:16px;margin-right:8px"></i>Documents</a>
-<a href="/dashboard/email-system.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-envelope" style="width:16px;margin-right:8px"></i>Email</a>
-<a href="/dashboard/calendar-system.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-calendar" style="width:16px;margin-right:8px"></i>Calendar</a>
-<a href="/dashboard/ai-features.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-robot" style="width:16px;margin-right:8px"></i>AI Features</a>
-<a href="/dashboard/reports.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-chart-bar" style="width:16px;margin-right:8px"></i>Reports</a>
-<a href="/dashboard/security-center.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-shield-alt" style="width:16px;margin-right:8px"></i>Security</a>
-<div style="border-top:1px solid rgba(255,255,255,0.2);margin:8px 0"></div>
-<p style="font-size:10px;color:rgba(165,180,252,0.7);padding:4px 12px;text-transform:uppercase;letter-spacing:0.05em">Departments</p>
-<a href="/dashboard/communication-department.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-comments" style="width:16px;margin-right:8px"></i>Communication</a>
-<a href="/dashboard/operations-department.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-cog" style="width:16px;margin-right:8px"></i>Operations</a>
-<a href="/dashboard/sales-department.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-handshake" style="width:16px;margin-right:8px"></i>Sales</a>
-<a href="/dashboard/accounting-tools.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-calculator" style="width:16px;margin-right:8px"></i>Accounting</a>
-<a href="/dashboard/automation.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-magic" style="width:16px;margin-right:8px"></i>Automation</a>
-<div style="border-top:1px solid rgba(255,255,255,0.2);margin:8px 0"></div>
-<p style="font-size:10px;color:rgba(165,180,252,0.7);padding:4px 12px;text-transform:uppercase;letter-spacing:0.05em">Tools</p>
-<a href="/dashboard/excel-system.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-file-excel" style="width:16px;margin-right:8px"></i>Excel</a>
-<a href="/dashboard/google-drive.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-cloud" style="width:16px;margin-right:8px"></i>Google Drive</a>
-<a href="/dashboard/gmail-system.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-envelope-open" style="width:16px;margin-right:8px"></i>Gmail</a>
-<a href="/dashboard/trello-management.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fab fa-trello" style="width:16px;margin-right:8px"></i>Trello</a>
-<a href="/dashboard/data-management.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-database" style="width:16px;margin-right:8px"></i>Data</a>
-<a href="/dashboard/it-compliance.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-shield-alt" style="width:16px;margin-right:8px"></i>IT Compliance</a>
-<a href="/dashboard/pricing.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-tags" style="width:16px;margin-right:8px"></i>Pricing</a>
-<a href="/dashboard/contact.html" style="display:flex;align-items:center;padding:8px 12px;border-radius:8px;color:rgba(199,210,254,1);text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background=''"><i class="fas fa-phone" style="width:16px;margin-right:8px"></i>Contact</a>
+<a href="/dashboard/index.html" class="pricing-nav"><i class="fas fa-home"></i>Dashboard</a>
+<a href="/dashboard/workflow.html" class="pricing-nav"><i class="fas fa-route"></i>Work Center</a>
+<a href="/dashboard/my-work.html" class="pricing-nav"><i class="fas fa-inbox"></i>My Work</a>
+<a href="/dashboard/tasks-management.html" class="pricing-nav"><i class="fas fa-list-check"></i>Tasks</a>
+<a href="/dashboard/notifications.html" class="pricing-nav"><i class="fas fa-bell"></i>Notifications</a>
+<a href="/dashboard/workflow-builder.html" class="pricing-nav"><i class="fas fa-sitemap"></i>Workflow Builder</a>
+<a href="/dashboard/control-tower.html" class="pricing-nav"><i class="fas fa-chart-line"></i>Control Tower</a>
+<div class="pricing-divider"></div><p class="pricing-section">Organization</p>
+<a href="/dashboard/departments.html" class="pricing-nav"><i class="fas fa-building"></i>Departments</a>
+<a href="/dashboard/hr-system.html" class="pricing-nav"><i class="fas fa-users"></i>People & HR Workflows</a>
+<a href="/dashboard/operational-module.html?category=Finance" class="pricing-nav"><i class="fas fa-coins"></i>Finance Workflows</a>
+<a href="/dashboard/operational-module.html?category=Procurement" class="pricing-nav"><i class="fas fa-cart-shopping"></i>Procurement Workflows</a>
+<a href="/dashboard/document-management.html" class="pricing-nav"><i class="fas fa-file-alt"></i>Documents</a>
+<a href="/dashboard/integration-center.html" class="pricing-nav"><i class="fas fa-plug"></i>Integrations</a>
+<a href="/dashboard/reports.html" class="pricing-nav"><i class="fas fa-chart-bar"></i>Reports</a>
+<a href="/dashboard/security-center.html" class="pricing-nav"><i class="fas fa-shield-alt"></i>Security</a>
+<a href="/dashboard/billing.html" class="pricing-nav"><i class="fas fa-credit-card"></i>Subscription & Billing</a>
+<a href="/dashboard/contact.html" class="pricing-nav"><i class="fas fa-phone"></i>Contact</a>
 </nav>
 <div class="p-3 border-t border-white border-opacity-20" style="font-size:12px">
-<p data-user-name style="font-weight:600;color:white">User</p>
-<p data-user-role style="color:rgba(165,180,252,0.8)"></p>
-<button onclick="OOES_AUTH.logout()" style="color:rgba(252,165,165,1);background:none;border:none;cursor:pointer;margin-top:4px"><i class="fas fa-sign-out-alt"></i> Logout</button>
+<p data-user-name style="font-weight:600;color:white">OfficeFlow</p>
+<p data-user-role style="color:rgba(165,180,252,0.8)">Subscription plans</p>
+<a href="/dashboard/index.html" style="display:inline-block;color:white;margin-top:6px;text-decoration:underline">Open dashboard</a>
 </div>
 </div>
 <div style="margin-left:224px">
