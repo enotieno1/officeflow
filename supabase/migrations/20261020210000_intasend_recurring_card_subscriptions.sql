@@ -50,8 +50,8 @@ begin
   ) into v_subscription
   from public.billing_subscriptions s
   join public.billing_plans p on p.id = s.plan_id
-  where s.organization_id = v_org and s.status in ('pending','active','past_due')
-  order by s.created_at desc limit 1;
+  where s.organization_id = v_org
+  order by case when s.status in ('pending','active','past_due') then 0 else 1 end, s.created_at desc limit 1;
 
   select coalesce(jsonb_agg(jsonb_build_object(
     'api_ref', x.api_ref, 'amount', x.amount, 'currency', x.currency,
