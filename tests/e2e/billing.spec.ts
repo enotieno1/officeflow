@@ -43,7 +43,7 @@ test("signed-in organization administrator sees database-backed published plans"
 });
 
 test("optional sandbox card checkout redirects to IntaSend and does not claim payment success", async ({ page }) => {
-  test.skip(process.env.RUN_BILLING_SANDBOX_HANDOFF !== "1" || /(^|\\.)officeflow\\.co\\.ke$|(^|\\.)office-sort\\.vercel\\.app$/.test(new URL(baseURL).hostname), "Opt-in only on a dedicated preview/staging app with sandbox merchant credentials.");
+  test.skip(process.env.RUN_BILLING_SANDBOX_HANDOFF !== "1" || /(^|\.)officeflow\.co\.ke$|(^|\.)office-sort\.vercel\.app$/.test(new URL(baseURL).hostname), "Opt-in only on a dedicated preview/staging app with sandbox merchant credentials.");
   await signIn(page);
   await page.goto(baseURL + "/dashboard/billing.html");
   const cardSelect = page.locator("select").first();
