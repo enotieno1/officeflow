@@ -110,7 +110,8 @@ var OOES_AUTH = {
       if (!data || !data.session) {
         this._session = null;
         localStorage.removeItem('ooesSession');
-        window.location.replace('/dashboard/auth.html');
+        var returnTo = window.location.pathname + window.location.search;
+        window.location.replace('/dashboard/auth.html?next=' + encodeURIComponent(returnTo));
         return false;
       }
       await this._loadProfile(data.session.user);
@@ -141,21 +142,41 @@ var OOES_AUTH = {
 OOES_AUTH.ready = new Promise(function (resolve) { OOES_AUTH._readyResolve = resolve; });
 
 (function () {
-  if (!window.location.pathname.includes('auth.html')) {
-    document.addEventListener('DOMContentLoaded', async function () {
-      var ok = false;
-      try {
+  var path = window.location.pathname;
+  var isAuthPage = path.endsWith('/auth.html');
+  var isPublicPage = path.endsWith('/pricing.html') || path.endsWith('/contact.html');
+
+  if (isAuthPage) {
+    OOES_AUTH._readyResolve(false);
+    return;
+  }
+
+  document.addEventListener('DOMContentLoaded', async function () {
+    var ok = false;
+    try {
+      if (isPublicPage) {
+        // Public marketing pages must remain accessible while signed out.
+        // If a session exists, load its profile so CTA routing and user info work.
+        var sessionResult = await supabase.auth.getSession();
+        if (!sessionResult.error && sessionResult.data && sessionResult.data.session) {
+          await OOES_AUTH._loadProfile(sessionResult.data.session.user);
+          ok = true;
+          OOES_AUTH.renderUserInfo();
+        }
+      } else {
         ok = await OOES_AUTH.requireAuth();
         if (ok) OOES_AUTH.renderUserInfo();
-      } catch (error) {
-        // Defensive final guard: never leave OOES_AUTH.ready unresolved.
-        console.error('OfficeFlow auth initialization failed', error);
-        OOES_AUTH._session = null;
-      } finally {
-        OOES_AUTH._readyResolve(ok);
       }
-    });
-  } else {
-    OOES_AUTH._readyResolve(false);
-  }
+    } catch (error) {
+      console.error('OfficeFlow auth initialization failed', error);
+      OOES_AUTH._session = null;
+      if (!isPublicPage) {
+        localStorage.removeItem('ooesSession');
+        window.location.replace('/dashboard/auth.html?reason=session');
+      }
+    } finally {
+      // Resolve for every route, even when auth/profile requests fail.
+      OOES_AUTH._readyResolve(ok);
+    }
+  });
 })();
