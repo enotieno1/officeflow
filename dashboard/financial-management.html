@@ -393,31 +393,30 @@
             { id: 'INV-2026-005', client: 'Local Business', amount: 95000, dueDate: '2026-02-18', status: 'pending' }
         ];
 
-        async function initializeFinancialSystem() {
+        async async function initializeFinancialSystem() {
             try {
-                var data = await getTransactions();
-                if (data && data.length > 0) {
-                    invoices = data.map(function(t, i) {
-                        return {
-                            id: t.id || 'TXN-' + (i+1),
-                            client: t.description || t.type || 'Transaction',
-                            amount: Math.abs(parseFloat(t.amount) || 0),
-                            dueDate: t.date || '2026-01-01',
-                            status: parseFloat(t.amount) >= 0 ? 'paid' : 'pending',
-                            type: t.type || 'expense'
-                        };
-                    });
-                }
-            } catch(err) { console.log('Using local data'); }
-            renderInvoiceTable();
-            updateFinancialMetrics();
+                if (window.OOES_AUTH && OOES_AUTH.ready) await OOES_AUTH.ready;
+                const session = window.OOES_AUTH && OOES_AUTH.getSession();
+                if (!session || !session.organization_id) throw new Error('Organization session unavailable');
+                const {data,error} = await supabase.from('invoices').select('*').order('created_at',{ascending:false});
+                if (error) throw error;
+                invoices = (data || []).map(row => ({
+                    id: row.id, invoiceNumber: row.invoice_number, client: row.client_name,
+                    amount: Number(row.amount) || 0, dueDate: row.due_date || '', status: row.status
+                }));
+                renderInvoiceTable(); updateFinancialMetrics();
+            } catch(err) {
+                console.error('Invoice loading failed:',err);
+                invoices = []; renderInvoiceTable(); updateFinancialMetrics();
+                showNotification('Invoices could not be loaded from the database. Check your access and connection.', 'error');
+            }
         }
 
         function renderInvoiceTable() {
             const tableBody = document.getElementById('invoiceTable');
             tableBody.innerHTML = invoices.map(invoice => `
                 <tr class="border-b hover:bg-gray-50">
-                    <td class="px-4 py-3 font-semibold">${invoice.id}</td>
+                    <td class="px-4 py-3 font-semibold">${escapeHtml(invoice.invoiceNumber || invoice.id)}</td>
                     <td class="px-4 py-3">${invoice.client}</td>
                     <td class="px-4 py-3 font-bold text-green-600">KSh ${invoice.amount.toLocaleString()}</td>
                     <td class="px-4 py-3">${invoice.dueDate}</td>
@@ -464,22 +463,27 @@
             document.getElementById('invoiceForm').reset();
         }
 
-        function saveInvoice() {
-            const newInvoice = {
-                id: document.getElementById('invoiceNumber').value,
-                client: document.getElementById('clientName').value,
-                amount: parseFloat(document.getElementById('invoiceAmount').value),
-                dueDate: document.getElementById('dueDate').value,
-                status: 'draft'
-            };
-            
-            invoices.push(newInvoice);
-            renderInvoiceTable();
-            updateFinancialMetrics();
-            closeInvoiceModal();
-            
-            // Show success message
-            showNotification('Invoice created successfully!', 'success');
+        async function saveInvoice() {
+            const session = window.OOES_AUTH && OOES_AUTH.getSession();
+            const invoiceNumber = document.getElementById('invoiceNumber').value.trim();
+            const client = document.getElementById('clientName').value.trim();
+            const amount = Number(document.getElementById('invoiceAmount').value);
+            const dueDate = document.getElementById('dueDate').value || null;
+            if (!session || !session.id || !session.organization_id) { showNotification('Sign in to an organization before creating an invoice.', 'error'); return; }
+            if (!invoiceNumber || !client || !Number.isFinite(amount) || amount <= 0) { showNotification('Enter an invoice number, client and positive amount.', 'error'); return; }
+            try {
+                const {data,error} = await supabase.from('invoices').insert([{
+                    organization_id: session.organization_id, owner_id: session.id,
+                    invoice_number: invoiceNumber, client_name: client, amount, due_date: dueDate, status: 'draft'
+                }]).select().single();
+                if (error) throw error;
+                invoices.unshift({id:data.id,invoiceNumber:data.invoice_number,client:data.client_name,amount:Number(data.amount),dueDate:data.due_date||'',status:data.status});
+                renderInvoiceTable(); updateFinancialMetrics(); closeInvoiceModal();
+                showNotification('Invoice draft saved to the database.', 'success');
+            } catch(err) {
+                console.error('Invoice save failed:',err);
+                showNotification('Invoice was not saved. Check permissions and ensure the invoice number is unique.', 'error');
+            }
         }
 
         function escapeHtml(str) {
@@ -505,31 +509,24 @@
 
         function sendReminder(invoiceId) {
             const invoice = invoices.find(inv => inv.id === invoiceId);
-            if (invoice) {
-                showNotification(`Payment reminder sent to ${invoice.client} for ${invoice.id}`, 'info');
-            }
+            if (invoice) showNotification('Email delivery is not connected. No payment reminder was sent.', 'warning');
         }
 
         function processPayroll() {
-            showNotification('Processing payroll for 24 employees...', 'info');
-            setTimeout(() => {
-                showNotification('Payroll processed successfully! All employees paid.', 'success');
-            }, 2000);
+            showNotification('Payroll payment is not integrated with a payment provider. No payments were initiated.', 'warning');
         }
 
         function sendPaymentReminder() {
-            const pendingInvoices = invoices.filter(inv => inv.status === 'pending' || inv.status === 'overdue');
-            showNotification(`Sending payment reminders for ${pendingInvoices.length} invoices...`, 'info');
-            setTimeout(() => {
-                showNotification('Payment reminders sent successfully!', 'success');
-            }, 1500);
+            showNotification('Payment reminders cannot be sent until an email provider is configured.', 'warning');
         }
 
         function generateFinancialReport() {
-            showNotification('Generating comprehensive financial report...', 'info');
-            setTimeout(() => {
-                showNotification('Financial report generated and ready for download!', 'success');
-            }, 2000);
+            const rows = [['Invoice number','Client','Amount KES','Due date','Status'], ...invoices.map(inv => [inv.invoiceNumber || inv.id,inv.client,inv.amount,inv.dueDate,inv.status])];
+            const csv = rows.map(row => row.map(v => '"' + String(v == null ? '' : v).replace(/"/g,'""') + '"').join(',')).join('\\r\\n');
+            const blob = new Blob(['\\ufeff' + csv], {type:'text/csv;charset=utf-8;'});
+            const url = URL.createObjectURL(blob); const a = document.createElement('a');
+            a.href = url; a.download = 'officeflow-invoices.csv'; a.click(); URL.revokeObjectURL(url);
+            showNotification('Invoice report downloaded from the records currently loaded.', 'success');
         }
 
         function showInvoiceDashboard() {
