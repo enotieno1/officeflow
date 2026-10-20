@@ -81,8 +81,12 @@
  async function downloadDocument(doc){
   if(!doc.url){notice('This record has no stored file path. Contact your administrator.','error');return;}
   if(/^https?:\/\//i.test(doc.url)){notice('This is a legacy external link; it cannot be downloaded as a private OfficeFlow file.','error');return;}
-  try{const {data,error}=await supabase.storage.from('officeflow-documents').createSignedUrl(doc.url,60);if(error)throw error;const a=document.createElement('a');a.href=data.signedUrl;a.target='_blank';a.rel='noopener noreferrer';a.click();}
-  catch(error){console.error('Document download failed',error);notice('Download is not permitted or the file is unavailable.','error');}
+  const tab=window.open('about:blank','_blank');
+  try{
+   const {data,error}=await supabase.storage.from('officeflow-documents').createSignedUrl(doc.url,60);
+   if(error)throw error;
+   if(tab){tab.opener=null;tab.location.href=data.signedUrl;}else{window.location.assign(data.signedUrl);}
+  }catch(error){if(tab)tab.close();console.error('Document download failed',error);notice('Download is not permitted or the file is unavailable.','error');}
  }
  async function deleteDocument(doc){
   if(!confirm('Delete “'+(doc.name||'this document')+'” and its stored file?'))return;
