@@ -37,6 +37,7 @@ begin
   select jsonb_build_object(
     'id', s.id, 'plan_id', s.plan_id, 'status', s.status,
     'payment_method', s.payment_method,
+    'provider_subscription_id', s.provider_subscription_id,
     'current_period_start', s.current_period_start,
     'current_period_end', s.current_period_end,
     'cancel_at_period_end', s.cancel_at_period_end,
