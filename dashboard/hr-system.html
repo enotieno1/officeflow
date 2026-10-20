@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><script>/* OfficeFlow live-module routing */location.replace('operational-module.html?category=HR');</script><script>(function(){if(!localStorage.getItem("ooesSession")){window.location.href="/dashboard/auth.html";}})();</script>
+<head><script>/* OfficeFlow live-module routing */</script><script>(function(){if(!localStorage.getItem("ooesSession")){window.location.href="/dashboard/auth.html";}})();</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HR Management System - OOES</title>
@@ -546,7 +546,10 @@
             }
         ];
 
-        async function initializeHRSystem() {
+        async async function initializeHRSystem() {
+            await OOES_AUTH.ready;
+            if (!OOES_AUTH.isLoggedIn()) { window.location.href='/dashboard/auth.html'; return; }
+            if (!['administrator','super_admin'].includes(OOES_AUTH.getRole())) { window.location.replace('operational-module.html?category=HR'); return; }
             try {
                 var data = await getEmployees();
                 if (data && data.length > 0) {
