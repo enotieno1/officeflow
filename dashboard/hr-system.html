@@ -696,24 +696,138 @@
             showNotification('Payroll calculation is available, but payroll payment is not integrated. No employees have been paid from this screen.', 'warning');
         }
 
-        function viewAttendance() {
-            alert('Opening attendance tracking system...');
-            // Navigate to attendance section
-            document.querySelector('[data-section="attendance"]').scrollIntoView({ behavior: 'smooth' });
+        function localISODate() {
+            const d = new Date();
+            return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+        }
+
+        function employeeOptions() {
+            return (employees || []).filter(e => e && e.id && e.status !== 'inactive').map(e => ({
+                id: e.id,
+                label: ((e.firstName || '') + ' ' + (e.lastName || '')).trim() || e.name || ('Employee #' + e.id)
+            }));
+        }
+
+        function chooseEmployeeForHRAction(actionLabel) {
+            const options = employeeOptions();
+            if (!options.length) {
+                showNotification('No employees are loaded. Add or sync employees first, then retry.', 'error');
+                return null;
+            }
+            const menu = options.map((e, i) => (i + 1) + '. ' + e.label + ' (ID ' + e.id + ')').join('\n');
+            const answer = window.prompt('Select employee for ' + actionLabel + ' by number:\n' + menu);
+            if (answer === null) return null;
+            const n = Number(answer);
+            if (!Number.isInteger(n) || n < 1 || n > options.length) {
+                showNotification('Choose a valid employee number from the list.', 'error');
+                return null;
+            }
+            return options[n - 1];
+        }
+
+        async function viewAttendance() {
+            const section = document.getElementById('attendance') || document.querySelector('[data-section="attendance"]') || document.querySelector('#hr-attendance');
+            if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            try {
+                const session = window.OOES_AUTH && OOES_AUTH.getSession();
+                if (!session || !session.organization_id) throw new Error('Your organization profile is missing. Sign in again.');
+                const { data, error } = await supabase.from('hr_attendance')
+                    .select('attendance_date,attendance_status,employee_id,check_in_at,check_out_at')
+                    .eq('organization_id', session.organization_id)
+                    .order('attendance_date', { ascending: false })
+                    .limit(20);
+                if (error) throw error;
+                const today = localISODate();
+                const todays = (data || []).filter(row => row.attendance_date === today);
+                showNotification('Attendance loaded: ' + todays.filter(x => x.attendance_status === 'present' || x.attendance_status === 'remote').length + ' present/remote, ' + todays.filter(x => x.attendance_status === 'late').length + ' late, ' + todays.filter(x => x.attendance_status === 'absent').length + ' absent today. Recent records: ' + (data || []).length + '.', 'success');
+            } catch (err) {
+                showNotification('Could not load attendance: ' + (err.message || 'Please retry.'), 'error');
+            }
         }
 
         function generateReports() {
-            alert('Generating HR reports (headcount, payroll summary, attendance)...');
             window.location.href = '/dashboard/reports.html';
         }
 
-        function markAttendance() {
-            showNotification('Attendance persistence is not configured yet. No attendance records were changed.', 'warning');
+        async function markAttendance() {
+            const employee = chooseEmployeeForHRAction('attendance');
+            if (!employee) return;
+            const statusInput = window.prompt('Attendance status: present, late, absent, leave, or remote', 'present');
+            if (statusInput === null) return;
+            const status = statusInput.trim().toLowerCase();
+            if (!['present','late','absent','leave','remote'].includes(status)) {
+                showNotification('Invalid attendance status. Use present, late, absent, leave, or remote.', 'error');
+                return;
+            }
+            const session = window.OOES_AUTH && OOES_AUTH.getSession();
+            if (!session || !session.id || !session.organization_id) {
+                showNotification('Your organization profile is not ready. Sign in again.', 'error');
+                return;
+            }
+            try {
+                const now = new Date().toISOString();
+                const row = {
+                    organization_id: session.organization_id,
+                    employee_id: employee.id,
+                    attendance_date: localISODate(),
+                    attendance_status: status,
+                    check_in_at: ['present','late','remote'].includes(status) ? now : null,
+                    marked_by: session.id,
+                    updated_at: now
+                };
+                const { error } = await supabase.from('hr_attendance').upsert(row, { onConflict: 'organization_id,employee_id,attendance_date' });
+                if (error) throw error;
+                showNotification('Attendance saved for ' + employee.label + ' (' + status + ').', 'success');
+                await viewAttendance();
+            } catch (err) {
+                showNotification('Attendance was not saved: ' + (err.message || 'Please retry.'), 'error');
+            }
         }
 
-        function requestLeave() {
-            showNotification('Use Work Center and select the published Leave Request workflow. This legacy form does not submit a request.', 'warning');
-            window.location.href = '/dashboard/workflow.html';
+        async function requestLeave() {
+            const employee = chooseEmployeeForHRAction('leave request');
+            if (!employee) return;
+            const typeInput = window.prompt('Leave type: annual, sick, maternity, paternity, compassionate, unpaid, or other', 'annual');
+            if (typeInput === null) return;
+            const leaveType = typeInput.trim().toLowerCase();
+            if (!['annual','sick','maternity','paternity','compassionate','unpaid','other'].includes(leaveType)) {
+                showNotification('Invalid leave type. Please choose one of the listed leave types.', 'error');
+                return;
+            }
+            const startDate = window.prompt('Leave start date (YYYY-MM-DD)', localISODate());
+            if (startDate === null) return;
+            const endDate = window.prompt('Leave end date (YYYY-MM-DD)', startDate);
+            if (endDate === null) return;
+            if (!/^\d{4}-\d{2}-\d{2}$/.test(startDate) || !/^\d{4}-\d{2}-\d{2}$/.test(endDate) || endDate < startDate) {
+                showNotification('Enter valid dates in YYYY-MM-DD format; end date cannot be before start date.', 'error');
+                return;
+            }
+            const reason = window.prompt('Reason for leave (required)');
+            if (reason === null) return;
+            if (!reason.trim()) {
+                showNotification('A reason is required before submitting the leave request.', 'error');
+                return;
+            }
+            const session = window.OOES_AUTH && OOES_AUTH.getSession();
+            if (!session || !session.id || !session.organization_id) {
+                showNotification('Your organization profile is not ready. Sign in again.', 'error');
+                return;
+            }
+            try {
+                const { data, error } = await supabase.from('hr_leave_requests').insert({
+                    organization_id: session.organization_id,
+                    employee_id: employee.id,
+                    leave_type: leaveType,
+                    start_date: startDate,
+                    end_date: endDate,
+                    reason: reason.trim(),
+                    requested_by: session.id
+                }).select('id,status').single();
+                if (error) throw error;
+                showNotification('Leave request submitted for ' + employee.label + '. Request ID: ' + data.id + '. Status: ' + data.status + '.', 'success');
+            } catch (err) {
+                showNotification('Leave request was not submitted: ' + (err.message || 'Please retry.'), 'error');
+            }
         }
 
         function calculatePayroll() {
