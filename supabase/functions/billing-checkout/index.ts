@@ -50,9 +50,21 @@ Deno.serve(async (req: Request) => {
   await db.from("billing_payment_attempts").update({status:"failed",failure_reason:"Provider rejected checkout request.",updated_at:new Date().toISOString()}).eq("api_ref",apiRef);
   return reply(502,{error:"Payment provider rejected the request. No successful payment recorded."});
  }
- const invoiceId=provider.invoice_id??provider.invoice?.invoice_id??provider.id, checkoutUrl=provider.url??provider.checkout_url??null;
- if(!invoiceId) return reply(502,{error:"Provider returned no payment reference."});
- const {error:payErr}=await db.from("billing_payment_attempts").update({provider_invoice_id:String(invoiceId),status:"processing",provider_state:"PROCESSING",checkout_url:checkoutUrl,updated_at:new Date().toISOString()}).eq("api_ref",apiRef);
+ const invoiceId=method==="mpesa"?(provider.invoice_id??provider.invoice?.invoice_id):null;
+ const checkoutId=method==="card"?(provider.id??provider.checkout_id):null;
+ const checkoutUrl=provider.url??provider.checkout_url??null;
+ if(method==="mpesa"&&!invoiceId){
+  await db.from("billing_payment_attempts").update({status:"processing",failure_reason:"Provider response had no invoice ID; reconcile before retrying.",updated_at:new Date().toISOString()}).eq("api_ref",apiRef);
+  return reply(502,{error:"Provider returned no invoice reference. The attempt is retained for reconciliation; do not retry yet.",reference:apiRef});
+ }
+ if(method==="card"&&(!checkoutId||!checkoutUrl)){
+  await db.from("billing_payment_attempts").update({status:"processing",failure_reason:"Provider response had no hosted checkout ID or URL; reconcile before retrying.",updated_at:new Date().toISOString()}).eq("api_ref",apiRef);
+  return reply(502,{error:"Provider returned no secure checkout link. The attempt is retained for reconciliation; do not retry yet.",reference:apiRef});
+ }
+ const attemptUpdate:Record<string,unknown>={status:"processing",provider_state:"PROCESSING",checkout_url:checkoutUrl,updated_at:new Date().toISOString()};
+ if(invoiceId)attemptUpdate.provider_invoice_id=String(invoiceId);
+ if(checkoutId)attemptUpdate.provider_checkout_id=String(checkoutId);
+ const {error:payErr}=await db.from("billing_payment_attempts").update(attemptUpdate).eq("api_ref",apiRef).neq("status","paid");
  if(payErr) return reply(500,{error:"Provider may have started a payment prompt. The attempt is retained for reconciliation; do not retry yet.",reference:apiRef});
  return reply(200,{status:"processing",message:method==="mpesa"?"Complete the M-Pesa prompt on your phone. OfficeFlow will verify payment.":"Complete payment on the secure hosted checkout. OfficeFlow will verify payment.",checkout_url:checkoutUrl,reference:apiRef});
 });
