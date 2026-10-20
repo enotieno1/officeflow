@@ -44,7 +44,7 @@
         <div><label for="eventTitle" class="block text-sm font-medium mb-1">Event title *</label><input id="eventTitle" maxlength="200" required class="w-full rounded-lg border p-3" placeholder="e.g. Finance review meeting"></div>
         <div><label for="eventDescription" class="block text-sm font-medium mb-1">Description</label><textarea id="eventDescription" maxlength="10000" rows="3" class="w-full rounded-lg border p-3" placeholder="Agenda, preparation, or notes"></textarea></div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div><label for="eventStart" class="block text-sm font-medium mb-1">Starts *</label><input id="eventStart" type="datetime-local" required class="w-full rounded-lg border p-3"></div><div><label for="eventEnd" class="block text-sm font-medium mb-1">Ends *</label><input id="eventEnd" type="datetime-local" required class="w-full rounded-lg border p-3"></div></div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div><label for="eventVisibility" class="block text-sm font-medium mb-1">Who can see this?</label><select id="eventVisibility" class="w-full rounded-lg border p-3"><option value="private">Private — me and administrators</option><option value="department">My department</option><option value="organization">Entire organization (managers/admins)</option></select></div><div><label for="eventTimezone" class="block text-sm font-medium mb-1">Time zone</label><select id="eventTimezone" class="w-full rounded-lg border p-3"><option value="Africa/Nairobi">Africa/Nairobi (EAT)</option><option value="UTC">UTC</option></select></div></div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div><label for="eventVisibility" class="block text-sm font-medium mb-1">Who can see this?</label><select id="eventVisibility" class="w-full rounded-lg border p-3"><option value="private">Private — me and administrators</option><option value="department">My department</option><option value="organization">Entire organization (managers/admins)</option></select></div><div class="rounded-lg bg-gray-50 border p-3 text-sm"><div class="font-medium">Time zone</div><div class="text-gray-600 mt-1">Africa/Nairobi (East Africa Time, EAT)</div></div></div>
         <div id="eventFormError" role="alert" class="hidden text-sm text-red-700"></div>
         <div class="flex justify-end gap-2 pt-2"><button type="button" id="cancelModalBtn" class="rounded-lg border px-4 py-2">Close</button><button id="saveEventBtn" type="submit" class="rounded-lg bg-[#16213e] text-white px-4 py-2">Save event</button></div>
       </form>
@@ -57,12 +57,14 @@
   <script>
     const $ = id => document.getElementById(id);
     const escapeHtml = value => String(value == null ? '' : value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-    let session = null, events = [], monthCursor = new Date(new Date().getFullYear(), new Date().getMonth(), 1), selectedDay = dateKey(new Date()), editingEvent = null;
-    function dateKey(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
-    function localInputToIso(value){return new Date(value).toISOString();}
-    function isoToLocalInput(value){const d=new Date(value);return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,16);}
-    function displayTime(value){return new Intl.DateTimeFormat(undefined,{hour:'numeric',minute:'2-digit'}).format(new Date(value));}
-    function displayDate(value){return new Intl.DateTimeFormat(undefined,{weekday:'short',month:'short',day:'numeric',year:'numeric'}).format(new Date(value));}
+    let session = null, events = [], monthCursor = nairobiMonth(new Date()), selectedDay = dateKeyInZone(new Date()), editingEvent = null;
+    function zonedParts(value){const p=new Intl.DateTimeFormat('en-CA',{timeZone:'Africa/Nairobi',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date(value));return Object.fromEntries(p.filter(x=>x.type!=='literal').map(x=>[x.type,x.value]));}
+    function dateKeyInZone(value){const p=zonedParts(value);return p.year+'-'+p.month+'-'+p.day;}
+    function nairobiMonth(value){const p=zonedParts(value);return new Date(Number(p.year),Number(p.month)-1,1);}
+    function localInputToIso(value){const [date,time]=value.split('T'),[y,m,d]=date.split('-').map(Number),[h,min]=time.split(':').map(Number);const target=Date.UTC(y,m-1,d,h,min);const guess=new Date(target);const p=zonedParts(guess);const represented=Date.UTC(Number(p.year),Number(p.month)-1,Number(p.day),Number(p.hour),Number(p.minute));return new Date(target-(represented-target)).toISOString();}
+    function isoToLocalInput(value){const p=zonedParts(value);return p.year+'-'+p.month+'-'+p.day+'T'+p.hour+':'+p.minute;}
+    function displayTime(value){return new Intl.DateTimeFormat(undefined,{timeZone:'Africa/Nairobi',hour:'numeric',minute:'2-digit'}).format(new Date(value));}
+    function displayDate(value){return new Intl.DateTimeFormat(undefined,{timeZone:'Africa/Nairobi',weekday:'short',month:'short',day:'numeric',year:'numeric'}).format(new Date(value));}
     function showError(message){$('pageError').textContent=message;$('pageError').classList.remove('hidden');}
     function hideError(){$('pageError').classList.add('hidden');}
     function canManage(event){return !!session && (event.created_by===session.id || ['administrator','super_admin'].includes(session.role));}
@@ -72,8 +74,8 @@
         if(window.OOES_AUTH && OOES_AUTH.ready) await OOES_AUTH.ready;
         session=window.OOES_AUTH && OOES_AUTH.getSession();
         if(!session || !session.organization_id){showError('Your session or organization could not be verified. Please sign in again.');return;}
-        const start=new Date(monthCursor.getFullYear(),monthCursor.getMonth(),1);
-        const end=new Date(monthCursor.getFullYear(),monthCursor.getMonth()+1,1);
+        const start=new Date(Date.UTC(monthCursor.getFullYear(),monthCursor.getMonth(),1)-3*60*60*1000);
+        const end=new Date(Date.UTC(monthCursor.getFullYear(),monthCursor.getMonth()+1,1)-3*60*60*1000);
         const {data,error}=await supabase.from('calendar_events').select('id,organization_id,created_by,unit_id,title,description,start_at,end_at,timezone,visibility,status,created_at,updated_at').gte('start_at',start.toISOString()).lt('start_at',end.toISOString()).order('start_at',{ascending:true});
         if(error) throw error;
         events=data||[];
@@ -84,11 +86,11 @@
       $('monthLabel').textContent=new Intl.DateTimeFormat(undefined,{month:'long',year:'numeric'}).format(monthCursor);
       const first=new Date(monthCursor.getFullYear(),monthCursor.getMonth(),1);
       const gridStart=new Date(first);gridStart.setDate(first.getDate()-first.getDay());
-      const today=dateKey(new Date());
+      const today=dateKeyInZone(new Date());
       let html='';
       for(let i=0;i<42;i++){
         const day=new Date(gridStart);day.setDate(gridStart.getDate()+i);
-        const key=dateKey(day), dayEvents=events.filter(e=>dateKey(new Date(e.start_at))===key);
+        const key=day.getFullYear()+'-'+String(day.getMonth()+1).padStart(2,'0')+'-'+String(day.getDate()).padStart(2,'0'), dayEvents=events.filter(e=>dateKeyInZone(e.start_at)===key);
         html+='<button type="button" class="of-calendar-day '+(day.getMonth()!==monthCursor.getMonth()?'outside ':'')+(key===today?'today ':'')+(key===selectedDay?'selected':'')+'" data-day="'+key+'" aria-label="'+escapeHtml(key+', '+dayEvents.length+' events')+'"><span class="day-number text-sm font-semibold">'+day.getDate()+'</span>'+dayEvents.slice(0,2).map(e=>'<span class="of-event-dot">'+escapeHtml(e.title)+'</span>').join('')+(dayEvents.length>2?'<span class="text-xs text-gray-500">+'+(dayEvents.length-2)+' more</span>':'')+'</button>';
       }
       $('calendarGrid').innerHTML=html;
@@ -96,8 +98,8 @@
       renderAgenda();
     }
     function renderAgenda(){
-      const dayEvents=events.filter(e=>dateKey(new Date(e.start_at))===selectedDay);
-      $('agendaLabel').textContent=new Intl.DateTimeFormat(undefined,{month:'short',day:'numeric'}).format(new Date(selectedDay+'T12:00:00'))+' agenda';
+      const dayEvents=events.filter(e=>dateKeyInZone(e.start_at)===selectedDay);
+      $('agendaLabel').textContent=new Intl.DateTimeFormat(undefined,{month:'short',day:'numeric'}).format(new Date(selectedDay+'T12:00:00+03:00'))+' agenda';
       const list=dayEvents.length?dayEvents:events.filter(e=>new Date(e.start_at)>=new Date()&&e.status!=='cancelled').slice(0,8);
       if(!list.length){$('eventList').innerHTML='<div class="rounded-lg border border-dashed p-6 text-center"><i class="far fa-calendar text-2xl text-gray-400"></i><p class="font-medium mt-2">No events for this day</p><p class="text-sm text-gray-500 mt-1">Create an event to schedule work.</p></div>';return;}
       $('eventList').innerHTML=list.map(e=>'<article class="rounded-lg border p-4 '+(e.status==='cancelled'?'opacity-60':'')+'"><div class="flex justify-between items-start gap-3"><div class="min-w-0"><div class="text-xs text-gray-500">'+escapeHtml(displayDate(e.start_at))+' · '+escapeHtml(displayTime(e.start_at))+'–'+escapeHtml(displayTime(e.end_at))+'</div><h3 class="font-semibold mt-1 break-words">'+escapeHtml(e.title)+'</h3><p class="text-sm text-gray-600 mt-1 whitespace-pre-wrap">'+escapeHtml(e.description||'No description')+'</p><div class="flex flex-wrap gap-2 mt-2 text-xs"><span class="rounded-full bg-gray-100 px-2 py-1">'+escapeHtml(e.visibility)+'</span><span class="rounded-full '+(e.status==='cancelled'?'bg-red-100 text-red-800':'bg-green-100 text-green-800')+' px-2 py-1">'+escapeHtml(e.status)+'</span></div></div>'+(canManage(e)&&e.status!=='cancelled'?'<div class="flex gap-1 shrink-0"><button class="rounded border px-2 py-1 text-xs" data-edit="'+escapeHtml(e.id)+'">Edit</button><button class="rounded border px-2 py-1 text-xs text-red-700" data-cancel="'+escapeHtml(e.id)+'">Cancel</button></div>':'')+'</div></article>').join('');
@@ -111,7 +113,7 @@
       $('eventDescription').value=event?event.description||'':'';
       $('eventStart').value=event?isoToLocalInput(event.start_at):isoToLocalInput(new Date(Date.now()+3600000).toISOString());
       $('eventEnd').value=event?isoToLocalInput(event.end_at):isoToLocalInput(new Date(Date.now()+7200000).toISOString());
-      $('eventTimezone').value=event?event.timezone||'Africa/Nairobi':'Africa/Nairobi';
+     
       $('eventVisibility').value=event?event.visibility:'private';
       const unitId=session&&session.unit_id;
       const departmentOption=$('eventVisibility').querySelector('option[value="department"]');
@@ -128,7 +130,7 @@
       if(!start||!end||new Date(end)<=new Date(start)){err.textContent='The end time must be later than the start time.';err.classList.remove('hidden');return;}
       if(!session||!session.organization_id){err.textContent='Your organization profile is unavailable. Sign in again.';err.classList.remove('hidden');return;}
       const visibility=$('eventVisibility').value;
-      const payload={title,description:$('eventDescription').value.trim()||null,start_at:localInputToIso(start),end_at:localInputToIso(end),timezone:$('eventTimezone').value,visibility,unit_id:visibility==='department'?session.unit_id:null,updated_at:new Date().toISOString()};
+      const payload={title,description:$('eventDescription').value.trim()||null,start_at:localInputToIso(start),end_at:localInputToIso(end),timezone:'Africa/Nairobi',visibility,unit_id:visibility==='department'?session.unit_id:null,updated_at:new Date().toISOString()};
       btn.disabled=true;
       try{
         let result;
@@ -148,9 +150,9 @@
     $('closeModalBtn').addEventListener('click',closeModal);$('cancelModalBtn').addEventListener('click',closeModal);
     $('eventModal').addEventListener('click',e=>{if(e.target===$('eventModal'))closeModal();});
     $('eventForm').addEventListener('submit',saveEvent);
-    $('prevMonth').addEventListener('click',()=>{monthCursor=new Date(monthCursor.getFullYear(),monthCursor.getMonth()-1,1);selectedDay=dateKey(monthCursor);loadEvents();});
-    $('nextMonth').addEventListener('click',()=>{monthCursor=new Date(monthCursor.getFullYear(),monthCursor.getMonth()+1,1);selectedDay=dateKey(monthCursor);loadEvents();});
-    $('todayBtn').addEventListener('click',()=>{const now=new Date();monthCursor=new Date(now.getFullYear(),now.getMonth(),1);selectedDay=dateKey(now);loadEvents();});
+    $('prevMonth').addEventListener('click',()=>{monthCursor=new Date(monthCursor.getFullYear(),monthCursor.getMonth()-1,1);selectedDay=monthCursor.getFullYear()+'-'+String(monthCursor.getMonth()+1).padStart(2,'0')+'-01';loadEvents();});
+    $('nextMonth').addEventListener('click',()=>{monthCursor=new Date(monthCursor.getFullYear(),monthCursor.getMonth()+1,1);selectedDay=monthCursor.getFullYear()+'-'+String(monthCursor.getMonth()+1).padStart(2,'0')+'-01';loadEvents();});
+    $('todayBtn').addEventListener('click',()=>{const now=new Date();monthCursor=new Date(now.getFullYear(),now.getMonth(),1);selectedDay=dateKeyInZone(now);loadEvents();});
     $('refreshBtn').addEventListener('click',loadEvents);
     document.addEventListener('DOMContentLoaded',loadEvents);
   </script>
