@@ -26,3 +26,11 @@ Browser redirect is not proof of payment. The webhook handler checks the configu
 
 ## Recurring billing limitation
 This integration collects and verifies subscription payments, then records a paid period. It does not claim automatic card-on-file recurring charges or an M-Pesa recurring mandate. IntaSend documents card subscription APIs separately; that explicit card mandate flow, renewal scheduler, failed-renewal grace period and cancellation UX remain launch gates. M-Pesa currently needs a monthly renewal prompt unless the merchant account supports an approved mandate. Do not market automated renewals until those pieces and E2E tests pass.
+
+
+## Subscription behavior in this branch
+
+- **Cards:** OfficeFlow creates an IntaSend recurring subscription plan, customer and subscription server-side. The customer adds a card on the provider-hosted setup page. The subscription is not marked active until a provider-verified invoice is reconciled. Each subscription event is checked against the provider's subscription record, plan amount/currency and payment-status API. Invoice IDs and event keys are idempotent.
+- **M-Pesa:** Initial subscription and renewals use customer-confirmed STK prompts. A renewal is available during the final seven days of the current paid period; this flow does not claim silent automatic M-Pesa debits.
+- **Cancellation:** The billing UI requests cancellation server-side. For cards it calls IntaSend's unsubscribe endpoint and checks the provider status; if the final status is not yet verified, the UI reports cancellation as pending. For M-Pesa it stops future manual renewals and preserves the recorded paid-period end.
+- **Release requirements:** apply `20261020210000_intasend_recurring_card_subscriptions.sql`, deploy the latest `billing-checkout`, `intasend-webhook` and `billing-cancel` functions, set sandbox secrets and register `collection_event` and `subscription_event` webhooks. Run all sandbox payment, renewal, cancellation, replay, failure and two-tenant tests before live keys.
