@@ -21,13 +21,15 @@ This review separates evidence from assumptions. A table, RPC, or page existing 
 - Atomic payment reconciliation RPC exists and is executable only by service_role. It checks the stored API reference, invoice ID, amount and currency, handles duplicate events transactionally, and avoids downgrading an already-paid attempt on a stale event.
 - IntaSend webhook Edge Function is deployed at version 3. It validates the configured webhook challenge and re-queries IntaSend's payment-status API before calling the reconciliation RPC.
 - No subscription rows or payment-attempt rows were fabricated during this review.
+- Task management now has organization-scoped CRUD, a real assignee user ID, a same-organization assignment validator, role-aware task policies, and a manager/admin-only member-list RPC. Six task SQL regression checks passed.
+- A private `officeflow-documents` Storage bucket now exists with a 10 MB limit, allowed MIME types, organization/user-scoped read/write/delete policies, and metadata insert/delete policies. Six document-storage SQL regression checks passed. The UI now uploads files, stores object paths, creates short-lived signed download URLs and deletes authorized records/files.
 - The legacy package-selection route is simplified on the billing implementation branch to rely on the Supabase session wrapper and redirect to the canonical billing page.
 
 ## Billing release status
 
 **Foundation implemented; end-to-end billing not signed off.**
 
-- The billing page, scoped billing read RPC, migrations, Playwright test specification and package-selection redirect are on draft PR #17 and are not yet part of the default branch.
+- The billing page, scoped billing read RPC, task-management UI, document-management UI, legacy HR/Finance redirects, migrations, Playwright test specification and regression SQL are on draft PR #17 and are not yet part of the default branch.
 - The deployed checkout Edge Function is still version 1; an attempt to deploy the hardened branch revision was blocked by the execution safety check. Do not assume the latest checkout reliability fix is live. The official checkout API returns a hosted checkout-session ID, which is distinct from the collection invoice ID; a separate `provider_checkout_id` column and corrected branch handling have been added, but that checkout code is not yet deployed.
 - Merchant sandbox/live keys, webhook registration and actual provider callback delivery have not been verified in this review.
 - No authenticated browser test or real sandbox payment was completed.
@@ -47,7 +49,7 @@ This review separates evidence from assumptions. A table, RPC, or page existing 
 | HR | Partial | Employee CRUD and authorized access; test leave, onboarding, transfer and attendance workflows. Do not market as a full HRIS/payroll until those lifecycles work. |
 | Finance | Incomplete | Current finance page redirects to a generic operational module; a separate accountant portal uses sample data. Implement persistent expense/invoice/budget/approval records and reconcile all totals. Do not claim a full accounting ledger or payment execution. |
 | Procurement | Gap/unknown | Supplier register, quote comparison, purchase orders, goods receipt and approval controls need dedicated persistent lifecycle and tests. |
-| Documents | Partial | Verify private Storage bucket, upload, download authorization, versioning, size/type limits and retention; current register is not proof of full document lifecycle. |
+| Documents | Private storage and upload/download/delete implemented in branch; browser tests pending | Test upload, MIME/size rejection, signed URL expiry, owner/admin deletion, cross-tenant denial, orphan cleanup and retention/versioning. Versioning/retention remain unimplemented. |
 | Notifications and email | Partial / unverified | Verify event coverage, mark-read, duplicate prevention, outbox retries, actual delivery and bounce/failure handling. No successful sender delivery has been demonstrated. |
 | Control Tower / reports | Partial | Reconcile every KPI to a documented query and test unit/role scope against fixture data. |
 | Billing and entitlements | Foundation only | Finish checkout deployment, sandbox payments, renewal/cancel/failure paths and enforcement of seat/module limits. |
@@ -76,7 +78,7 @@ The next security pass must verify that every exposed SECURITY DEFINER function 
 - The repository root currently has no standard package manifest or GitHub Actions workflow directory; the added Playwright spec is not yet executed by CI.
 - Establish a repeatable test command and CI gate for lint/static checks, SQL regression checks against a disposable/staging database, browser E2E and accessibility checks.
 - Use staging for destructive and cross-tenant tests. Do not create fake payment data or test real payments against production.
-- Keep the billing work in draft PR #17 until code review and the sandbox payment/webhook matrix pass.
+- Keep the work in draft PR #17 until code review, authenticated browser E2E and the sandbox payment/webhook matrix pass.
 
 ## Release gates
 
