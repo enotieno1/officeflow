@@ -449,11 +449,26 @@
           return true;
         }
 
+        function safeNextDestination() {
+            var candidate = new URLSearchParams(window.location.search).get('next');
+            if (!candidate || candidate.charAt(0) !== '/') return null;
+            try {
+                var target = new URL(candidate, window.location.origin);
+                if (target.origin !== window.location.origin || !target.pathname.startsWith('/dashboard/')) return null;
+                if (target.pathname === '/dashboard/auth.html' || target.pathname === '/dashboard/organization-setup.html') return null;
+                return target.pathname + target.search + target.hash;
+            } catch (error) {
+                return null;
+            }
+        }
+
         function destinationForAccount(account) {
             var bootstrapOrgId = '00000000-0000-0000-0000-000000000001';
-            return account && account.role === 'employee' && account.organization_id === bootstrapOrgId
-                ? '/dashboard/organization-setup.html'
-                : '/dashboard/index.html';
+            var next = safeNextDestination();
+            if (account && account.role === 'employee' && account.organization_id === bootstrapOrgId) {
+                return '/dashboard/organization-setup.html' + (next ? '?next=' + encodeURIComponent(next) : '');
+            }
+            return next || '/dashboard/index.html';
         }
 
         // Form Toggle
@@ -538,7 +553,12 @@
             showNotification('Creating Account', 'Please wait...', 'info');
             try {
                 var phone = document.getElementById('signUpPhone').value.trim();
-                var result = await OOES_AUTH.register(fn, ln, email, pw, window.location.origin + '/dashboard/auth.html' + (portalCode ? '?department=' + encodeURIComponent(portalCode) : ''), phone);
+                var callbackParams = new URLSearchParams();
+                if (portalCode) callbackParams.set('department', portalCode);
+                var nextTarget = new URLSearchParams(window.location.search).get('next');
+                if (nextTarget) callbackParams.set('next', nextTarget);
+                var confirmationUrl = window.location.origin + '/dashboard/auth.html' + (callbackParams.toString() ? '?' + callbackParams.toString() : '');
+                var result = await OOES_AUTH.register(fn, ln, email, pw, confirmationUrl, phone);
                 if (!result || result.error) {
                     showNotification('Sign Up Failed', (result && result.error) || 'Unable to create your account. Please try again.', 'error');
                     return;
