@@ -33,7 +33,7 @@ test("signed-in organization administrator sees database-backed published plans"
   await expect(page.getByRole("heading", { name: "Subscription & billing" })).toBeVisible();
   await expect(page.getByText("Starter", { exact: true })).toBeVisible();
   await expect(page.getByText("Professional", { exact: true })).toBeVisible();
-  await expect(page.getByText("KES", { exact: false })).toBeVisible();
+  await expect(page.getByText(/10,000/)).toBeVisible();
   await expect(page.getByText(/no subscription prices have been published/i)).toHaveCount(0);
 });
 
