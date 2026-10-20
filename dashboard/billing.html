@@ -29,24 +29,36 @@
   await OOES_AUTH.ready;
   if(!OOES_AUTH.getSession())return;
   $('logout').addEventListener('click',()=>OOES_AUTH.logout());
-  const s=OOES_AUTH.getSession(),isAdmin=['administrator','super_admin'].includes(s.role);
-  if(new URLSearchParams(location.search).get('payment')==='pending')note('Payment is pending provider verification. This page will show an active subscription only after OfficeFlow verifies payment with IntaSend.','info');
+  const account=OOES_AUTH.getSession(),isAdmin=['administrator','super_admin'].includes(account.role);
+  if(new URLSearchParams(location.search).get('payment')==='pending')note('Payment or card setup is pending provider verification. A redirect does not mean payment succeeded.','info');
   const current=$('current'),plans=$('plans'),payments=$('payments');
   if(!isAdmin){current.textContent='Only your organization administrator can view or change billing.';plans.textContent='Ask your organization administrator to manage its subscription.';payments.textContent='Payment history is restricted to organization administrators.';return;}
   const {data:overview,error:overviewErr}=await supabase.rpc('fn_get_billing_overview');
-  const subRes={data:overview?.subscription?[overview.subscription]:[],error:overviewErr};
-  const planRes={data:overview?.plans||[],error:overviewErr};
-  const payRes={data:overview?.payments||[],error:overviewErr};
-  if(subRes.error){current.textContent='Could not load subscription status. Refresh or contact support.';}else if(!subRes.data.length){current.textContent='No active subscription is recorded for this organization.';}else{
-   const sub=subRes.data[0],plan=sub.plan||{};current.replaceChildren();
-   current.append(cell('p',(plan.name||'OfficeFlow plan')+' · '+sub.status.toUpperCase(),'font-semibold '+(sub.status==='active'?'text-green-700':'text-amber-700')));
+  if(overviewErr){current.textContent='Could not load subscription status. Refresh or contact support.';plans.textContent='Plans could not be loaded. No checkout is available until the billing service responds.';payments.textContent='Payment history could not be loaded.';return;}
+  const currentSub=overview?.subscription||null,planData=overview?.plans||[],paymentData=overview?.payments||[];
+  if(!currentSub){current.textContent='No active or pending subscription is recorded for this organization.';}
+  else{
+   const plan=currentSub.plan||{};
+   current.replaceChildren();
+   current.append(cell('p',(plan.name||'OfficeFlow plan')+' · '+String(currentSub.status).toUpperCase(),'font-semibold '+(currentSub.status==='active'?'text-green-700':'text-amber-700')));
    if(plan.amount)current.append(cell('p',money(plan.amount,plan.currency)+' / '+(plan.interval_unit||'month'),'mt-1'));
-   if(sub.current_period_end)current.append(cell('p','Current period ends '+new Date(sub.current_period_end).toLocaleDateString('en-KE'),'mt-1 text-slate-500'));
+   if(currentSub.current_period_end)current.append(cell('p','Current paid period ends '+new Date(currentSub.current_period_end).toLocaleDateString('en-KE'),'mt-1 text-slate-500'));
+   if(currentSub.payment_method==='card'&&currentSub.status==='active'){
+    current.append(cell('p','Recurring card billing is managed by IntaSend. OfficeFlow will update the subscription only after verifying provider events.','mt-3 text-sm text-slate-600'));
+    if(currentSub.next_billing_at)current.append(cell('p','Next scheduled charge: '+new Date(currentSub.next_billing_at+'T00:00:00').toLocaleDateString('en-KE'),'mt-1 text-sm font-semibold'));
+   }else if(currentSub.payment_method==='card'&&currentSub.status==='pending'){
+    current.append(cell('p','Card setup is not active until the first payment is verified.','mt-3 text-sm text-amber-700'));
+    if(currentSub.provider_setup_url){const a=cell('a','Continue secure card setup','inline-block mt-3 px-4 py-2 rounded-lg navy text-white font-semibold text-sm');a.href=currentSub.provider_setup_url;a.target='_blank';a.rel='noopener noreferrer';current.append(a);}
+   }else if(currentSub.payment_method==='mpesa'){
+    current.append(cell('p','M-Pesa renewals require a customer-confirmed STK prompt. Renewal opens seven days before the paid period ends.','mt-3 text-sm text-slate-600'));
+   }
+   if(currentSub.provider_subscription_failure_reason)current.append(cell('p','Billing needs attention: '+currentSub.provider_subscription_failure_reason,'mt-3 text-sm text-red-700'));
   }
-  if(planRes.error){plans.textContent='Plans could not be loaded. Please retry.';}else if(!planRes.data.length){plans.textContent='No subscription prices have been published yet. Checkout is intentionally unavailable until OfficeFlow approves its pricing and activates plans.';}else{
+  if(!planData.length){plans.textContent='No subscription prices have been published. Checkout is unavailable until pricing is approved.';}
+  else{
    plans.replaceChildren();
    const requestedPlanId=new URLSearchParams(location.search).get('plan');
-   const orderedPlans=[...planRes.data].sort((a,b)=>Number(b.id===requestedPlanId)-Number(a.id===requestedPlanId));
+   const orderedPlans=[...planData].sort((a,b)=>Number(b.id===requestedPlanId)-Number(a.id===requestedPlanId));
    orderedPlans.forEach(plan=>{
     const card=cell('article','', 'border border-slate-200 rounded-xl p-5 flex flex-col');
     card.append(cell('h3',plan.name,'font-bold text-lg'));
@@ -54,31 +66,49 @@
     card.append(cell('p',plan.description||'OfficeFlow subscription','text-sm text-slate-600 mt-2'));
     card.append(cell('p',money(plan.amount,plan.currency),'text-2xl font-bold mt-4'));
     card.append(cell('p','per '+(Number(plan.interval_count)>1?plan.interval_count+' ':'')+plan.interval_unit,'text-sm text-slate-500'));
-
+    const hasLiveSub=!!currentSub&&['pending','active','past_due'].includes(currentSub.status);
+    const isCurrentPlan=!!currentSub&&currentSub.plan_id===plan.id;
+    const periodEnd=currentSub?.current_period_end?Date.parse(currentSub.current_period_end):NaN;
+    const mpesaRenewalAllowed=!!currentSub&&['active','past_due'].includes(currentSub.status)&&currentSub.payment_method==='mpesa'&&isCurrentPlan&&Number.isFinite(periodEnd)&&periodEnd<=Date.now()+7*86400000;
     const method=cell('select','','w-full border rounded-lg px-3 py-2 mt-4');
-    method.append(new Option('Pay with M-Pesa','mpesa'),new Option('Pay with Visa / Mastercard','card'));
+    method.append(new Option('Pay with M-Pesa','mpesa'),new Option('Recurring card subscription','card'));
+    if(currentSub?.payment_method==='card')method.value='card';
+    if(mpesaRenewalAllowed)method.value='mpesa';
+    method.disabled=hasLiveSub&&!mpesaRenewalAllowed;
     const phone=cell('input','','w-full border rounded-lg px-3 py-2 mt-2');phone.type='tel';phone.placeholder='M-Pesa number (e.g. 0712345678)';phone.autocomplete='tel';
-    method.addEventListener('change',()=>{phone.classList.toggle('hidden',method.value!=='mpesa');});
-    const button=cell('button','Continue to secure payment','w-full navy text-white font-semibold rounded-lg px-4 py-3 mt-4');button.type='button';
+    const canInitiate=!hasLiveSub||mpesaRenewalAllowed;
+    phone.classList.toggle('hidden',!(method.value==='mpesa'&&canInitiate));
+    method.addEventListener('change',()=>{phone.classList.toggle('hidden',!(method.value==='mpesa'&&canInitiate));});
+    let buttonLabel='Continue to secure payment';
+    if(mpesaRenewalAllowed)buttonLabel='Renew with M-Pesa';
+    else if(currentSub?.status==='active'&&currentSub.payment_method==='card'&&isCurrentPlan)buttonLabel='Card auto-renews';
+    else if(currentSub?.status==='active'&&currentSub.payment_method==='mpesa'&&isCurrentPlan)buttonLabel='Renewal opens 7 days before period end';
+    else if(currentSub?.status==='pending'&&currentSub.payment_method==='card')buttonLabel='Continue card setup above';
+    else if(currentSub?.status==='pending')buttonLabel='Payment pending';
+    else if(currentSub?.status==='past_due')buttonLabel='Subscription needs attention';
+    else if(hasLiveSub)buttonLabel='Plan changes not available';
+    const button=cell('button',buttonLabel,'w-full navy text-white font-semibold rounded-lg px-4 py-3 mt-4');button.type='button';button.disabled=!canInitiate;
     button.addEventListener('click',async()=>{
+     if(!canInitiate)return;
      clearNote();button.disabled=true;button.textContent='Starting secure checkout…';
      try{
       const {data,error}=await supabase.functions.invoke('billing-checkout',{body:{plan_id:plan.id,payment_method:method.value,phone_number:method.value==='mpesa'?phone.value:undefined}});
-      if(error){let message='Checkout could not start. No successful payment has been recorded.';try{const e=await error.context.json();if(e.error)message=e.error;}catch{}note(message,'error');}
-      else if(data&&data.checkout_url){note('Secure checkout is opening. Your subscription remains pending until provider verification completes.','info');location.assign(data.checkout_url);}
+      if(error){let msg='Checkout could not start. No successful payment has been recorded.';try{const e=await error.context.json();if(e.error)msg=e.error;}catch{}note(msg,'error');}
+      else if(data&&data.checkout_url){note('Secure provider page is opening. Your subscription remains pending until server-side verification completes.','info');location.assign(data.checkout_url);}
       else if(data&&data.status==='processing'){note(data.message||'Payment request started. Waiting for provider verification.','info');await refreshStatus();}
       else note('No verified payment was reported. Please retry or contact support.','error');
      }catch{note('Network error starting checkout. No successful payment has been recorded.','error');}
-     finally{button.disabled=false;button.textContent='Continue to secure payment';}
+     finally{button.disabled=!canInitiate;button.textContent=buttonLabel;}
     });
     card.append(method,phone,button);plans.append(card);
    });
   }
-  if(payRes.error){payments.textContent='Payment history could not be loaded.';}else if(!payRes.data.length){payments.textContent='No payment attempts yet.';}else{
+  if(!paymentData.length){payments.textContent='No payment attempts yet.';}
+  else{
    const table=cell('table','', 'w-full text-left text-sm');const head=cell('thead','');const hr=cell('tr','');
    ['Date','Amount','Method','Status','Reference'].forEach(x=>hr.append(cell('th',x,'py-2 pr-3 text-slate-500 font-semibold')));head.append(hr);table.append(head);
    const tb=cell('tbody','');
-   payRes.data.forEach(p=>{const tr=cell('tr','');tr.append(cell('td',new Date(p.created_at).toLocaleString('en-KE'),'py-3 pr-3 border-t'),cell('td',money(p.amount,p.currency),'py-3 pr-3 border-t'),cell('td',p.payment_method.toUpperCase(),'py-3 pr-3 border-t'),cell('td',p.status.toUpperCase(),'py-3 pr-3 border-t font-semibold'),cell('td',p.api_ref,'py-3 pr-3 border-t font-mono text-xs'));tb.append(tr);});table.append(tb);payments.replaceChildren(table);
+   paymentData.forEach(p=>{const tr=cell('tr','');tr.append(cell('td',new Date(p.created_at).toLocaleString('en-KE'),'py-3 pr-3 border-t'),cell('td',money(p.amount,p.currency),'py-3 pr-3 border-t'),cell('td',p.payment_method.toUpperCase(),'py-3 pr-3 border-t'),cell('td',p.status.toUpperCase(),'py-3 pr-3 border-t font-semibold'),cell('td',p.api_ref,'py-3 pr-3 border-t font-mono text-xs'));tb.append(tr);});table.append(tb);payments.replaceChildren(table);
   }
  }
  async function refreshStatus(){
