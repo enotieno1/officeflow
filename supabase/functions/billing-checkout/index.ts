@@ -29,12 +29,12 @@ Deno.serve(async (req: Request) => {
  if (!auth?.startsWith("Bearer ")) return reply(req,401,{error:"Sign in to manage billing."});
  const userClient=createClient(url,anon,{global:{headers:{Authorization:auth}},auth:{persistSession:false,autoRefreshToken:false}});
  const {data:{user},error:authErr}=await userClient.auth.getUser();
- if(authErr||!user) return reply(401,{error:"Session invalid or expired. Sign in again."});
+ if(authErr||!user) return reply(req,401,{error:"Session invalid or expired. Sign in again."});
  let body: Record<string,unknown>; try{body=await req.json()}catch{return reply(req,400,{error:"Invalid request."})}
  const planId=typeof body.plan_id==="string"?body.plan_id:"", method=body.payment_method;
- if(!planId||!["mpesa","card"].includes(String(method))) return reply(400,{error:"Choose an active plan and M-Pesa or card."});
+ if(!planId||!["mpesa","card"].includes(String(method))) return reply(req,400,{error:"Choose an active plan and M-Pesa or card."});
  const phone=method==="mpesa"?phoneKE(body.phone_number):null;
- if(method==="mpesa"&&!phone) return reply(400,{error:"Enter a valid Kenyan mobile number."});
+ if(method==="mpesa"&&!phone) return reply(req,400,{error:"Enter a valid Kenyan mobile number."});
  const db=createClient(url,service,{auth:{persistSession:false,autoRefreshToken:false}});
  const {data:profile,error:pErr}=await db.from("profiles").select("organization_id,role").eq("id",user.id).maybeSingle();
  if(pErr||!profile?.organization_id||!["administrator","super_admin"].includes(profile.role)) return reply(req,403,{error:"Only an organization administrator can manage billing."});
@@ -42,16 +42,16 @@ Deno.serve(async (req: Request) => {
  if(!plan) return reply(req,404,{error:"Plan unavailable. No payment was initiated."});
  const {data:existing}=await db.from("billing_subscriptions").select("id,status,plan_id").eq("organization_id",profile.organization_id).in("status",["pending","active","past_due"]).maybeSingle();
  if(existing?.status==="active") return reply(req,409,{error:"Organization already has an active subscription."});
- if(existing?.status==="past_due") return reply(409,{error:"Resolve the outstanding subscription before starting another."});
- if(existing?.status==="pending"&&existing.plan_id!==plan.id) return reply(409,{error:"A different subscription setup is already pending."});
+ if(existing?.status==="past_due") return reply(req,409,{error:"Resolve the outstanding subscription before starting another."});
+ if(existing?.status==="pending"&&existing.plan_id!==plan.id) return reply(req,409,{error:"A different subscription setup is already pending."});
  const apiRef="of-"+crypto.randomUUID(), origin=app.replace(/\/$/,""), meta=(user.user_metadata??{}) as Record<string,unknown>, names=(typeof meta.full_name==="string"?meta.full_name:"OfficeFlow Customer").trim().split(/\s+/);
  const subId=existing?.id??crypto.randomUUID();
  if(!existing){const {error}=await db.from("billing_subscriptions").insert({id:subId,organization_id:profile.organization_id,plan_id:plan.id,status:"pending",payment_method:method,provider:"intasend",created_by:user.id}); if(error)return reply(req,500,{error:"Could not start subscription setup."});}
  const {data:inFlight,error:flightErr}=await db.from("billing_payment_attempts").select("id,api_ref,created_at").eq("subscription_id",subId).in("status",["pending","processing"]).gte("created_at",new Date(Date.now()-15*60*1000).toISOString()).limit(1).maybeSingle();
- if(flightErr)return reply(500,{error:"Could not check existing payment attempts."});
- if(inFlight)return reply(409,{error:"A payment attempt is already pending or processing. Check its status before trying again.",reference:inFlight.api_ref});
+ if(flightErr)return reply(req,500,{error:"Could not check existing payment attempts."});
+ if(inFlight)return reply(req,409,{error:"A payment attempt is already pending or processing. Check its status before trying again.",reference:inFlight.api_ref});
  const {error:attemptErr}=await db.from("billing_payment_attempts").insert({organization_id:profile.organization_id,subscription_id:subId,plan_id:plan.id,initiated_by:user.id,provider:"intasend",payment_method:method,api_ref:apiRef,amount:plan.amount,currency:plan.currency,status:"pending"});
- if(attemptErr)return reply(500,{error:"Could not create a payment attempt. No payment was initiated."});
+ if(attemptErr)return reply(req,500,{error:"Could not create a payment attempt. No payment was initiated."});
  const payload={amount:Number(plan.amount),currency:plan.currency,email:user.email??"",first_name:names[0]||"OfficeFlow",last_name:names.slice(1).join(" ")||"Customer",phone_number:phone??undefined,api_ref:apiRef,redirect_url:origin+"/dashboard/billing.html?payment=pending",host:origin};
  let response:Response;
  try {
@@ -65,23 +65,23 @@ Deno.serve(async (req: Request) => {
  const provider=await response.json().catch(()=>({}));
  if(!response.ok) {
   await db.from("billing_payment_attempts").update({status:"failed",failure_reason:"Provider rejected checkout request.",updated_at:new Date().toISOString()}).eq("api_ref",apiRef);
-  return reply(502,{error:"Payment provider rejected the request. No successful payment recorded."});
+  return reply(req,502,{error:"Payment provider rejected the request. No successful payment recorded."});
  }
  const invoiceId=method==="mpesa"?(provider.invoice_id??provider.invoice?.invoice_id):null;
  const checkoutId=method==="card"?(provider.id??provider.checkout_id):null;
  const checkoutUrl=provider.url??provider.checkout_url??null;
  if(method==="mpesa"&&!invoiceId){
   await db.from("billing_payment_attempts").update({status:"processing",failure_reason:"Provider response had no invoice ID; reconcile before retrying.",updated_at:new Date().toISOString()}).eq("api_ref",apiRef);
-  return reply(502,{error:"Provider returned no invoice reference. The attempt is retained for reconciliation; do not retry yet.",reference:apiRef});
+  return reply(req,502,{error:"Provider returned no invoice reference. The attempt is retained for reconciliation; do not retry yet.",reference:apiRef});
  }
  if(method==="card"&&(!checkoutId||!checkoutUrl)){
   await db.from("billing_payment_attempts").update({status:"processing",failure_reason:"Provider response had no hosted checkout ID or URL; reconcile before retrying.",updated_at:new Date().toISOString()}).eq("api_ref",apiRef);
-  return reply(502,{error:"Provider returned no secure checkout link. The attempt is retained for reconciliation; do not retry yet.",reference:apiRef});
+  return reply(req,502,{error:"Provider returned no secure checkout link. The attempt is retained for reconciliation; do not retry yet.",reference:apiRef});
  }
  const attemptUpdate:Record<string,unknown>={status:"processing",provider_state:"PROCESSING",checkout_url:checkoutUrl,updated_at:new Date().toISOString()};
  if(invoiceId)attemptUpdate.provider_invoice_id=String(invoiceId);
  if(checkoutId)attemptUpdate.provider_checkout_id=String(checkoutId);
  const {error:payErr}=await db.from("billing_payment_attempts").update(attemptUpdate).eq("api_ref",apiRef).neq("status","paid");
- if(payErr) return reply(500,{error:"Provider may have started a payment prompt. The attempt is retained for reconciliation; do not retry yet.",reference:apiRef});
+ if(payErr) return reply(req,500,{error:"Provider may have started a payment prompt. The attempt is retained for reconciliation; do not retry yet.",reference:apiRef});
  return reply(req,200,{status:"processing",message:method==="mpesa"?"Complete the M-Pesa prompt on your phone. OfficeFlow will verify payment.":"Complete payment on the secure hosted checkout. OfficeFlow will verify payment.",checkout_url:checkoutUrl,reference:apiRef});
 });
