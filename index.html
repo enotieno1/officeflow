@@ -486,7 +486,8 @@ document.getElementById('contactEmailButton')?.addEventListener('click', functio
     status.textContent = 'Please enter your name, email and message before opening your email app.';
     return;
   }
-  if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)) { status.textContent = 'Please enter a valid email address.'; return; }\n  const subject = encodeURIComponent('OfficeFlow inquiry: ' + topic);
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { status.textContent = 'Please enter a valid email address.'; return; }
+  const subject = encodeURIComponent('OfficeFlow inquiry: ' + topic);
   const body = encodeURIComponent('Name: ' + name + '\nEmail: ' + email + '\nCompany: ' + company + '\nTopic: ' + topic + '\n\n' + message);
   status.textContent = 'Your email app should open. OfficeFlow has not received this message until you send it from your email app.';
   window.location.href = 'mailto:info@officeflow.co.ke?subject=' + subject + '&body=' + body;
