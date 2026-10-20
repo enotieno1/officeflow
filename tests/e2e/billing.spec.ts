@@ -1,6 +1,10 @@
 import { test, expect } from "@playwright/test";
 
-const baseURL = process.env.OFFICEFLOW_BASE_URL || "https://officeflow.co.ke";
+const baseURL = (process.env.OFFICEFLOW_BASE_URL || "").replace(/\/$/, "");
+const supabaseURL = (process.env.SUPABASE_URL || "https://oghowrilrhummzvrljdt.supabase.co").replace(/\/$/, "");
+test.beforeEach(() => {
+  test.skip(!baseURL, "Set OFFICEFLOW_BASE_URL to the deployed branch-preview URL; tests must not guess which deployment is live.");
+});
 const email = process.env.OFFICEFLOW_E2E_EMAIL;
 const password = process.env.OFFICEFLOW_E2E_PASSWORD;
 
@@ -19,7 +23,7 @@ test("billing page redirects unauthenticated visitors to sign-in", async ({ page
 });
 
 test("checkout endpoint refuses unauthenticated requests", async ({ request }) => {
-  const response = await request.post(baseURL + "/functions/v1/billing-checkout", {
+  const response = await request.post(supabaseURL + "/functions/v1/billing-checkout", {
     data: { plan_id: "starter_monthly", payment_method: "card" }
   });
   expect([401, 403]).toContain(response.status());
@@ -53,7 +57,7 @@ test("optional sandbox card checkout redirects to IntaSend and does not claim pa
 
 test("webhook rejects an invalid challenge once provider secrets are configured", async ({ request }) => {
   test.skip(process.env.RUN_BILLING_WEBHOOK_E2E !== "1", "Enable only after setting IntaSend sandbox secrets and registering the webhook.");
-  const response = await request.post(baseURL + "/functions/v1/intasend-webhook", {
+  const response = await request.post(supabaseURL + "/functions/v1/intasend-webhook", {
     data: { topic: "collection_event", challenge: "deliberately-wrong", invoice_id: "not-a-real-invoice", api_ref: "not-a-real-reference", state: "COMPLETE" }
   });
   expect(response.status()).toBe(401);
