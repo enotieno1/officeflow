@@ -24,14 +24,15 @@
 <a href="automation.html" class="sidebar-link"><i class="fas fa-bolt w-5 mr-3"></i>Automation Engine</a>
 <a href="reports.html" class="sidebar-link"><i class="fas fa-chart-bar w-5 mr-3"></i>Reports</a>
 <a href="security-center.html" class="sidebar-link"><i class="fas fa-shield-alt w-5 mr-3"></i>Security</a>
+<a href="fraud-detection.html" class="sidebar-link"><i class="fas fa-triangle-exclamation w-5 mr-3"></i>Fraud Alerts</a>
 <div class="border-t border-white border-opacity-20 my-2"></div>
 <p class="section-label">Organization</p>
 <a href="departments.html" class="sidebar-link"><i class="fas fa-building w-5 mr-3"></i>Departments</a>
-<a href="hr-system.html" class="sidebar-link"><i class="fas fa-users w-5 mr-3"></i>People & HR Workflows</a>
+<a href="hr-system.html" class="sidebar-link"><i class="fas fa-users w-5 mr-3"></i>People &amp; HR Workflows</a>
 <a href="operational-module.html?category=Finance" class="sidebar-link"><i class="fas fa-coins w-5 mr-3"></i>Finance Workflows</a>
 <a href="operational-module.html?category=Procurement" class="sidebar-link"><i class="fas fa-cart-shopping w-5 mr-3"></i>Procurement Workflows</a>
 <a href="document-management.html" class="sidebar-link"><i class="fas fa-file-alt w-5 mr-3"></i>Documents</a>
-<a href="billing.html" class="sidebar-link"><i class="fas fa-credit-card w-5 mr-3"></i>Subscription & Billing</a>
+<a href="billing.html" class="sidebar-link"><i class="fas fa-credit-card w-5 mr-3"></i>Subscription &amp; Billing</a>
 </nav>
 <div class="p-4 border-t border-white border-opacity-20">
 <p class="text-sm font-medium" data-user-name>User</p>
@@ -82,16 +83,19 @@
 <script src="/dashboard/js/ooes-auth.js"></script>
 <script src="/dashboard/js/ooes-core.js"></script>
 <script>
+function applyRoleNavigation(){const role=OOES_AUTH.getRole();const isAdmin=["administrator","super_admin"].includes(role);document.querySelectorAll('a[href="control-tower.html"],a[href="workflow-builder.html"],a[href="automation.html"],a[href="reports.html"],a[href="security-center.html"],a[href="fraud-detection.html"]').forEach(a=>{if(!isAdmin){a.style.display="none";a.setAttribute("aria-hidden","true");}});document.querySelectorAll('a[href="control-tower.html"]').forEach(a=>{const card=a.closest(".of-card");if(card&&!isAdmin)card.style.display="none";});document.querySelectorAll('a[href="workflow-builder.html"]').forEach(a=>{if(!isAdmin)a.style.display="none";});document.querySelectorAll('a[href="automation.html"],a[href="reports.html"]').forEach(a=>{if(!isAdmin)a.style.display="none";});}
 document.getElementById("current-date").textContent=new Date().toLocaleDateString("en-KE",{weekday:"long",year:"numeric",month:"long",day:"numeric"});
 async function loadDashboard(){
 try{
-await OOES_AUTH.ready;if(!OOES_AUTH.isLoggedIn())return;
-var r=await supabase.rpc('fn_control_tower');if(r.error)throw r.error;var x=(r.data||[])[0]||{};
-document.getElementById("stat-requests").textContent=x.total_requests??0;
+await OOES_AUTH.ready;if(!OOES_AUTH.isLoggedIn())return;applyRoleNavigation();
+var isAdmin=["administrator","super_admin"].includes(OOES_AUTH.getRole());var x={};
+if(isAdmin){var r=await supabase.rpc('fn_control_tower');if(r.error)throw r.error;x=(r.data||[])[0]||{};}
+else {var mine=await supabase.rpc('fn_my_work');if(mine.error)throw mine.error;var rows=mine.data||[];x={total_requests:null,pending_requests:rows.length,overdue_steps:rows.filter(v=>v.due_at&&new Date(v.due_at)<new Date()).length,escalated_steps:rows.filter(v=>v.escalated_at).length};document.getElementById("stat-requests").textContent="—";document.getElementById("stat-requests-sub").textContent="Organization totals restricted";}
+if(isAdmin){document.getElementById("stat-requests").textContent=x.total_requests??0;document.getElementById("stat-requests-sub").textContent="Organization-wide requests";}
 document.getElementById("stat-approvals").textContent=x.pending_requests??0;
 document.getElementById("stat-overdue").textContent=x.overdue_steps??0;
 document.getElementById("stat-escalated").textContent=x.escalated_steps??0;
-document.getElementById("stat-requests-sub").textContent="Total workflow requests";
+
 document.getElementById("stat-approvals-sub").textContent="Awaiting action";
 document.getElementById("stat-overdue-sub").textContent="Past SLA";
 document.getElementById("stat-escalated-sub").textContent="Escalated items";
@@ -100,6 +104,6 @@ document.getElementById("stat-escalated-sub").textContent="Escalated items";
 }
 }
 document.addEventListener("DOMContentLoaded",loadDashboard);
-function globalSearchFn(){var q=document.getElementById("globalSearch").value.toLowerCase().trim();if(!q)return;var pages=[{name:"Requests",url:"workflow.html"},{name:"My Work",url:"my-work.html"},{name:"Notifications",url:"notifications.html"},{name:"Control Tower",url:"control-tower.html"},{name:"Workflow Builder",url:"workflow-builder.html"},{name:"Automation Engine",url:"automation.html"},{name:"Reports",url:"reports.html"},{name:"Departments",url:"departments.html"},{name:"People",url:"hr-system.html"},{name:"Documents",url:"document-management.html"},{name:"Security",url:"security-center.html"}];var m=pages.filter(function(p){return p.name.toLowerCase().includes(q);});if(m.length>0){window.location.href=m[0].url;}else{showNotification("Search","No OfficeFlow area found for: "+q,"info");}}</script>
+function globalSearchFn(){var q=document.getElementById("globalSearch").value.toLowerCase().trim();if(!q)return;var pages=[{name:"Requests",url:"workflow.html"},{name:"My Work",url:"my-work.html"},{name:"Notifications",url:"notifications.html"},{name:"Control Tower",url:"control-tower.html"},{name:"Workflow Builder",url:"workflow-builder.html"},{name:"Automation Engine",url:"automation.html"},{name:"Reports",url:"reports.html"},{name:"Departments",url:"departments.html"},{name:"People",url:"hr-system.html"},{name:"Documents",url:"document-management.html"},{name:"Security",url:"security-center.html"},{name:"Fraud Alerts",url:"fraud-detection.html"}];var m=pages.filter(function(p){return p.name.toLowerCase().includes(q);});if(m.length>0){window.location.href=m[0].url;}else{showNotification("Search","No OfficeFlow area found for: "+q,"info");}}</script>
 </body>
 </html>
