@@ -24,7 +24,6 @@
 <a href="automation.html" class="sidebar-link"><i class="fas fa-bolt w-5 mr-3"></i>Automation Engine</a>
 <a href="reports.html" class="sidebar-link"><i class="fas fa-chart-bar w-5 mr-3"></i>Reports</a>
 <a href="security-center.html" class="sidebar-link"><i class="fas fa-shield-alt w-5 mr-3"></i>Security</a>
-<a href="fraud-detection.html" class="sidebar-link"><i class="fas fa-triangle-exclamation w-5 mr-3"></i>Fraud Alerts</a>
 <div class="border-t border-white border-opacity-20 my-2"></div>
 <p class="section-label">Organization</p>
 <a href="departments.html" class="sidebar-link"><i class="fas fa-building w-5 mr-3"></i>Departments</a>
@@ -83,7 +82,6 @@
 <script src="/dashboard/js/ooes-auth.js"></script>
 <script src="/dashboard/js/ooes-core.js"></script>
 <script>
-function applyRoleNavigation(){const role=OOES_AUTH.getRole();const isAdmin=["administrator","super_admin"].includes(role);document.querySelectorAll('a[href="control-tower.html"],a[href="workflow-builder.html"],a[href="automation.html"],a[href="reports.html"],a[href="security-center.html"],a[href="fraud-detection.html"]').forEach(a=>{if(!isAdmin){a.style.display="none";a.setAttribute("aria-hidden","true");}});document.querySelectorAll('a[href="control-tower.html"]').forEach(a=>{const card=a.closest(".of-card");if(card&&!isAdmin)card.style.display="none";});document.querySelectorAll('a[href="workflow-builder.html"]').forEach(a=>{if(!isAdmin)a.style.display="none";});document.querySelectorAll('a[href="automation.html"],a[href="reports.html"]').forEach(a=>{if(!isAdmin)a.style.display="none";});}
 document.getElementById("current-date").textContent=new Date().toLocaleDateString("en-KE",{weekday:"long",year:"numeric",month:"long",day:"numeric"});
 async function loadDashboard(){
 try{
