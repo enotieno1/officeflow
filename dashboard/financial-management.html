@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><script>/* OfficeFlow live-module routing */location.replace('operational-module.html?category=Finance');</script><script>(function(){if(!localStorage.getItem("ooesSession")){window.location.href="/dashboard/auth.html";}})();</script>
+<head><script>/* OfficeFlow live-module routing */</script><script>(function(){if(!localStorage.getItem("ooesSession")){window.location.href="/dashboard/auth.html";}})();</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Financial Management System - OOES</title>
@@ -396,6 +396,8 @@
         async function initializeFinancialSystem() {
             try {
                 if (window.OOES_AUTH && OOES_AUTH.ready) await OOES_AUTH.ready;
+                if (!OOES_AUTH.isLoggedIn()) { window.location.href='/dashboard/auth.html'; return; }
+                if (!['administrator','super_admin'].includes(OOES_AUTH.getRole())) { window.location.replace('operational-module.html?category=Finance'); return; }
                 const session = window.OOES_AUTH && OOES_AUTH.getSession();
                 if (!session || !session.organization_id) throw new Error('Organization session unavailable');
                 const {data,error} = await supabase.from('invoices').select('*').order('created_at',{ascending:false});
