@@ -77,14 +77,14 @@ body{background:#f5f6f8;color:#16213e}.shell{max-width:1180px;margin:auto}.navy{
    tasks=data||[];updateCounts();render();
   }catch(error){console.error('Tasks load failed',error);$('loadStatus').textContent='Tasks could not be loaded. Refresh or contact your administrator.';notice('Could not load tasks. Please retry.','error');}
  }
- function openNew(){editingId=null;$('taskForm').reset();$('taskPriority').value='medium';$('taskAssignee').value='';$('modalTitle').textContent='Create task';$('saveTask').textContent='Create task';$('taskModal').classList.add('open');$('taskTitle').focus();}
- function openEdit(t){editingId=t.id;$('taskTitle').value=t.title||'';$('taskDescription').value=t.description||'';$('taskPriority').value=['low','medium','high'].includes(t.priority)?t.priority:'medium';$('taskDueDate').value=t.due_date||'';const select=$('taskAssignee'),assignee=t.assigned_to_user_id;if(assignee&&!Array.from(select.options).some(o=>o.value===assignee))select.append(makeOption(t.assigned_to||'Current assignee',assignee));select.value=assignee||'';$('modalTitle').textContent='Edit task';$('saveTask').textContent='Save changes';$('taskModal').classList.add('open');$('taskTitle').focus();}
- function closeModal(){$('taskModal').classList.remove('open');editingId=null;}
+ function openNew(){editingId=null;$('taskForm').reset();$('taskPriority').value='medium';$('taskAssignee').disabled=false;$('taskAssignee').value='';$('modalTitle').textContent='Create task';$('saveTask').textContent='Create task';$('taskModal').classList.add('open');$('taskTitle').focus();}
+ function openEdit(t){editingId=t.id;const session=OOES_AUTH.getSession(),canManageAssignment=['administrator','manager','super_admin'].includes(session?.role)||t.owner_id===session?.id;$('taskAssignee').disabled=!canManageAssignment;$('taskTitle').value=t.title||'';$('taskDescription').value=t.description||'';$('taskPriority').value=['low','medium','high'].includes(t.priority)?t.priority:'medium';$('taskDueDate').value=t.due_date||'';const select=$('taskAssignee'),assignee=t.assigned_to_user_id;if(assignee&&!Array.from(select.options).some(o=>o.value===assignee))select.append(makeOption(t.assigned_to||'Current assignee',assignee));select.value=assignee||'';$('modalTitle').textContent='Edit task';$('saveTask').textContent='Save changes';$('taskModal').classList.add('open');$('taskTitle').focus();}
+ function closeModal(){$('taskModal').classList.remove('open');$('taskAssignee').disabled=false;editingId=null;}
  async function save(event){
   event.preventDefault();
   const session=OOES_AUTH.getSession();if(!session?.organization_id){notice('Your organization session is not ready. Please sign in again.','error');return;}
   const title=$('taskTitle').value.trim();if(!title){notice('Enter a task title.','error');return;}
-  const payload={title,description:$('taskDescription').value.trim()||null,priority:$('taskPriority').value,due_date:$('taskDueDate').value||null,assigned_to_user_id:$('taskAssignee').value||null};
+  const currentTask=editingId!==null?tasks.find(t=>String(t.id)===String(editingId)):null;const payload={title,description:$('taskDescription').value.trim()||null,priority:$('taskPriority').value,due_date:$('taskDueDate').value||null,assigned_to_user_id:$('taskAssignee').disabled?(currentTask?.assigned_to_user_id||null):($('taskAssignee').value||null)};
   const wasEditing=editingId!==null;$('saveTask').disabled=true;
   try{
    const result=wasEditing
