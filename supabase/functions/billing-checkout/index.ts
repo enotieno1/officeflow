@@ -42,8 +42,8 @@ Deno.serve(async (req: Request) => {
 
   const url = Deno.env.get("SUPABASE_URL"), anon = Deno.env.get("SUPABASE_ANON_KEY");
   const service = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY"), secret = Deno.env.get("INTASEND_SECRET_KEY");
-  const pub = Deno.env.get("INTASEND_PUBLISHABLE_KEY"), app = Deno.env.get("APP_BASE_URL");
-  if (!url || !anon || !service || !secret || !pub || !app) {
+  const app = Deno.env.get("APP_BASE_URL");
+  if (!url || !anon || !service || !secret || !app) {
     return reply(req, 503, { error: "Billing is not configured. No payment was initiated." });
   }
 
