@@ -17,6 +17,16 @@ async function signIn(page: import("@playwright/test").Page) {
   await expect(page).not.toHaveURL(/auth\.html/, { timeout: 15000 });
 }
 
+test("public landing page avoids false trial claims and routes the Starter plan to sign-up", async ({ page }) => {
+  await page.goto(baseURL + "/");
+  await expect(page.getByText(/free 14-day trial/i)).toHaveCount(0);
+  await expect(page.locator('[data-plan-id="starter_monthly"]')).toBeVisible();
+  await page.locator('[data-plan-id="starter_monthly"]').click();
+  await expect(page).toHaveURL(/auth\.html\?mode=signup/);
+  const url = new URL(page.url());
+  expect(url.searchParams.get("next")).toBe("/dashboard/billing.html?plan=starter_monthly");
+});
+
 test("pricing is public and its Starter CTA preserves the selected plan through sign-up", async ({ page }) => {
   await page.goto(baseURL + "/dashboard/pricing.html");
   await expect(page.getByRole("heading", { name: "Simple, Transparent Pricing" })).toBeVisible();
