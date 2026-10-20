@@ -107,7 +107,13 @@ body{background:#f5f6f8;color:#16213e}.shell{max-width:1180px;margin:auto}.navy{
  }
  function exportCsv(){
   const rows=[['Title','Description','Status','Priority','Assigned to','Due date'],...tasks.map(t=>[t.title,t.description,t.status,t.priority,t.assigned_to,t.due_date])];
-  const csv=rows.map(row=>row.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\r\n');
+  const csvCell=value=>{
+   let text=String(value??'');
+   // Prevent spreadsheet formula injection when exported text is opened in Excel/Sheets.
+   if(/^[\\t\\r ]*[=+@-]/.test(text))text="'"+text;
+   return '"'+text.replace(/"/g,'""')+'"';
+  };
+  const csv=rows.map(row=>row.map(csvCell).join(',')).join('\r\n');
   const url=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='officeflow-tasks.csv';a.click();URL.revokeObjectURL(url);
  }
  document.addEventListener('DOMContentLoaded',async()=>{
