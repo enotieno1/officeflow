@@ -78,7 +78,16 @@
    payRes.data.forEach(p=>{const tr=cell('tr','');tr.append(cell('td',new Date(p.created_at).toLocaleString('en-KE'),'py-3 pr-3 border-t'),cell('td',money(p.amount,p.currency),'py-3 pr-3 border-t'),cell('td',p.payment_method.toUpperCase(),'py-3 pr-3 border-t'),cell('td',p.status.toUpperCase(),'py-3 pr-3 border-t font-semibold'),cell('td',p.api_ref,'py-3 pr-3 border-t font-mono text-xs'));tb.append(tr);});table.append(tb);payments.replaceChildren(table);
   }
  }
- async function refreshStatus(){await new Promise(r=>setTimeout(r,1500));const {data,error}=await supabase.from('billing_subscriptions').select('status,current_period_end,plan:billing_plans(name)').in('status',['pending','active','past_due']).order('created_at',{ascending:false}).limit(1);if(!error&&data&&data.length){const s=data[0];if(s.status==='active')note('Subscription is active after provider verification.','success');else note('Payment is still '+s.status+'. Do not retry unless the provider reports failure. Refresh later to check again.','info');}}
+ async function refreshStatus(){
+  await new Promise(r=>setTimeout(r,1500));
+  // Direct reads of billing tables are intentionally revoked. Always use the
+  // scoped, administrator-only overview RPC.
+  const {data,error}=await supabase.rpc('fn_get_billing_overview');
+  if(error){note('Payment was initiated, but its status could not be refreshed yet. Do not retry while the provider is processing it. Refresh this page later.','info');return;}
+  const s=data?.subscription;
+  if(s?.status==='active')note('Subscription is active after server-side provider verification.','success');
+  else note('Payment is still '+(s?.status||'awaiting provider confirmation')+'. Do not retry while it is processing. Refresh later to check again.','info');
+ }
  document.addEventListener('DOMContentLoaded',load);
 })();
 </script></body></html>
