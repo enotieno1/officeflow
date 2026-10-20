@@ -27,3 +27,7 @@ select 'BILL-T07 reconciliation RPC is service-role-only' as test,
  has_function_privilege('service_role','public.fn_reconcile_intasend_payment(text,text,text,text,text,text,numeric,text,text)','EXECUTE')
  and not has_function_privilege('authenticated','public.fn_reconcile_intasend_payment(text,text,text,text,text,text,numeric,text,text)','EXECUTE')
  and not has_function_privilege('anon','public.fn_reconcile_intasend_payment(text,text,text,text,text,text,numeric,text,text)','EXECUTE') as pass;
+
+select 'BILL-T08 hosted checkout ID is distinct from invoice ID' as test,
+ exists(select 1 from information_schema.columns where table_schema='public' and table_name='billing_payment_attempts' and column_name='provider_checkout_id')
+ and exists(select 1 from information_schema.columns where table_schema='public' and table_name='billing_payment_attempts' and column_name='provider_invoice_id') as pass;
