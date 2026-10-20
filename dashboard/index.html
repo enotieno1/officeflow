@@ -78,16 +78,19 @@
 <script src="/dashboard/js/ooes-auth.js"></script>
 <script src="/dashboard/js/ooes-core.js"></script>
 <script>
+function applyRoleNavigation(){const role=OOES_AUTH.getRole();const isAdmin=["administrator","super_admin"].includes(role);document.querySelectorAll('a[href="control-tower.html"],a[href="workflow-builder.html"],a[href="automation.html"],a[href="reports.html"],a[href="security-center.html"]').forEach(a=>{if(!isAdmin){a.style.display="none";a.setAttribute("aria-hidden","true");}});document.querySelectorAll('a[href="control-tower.html"]').forEach(a=>{const card=a.closest(".of-card");if(card&&!isAdmin)card.style.display="none";});document.querySelectorAll('a[href="workflow-builder.html"]').forEach(a=>{if(!isAdmin)a.style.display="none";});document.querySelectorAll('a[href="automation.html"],a[href="reports.html"]').forEach(a=>{if(!isAdmin)a.style.display="none";});document.querySelectorAll('a[href^="operational-module.html?category="]').forEach(a=>{const c=new URLSearchParams(a.href.split("?")[1]||"").get("category");if(c==="HR"&&!isAdmin){a.style.display="none";a.setAttribute("aria-hidden","true");}});}
 document.getElementById("current-date").textContent=new Date().toLocaleDateString("en-KE",{weekday:"long",year:"numeric",month:"long",day:"numeric"});
 async function loadDashboard(){
 try{
-await OOES_AUTH.ready;if(!OOES_AUTH.isLoggedIn())return;
-var r=await supabase.rpc('fn_control_tower');if(r.error)throw r.error;var x=(r.data||[])[0]||{};
-document.getElementById("stat-requests").textContent=x.total_requests??0;
+await OOES_AUTH.ready;if(!OOES_AUTH.isLoggedIn())return;applyRoleNavigation();
+var isAdmin=["administrator","super_admin"].includes(OOES_AUTH.getRole());var x={};
+if(isAdmin){var r=await supabase.rpc('fn_control_tower');if(r.error)throw r.error;x=(r.data||[])[0]||{};}
+else {var mine=await supabase.rpc('fn_my_work');if(mine.error)throw mine.error;var rows=mine.data||[];x={total_requests:null,pending_requests:rows.length,overdue_steps:rows.filter(v=>v.due_at&&new Date(v.due_at)<new Date()).length,escalated_steps:rows.filter(v=>v.escalated_at).length};document.getElementById("stat-requests").textContent="—";document.getElementById("stat-requests-sub").textContent="Organization totals restricted";}
+if(isAdmin){document.getElementById("stat-requests").textContent=x.total_requests??0;document.getElementById("stat-requests-sub").textContent="Organization-wide requests";}
 document.getElementById("stat-approvals").textContent=x.pending_requests??0;
 document.getElementById("stat-overdue").textContent=x.overdue_steps??0;
 document.getElementById("stat-escalated").textContent=x.escalated_steps??0;
-document.getElementById("stat-requests-sub").textContent="Total workflow requests";
+
 document.getElementById("stat-approvals-sub").textContent="Awaiting action";
 document.getElementById("stat-overdue-sub").textContent="Past SLA";
 document.getElementById("stat-escalated-sub").textContent="Escalated items";
