@@ -54,7 +54,7 @@
     card.append(cell('p',plan.description||'OfficeFlow subscription','text-sm text-slate-600 mt-2'));
     card.append(cell('p',money(plan.amount,plan.currency),'text-2xl font-bold mt-4'));
     card.append(cell('p','per '+(Number(plan.interval_count)>1?plan.interval_count+' ':'')+plan.interval_unit,'text-sm text-slate-500'));
-    if(plan.seat_limit)card.append(cell('p','Up to '+plan.seat_limit+' users','text-sm mt-2'));
+
     const method=cell('select','','w-full border rounded-lg px-3 py-2 mt-4');
     method.append(new Option('Pay with M-Pesa','mpesa'),new Option('Pay with Visa / Mastercard','card'));
     const phone=cell('input','','w-full border rounded-lg px-3 py-2 mt-2');phone.type='tel';phone.placeholder='M-Pesa number (e.g. 0712345678)';phone.autocomplete='tel';
