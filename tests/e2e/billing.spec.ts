@@ -1,0 +1,52 @@
+import { test, expect } from "@playwright/test";
+
+const baseURL = process.env.OFFICEFLOW_BASE_URL || "https://officeflow.co.ke";
+const email = process.env.OFFICEFLOW_E2E_EMAIL;
+const password = process.env.OFFICEFLOW_E2E_PASSWORD;
+
+async function signIn(page: import("@playwright/test").Page) {
+  test.skip(!email || !password, "Set OFFICEFLOW_E2E_EMAIL and OFFICEFLOW_E2E_PASSWORD for authenticated E2E tests.");
+  await page.goto(baseURL + "/dashboard/auth.html");
+  await page.locator("#signInEmail").fill(email!);
+  await page.locator("#signInPassword").fill(password!);
+  await page.locator("#signInForm button[type=submit]").click();
+  await expect(page).not.toHaveURL(/auth\.html/, { timeout: 15000 });
+}
+
+test("billing page redirects unauthenticated visitors to sign-in", async ({ page }) => {
+  await page.goto(baseURL + "/dashboard/billing.html");
+  await expect(page).toHaveURL(/auth\.html/);
+});
+
+test("checkout endpoint refuses unauthenticated requests", async ({ request }) => {
+  const response = await request.post(baseURL + "/functions/v1/billing-checkout", {
+    data: { plan_id: "starter_monthly", payment_method: "card" }
+  });
+  expect([401, 403]).toContain(response.status());
+  const body = await response.text();
+  expect(body.toLowerCase()).not.toContain('"status":"paid"');
+});
+
+test("signed-in organization administrator sees database-backed published plans", async ({ page }) => {
+  await signIn(page);
+  await page.goto(baseURL + "/dashboard/billing.html");
+  await expect(page.getByRole("heading", { name: "Subscription & billing" })).toBeVisible();
+  await expect(page.getByText("Starter", { exact: true })).toBeVisible();
+  await expect(page.getByText("Professional", { exact: true })).toBeVisible();
+  await expect(page.getByText("KES", { exact: false })).toBeVisible();
+  await expect(page.getByText(/no subscription prices have been published/i)).toHaveCount(0);
+});
+
+test("optional sandbox card checkout redirects to IntaSend and does not claim payment success", async ({ page }) => {
+  test.skip(process.env.RUN_BILLING_SANDBOX_HANDOFF !== "1", "Opt-in only: use a sandbox merchant and test account.");
+  await signIn(page);
+  await page.goto(baseURL + "/dashboard/billing.html");
+  const cardSelect = page.locator("select").first();
+  await cardSelect.selectOption("card");
+  const checkout = page.getByRole("button", { name: "Continue to secure payment" }).first();
+  await checkout.click();
+  await expect(page).toHaveURL(/intasend\.com/, { timeout: 20000 });
+  // This deliberately stops at provider-hosted sandbox checkout. It never asserts
+  // payment success from the browser redirect; complete a provider sandbox payment
+  // and verify the webhook/database state separately before enabling live keys.
+});
