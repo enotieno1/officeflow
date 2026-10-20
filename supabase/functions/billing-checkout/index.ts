@@ -79,7 +79,7 @@ Deno.serve(async (req: Request) => {
   if (!plan) return reply(req, 404, { error: "Plan unavailable. No payment was initiated." });
 
   const { data: existing, error: existingErr } = await db.from("billing_subscriptions")
-    .select("id,status,plan_id,payment_method,current_period_end,provider_subscription_id,provider_setup_url,provider_customer_id,provider_plan_id,provider_subscription_status,created_at")
+    .select("id,status,plan_id,payment_method,current_period_end,provider_subscription_id,provider_setup_url,provider_customer_id,provider_plan_id,provider_subscription_status,provider_subscription_failure_reason,created_at")
     .eq("organization_id", profile.organization_id)
     .in("status", ["pending", "active", "past_due"])
     .order("created_at", { ascending: false }).limit(1).maybeSingle();
@@ -129,10 +129,15 @@ Deno.serve(async (req: Request) => {
       });
     }
     if (existing?.status === "pending" && !existing.provider_subscription_id) {
-      return reply(req, 409, {
-        error: "A card subscription setup is awaiting provider reconciliation. Do not retry; contact support with this subscription reference.",
-        reference: existing.id
-      });
+      const safeRetry = typeof existing.provider_subscription_failure_reason === "string" &&
+        (existing.provider_subscription_failure_reason.includes("no card subscription was created") ||
+         existing.provider_subscription_failure_reason.includes("no subscription was created"));
+      if (!safeRetry) {
+        return reply(req, 409, {
+          error: "A card subscription setup is awaiting provider reconciliation. Do not retry; contact support with this subscription reference.",
+          reference: existing.id
+        });
+      }
     }
 
     const customerResult = await providerPost("subscriptions-customers/", secret, {
