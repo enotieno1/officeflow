@@ -192,7 +192,7 @@ begin
   if coalesce(auth.role(),'') <> 'service_role' then raise exception 'service_role required'; end if;
   if coalesce(p_event_key,'') = '' or coalesce(p_provider_subscription_id,'') = ''
      or coalesce(p_reference,'') = '' then raise exception 'invalid subscription event'; end if;
-  if v_state not in ('PENDING','ACTIVE','CANCELED','COMPLETE','FAILED') then raise exception 'unsupported subscription state'; end if;
+  if v_state not in ('PENDING','ACTIVE','CANCELED','CANCELLED','COMPLETE','FAILED') then raise exception 'unsupported subscription state'; end if;
 
   select * into v_sub from public.billing_subscriptions
     where id::text = p_reference for update;
@@ -210,7 +210,7 @@ begin
   end if;
 
   v_status := case
-    when v_state in ('CANCELED','COMPLETE') then 'cancelled'
+    when v_state in ('CANCELED','CANCELLED','COMPLETE') then 'cancelled'
     when v_state = 'FAILED' then 'past_due'
     when v_state = 'ACTIVE' and exists (
       select 1 from public.billing_payment_attempts a
