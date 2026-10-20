@@ -12,15 +12,15 @@
 <style>
 :root { scroll-behavior: smooth; }
 body { background: #0a0f1e; color: white; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; margin: 0; }
-.grad { background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); }
-.grad-text { background: linear-gradient(135deg, #60a5fa, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.grad { background: linear-gradient(135deg, #a6823d 0%, #16213e 100%); }
+.grad-text { background: linear-gradient(135deg, #d2b46d, #d2b46d); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 .card { background: #111827; border: 1px solid #1f2937; border-radius: 16px; }
-.card:hover { border-color: #2563eb; transform: translateY(-4px); transition: all 0.3s; }
-.pill { background: rgba(37,99,235,0.15); border: 1px solid rgba(37,99,235,0.3); color: #60a5fa; padding: 4px 14px; border-radius: 999px; font-size: 12px; display: inline-block; }
+.card:hover { border-color: #a6823d; transform: translateY(-4px); transition: all 0.3s; }
+.pill { background: rgba(37,99,235,0.15); border: 1px solid rgba(37,99,235,0.3); color: #d2b46d; padding: 4px 14px; border-radius: 999px; font-size: 12px; display: inline-block; }
 .glow { box-shadow: 0 0 40px rgba(37,99,235,0.3); }
 .nav-link { color: #94a3b8; text-decoration: none; transition: color 0.2s; }
 .nav-link:hover { color: white; }
-@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+@keyframes float { 0%,100%{transform:translateY(0)} Workflow{transform:translateY(-12px)} }
 .float { animation: float 4s ease-in-out infinite; }
 @keyframes fadein { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
 .fadein { animation: fadein 0.8s ease forwards; }
@@ -32,10 +32,10 @@ body { background: #0a0f1e; color: white; font-family: 'Inter', -apple-system, B
 <nav style="position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,15,30,0.9);backdrop-filter:blur(12px);border-bottom:1px solid #1f2937;padding:16px 0;">
 <div style="max-width:1200px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;">
   <a href="/" style="display:flex;align-items:center;gap:12px;text-decoration:none;">
-    <div style="width:40px;height:40px;background:linear-gradient(135deg,#2563eb,#1d4ed8);clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);display:flex;align-items:center;justify-content:center;">
+    <div style="width:40px;height:40px;background:linear-gradient(135deg,#a6823d,#16213e);clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);display:flex;align-items:center;justify-content:center;">
       <span style="color:white;font-weight:700;font-size:14px;">OF</span>
     </div>
-    <span style="font-size:20px;font-weight:700;color:white;">Office<span style="color:#60a5fa;">Flow</span></span>
+    <span style="font-size:20px;font-weight:700;color:white;">Office<span style="color:#d2b46d;">Flow</span></span>
   </a>
   <div style="display:flex;align-items:center;gap:32px;">
     <a href="#features" class="nav-link">Features</a>
@@ -44,8 +44,8 @@ body { background: #0a0f1e; color: white; font-family: 'Inter', -apple-system, B
     <a href="#contact" class="nav-link">Contact</a>
   </div>
   <div style="display:flex;gap:12px;">
-    <a href="/dashboard/portals/index.html" style="color:#60a5fa;text-decoration:none;padding:10px 20px;border:1px solid #2563eb;border-radius:8px;font-size:14px;">Department Sign In</a>
-    <a href="/dashboard/auth.html?mode=signup" style="background:linear-gradient(135deg,#2563eb,#1d4ed8);color:white;text-decoration:none;padding:10px 20px;border-radius:8px;font-size:14px;font-weight:600;">Start Free Trial</a>
+    <a href="/dashboard/portals/index.html" style="color:#d2b46d;text-decoration:none;padding:10px 20px;border:1px solid #a6823d;border-radius:8px;font-size:14px;">Department Sign In</a>
+    <a href="/dashboard/auth.html?mode=signup" style="background:linear-gradient(135deg,#a6823d,#16213e);color:white;text-decoration:none;padding:10px 20px;border-radius:8px;font-size:14px;font-weight:600;">Create Workspace</a>
   </div>
 </div>
 </nav>
@@ -62,23 +62,23 @@ body { background: #0a0f1e; color: white; font-family: 'Inter', -apple-system, B
       Turn Chaotic Operations<br>Into <span class="grad-text">Simple, Structured</span><br>Workflows.
     </h1>
     <p style="font-size:20px;color:#94a3b8;max-width:620px;margin:0 auto 48px;line-height:1.7;">
-      OfficeFlow centralizes your HR, finance, tasks, documents, and team communication — giving managers real-time visibility and control over every operation.
+      OfficeFlow brings workflow requests, approvals, tasks and private documents into one workspace, with role-based access and an audit trail.
     </p>
     <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
-      <a href="/dashboard/auth.html?mode=signup" style="background:linear-gradient(135deg,#2563eb,#1d4ed8);color:white;text-decoration:none;padding:16px 40px;border-radius:10px;font-size:18px;font-weight:700;box-shadow:0 0 30px rgba(37,99,235,0.4);">Start Free Trial <i class="fas fa-arrow-right" style="margin-left:8px;"></i></a>
-      <a href="#contact" style="color:#60a5fa;text-decoration:none;padding:16px 40px;border-radius:10px;font-size:18px;border:1px solid #2563eb;">Request a Demo</a>
+      <a href="/dashboard/auth.html?mode=signup" style="background:linear-gradient(135deg,#a6823d,#16213e);color:white;text-decoration:none;padding:16px 40px;border-radius:10px;font-size:18px;font-weight:700;box-shadow:0 0 30px rgba(37,99,235,0.4);">Start Free Trial <i class="fas fa-arrow-right" style="margin-left:8px;"></i></a>
+      <a href="#contact" style="color:#d2b46d;text-decoration:none;padding:16px 40px;border-radius:10px;font-size:18px;border:1px solid #a6823d;">Request a Demo</a>
     </div>
-    <p style="margin-top:20px;color:#475569;font-size:13px;">No credit card required · Free 14-day trial · Cancel anytime</p>
+    <p style="margin-top:20px;color:#475569;font-size:13px;">Create your organization workspace and review subscription options before paying.</p>
 
     <!-- Stats bar -->
     <div style="display:flex;gap:48px;justify-content:center;margin-top:64px;flex-wrap:wrap;">
-      <div><div style="font-size:36px;font-weight:800;color:#60a5fa;">50%</div><div style="color:#64748b;font-size:14px;">Admin Time Saved</div></div>
+      <div><div style="font-size:36px;font-weight:800;color:#d2b46d;">50%</div><div style="color:#64748b;font-size:14px;">Requests and approvals</div></div>
       <div style="width:1px;background:#1f2937;"></div>
-      <div><div style="font-size:36px;font-weight:800;color:#60a5fa;">33+</div><div style="color:#64748b;font-size:14px;">Integrated Modules</div></div>
+      <div><div style="font-size:36px;font-weight:800;color:#d2b46d;">6</div><div style="color:#64748b;font-size:14px;">Defined role types</div></div>
       <div style="width:1px;background:#1f2937;"></div>
-      <div><div style="font-size:36px;font-weight:800;color:#60a5fa;">3</div><div style="color:#64748b;font-size:14px;">User Role Levels</div></div>
+      <div><div style="font-size:36px;font-weight:800;color:#d2b46d;">1</div><div style="color:#64748b;font-size:14px;">Shared workflow engine</div></div>
       <div style="width:1px;background:#1f2937;"></div>
-      <div><div style="font-size:36px;font-weight:800;color:#60a5fa;">∞</div><div style="color:#64748b;font-size:14px;">Scalable for Africa</div></div>
+      <div><div style="font-size:36px;font-weight:800;color:#d2b46d;">Private</div><div style="color:#64748b;font-size:14px;">Organization document storage</div></div>
     </div>
   </div>
 </section>
@@ -93,42 +93,42 @@ body { background: #0a0f1e; color: white; font-family: 'Inter', -apple-system, B
   </div>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;">
     <div class="card" style="padding:28px;transition:all 0.3s;">
-      <i class="fas fa-users-slash" style="font-size:28px;color:#2563eb;margin-bottom:16px;display:block;"></i>
+      <i class="fas fa-users-slash" style="font-size:28px;color:#a6823d;margin-bottom:16px;display:block;"></i>
       <h3 style="font-size:18px;font-weight:700;margin:0 0 10px;">No Accountability</h3>
       <p style="color:#64748b;font-size:14px;line-height:1.6;margin:0;">Tasks get assigned but nobody follows up. Deadlines slip. Blame goes around.</p>
     </div>
     <div class="card" style="padding:28px;transition:all 0.3s;">
-      <i class="fas fa-clock" style="font-size:28px;color:#2563eb;margin-bottom:16px;display:block;"></i>
+      <i class="fas fa-clock" style="font-size:28px;color:#a6823d;margin-bottom:16px;display:block;"></i>
       <h3 style="font-size:18px;font-weight:700;margin:0 0 10px;">Workflow Bottlenecks</h3>
       <p style="color:#64748b;font-size:14px;line-height:1.6;margin:0;">Approvals stuck in someone's inbox. Projects delayed waiting for one person.</p>
     </div>
     <div class="card" style="padding:28px;transition:all 0.3s;">
-      <i class="fas fa-comments" style="font-size:28px;color:#2563eb;margin-bottom:16px;display:block;"></i>
+      <i class="fas fa-comments" style="font-size:28px;color:#a6823d;margin-bottom:16px;display:block;"></i>
       <h3 style="font-size:18px;font-weight:700;margin:0 0 10px;">Poor Communication</h3>
       <p style="color:#64748b;font-size:14px;line-height:1.6;margin:0;">Critical updates buried in WhatsApp groups. Context lost. Mistakes repeated.</p>
     </div>
     <div class="card" style="padding:28px;transition:all 0.3s;">
-      <i class="fas fa-folder-open" style="font-size:28px;color:#2563eb;margin-bottom:16px;display:block;"></i>
+      <i class="fas fa-folder-open" style="font-size:28px;color:#a6823d;margin-bottom:16px;display:block;"></i>
       <h3 style="font-size:18px;font-weight:700;margin:0 0 10px;">Scattered Information</h3>
       <p style="color:#64748b;font-size:14px;line-height:1.6;margin:0;">Files on USB, emails, Google Drive, WhatsApp — nobody knows where anything is.</p>
     </div>
     <div class="card" style="padding:28px;transition:all 0.3s;">
-      <i class="fas fa-redo" style="font-size:28px;color:#2563eb;margin-bottom:16px;display:block;"></i>
+      <i class="fas fa-redo" style="font-size:28px;color:#a6823d;margin-bottom:16px;display:block;"></i>
       <h3 style="font-size:18px;font-weight:700;margin:0 0 10px;">Manual Repetitive Work</h3>
       <p style="color:#64748b;font-size:14px;line-height:1.6;margin:0;">Same reports, same reminders, same data entry — done manually every single day.</p>
     </div>
     <div class="card" style="padding:28px;transition:all 0.3s;">
-      <i class="fas fa-eye-slash" style="font-size:28px;color:#2563eb;margin-bottom:16px;display:block;"></i>
+      <i class="fas fa-eye-slash" style="font-size:28px;color:#a6823d;margin-bottom:16px;display:block;"></i>
       <h3 style="font-size:18px;font-weight:700;margin:0 0 10px;">Zero Visibility</h3>
       <p style="color:#64748b;font-size:14px;line-height:1.6;margin:0;">Managers have no real-time view of what's happening across the business.</p>
     </div>
     <div class="card" style="padding:28px;transition:all 0.3s;">
-      <i class="fas fa-chart-bar" style="font-size:28px;color:#2563eb;margin-bottom:16px;display:block;"></i>
+      <i class="fas fa-chart-bar" style="font-size:28px;color:#a6823d;margin-bottom:16px;display:block;"></i>
       <h3 style="font-size:18px;font-weight:700;margin:0 0 10px;">No Performance Data</h3>
       <p style="color:#64748b;font-size:14px;line-height:1.6;margin:0;">No way to measure team output, task completion rates, or department efficiency.</p>
     </div>
     <div class="card" style="padding:28px;transition:all 0.3s;">
-      <i class="fas fa-user-tie" style="font-size:28px;color:#2563eb;margin-bottom:16px;display:block;"></i>
+      <i class="fas fa-user-tie" style="font-size:28px;color:#a6823d;margin-bottom:16px;display:block;"></i>
       <h3 style="font-size:18px;font-weight:700;margin:0 0 10px;">Over-Reliance on Individuals</h3>
       <p style="color:#64748b;font-size:14px;line-height:1.6;margin:0;">If one person leaves, everything breaks. No documented processes or systems.</p>
     </div>
@@ -142,26 +142,26 @@ body { background: #0a0f1e; color: white; font-family: 'Inter', -apple-system, B
   <div style="text-align:center;margin-bottom:56px;">
     <div class="pill" style="margin-bottom:16px;">Key Features</div>
     <h2 style="font-size:42px;font-weight:800;margin:0 0 16px;">Everything Your Office Needs</h2>
-    <p style="color:#64748b;font-size:18px;">One platform. Every department. Total control.</p>
+    <p style="color:#64748b;font-size:18px;">One workflow platform for everyday operations.</p>
   </div>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;">
     <div class="card" style="padding:32px;transition:all 0.3s;">
-      <div style="width:52px;height:52px;background:#2563eb22;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;">
-        <i class="fas fa-tasks" style="font-size:22px;color:#2563eb;"></i>
+      <div style="width:52px;height:52px;background:#a6823d22;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;">
+        <i class="fas fa-tasks" style="font-size:22px;color:#a6823d;"></i>
       </div>
       <h3 style="font-size:20px;font-weight:700;margin:0 0 12px;">Task & Workflow Management</h3>
       <p style="color:#64748b;font-size:15px;line-height:1.6;margin:0;">Assign tasks, set deadlines, track progress. Full workflow visibility for every manager.</p>
     </div>
     <div class="card" style="padding:32px;transition:all 0.3s;">
-      <div style="width:52px;height:52px;background:#7c3aed22;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;">
-        <i class="fas fa-check-double" style="font-size:22px;color:#7c3aed;"></i>
+      <div style="width:52px;height:52px;background:#a6823d22;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;">
+        <i class="fas fa-check-double" style="font-size:22px;color:#a6823d;"></i>
       </div>
       <h3 style="font-size:20px;font-weight:700;margin:0 0 12px;">Approval System</h3>
-      <p style="color:#64748b;font-size:15px;line-height:1.6;margin:0;">Requests, approvals, rejections — all tracked with full audit trail. No more lost approvals.</p>
+      <p style="color:#64748b;font-size:15px;line-height:1.6;margin:0;">Requests, approvals and rejections are recorded with an audit trail to reduce lost handoffs.</p>
     </div>
     <div class="card" style="padding:32px;transition:all 0.3s;">
-      <div style="width:52px;height:52px;background:#0891b222;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;">
-        <i class="fas fa-comment-dots" style="font-size:22px;color:#0891b2;"></i>
+      <div style="width:52px;height:52px;background:#a6823d22;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;">
+        <i class="fas fa-comment-dots" style="font-size:22px;color:#a6823d;"></i>
       </div>
       <h3 style="font-size:20px;font-weight:700;margin:0 0 12px;">Centralized Communication</h3>
       <p style="color:#64748b;font-size:15px;line-height:1.6;margin:0;">Task-based comments keep all context in one place. No more scattered WhatsApp messages.</p>
@@ -171,7 +171,7 @@ body { background: #0a0f1e; color: white; font-family: 'Inter', -apple-system, B
         <i class="fas fa-tachometer-alt" style="font-size:22px;color:#059669;"></i>
       </div>
       <h3 style="font-size:20px;font-weight:700;margin:0 0 12px;">Real-Time Dashboard</h3>
-      <p style="color:#64748b;font-size:15px;line-height:1.6;margin:0;">Live KPIs across employees, finance, tasks and documents. Know what's happening right now.</p>
+      <p style="color:#64748b;font-size:15px;line-height:1.6;margin:0;">The operations dashboard surfaces request and approval activity from saved workflow data.</p>
     </div>
     <div class="card" style="padding:32px;transition:all 0.3s;">
       <div style="width:52px;height:52px;background:#d9770622;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;">
@@ -185,27 +185,27 @@ body { background: #0a0f1e; color: white; font-family: 'Inter', -apple-system, B
         <i class="fas fa-bell" style="font-size:22px;color:#dc2626;"></i>
       </div>
       <h3 style="font-size:20px;font-weight:700;margin:0 0 12px;">Notifications & Reminders</h3>
-      <p style="color:#64748b;font-size:15px;line-height:1.6;margin:0;">Automated reminders for deadlines, approvals and overdue tasks. Nothing falls through.</p>
+      <p style="color:#64748b;font-size:15px;line-height:1.6;margin:0;">SLA deadlines and escalation rules help surface overdue approval steps. Outbound email delivery is not yet enabled.</p>
     </div>
     <div class="card" style="padding:32px;transition:all 0.3s;">
-      <div style="width:52px;height:52px;background:#2563eb22;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;">
-        <i class="fas fa-users" style="font-size:22px;color:#2563eb;"></i>
+      <div style="width:52px;height:52px;background:#a6823d22;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;">
+        <i class="fas fa-users" style="font-size:22px;color:#a6823d;"></i>
       </div>
-      <h3 style="font-size:20px;font-weight:700;margin:0 0 12px;">HR & Payroll</h3>
-      <p style="color:#64748b;font-size:15px;line-height:1.6;margin:0;">Employee records, PAYE, NHIF, NSSF calculations. Full payroll in minutes not days.</p>
+      <h3 style="font-size:20px;font-weight:700;margin:0 0 12px;">People workflows</h3>
+      <p style="color:#64748b;font-size:15px;line-height:1.6;margin:0;">Configure employee-related requests and approvals with the workflow engine. Payroll calculations and statutory filing are not provided by this release.</p>
     </div>
     <div class="card" style="padding:32px;transition:all 0.3s;">
-      <div style="width:52px;height:52px;background:#7c3aed22;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;">
-        <i class="fas fa-robot" style="font-size:22px;color:#7c3aed;"></i>
+      <div style="width:52px;height:52px;background:#a6823d22;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;">
+        <i class="fas fa-robot" style="font-size:22px;color:#a6823d;"></i>
       </div>
-      <h3 style="font-size:20px;font-weight:700;margin:0 0 12px;">AI-Powered Tools</h3>
-      <p style="color:#64748b;font-size:15px;line-height:1.6;margin:0;">6 AI modules: document processing, virtual assistant, financial intelligence and more.</p>
+      <h3 style="font-size:20px;font-weight:700;margin:0 0 12px;">Workflow Builder & Approvals</h3>
+      <p style="color:#64748b;font-size:15px;line-height:1.6;margin:0;">Configure approval steps, approver roles and service-level deadlines. AI-generated responses and actions are not enabled.</p>
     </div>
     <div class="card" style="padding:32px;transition:all 0.3s;">
-      <div style="width:52px;height:52px;background:#0891b222;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;">
-        <i class="fas fa-chart-pie" style="font-size:22px;color:#0891b2;"></i>
+      <div style="width:52px;height:52px;background:#a6823d22;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;">
+        <i class="fas fa-chart-pie" style="font-size:22px;color:#a6823d;"></i>
       </div>
-      <h3 style="font-size:20px;font-weight:700;margin:0 0 12px;">Reports & Analytics</h3>
+      <h3 style="font-size:20px;font-weight:700;margin:0 0 12px;">Workflow Operations Visibility</h3>
       <p style="color:#64748b;font-size:15px;line-height:1.6;margin:0;">Live charts for revenue, tasks, employees and transactions. Data-driven decisions.</p>
     </div>
   </div>
@@ -222,37 +222,37 @@ body { background: #0a0f1e; color: white; font-family: 'Inter', -apple-system, B
   </div>
   <div style="display:flex;flex-direction:column;gap:0;">
     <div style="display:flex;gap:24px;padding:32px 0;border-bottom:1px solid #1f2937;">
-      <div style="flex-shrink:0;width:56px;height:56px;background:linear-gradient(135deg,#2563eb,#1d4ed8);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:white;">1</div>
+      <div style="flex-shrink:0;width:56px;height:56px;background:linear-gradient(135deg,#a6823d,#16213e);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:white;">1</div>
       <div>
-        <h3 style="font-size:22px;font-weight:700;margin:0 0 8px;display:flex;align-items:center;gap:12px;"><i class="fas fa-user-plus" style="color:#2563eb;font-size:18px;"></i> Sign Up Free</h3>
+        <h3 style="font-size:22px;font-weight:700;margin:0 0 8px;display:flex;align-items:center;gap:12px;"><i class="fas fa-user-plus" style="color:#a6823d;font-size:18px;"></i> Sign Up Free</h3>
         <p style="color:#64748b;font-size:16px;margin:0;line-height:1.6;">Create your account in 60 seconds. No credit card required. Choose your plan later.</p>
       </div>
     </div>
     <div style="display:flex;gap:24px;padding:32px 0;border-bottom:1px solid #1f2937;">
-      <div style="flex-shrink:0;width:56px;height:56px;background:linear-gradient(135deg,#2563eb,#1d4ed8);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:white;">2</div>
+      <div style="flex-shrink:0;width:56px;height:56px;background:linear-gradient(135deg,#a6823d,#16213e);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:white;">2</div>
       <div>
-        <h3 style="font-size:22px;font-weight:700;margin:0 0 8px;display:flex;align-items:center;gap:12px;"><i class="fas fa-building" style="color:#2563eb;font-size:18px;"></i> Set Up Your Office</h3>
+        <h3 style="font-size:22px;font-weight:700;margin:0 0 8px;display:flex;align-items:center;gap:12px;"><i class="fas fa-building" style="color:#a6823d;font-size:18px;"></i> Set Up Your Office</h3>
         <p style="color:#64748b;font-size:16px;margin:0;line-height:1.6;">Add your team members, departments, and assign roles — Admin, Manager, or Viewer.</p>
       </div>
     </div>
     <div style="display:flex;gap:24px;padding:32px 0;border-bottom:1px solid #1f2937;">
-      <div style="flex-shrink:0;width:56px;height:56px;background:linear-gradient(135deg,#2563eb,#1d4ed8);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:white;">3</div>
+      <div style="flex-shrink:0;width:56px;height:56px;background:linear-gradient(135deg,#a6823d,#16213e);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:white;">3</div>
       <div>
-        <h3 style="font-size:22px;font-weight:700;margin:0 0 8px;display:flex;align-items:center;gap:12px;"><i class="fas fa-tasks" style="color:#2563eb;font-size:18px;"></i> Assign & Track Work</h3>
+        <h3 style="font-size:22px;font-weight:700;margin:0 0 8px;display:flex;align-items:center;gap:12px;"><i class="fas fa-tasks" style="color:#a6823d;font-size:18px;"></i> Assign & Track Work</h3>
         <p style="color:#64748b;font-size:16px;margin:0;line-height:1.6;">Create tasks, set deadlines, attach documents, and track progress in real-time.</p>
       </div>
     </div>
     <div style="display:flex;gap:24px;padding:32px 0;border-bottom:1px solid #1f2937;">
-      <div style="flex-shrink:0;width:56px;height:56px;background:linear-gradient(135deg,#2563eb,#1d4ed8);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:white;">4</div>
+      <div style="flex-shrink:0;width:56px;height:56px;background:linear-gradient(135deg,#a6823d,#16213e);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:white;">4</div>
       <div>
-        <h3 style="font-size:22px;font-weight:700;margin:0 0 8px;display:flex;align-items:center;gap:12px;"><i class="fas fa-eye" style="color:#2563eb;font-size:18px;"></i> Get Full Visibility</h3>
+        <h3 style="font-size:22px;font-weight:700;margin:0 0 8px;display:flex;align-items:center;gap:12px;"><i class="fas fa-eye" style="color:#a6823d;font-size:18px;"></i> Get Full Visibility</h3>
         <p style="color:#64748b;font-size:16px;margin:0;line-height:1.6;">Watch your dashboard light up with live data. See everything happening across your business.</p>
       </div>
     </div>
     <div style="display:flex;gap:24px;padding:32px 0;border-bottom:1px solid #1f2937;">
-      <div style="flex-shrink:0;width:56px;height:56px;background:linear-gradient(135deg,#2563eb,#1d4ed8);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:white;">5</div>
+      <div style="flex-shrink:0;width:56px;height:56px;background:linear-gradient(135deg,#a6823d,#16213e);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:white;">5</div>
       <div>
-        <h3 style="font-size:22px;font-weight:700;margin:0 0 8px;display:flex;align-items:center;gap:12px;"><i class="fas fa-rocket" style="color:#2563eb;font-size:18px;"></i> Grow With Confidence</h3>
+        <h3 style="font-size:22px;font-weight:700;margin:0 0 8px;display:flex;align-items:center;gap:12px;"><i class="fas fa-rocket" style="color:#a6823d;font-size:18px;"></i> Grow With Confidence</h3>
         <p style="color:#64748b;font-size:16px;margin:0;line-height:1.6;">Scale from 10 to 10,000 employees. OfficeFlow grows with your African business.</p>
       </div>
     </div>
@@ -269,32 +269,32 @@ body { background: #0a0f1e; color: white; font-family: 'Inter', -apple-system, B
   </div>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;">
     <div class="card" style="padding:28px;text-align:center;transition:all 0.3s;">
-      <i class="fas fa-briefcase" style="font-size:32px;color:#2563eb;margin-bottom:16px;display:block;"></i>
+      <i class="fas fa-briefcase" style="font-size:32px;color:#a6823d;margin-bottom:16px;display:block;"></i>
       <h3 style="font-size:18px;font-weight:700;margin:0 0 10px;">SMEs</h3>
       <p style="color:#64748b;font-size:14px;line-height:1.6;margin:0;">Small and medium businesses that need structure without enterprise complexity.</p>
     </div>
     <div class="card" style="padding:28px;text-align:center;transition:all 0.3s;">
-      <i class="fas fa-headset" style="font-size:32px;color:#2563eb;margin-bottom:16px;display:block;"></i>
+      <i class="fas fa-headset" style="font-size:32px;color:#a6823d;margin-bottom:16px;display:block;"></i>
       <h3 style="font-size:18px;font-weight:700;margin:0 0 10px;">Call Centers</h3>
       <p style="color:#64748b;font-size:14px;line-height:1.6;margin:0;">Manage agents, track performance, handle shifts and approvals seamlessly.</p>
     </div>
     <div class="card" style="padding:28px;text-align:center;transition:all 0.3s;">
-      <i class="fas fa-hotel" style="font-size:32px;color:#2563eb;margin-bottom:16px;display:block;"></i>
+      <i class="fas fa-hotel" style="font-size:32px;color:#a6823d;margin-bottom:16px;display:block;"></i>
       <h3 style="font-size:18px;font-weight:700;margin:0 0 10px;">Hotels & Hospitality</h3>
       <p style="color:#64748b;font-size:14px;line-height:1.6;margin:0;">Staff management, task tracking, guest operations — all in one place.</p>
     </div>
     <div class="card" style="padding:28px;text-align:center;transition:all 0.3s;">
-      <i class="fas fa-graduation-cap" style="font-size:32px;color:#2563eb;margin-bottom:16px;display:block;"></i>
+      <i class="fas fa-graduation-cap" style="font-size:32px;color:#a6823d;margin-bottom:16px;display:block;"></i>
       <h3 style="font-size:18px;font-weight:700;margin:0 0 10px;">Schools & NGOs</h3>
       <p style="color:#64748b;font-size:14px;line-height:1.6;margin:0;">Administration, HR, documents and budgets — simplified for mission-driven orgs.</p>
     </div>
     <div class="card" style="padding:28px;text-align:center;transition:all 0.3s;">
-      <i class="fas fa-stethoscope" style="font-size:32px;color:#2563eb;margin-bottom:16px;display:block;"></i>
+      <i class="fas fa-stethoscope" style="font-size:32px;color:#a6823d;margin-bottom:16px;display:block;"></i>
       <h3 style="font-size:18px;font-weight:700;margin:0 0 10px;">Clinics & Healthcare</h3>
       <p style="color:#64748b;font-size:14px;line-height:1.6;margin:0;">Patient admin, staff scheduling, compliance tracking — built for care teams.</p>
     </div>
     <div class="card" style="padding:28px;text-align:center;transition:all 0.3s;">
-      <i class="fas fa-store" style="font-size:32px;color:#2563eb;margin-bottom:16px;display:block;"></i>
+      <i class="fas fa-store" style="font-size:32px;color:#a6823d;margin-bottom:16px;display:block;"></i>
       <h3 style="font-size:18px;font-weight:700;margin:0 0 10px;">Professional Offices</h3>
       <p style="color:#64748b;font-size:14px;line-height:1.6;margin:0;">Law firms, accountants, consultancies — organized, efficient, accountable.</p>
     </div>
@@ -308,7 +308,7 @@ body { background: #0a0f1e; color: white; font-family: 'Inter', -apple-system, B
   <div style="text-align:center;margin-bottom:56px;">
     <div class="pill" style="margin-bottom:16px;">Pricing</div>
     <h2 style="font-size:42px;font-weight:800;margin:0 0 16px;">Simple, Transparent Pricing</h2>
-    <p style="color:#64748b;font-size:18px;">Start free. Scale as you grow.</p>
+    <p style="color:#64748b;font-size:18px;">Choose a subscription for the workflow capabilities your organization needs.</p>
   </div>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;">
 
@@ -317,30 +317,30 @@ body { background: #0a0f1e; color: white; font-family: 'Inter', -apple-system, B
       <p style="color:#64748b;margin:0 0 20px;font-size:14px;">Perfect for small offices up to 10 staff</p>
       <div style="font-size:42px;font-weight:800;margin-bottom:24px;">KES 10,000<span style="font-size:16px;color:#64748b;">/mo</span></div>
       <ul style="list-style:none;padding:0;margin:0 0 32px;display:flex;flex-direction:column;gap:12px;">
-        <li style="color:#94a3b8;font-size:15px;"><i class="fas fa-check" style="color:#2563eb;margin-right:8px;"></i>Up to 10 employees</li>
-        <li style="color:#94a3b8;font-size:15px;"><i class="fas fa-check" style="color:#2563eb;margin-right:8px;"></i>Task management</li>
-        <li style="color:#94a3b8;font-size:15px;"><i class="fas fa-check" style="color:#2563eb;margin-right:8px;"></i>Document storage 5GB</li>
-        <li style="color:#94a3b8;font-size:15px;"><i class="fas fa-check" style="color:#2563eb;margin-right:8px;"></i>Basic reports</li>
+        <li style="color:#94a3b8;font-size:15px;"><i class="fas fa-check" style="color:#a6823d;margin-right:8px;"></i>Workflow requests and approvals</li>
+        <li style="color:#94a3b8;font-size:15px;"><i class="fas fa-check" style="color:#a6823d;margin-right:8px;"></i>Task tracking and assignment</li>
+        <li style="color:#94a3b8;font-size:15px;"><i class="fas fa-check" style="color:#a6823d;margin-right:8px;"></i>Private document storage (10 MB per file)</li>
+        <li style="color:#94a3b8;font-size:15px;"><i class="fas fa-check" style="color:#a6823d;margin-right:8px;"></i>In-app notifications</li>
         <li style="color:#64748b;font-size:15px;"><i class="fas fa-times" style="color:#374151;margin-right:8px;"></i>HR & Payroll</li>
-        <li style="color:#64748b;font-size:15px;"><i class="fas fa-times" style="color:#374151;margin-right:8px;"></i>AI Features</li>
+        <li style="color:#64748b;font-size:15px;"><i class="fas fa-times" style="color:#374151;margin-right:8px;"></i>Request audit trail</li>
       </ul>
-      <a href="/dashboard/auth.html" style="display:block;text-align:center;border:1px solid #2563eb;color:#60a5fa;padding:14px;border-radius:8px;text-decoration:none;font-weight:600;">Get Started</a>
+      <a href="/dashboard/auth.html?mode=signup&amp;next=%2Fdashboard%2Fbilling.html%3Fplan%3Dstarter_monthly" data-plan-id="starter_monthly" style="display:block;text-align:center;border:1px solid #a6823d;color:#d2b46d;padding:14px;border-radius:8px;text-decoration:none;font-weight:600;">Get Started</a>
     </div>
 
-    <div style="background:linear-gradient(135deg,#1e3a8a,#1d4ed8);border-radius:16px;padding:36px;position:relative;box-shadow:0 0 40px rgba(37,99,235,0.3);">
-      <div style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:#f59e0b;color:#1f2937;padding:4px 20px;border-radius:999px;font-size:12px;font-weight:700;">MOST POPULAR</div>
+    <div style="background:linear-gradient(135deg,#16213e,#16213e);border-radius:16px;padding:36px;position:relative;box-shadow:0 0 40px rgba(37,99,235,0.3);">
+      <div style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:#a6823d;color:#1f2937;padding:4px 20px;border-radius:999px;font-size:12px;font-weight:700;">MOST POPULAR</div>
       <h3 style="font-size:22px;font-weight:700;margin:0 0 8px;">Professional</h3>
-      <p style="color:#bfdbfe;margin:0 0 20px;font-size:14px;">For growing businesses up to 50 staff</p>
-      <div style="font-size:42px;font-weight:800;margin-bottom:24px;">KES 40,000<span style="font-size:16px;color:#bfdbfe;">/mo</span></div>
+      <p style="color:#e9dfc7;margin:0 0 20px;font-size:14px;">For growing teams with more complex workflows</p>
+      <div style="font-size:42px;font-weight:800;margin-bottom:24px;">KES 40,000<span style="font-size:16px;color:#e9dfc7;">/mo</span></div>
       <ul style="list-style:none;padding:0;margin:0 0 32px;display:flex;flex-direction:column;gap:12px;">
-        <li style="color:#dbeafe;font-size:15px;"><i class="fas fa-check" style="color:#60a5fa;margin-right:8px;"></i>Up to 50 employees</li>
-        <li style="color:#dbeafe;font-size:15px;"><i class="fas fa-check" style="color:#60a5fa;margin-right:8px;"></i>Full task management</li>
-        <li style="color:#dbeafe;font-size:15px;"><i class="fas fa-check" style="color:#60a5fa;margin-right:8px;"></i>HR & Payroll automation</li>
-        <li style="color:#dbeafe;font-size:15px;"><i class="fas fa-check" style="color:#60a5fa;margin-right:8px;"></i>Advanced analytics</li>
-        <li style="color:#dbeafe;font-size:15px;"><i class="fas fa-check" style="color:#60a5fa;margin-right:8px;"></i>Priority support</li>
-        <li style="color:#dbeafe;font-size:15px;"><i class="fas fa-check" style="color:#60a5fa;margin-right:8px;"></i>Basic AI features</li>
+        <li style="color:#dbeafe;font-size:15px;"><i class="fas fa-check" style="color:#d2b46d;margin-right:8px;"></i>Everything in Starter</li>
+        <li style="color:#dbeafe;font-size:15px;"><i class="fas fa-check" style="color:#d2b46d;margin-right:8px;"></i>Workflow Builder</li>
+        <li style="color:#dbeafe;font-size:15px;"><i class="fas fa-check" style="color:#d2b46d;margin-right:8px;"></i>SLA escalation</li>
+        <li style="color:#dbeafe;font-size:15px;"><i class="fas fa-check" style="color:#d2b46d;margin-right:8px;"></i>Advanced analytics</li>
+        <li style="color:#dbeafe;font-size:15px;"><i class="fas fa-check" style="color:#d2b46d;margin-right:8px;"></i>Organization-scoped access controls</li>
+        <li style="color:#dbeafe;font-size:15px;"><i class="fas fa-check" style="color:#d2b46d;margin-right:8px;"></i>Approval audit trail</li>
       </ul>
-      <a href="/dashboard/auth.html" style="display:block;text-align:center;background:white;color:#1d4ed8;padding:14px;border-radius:8px;text-decoration:none;font-weight:700;">Get Started</a>
+      <a href="/dashboard/auth.html?mode=signup&amp;next=%2Fdashboard%2Fbilling.html%3Fplan%3Dprofessional_monthly" data-plan-id="professional_monthly" style="display:block;text-align:center;background:white;color:#16213e;padding:14px;border-radius:8px;text-decoration:none;font-weight:700;">Get Started</a>
     </div>
 
     <div class="card" style="padding:36px;">
@@ -348,14 +348,14 @@ body { background: #0a0f1e; color: white; font-family: 'Inter', -apple-system, B
       <p style="color:#64748b;margin:0 0 20px;font-size:14px;">Unlimited staff, custom integrations</p>
       <div style="font-size:42px;font-weight:800;margin-bottom:24px;">Custom</div>
       <ul style="list-style:none;padding:0;margin:0 0 32px;display:flex;flex-direction:column;gap:12px;">
-        <li style="color:#94a3b8;font-size:15px;"><i class="fas fa-check" style="color:#2563eb;margin-right:8px;"></i>Unlimited employees</li>
-        <li style="color:#94a3b8;font-size:15px;"><i class="fas fa-check" style="color:#2563eb;margin-right:8px;"></i>Full AI suite</li>
-        <li style="color:#94a3b8;font-size:15px;"><i class="fas fa-check" style="color:#2563eb;margin-right:8px;"></i>Custom integrations</li>
-        <li style="color:#94a3b8;font-size:15px;"><i class="fas fa-check" style="color:#2563eb;margin-right:8px;"></i>Dedicated account manager</li>
-        <li style="color:#94a3b8;font-size:15px;"><i class="fas fa-check" style="color:#2563eb;margin-right:8px;"></i>24/7 phone support</li>
-        <li style="color:#94a3b8;font-size:15px;"><i class="fas fa-check" style="color:#2563eb;margin-right:8px;"></i>SLA guarantee</li>
+        <li style="color:#94a3b8;font-size:15px;"><i class="fas fa-check" style="color:#a6823d;margin-right:8px;"></i>Custom plan discussion</li>
+        <li style="color:#94a3b8;font-size:15px;"><i class="fas fa-check" style="color:#a6823d;margin-right:8px;"></i>Workflow requirements review</li>
+        <li style="color:#94a3b8;font-size:15px;"><i class="fas fa-check" style="color:#a6823d;margin-right:8px;"></i>Integration requirements assessment</li>
+        <li style="color:#94a3b8;font-size:15px;"><i class="fas fa-check" style="color:#a6823d;margin-right:8px;"></i>Security and access review</li>
+        <li style="color:#94a3b8;font-size:15px;"><i class="fas fa-check" style="color:#a6823d;margin-right:8px;"></i>Rollout planning</li>
+        <li style="color:#94a3b8;font-size:15px;"><i class="fas fa-check" style="color:#a6823d;margin-right:8px;"></i>Custom commercial proposal</li>
       </ul>
-      <a href="#contact" style="display:block;text-align:center;border:1px solid #2563eb;color:#60a5fa;padding:14px;border-radius:8px;text-decoration:none;font-weight:600;">Contact Sales</a>
+      <a href="#contact" style="display:block;text-align:center;border:1px solid #a6823d;color:#d2b46d;padding:14px;border-radius:8px;text-decoration:none;font-weight:600;">Contact Sales</a>
     </div>
 
   </div>
@@ -369,36 +369,36 @@ body { background: #0a0f1e; color: white; font-family: 'Inter', -apple-system, B
   <h2 style="font-size:42px;font-weight:800;margin:0 0 48px;">This is NOT Just a Task Manager</h2>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px;">
     <div class="card" style="padding:32px;text-align:left;">
-      <i class="fas fa-sitemap" style="font-size:28px;color:#2563eb;margin-bottom:16px;display:block;"></i>
+      <i class="fas fa-sitemap" style="font-size:28px;color:#a6823d;margin-bottom:16px;display:block;"></i>
       <h3 style="font-size:18px;font-weight:700;margin:0 0 10px;">An Operating System</h3>
-      <p style="color:#64748b;font-size:14px;line-height:1.6;margin:0;">We don't just track tasks. We systematize your entire business operation.</p>
+      <p style="color:#64748b;font-size:14px;line-height:1.6;margin:0;">We structure requests, approvals and recurring work in one place.</p>
     </div>
     <div class="card" style="padding:32px;text-align:left;">
-      <i class="fas fa-globe-africa" style="font-size:28px;color:#2563eb;margin-bottom:16px;display:block;"></i>
+      <i class="fas fa-globe-africa" style="font-size:28px;color:#a6823d;margin-bottom:16px;display:block;"></i>
       <h3 style="font-size:18px;font-weight:700;margin:0 0 10px;">Built for Africa</h3>
-      <p style="color:#64748b;font-size:14px;line-height:1.6;margin:0;">Local currencies, tax compliance, and the African business context baked in.</p>
+      <p style="color:#64748b;font-size:14px;line-height:1.6;margin:0;">Designed for teams operating in Kenya and across Africa, with workflow-first operations.</p>
     </div>
     <div class="card" style="padding:32px;text-align:left;">
-      <i class="fas fa-lock" style="font-size:28px;color:#2563eb;margin-bottom:16px;display:block;"></i>
+      <i class="fas fa-lock" style="font-size:28px;color:#a6823d;margin-bottom:16px;display:block;"></i>
       <h3 style="font-size:18px;font-weight:700;margin:0 0 10px;">Role-Based Control</h3>
-      <p style="color:#64748b;font-size:14px;line-height:1.6;margin:0;">Admin, Manager, Viewer — every team member sees exactly what they should.</p>
+      <p style="color:#64748b;font-size:14px;line-height:1.6;margin:0;">Role-based access is enforced by the database, not just by what the interface displays.</p>
     </div>
     <div class="card" style="padding:32px;text-align:left;">
-      <i class="fas fa-bolt" style="font-size:28px;color:#2563eb;margin-bottom:16px;display:block;"></i>
+      <i class="fas fa-bolt" style="font-size:28px;color:#a6823d;margin-bottom:16px;display:block;"></i>
       <h3 style="font-size:18px;font-weight:700;margin:0 0 10px;">Real-Time Everything</h3>
-      <p style="color:#64748b;font-size:14px;line-height:1.6;margin:0;">No refreshing. No waiting. Live data across every module, every time.</p>
+      <p style="color:#64748b;font-size:14px;line-height:1.6;margin:0;">Workflow pages read saved records and display the activity supported by each module.</p>
     </div>
   </div>
 </div>
 </section>
 
 <!-- CTA BANNER -->
-<section style="padding:80px 24px;background:linear-gradient(135deg,#1e3a8a,#1d4ed8);">
+<section style="padding:80px 24px;background:linear-gradient(135deg,#16213e,#16213e);">
 <div style="max-width:800px;margin:0 auto;text-align:center;">
   <h2 style="font-size:48px;font-weight:800;margin:0 0 16px;">Simplify Your Operations Today.</h2>
-  <p style="font-size:20px;color:#bfdbfe;margin:0 0 40px;line-height:1.6;">Join thousands of African businesses running on OfficeFlow. Start your free 14-day trial — no credit card needed.</p>
+  <p style="font-size:20px;color:#e9dfc7;margin:0 0 40px;line-height:1.6;">Join thousands of African businesses running on OfficeFlow. Create an organization workspace and review subscription options.</p>
   <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
-    <a href="/dashboard/auth.html" style="background:white;color:#1d4ed8;padding:18px 48px;border-radius:10px;font-size:18px;font-weight:700;text-decoration:none;">Start Free Trial</a>
+    <a href="/dashboard/auth.html" style="background:white;color:#16213e;padding:18px 48px;border-radius:10px;font-size:18px;font-weight:700;text-decoration:none;">Start Free Trial</a>
     <a href="#contact" style="border:2px solid white;color:white;padding:18px 48px;border-radius:10px;font-size:18px;text-decoration:none;">Request Demo</a>
   </div>
 </div>
@@ -413,25 +413,25 @@ body { background: #0a0f1e; color: white; font-family: 'Inter', -apple-system, B
   <div class="card" style="padding:40px;text-align:left;">
     <div style="display:flex;flex-direction:column;gap:16px;">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
-        <input type="text" placeholder="Your Name" style="background:#1f2937;border:1px solid #374151;color:white;padding:14px 16px;border-radius:8px;font-size:15px;outline:none;">
-        <input type="email" placeholder="Email Address" style="background:#1f2937;border:1px solid #374151;color:white;padding:14px 16px;border-radius:8px;font-size:15px;outline:none;">
+        <input id="contactName" type="text" placeholder="Your Name" style="background:#1f2937;border:1px solid #374151;color:white;padding:14px 16px;border-radius:8px;font-size:15px;outline:none;">
+        <input id="contactEmail" type="email" placeholder="Email Address" style="background:#1f2937;border:1px solid #374151;color:white;padding:14px 16px;border-radius:8px;font-size:15px;outline:none;">
       </div>
-      <input type="text" placeholder="Company Name" style="background:#1f2937;border:1px solid #374151;color:white;padding:14px 16px;border-radius:8px;font-size:15px;outline:none;">
-      <select style="background:#1f2937;border:1px solid #374151;color:#94a3b8;padding:14px 16px;border-radius:8px;font-size:15px;outline:none;">
+      <input id="contactCompany" type="text" placeholder="Company Name" style="background:#1f2937;border:1px solid #374151;color:white;padding:14px 16px;border-radius:8px;font-size:15px;outline:none;">
+      <select id="contactTopic" style="background:#1f2937;border:1px solid #374151;color:#94a3b8;padding:14px 16px;border-radius:8px;font-size:15px;outline:none;">
         <option>What can we help you with?</option>
         <option>Schedule a Demo</option>
         <option>Pricing Inquiry</option>
         <option>Technical Support</option>
         <option>Enterprise Sales</option>
       </select>
-      <textarea rows="4" placeholder="Tell us about your business..." style="background:#1f2937;border:1px solid #374151;color:white;padding:14px 16px;border-radius:8px;font-size:15px;outline:none;resize:vertical;"></textarea>
-      <button onclick="alert('Thank you! We will be in touch within 24 hours.')" style="background:linear-gradient(135deg,#2563eb,#1d4ed8);color:white;border:none;padding:16px;border-radius:8px;font-size:16px;font-weight:700;cursor:pointer;">Send Message <i class="fas fa-paper-plane" style="margin-left:8px;"></i></button>
+      <textarea id="contactMessage" rows="4" placeholder="Tell us about your business..." style="background:#1f2937;border:1px solid #374151;color:white;padding:14px 16px;border-radius:8px;font-size:15px;outline:none;resize:vertical;"></textarea>
+      <button id="contactEmailButton" type="button" style="background:linear-gradient(135deg,#a6823d,#16213e);color:white;border:none;padding:16px;border-radius:8px;font-size:16px;font-weight:700;cursor:pointer;">Open Email App <i class="fas fa-paper-plane" style="margin-left:8px;"></i></button>
     </div>
   </div>
   <div style="display:flex;gap:32px;justify-content:center;margin-top:40px;flex-wrap:wrap;">
-    <div style="color:#64748b;font-size:14px;"><i class="fas fa-envelope" style="color:#2563eb;margin-right:8px;"></i>hello@officeflow.co.ke</div>
-    <div style="color:#64748b;font-size:14px;"><i class="fas fa-phone" style="color:#2563eb;margin-right:8px;"></i>+254 700 000 000</div>
-    <div style="color:#64748b;font-size:14px;"><i class="fas fa-globe" style="color:#2563eb;margin-right:8px;"></i>officeflow.vercel.app</div>
+    <div style="color:#64748b;font-size:14px;"><i class="fas fa-envelope" style="color:#a6823d;margin-right:8px;"></i>info@officeflow.co.ke</div>
+    <div style="color:#64748b;font-size:14px;"><i class="fas fa-phone" style="color:#a6823d;margin-right:8px;"></i></div>
+    <div style="color:#64748b;font-size:14px;"><i class="fas fa-globe" style="color:#a6823d;margin-right:8px;"></i>officeflow.co.ke</div>
   </div>
 </div>
 </section>
@@ -440,10 +440,10 @@ body { background: #0a0f1e; color: white; font-family: 'Inter', -apple-system, B
 <footer style="background:#030712;border-top:1px solid #111827;padding:40px 24px;">
 <div style="max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;">
   <div style="display:flex;align-items:center;gap:12px;">
-    <div style="width:32px;height:32px;background:linear-gradient(135deg,#2563eb,#1d4ed8);clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);display:flex;align-items:center;justify-content:center;">
+    <div style="width:32px;height:32px;background:linear-gradient(135deg,#a6823d,#16213e);clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);display:flex;align-items:center;justify-content:center;">
       <span style="color:white;font-weight:700;font-size:11px;">OF</span>
     </div>
-    <span style="font-weight:700;color:white;">Office<span style="color:#60a5fa;">Flow</span></span>
+    <span style="font-weight:700;color:white;">Office<span style="color:#d2b46d;">Flow</span></span>
     <span style="color:#374151;font-size:13px;">© 2026 · Powering Africa, One Office at a Time.</span>
   </div>
   <div style="display:flex;gap:24px;">
@@ -455,5 +455,41 @@ body { background: #0a0f1e; color: white; font-family: 'Inter', -apple-system, B
 </div>
 </footer>
 
-</body>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="/dashboard/js/config.js"></script>
+<script>
+const officeflowSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+document.querySelectorAll('[data-plan-id]').forEach(function (link) {
+  link.addEventListener('click', async function (event) {
+    event.preventDefault();
+    const target = '/dashboard/billing.html?plan=' + encodeURIComponent(link.getAttribute('data-plan-id'));
+    const signup = '/dashboard/auth.html?mode=signup&next=' + encodeURIComponent(target);
+    try {
+      const {data, error} = await officeflowSupabase.auth.getSession();
+      if (error || !data.session) { window.location.href = signup; return; }
+      const {data: profile, error: profileError} = await officeflowSupabase.from('profiles').select('role,organization_id').eq('id',data.session.user.id).maybeSingle();
+      if (profileError || !profile) { window.location.href = '/dashboard/auth.html?next=' + encodeURIComponent(target); return; }
+      if (profile.role === 'employee' && profile.organization_id === '00000000-0000-0000-0000-000000000001') {
+        window.location.href = '/dashboard/organization-setup.html?next=' + encodeURIComponent(target); return;
+      }
+      window.location.href = target;
+    } catch (error) { window.location.href = signup; }
+  });
+});
+document.getElementById('contactEmailButton')?.addEventListener('click', function () {
+  const name = document.getElementById('contactName').value.trim();
+  const email = document.getElementById('contactEmail').value.trim();
+  const company = document.getElementById('contactCompany').value.trim();
+  const topic = document.getElementById('contactTopic').value;
+  const message = document.getElementById('contactMessage').value.trim();
+  const status = document.getElementById('contactStatus');
+  if (!name || !email || !message) {
+    status.textContent = 'Please enter your name, email and message before opening your email app.';
+    return;
+  }
+  const subject = encodeURIComponent('OfficeFlow inquiry: ' + topic);
+  const body = encodeURIComponent('Name: ' + name + '\nEmail: ' + email + '\nCompany: ' + company + '\nTopic: ' + topic + '\n\n' + message);
+  status.textContent = 'Your email app should open. OfficeFlow has not received this message until you send it from your email app.';
+  window.location.href = 'mailto:info@officeflow.co.ke?subject=' + subject + '&body=' + body;
+});
+</script></body>
 </html>
