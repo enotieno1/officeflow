@@ -1926,7 +1926,7 @@
             }
         }
 
-        async function submitLeaveRequest()        async function submitLeaveRequest() {
+        async function submitLeaveRequest() {
             const form = document.getElementById('leaveForm');
             const employeeId = Number(document.getElementById('leaveEmployeeId')?.value);
             const session = window.OOES_AUTH && OOES_AUTH.getSession();
@@ -2059,7 +2059,7 @@
             } catch (err) { showNotification('Benefit record was not saved: ' + (err.message || 'Please retry.'), 'error'); }
         }
 
-        function openComplianceModal()        function openComplianceModal() {
+        function openComplianceModal() {
             showNotification('Opening compliance management...', 'info');
             setTimeout(() => {
                 showNotification('Compliance module ready', 'success');
