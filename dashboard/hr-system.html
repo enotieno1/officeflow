@@ -2336,7 +2336,20 @@ async function loadEmployees() {
   const employees = await getEmployees();
   const total = employees.length;
   const active = employees.filter(e => e.status === 'Active').length;
-  const totalPayroll = employees.reduce((sum, e) => sum + (e.salary || 0), 0);
+  const totalPayroll = employees.reduce((sum, e) => sum + (Number(e.salary) || 0), 0);
+
+  // Keep performance-review employee choices synced with real database employee IDs.
+  const reviewEmployeeSelect = document.querySelector('#performanceForm select[name="employeeId"]');
+  if (reviewEmployeeSelect) {
+    const previousValue = reviewEmployeeSelect.value;
+    reviewEmployeeSelect.innerHTML = '<option value="">Select Employee</option>' + employees
+      .filter(e => e && e.id && String(e.status || '').toLowerCase() !== 'inactive')
+      .map(e => '<option value="' + String(e.id).replace(/"/g, '&quot;') + '">' +
+        String(e.name || ((e.firstName || '') + ' ' + (e.lastName || '')).trim() || ('Employee #' + e.id))
+          .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') +
+        '</option>').join('');
+    if (employees.some(e => String(e.id) === previousValue)) reviewEmployeeSelect.value = previousValue;
+  }
   
   document.querySelectorAll('.total-employees').forEach(el => el.textContent = total);
   document.querySelectorAll('.total-payroll').forEach(el => el.textContent = 'KSh ' + totalPayroll.toLocaleString());
