@@ -1,0 +1,51 @@
+name: OfficeFlow quality gates
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  static:
+    name: Static and Edge Function checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - name: Check inline JavaScript in dashboard HTML
+        run: node scripts/check-inline-scripts.mjs
+      - name: Type-check billing Edge Functions
+        run: deno check supabase/functions/billing-checkout/index.ts supabase/functions/intasend-webhook/index.ts
+
+  browser-e2e:
+    name: Browser regression tests
+    if: ${{ vars.OFFICEFLOW_BASE_URL != '' }}
+    needs: static
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install Playwright
+        run: npm install --no-save @playwright/test@1.56.1
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Run browser tests against configured preview
+        run: npx playwright test tests/e2e
+        env:
+          OFFICEFLOW_BASE_URL: ${{ vars.OFFICEFLOW_BASE_URL }}
+          SUPABASE_URL: ${{ vars.SUPABASE_URL }}
+          OFFICEFLOW_E2E_EMAIL: ${{ secrets.OFFICEFLOW_E2E_EMAIL }}
+          OFFICEFLOW_E2E_PASSWORD: ${{ secrets.OFFICEFLOW_E2E_PASSWORD }}
+          RUN_MUTATING_E2E: ${{ vars.RUN_MUTATING_E2E }}
+          RUN_BILLING_SANDBOX_HANDOFF: ${{ vars.RUN_BILLING_SANDBOX_HANDOFF }}
+          RUN_BILLING_WEBHOOK_E2E: ${{ vars.RUN_BILLING_WEBHOOK_E2E }}
