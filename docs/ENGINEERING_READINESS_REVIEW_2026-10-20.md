@@ -96,3 +96,23 @@ The next security pass must verify that every exposed SECURITY DEFINER function 
 - SaaS launch gate: https://github.com/enotieno1/officeflow/issues/16
 - IntaSend recurring subscriptions: https://developers.intasend.com/guides/subscriptions/
 - IntaSend webhooks: https://developers.intasend.com/guides/webhooks/
+
+
+## Second-pass implementation review (2026-10-20)
+
+The following code-level defects were found while reviewing the first implementation branch and have been fixed on this branch:
+
+- **Auth initialization could hang:** a thrown session/profile lookup error could prevent `OOES_AUTH.ready` from resolving, leaving protected pages permanently loading. Initialization now catches failures, clears the UI hint, redirects to sign-in, and resolves the ready promise in a `finally` path.
+- **Billing status refresh used a revoked direct table read:** the page now uses the administrator-scoped `fn_get_billing_overview()` RPC consistently.
+- **Checkout CORS did not account for the deployment hostname seen in production traffic:** the branch uses an explicit allowlist supporting `officeflow.co.ke` and `office-sort.vercel.app` by default, with `APP_ORIGINS` available for an intentional override. The deployed checkout function is still v1, so this fix is not live yet.
+- **Task CSV formula injection:** exported user-controlled text now prefixes spreadsheet formula-leading values, including values preceded by tabs/carriage returns/spaces.
+- **Navigation placement:** Tasks is now a first-class dashboard item, and Finance and Procurement entries point to their live-workflow catalogue rather than retired sample-data pages. HR is labelled as workflows instead of implying a complete HRIS.
+- **Browser test safety and coverage:** endpoint tests now require an explicit staging Supabase URL; browser tests require an explicit deployed preview URL; mutating E2E tests refuse the known production hosts. Added guarded task CRUD and private-document upload/delete tests.
+- **Quality gates:** added a static syntax checker for inline dashboard JavaScript and a GitHub Actions workflow to type-check Edge Functions. The browser test job runs only when an explicit preview URL is configured.
+
+### Additional production evidence
+
+- Current production browser logs show traffic from `office-sort.vercel.app`. The canonical production domain and Vercel deployment target should be confirmed before launch; the branch itself is not deployed merely because its database migrations are present.
+- The most recent 24-hour log sample contained 294 successful gateway requests, 2 HTTP 400 responses, 3 HTTP 403 responses and 2 HTTP 429 responses. The sample included expected authorization denials and signup rate limiting, but the workflow decision 400s need correlation with user actions before being called expected.
+- Fifteen database-level billing/task/document/auth regression assertions passed during this second pass. These are structural/security checks; they do not prove browser journeys, payment settlement, tenant isolation under real identities or module acceptance.
+- The security advisor still flags leaked-password protection and 15 authenticated GraphQL table exposures. Those remain open until auth configuration is reviewed and each exposed object is mapped to its intended role/RLS contract.
