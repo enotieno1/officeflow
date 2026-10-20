@@ -17,9 +17,22 @@ async function signIn(page: import("@playwright/test").Page) {
   await expect(page).not.toHaveURL(/auth\.html/, { timeout: 15000 });
 }
 
-test("billing page redirects unauthenticated visitors to sign-in", async ({ page }) => {
+test("pricing is public and its Starter CTA preserves the selected plan through sign-up", async ({ page }) => {
+  await page.goto(baseURL + "/dashboard/pricing.html");
+  await expect(page.getByRole("heading", { name: "Simple, Transparent Pricing" })).toBeVisible();
+  await expect(page.getByText(/14-day free trial/i)).toHaveCount(0);
+  await page.getByRole("link", { name: "Get Started" }).first().click();
+  await expect(page).toHaveURL(/auth\.html\?mode=signup/);
+  const url = new URL(page.url());
+  expect(url.searchParams.get("next")).toBe("/dashboard/billing.html?plan=starter_monthly");
+  await expect(page.locator("#signUpForm")).toBeVisible();
+});
+
+test("billing page redirects unauthenticated visitors and preserves the return path", async ({ page }) => {
   await page.goto(baseURL + "/dashboard/billing.html");
   await expect(page).toHaveURL(/auth\.html/);
+  const url = new URL(page.url());
+  expect(url.searchParams.get("next")).toBe("/dashboard/billing.html");
 });
 
 test("checkout endpoint refuses unauthenticated requests", async ({ request }) => {
