@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     var target = '/dashboard/billing.html' + (planId ? '?plan=' + encodeURIComponent(planId) : '');
     var account = OOES_AUTH.getSession();
     var bootstrapOrgId = '00000000-0000-0000-0000-000000000001';
-    if (account && account.organization_id === bootstrapOrgId) {
+    if (account && account.role === 'employee' && account.organization_id === bootstrapOrgId) {
       window.location.href = '/dashboard/organization-setup.html?next=' + encodeURIComponent(target);
     } else if (account && account.organization_id) {
       window.location.href = target;
