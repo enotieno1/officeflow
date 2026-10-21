@@ -180,129 +180,157 @@
                     </div>
                 </div>
 
-                <!-- HR operating framework: added within the existing Overview layout -->
+                <!-- Professionally styled HR operating framework; existing HR interface and navigation remain unchanged -->
                 <section id="hr-operating-framework" class="mt-8 border-t border-[#E4E1D8] pt-8">
-                    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-3 mb-6">
-                        <div>
-                            <p class="text-xs font-bold uppercase tracking-widest text-[#A6823D] mb-2">HR Operating Framework</p>
-                            <h3 class="text-xl md:text-2xl font-bold text-[#16213E]">The essential functions of a complete HR office</h3>
-                            <p class="text-sm text-gray-600 mt-2 max-w-3xl">A structured view of the people operations, records and controls that keep an organization staffed, supported and compliant.</p>
+                    <style>
+                        #hr-operating-framework .hrf-eyebrow{font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;font-weight:800;color:#A6823D}
+                        #hr-operating-framework .hrf-card{position:relative;display:flex;flex-direction:column;min-height:100%;overflow:hidden;border:1px solid #E4E1D8;border-radius:14px;background:#fff;padding:1.25rem;box-shadow:0 2px 8px rgba(22,33,62,.035);transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+                        #hr-operating-framework .hrf-card:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(22,33,62,.08);border-color:#C9A868}
+                        #hr-operating-framework .hrf-card-primary{border-color:#C9A868;background:linear-gradient(155deg,#fff 0%,#F7F6F2 100%)}
+                        #hr-operating-framework .hrf-card-primary:before{content:"";position:absolute;inset:0 0 auto;height:3px;background:#A6823D}
+                        #hr-operating-framework .hrf-icon{display:flex;width:42px;height:42px;flex-shrink:0;align-items:center;justify-content:center;border-radius:11px;background:#16213E;color:#fff;font-size:1rem}
+                        #hr-operating-framework .hrf-number{font-size:.68rem;letter-spacing:.04em;font-weight:800;color:#6B7280;background:#F7F6F2;border:1px solid #E4E1D8;border-radius:999px;padding:.35rem .6rem;white-space:nowrap}
+                        #hr-operating-framework .hrf-card h4{font-size:1.02rem;line-height:1.45;font-weight:750;color:#16213E;margin-top:1rem}
+                        #hr-operating-framework .hrf-description{font-size:.875rem;line-height:1.7;color:#5B6472;margin-top:.6rem}
+                        #hr-operating-framework .hrf-outcome{display:flex;gap:.55rem;align-items:flex-start;font-size:.78rem;line-height:1.55;font-weight:650;color:#1F2C4F;margin-top:1rem;padding-top:.85rem;border-top:1px solid #EAE7DF}
+                        #hr-operating-framework .hrf-outcome i{color:#A6823D;margin-top:.15rem}
+                        #hr-operating-framework .hrf-link{display:inline-flex;align-items:center;gap:.5rem;font-size:.8rem;font-weight:750;color:#8C6A2E;margin-top:auto;padding-top:1rem;width:max-content}
+                        #hr-operating-framework .hrf-link:hover{text-decoration:underline}
+                        #hr-operating-framework .hrf-panel{height:100%;border:1px solid #E4E1D8;border-radius:14px;background:#fff;padding:1.25rem}
+                        #hr-operating-framework .hrf-panel-title{display:flex;align-items:center;gap:.65rem;font-size:.93rem;font-weight:750;color:#16213E;margin-bottom:1rem}
+                        #hr-operating-framework .hrf-panel-title i{color:#A6823D}
+                        #hr-operating-framework .hrf-list{display:grid;gap:.7rem;font-size:.82rem;line-height:1.55;color:#5B6472}
+                        #hr-operating-framework .hrf-list li{display:flex;align-items:flex-start;gap:.6rem}
+                        #hr-operating-framework .hrf-list li i{color:#A6823D;margin-top:.2rem;flex-shrink:0}
+                        @media(max-width:640px){#hr-operating-framework .hrf-card{padding:1rem}#hr-operating-framework .hrf-card h4{font-size:.98rem}}
+                        @media(prefers-reduced-motion:reduce){#hr-operating-framework .hrf-card{transition:none}#hr-operating-framework .hrf-card:hover{transform:none}}
+                    </style>
+
+                    <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4 mb-6">
+                        <div class="max-w-3xl">
+                            <p class="hrf-eyebrow mb-2">HR Operating Framework</p>
+                            <h3 class="text-2xl md:text-3xl font-bold tracking-tight text-[#16213E]">The essential functions of a complete HR office</h3>
+                            <p class="text-sm md:text-base leading-7 text-gray-600 mt-3">A practical framework for managing the full employee lifecycle, maintaining dependable records, controlling people-related risk and supporting better workforce decisions.</p>
                         </div>
-                        <span class="inline-flex items-center gap-2 self-start rounded-full border border-[#E4E1D8] bg-[#F7F6F2] px-3 py-2 text-xs font-semibold text-[#16213E]">
-                            <i class="fas fa-layer-group text-[#A6823D]"></i> Core HR priorities
-                        </span>
+                        <div class="inline-flex items-center gap-2 self-start lg:self-auto rounded-full border border-[#E4E1D8] bg-[#F7F6F2] px-3.5 py-2 text-xs font-bold text-[#16213E]">
+                            <i class="fas fa-layer-group text-[#A6823D]"></i> Six core priorities
+                        </div>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-                        <article class="rounded-xl border border-[#C9A868] bg-[#F7F6F2] p-5 shadow-sm">
-                            <div class="flex items-start justify-between gap-3 mb-3">
-                                <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-[#16213E] text-white"><i class="fas fa-id-card"></i></span>
-                                <span class="rounded-full bg-[#E4E1D8] px-2.5 py-1 text-xs font-bold text-[#16213E]">01 · Foundation</span>
+                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 items-stretch">
+                        <article class="hrf-card hrf-card-primary">
+                            <div class="flex items-center justify-between gap-3">
+                                <span class="hrf-icon"><i class="fas fa-id-card"></i></span>
+                                <span class="hrf-number">01 / FOUNDATION</span>
                             </div>
-                            <h4 class="font-bold text-[#16213E] text-lg">Employee Records & HR Administration</h4>
-                            <p class="mt-2 text-sm leading-6 text-gray-600">Maintain accurate employee profiles, job and department details, contracts, qualifications, next-of-kin details, employment history, personnel files and approved changes.</p>
-                            <p class="mt-3 text-sm font-semibold text-[#16213E]"><i class="fas fa-check-circle text-[#A6823D] mr-2"></i>Establishes the authoritative employee record.</p>
-                            <a href="#hr-employees" class="inline-flex items-center mt-4 text-sm font-semibold text-[#A6823D] hover:underline">Open Employees <i class="fas fa-arrow-right ml-2"></i></a>
+                            <h4>Employee Records & HR Administration</h4>
+                            <p class="hrf-description">Maintain a reliable employee master record covering identity and contact details, job and department, contract terms, qualifications, personnel documents, employment history and approved changes.</p>
+                            <p class="hrf-outcome"><i class="fas fa-check-circle"></i><span>Outcome: one trusted record for each employee.</span></p>
+                            <a href="#hr-employees" class="hrf-link">Open Employees <i class="fas fa-arrow-right"></i></a>
                         </article>
 
-                        <article class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-                            <div class="flex items-start justify-between gap-3 mb-3">
-                                <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-[#16213E] text-white"><i class="fas fa-money-check-alt"></i></span>
-                                <span class="rounded-full bg-[#F7F6F2] px-2.5 py-1 text-xs font-bold text-[#16213E]">02 · Critical operation</span>
+                        <article class="hrf-card">
+                            <div class="flex items-center justify-between gap-3">
+                                <span class="hrf-icon"><i class="fas fa-money-check-alt"></i></span>
+                                <span class="hrf-number">02 / PAY & BENEFITS</span>
                             </div>
-                            <h4 class="font-bold text-[#16213E] text-lg">Payroll & Compensation</h4>
-                            <p class="mt-2 text-sm leading-6 text-gray-600">Manage salary and allowance inputs, overtime, approved deductions, bonuses, statutory obligations, payslips, payroll reviews and final dues in coordination with Finance.</p>
-                            <p class="mt-3 text-sm font-semibold text-[#16213E]"><i class="fas fa-check-circle text-[#A6823D] mr-2"></i>Supports accurate, timely and controlled pay.</p>
-                            <a href="#hr-payroll" class="inline-flex items-center mt-4 text-sm font-semibold text-[#A6823D] hover:underline">Open Payroll <i class="fas fa-arrow-right ml-2"></i></a>
+                            <h4>Payroll & Compensation</h4>
+                            <p class="hrf-description">Coordinate salary and allowance inputs, overtime, approved deductions, bonuses, statutory obligations, payslips, payroll review and final dues with Finance.</p>
+                            <p class="hrf-outcome"><i class="fas fa-check-circle"></i><span>Outcome: accurate, timely and accountable pay.</span></p>
+                            <a href="#hr-payroll" class="hrf-link">Open Payroll <i class="fas fa-arrow-right"></i></a>
                         </article>
 
-                        <article class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-                            <div class="flex items-start justify-between gap-3 mb-3">
-                                <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-[#16213E] text-white"><i class="fas fa-calendar-check"></i></span>
-                                <span class="rounded-full bg-[#F7F6F2] px-2.5 py-1 text-xs font-bold text-[#16213E]">03 · Daily control</span>
+                        <article class="hrf-card">
+                            <div class="flex items-center justify-between gap-3">
+                                <span class="hrf-icon"><i class="fas fa-calendar-check"></i></span>
+                                <span class="hrf-number">03 / DAILY OPERATIONS</span>
                             </div>
-                            <h4 class="font-bold text-[#16213E] text-lg">Attendance, Time & Leave</h4>
-                            <p class="mt-2 text-sm leading-6 text-gray-600">Track attendance, lateness, absence, shifts, overtime, leave applications, approvals, balances and return-to-work dates.</p>
-                            <p class="mt-3 text-sm font-semibold text-[#16213E]"><i class="fas fa-check-circle text-[#A6823D] mr-2"></i>Helps plan staffing and verify time-related pay.</p>
-                            <a href="#hr-attendance" class="inline-flex items-center mt-4 text-sm font-semibold text-[#A6823D] hover:underline">Open Attendance <i class="fas fa-arrow-right ml-2"></i></a>
+                            <h4>Attendance, Time & Leave</h4>
+                            <p class="hrf-description">Track attendance, lateness, absence, shifts, overtime, leave requests and approvals, balances, return-to-work dates and staffing availability.</p>
+                            <p class="hrf-outcome"><i class="fas fa-check-circle"></i><span>Outcome: visibility of availability and time-related inputs.</span></p>
+                            <a href="#hr-attendance" class="hrf-link">Open Attendance <i class="fas fa-arrow-right"></i></a>
                         </article>
 
-                        <article class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-                            <div class="flex items-start justify-between gap-3 mb-3">
-                                <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-[#16213E] text-white"><i class="fas fa-user-plus"></i></span>
-                                <span class="rounded-full bg-[#F7F6F2] px-2.5 py-1 text-xs font-bold text-[#16213E]">04 · Workforce lifecycle</span>
+                        <article class="hrf-card">
+                            <div class="flex items-center justify-between gap-3">
+                                <span class="hrf-icon"><i class="fas fa-user-plus"></i></span>
+                                <span class="hrf-number">04 / EMPLOYEE LIFECYCLE</span>
                             </div>
-                            <h4 class="font-bold text-[#16213E] text-lg">Recruitment, Onboarding & Separation</h4>
-                            <p class="mt-2 text-sm leading-6 text-gray-600">Coordinate workforce requests, vacancies, applications, interviews, selection approvals, offers, induction, probation, transfers, offboarding and exit clearance.</p>
-                            <p class="mt-3 text-sm font-semibold text-[#16213E]"><i class="fas fa-check-circle text-[#A6823D] mr-2"></i>Controls how people join, move through and leave the organization.</p>
+                            <h4>Recruitment, Onboarding & Separation</h4>
+                            <p class="hrf-description">Manage workforce requests, vacancies, applications, interviews, selection approvals, offers, induction, probation, transfers, offboarding and exit clearance.</p>
+                            <p class="hrf-outcome"><i class="fas fa-check-circle"></i><span>Outcome: controlled employee entry, movement and exit.</span></p>
                         </article>
 
-                        <article class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-                            <div class="flex items-start justify-between gap-3 mb-3">
-                                <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-[#16213E] text-white"><i class="fas fa-scale-balanced"></i></span>
-                                <span class="rounded-full bg-[#F7F6F2] px-2.5 py-1 text-xs font-bold text-[#16213E]">05 · Protection</span>
+                        <article class="hrf-card">
+                            <div class="flex items-center justify-between gap-3">
+                                <span class="hrf-icon"><i class="fas fa-scale-balanced"></i></span>
+                                <span class="hrf-number">05 / GOVERNANCE</span>
                             </div>
-                            <h4 class="font-bold text-[#16213E] text-lg">Employee Relations & Compliance</h4>
-                            <p class="mt-2 text-sm leading-6 text-gray-600">Handle grievances, disciplinary cases, employee welfare, workplace disputes, policy acknowledgements, confidentiality and applicable employment-law requirements.</p>
-                            <p class="mt-3 text-sm font-semibold text-[#16213E]"><i class="fas fa-check-circle text-[#A6823D] mr-2"></i>Promotes fair processes and reduces people-related risk.</p>
-                            <a href="#hr-reports" class="inline-flex items-center mt-4 text-sm font-semibold text-[#A6823D] hover:underline">Open Reports & Compliance <i class="fas fa-arrow-right ml-2"></i></a>
+                            <h4>Employee Relations & Compliance</h4>
+                            <p class="hrf-description">Handle grievances, disciplinary matters, workplace disputes, employee welfare, policy acknowledgements, confidentiality and applicable employment-law requirements.</p>
+                            <p class="hrf-outcome"><i class="fas fa-check-circle"></i><span>Outcome: fair processes and reduced people-related risk.</span></p>
+                            <a href="#hr-reports" class="hrf-link">Open Reports & Compliance <i class="fas fa-arrow-right"></i></a>
                         </article>
 
-                        <article class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-                            <div class="flex items-start justify-between gap-3 mb-3">
-                                <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-[#16213E] text-white"><i class="fas fa-chart-line"></i></span>
-                                <span class="rounded-full bg-[#F7F6F2] px-2.5 py-1 text-xs font-bold text-[#16213E]">06 · Improvement</span>
+                        <article class="hrf-card">
+                            <div class="flex items-center justify-between gap-3">
+                                <span class="hrf-icon"><i class="fas fa-chart-line"></i></span>
+                                <span class="hrf-number">06 / DEVELOPMENT</span>
                             </div>
-                            <h4 class="font-bold text-[#16213E] text-lg">Performance, Learning & Workforce Insights</h4>
-                            <p class="mt-2 text-sm leading-6 text-gray-600">Coordinate goals and reviews, training plans, skills development, succession planning, workforce budgets, headcount reports and HR performance indicators.</p>
-                            <p class="mt-3 text-sm font-semibold text-[#16213E]"><i class="fas fa-check-circle text-[#A6823D] mr-2"></i>Helps management develop people and plan ahead.</p>
-                            <a href="#hr-reports" class="inline-flex items-center mt-4 text-sm font-semibold text-[#A6823D] hover:underline">Open Reports & Compliance <i class="fas fa-arrow-right ml-2"></i></a>
+                            <h4>Performance, Learning & Workforce Insights</h4>
+                            <p class="hrf-description">Coordinate goals and reviews, training plans, skills development, succession planning, workforce budgets, headcount reports and HR performance indicators.</p>
+                            <p class="hrf-outcome"><i class="fas fa-check-circle"></i><span>Outcome: stronger capability and informed planning.</span></p>
+                            <a href="#hr-reports" class="hrf-link">Open Reports & Compliance <i class="fas fa-arrow-right"></i></a>
                         </article>
                     </div>
 
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-6">
-                        <div class="rounded-xl border border-gray-200 bg-white p-5">
-                            <h4 class="font-bold text-[#16213E] mb-3"><i class="fas fa-list-check text-[#A6823D] mr-2"></i>Supporting HR responsibilities</h4>
-                            <ul class="space-y-2 text-sm text-gray-600">
-                                <li><i class="fas fa-check text-[#A6823D] mr-2"></i>Benefits, pensions and employee claims</li>
-                                <li><i class="fas fa-check text-[#A6823D] mr-2"></i>Contracts, job descriptions and organization structure</li>
-                                <li><i class="fas fa-check text-[#A6823D] mr-2"></i>Health, safety, wellbeing and engagement</li>
-                                <li><i class="fas fa-check text-[#A6823D] mr-2"></i>Promotions, transfers and internal mobility</li>
-                                <li><i class="fas fa-check text-[#A6823D] mr-2"></i>Equal opportunity and inclusion</li>
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-5 items-stretch">
+                        <div class="hrf-panel">
+                            <h4 class="hrf-panel-title"><i class="fas fa-list-check"></i>Supporting HR responsibilities</h4>
+                            <ul class="hrf-list">
+                                <li><i class="fas fa-check"></i><span>Benefits, pensions and employee claims</span></li>
+                                <li><i class="fas fa-check"></i><span>Contracts, job descriptions and organization design</span></li>
+                                <li><i class="fas fa-check"></i><span>Health, safety, wellbeing and engagement</span></li>
+                                <li><i class="fas fa-check"></i><span>Promotions, transfers and internal mobility</span></li>
+                                <li><i class="fas fa-check"></i><span>Equal opportunity, inclusion and employee support</span></li>
                             </ul>
                         </div>
-                        <div class="rounded-xl border border-gray-200 bg-white p-5">
-                            <h4 class="font-bold text-[#16213E] mb-3"><i class="fas fa-diagram-project text-[#A6823D] mr-2"></i>Daily HR service cycle</h4>
-                            <ol class="space-y-2 text-sm text-gray-600 list-decimal pl-5">
-                                <li>Receive a request or record an employee event.</li>
-                                <li>Validate the details and supporting documents.</li>
-                                <li>Route to the authorized reviewer or approver.</li>
-                                <li>Record the decision and complete the action.</li>
-                                <li>Update the employee record and retain an audit trail.</li>
-                                <li>Escalate overdue actions and report exceptions.</li>
+                        <div class="hrf-panel">
+                            <h4 class="hrf-panel-title"><i class="fas fa-diagram-project"></i>Daily HR service cycle</h4>
+                            <ol class="hrf-list list-decimal pl-1">
+                                <li><span class="font-bold text-[#A6823D]">01.</span><span>Receive a request or record an employee event.</span></li>
+                                <li><span class="font-bold text-[#A6823D]">02.</span><span>Validate details and supporting documents.</span></li>
+                                <li><span class="font-bold text-[#A6823D]">03.</span><span>Route to the authorized reviewer or approver.</span></li>
+                                <li><span class="font-bold text-[#A6823D]">04.</span><span>Record the decision and complete the action.</span></li>
+                                <li><span class="font-bold text-[#A6823D]">05.</span><span>Update records and retain an audit trail.</span></li>
+                                <li><span class="font-bold text-[#A6823D]">06.</span><span>Escalate overdue actions and report exceptions.</span></li>
                             </ol>
                         </div>
-                        <div class="rounded-xl border border-gray-200 bg-white p-5">
-                            <h4 class="font-bold text-[#16213E] mb-3"><i class="fas fa-shield-halved text-[#A6823D] mr-2"></i>Essential management controls</h4>
-                            <ul class="space-y-2 text-sm text-gray-600">
-                                <li><i class="fas fa-lock text-[#A6823D] mr-2"></i>Restrict sensitive records to authorized roles.</li>
-                                <li><i class="fas fa-user-check text-[#A6823D] mr-2"></i>Separate preparation, approval and payment duties.</li>
-                                <li><i class="fas fa-history text-[#A6823D] mr-2"></i>Keep dated approvals and change history.</li>
-                                <li><i class="fas fa-bell text-[#A6823D] mr-2"></i>Flag expiring contracts, probation and overdue actions.</li>
-                                <li><i class="fas fa-file-shield text-[#A6823D] mr-2"></i>Protect confidentiality and follow retention rules.</li>
+                        <div class="hrf-panel">
+                            <h4 class="hrf-panel-title"><i class="fas fa-shield-halved"></i>Essential management controls</h4>
+                            <ul class="hrf-list">
+                                <li><i class="fas fa-lock"></i><span>Limit sensitive records to authorized roles.</span></li>
+                                <li><i class="fas fa-user-check"></i><span>Separate preparation, approval and payment duties.</span></li>
+                                <li><i class="fas fa-history"></i><span>Retain dated approvals and change history.</span></li>
+                                <li><i class="fas fa-bell"></i><span>Flag expiring contracts, probation and overdue actions.</span></li>
+                                <li><i class="fas fa-file-shield"></i><span>Apply confidentiality and records-retention rules.</span></li>
                             </ul>
                         </div>
                     </div>
-                    <div class="mt-5 rounded-xl bg-[#16213E] p-5 md:p-6 text-white flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                        <div>
-                            <h4 class="font-bold text-lg">The HR priority order</h4>
-                            <p class="text-sm text-blue-100 mt-1">Reliable employee records → controlled HR administration → attendance and leave → accurate payroll → recruitment and employee lifecycle → compliance → performance and workforce planning.</p>
+
+                    <div class="mt-5 rounded-2xl bg-[#16213E] p-5 md:p-6 text-white shadow-sm">
+                        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                            <div class="max-w-4xl">
+                                <p class="text-xs font-bold uppercase tracking-[.15em] text-[#C9A868]">Recommended implementation order</p>
+                                <h4 class="font-bold text-xl mt-2">Build from trusted records to strategic HR</h4>
+                                <p class="text-sm leading-6 text-blue-100 mt-2">Employee records → HR administration → attendance and leave → payroll controls → recruitment and employee lifecycle → compliance → performance and workforce planning.</p>
+                            </div>
+                            <a href="#hr-employees" class="inline-flex shrink-0 items-center justify-center rounded-lg bg-[#C9A868] px-4 py-3 text-sm font-bold text-[#16213E] hover:bg-[#D8BC84]">Start with Employees <i class="fas fa-arrow-right ml-2"></i></a>
                         </div>
-                        <a href="#hr-employees" class="inline-flex shrink-0 items-center justify-center rounded-lg bg-[#C9A868] px-4 py-2.5 text-sm font-bold text-[#16213E] hover:bg-[#D8BC84]">Start with Employee Records <i class="fas fa-arrow-right ml-2"></i></a>
                     </div>
-                    <p class="mt-4 text-xs leading-5 text-gray-500"><i class="fas fa-info-circle mr-1"></i>This framework describes the responsibilities a complete HR function should cover. The cards link to the existing sections where available; listing a responsibility here does not by itself mean its workflow or database integration is already live.</p>
+                    <p class="mt-4 text-xs leading-5 text-gray-500"><i class="fas fa-info-circle mr-1"></i>Framework and guidance only: cards link to existing sections where available. Their presence does not imply that every HR workflow or database integration is already active.</p>
                 </section>
-            </div>
+                </div>
         </section>
 
         <!-- Employee Management -->
