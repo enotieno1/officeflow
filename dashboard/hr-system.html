@@ -636,30 +636,57 @@
         }
 
         async function saveEmployee() {
-            const session = window.OOES_AUTH && OOES_AUTH.getSession();
-            const fn = document.getElementById('firstName').value.trim();
-            const ln = document.getElementById('lastName').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const phone = document.getElementById('phone').value.trim();
-            const dept = document.getElementById('department').value;
-            const pos = document.getElementById('position').value.trim();
-            const salary = Number(document.getElementById('salary').value) || 0;
-            if (!session || !session.id || !session.organization_id) { showNotification('Your organization profile is not ready. Sign in again.', 'error'); return; }
-            if (!fn || !ln || !email) { showNotification('Enter the employee name and email address.', 'error'); return; }
+            const form = document.getElementById('employeeForm');
+            if (!form) {
+                showNotification('Employee form could not be found. Refresh the page and retry.', 'error');
+                return;
+            }
+            const fields = form.elements;
+            const fn = (fields.namedItem('firstName')?.value || '').trim();
+            const ln = (fields.namedItem('lastName')?.value || '').trim();
+            const email = (fields.namedItem('email')?.value || '').trim();
+            const phone = (fields.namedItem('phone')?.value || '').trim();
+            const dept = fields.namedItem('department')?.value || '';
+            const pos = (fields.namedItem('position')?.value || '').trim();
+            const salaryValue = fields.namedItem('salary')?.value || '';
+            const salary = salaryValue === '' ? null : Number(salaryValue);
+            const startDate = fields.namedItem('startDate')?.value || null;
+            const session = window.OOES_AUTH && window.OOES_AUTH.getSession();
+
+            if (!session || !session.id || !session.organization_id) {
+                showNotification('Your organization profile is not ready. Sign in again.', 'error');
+                return;
+            }
+            if (!fn || !ln || !email || !dept || !pos || !startDate || salary === null || !Number.isFinite(salary) || salary < 0) {
+                showNotification('Complete all required employee fields and enter a valid, non-negative salary.', 'error');
+                return;
+            }
+            if (!window.supabase) {
+                showNotification('The database connection is not ready. Refresh the page and retry.', 'error');
+                return;
+            }
             try {
-                const {data,error} = await supabase.from('employees').insert([{
-                    name: fn + ' ' + ln, email, phone: phone || null, department: dept || null,
-                    position: pos || null, salary, status: 'Active',
-                    owner_id: session.id, organization_id: session.organization_id,
-                    hire_date: new Date().toISOString().slice(0,10)
-                }]).select().single();
+                const { error } = await window.supabase.from('employees').insert([{
+                    name: fn + ' ' + ln,
+                    email,
+                    phone: phone || null,
+                    department: dept,
+                    position: pos,
+                    salary,
+                    status: 'Active',
+                    owner_id: session.id,
+                    organization_id: session.organization_id,
+                    hire_date: startDate
+                }]);
                 if (error) throw error;
                 await loadEmployees();
                 showNotification(fn + ' ' + ln + ' added to the organization records.', 'success');
+                form.reset();
                 closeEmployeeModal();
-            } catch(err) {
+            } catch (err) {
                 console.error('Employee save failed:', err);
-                showNotification('Employee was not saved. Check permissions and required fields, then retry.', 'error');
+                const detail = err && (err.message || err.details || err.hint);
+                showNotification('Employee was not saved' + (detail ? ': ' + detail : '. Check access permissions and required fields, then retry.'), 'error');
             }
         }
 
@@ -2129,10 +2156,10 @@
                             <label class="block text-sm font-medium text-gray-700 mb-2">Department</label>
                             <select name="department" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                                 <option value="">Select Department</option>
-                                <option value="Engineering">Engineering</option>
+                                <option value="Management">Management</option>
                                 <option value="Sales">Sales</option>
-                                <option value="Marketing">Marketing</option>
-                                <option value="HR">HR</option>
+                                <option value="IT">IT</option>
+                                <option value="Human Resources">Human Resources</option>
                                 <option value="Finance">Finance</option>
                                 <option value="Operations">Operations</option>
                             </select>
