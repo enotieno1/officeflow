@@ -705,7 +705,15 @@
             document.getElementById('priorityFilter').addEventListener('change', renderTasks);
             document.getElementById('assigneeFilter').addEventListener('change', renderTasks);
             document.getElementById('taskModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeTaskModal(); });
-            syncTasks();
+            const params = new URLSearchParams(window.location.search);
+            const shouldCreateTask = params.get('action') === 'create';
+            syncTasks().then(() => {
+                if (shouldCreateTask && window.OOES_AUTH && OOES_AUTH.getSession()) {
+                    openTaskModal();
+                    // Remove the one-time action so refresh does not reopen the form.
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                }
+            });
         });
         function goBack() { window.location.href = 'index.html'; }
         function showNotification(message, type = 'info') {
