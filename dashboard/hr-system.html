@@ -1847,29 +1847,6 @@
                 });
             }));
         });
-            // Hide all tabs
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.add('hidden');
-            });
-            
-            // Remove active class from all tab buttons
-            document.querySelectorAll('.tab-button').forEach(button => {
-                button.classList.remove('active');
-            });
-            
-            // Show selected tab
-            const selectedTab = document.getElementById(tabName);
-            if (selectedTab) {
-                selectedTab.classList.remove('hidden');
-            }
-            
-            // Add active class to clicked button
-            const clickedButton = document.querySelector(`[onclick*="switchTab('${tabName}')"]`);
-            if (clickedButton) {
-                clickedButton.classList.add('active');
-            }
-        }
-
         // Additional HR Functions
         function openPerformanceModal(employeeId = null) {
             const modal = document.getElementById('performanceModal');
