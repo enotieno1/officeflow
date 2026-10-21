@@ -1,16 +1,10 @@
 // OOES_AUTH — real Supabase Auth wrapper.
-// Public API is unchanged on purpose (getSession/getRole/can/requireAuth/
-// renderUserInfo/logout) so none of the other dashboard pages need editing.
-// requireAuth()/login()/register() are now async internally, but the result
-// is cached in memory so every other page can keep reading it synchronously.
+// Public API remains unchanged so dashboard pages do not need editing.
 var OOES_AUTH = {
-  _session: null,   // cached in-memory: {id, email, name, role}
+  _session: null,
   _readyResolve: null,
-  ready: null,      // await OOES_AUTH.ready if a page needs the session before it runs
+  ready: null,
 
-  // Locked six-role model (profiles_role_check). Least-privilege ('employee')
-  // is the fail-safe default everywhere below — never fail open into a
-  // privileged role.
   ROLE_PERMISSIONS: {
     employee:      {canEdit:true,  canDelete:false, canViewFinance:false, canManageUsers:false},
     officer:       {canEdit:true,  canDelete:false, canViewFinance:true,  canManageUsers:false},
@@ -20,18 +14,47 @@ var OOES_AUTH = {
     super_admin:   {canEdit:true,  canDelete:true,  canViewFinance:true,  canManageUsers:true}
   },
 
+  // Storage is only a UI hint; browser privacy settings must never invalidate
+  // a successful Supabase authentication.
+  _setSessionFlag() {
+    try { window.localStorage.setItem('ooesSession', '1'); } catch (_) {}
+  },
+  _clearSessionFlag() {
+    try { window.localStorage.removeItem('ooesSession'); } catch (_) {}
+  },
+
   async _loadProfile(user) {
     var metadata = user.user_metadata || {};
-    var name = metadata.full_name || [metadata.first_name, metadata.last_name].filter(Boolean).join(' ') || user.email;
-    var res;
-    try {
-      res = await supabase.from('profiles').select('role, organization_id, unit_id').eq('id', user.id).single();
-    } catch (e) {
-      throw new Error('Your account was authenticated, but OfficeFlow could not load your profile. Please try again.');
+    var name = metadata.full_name ||
+      [metadata.first_name, metadata.last_name].filter(Boolean).join(' ') ||
+      user.email || 'OfficeFlow user';
+    var res = null;
+    var lastError = null;
+
+    // Retry short transient network/API failures after successful authentication.
+    for (var attempt = 0; attempt < 3; attempt++) {
+      try {
+        res = await supabase.from('profiles')
+          .select('role, organization_id, unit_id')
+          .eq('id', user.id)
+          .maybeSingle();
+        if (!res.error && res.data) break;
+        lastError = res.error || new Error('Profile row was not returned.');
+      } catch (e) {
+        lastError = e;
+      }
+      if (attempt < 2) {
+        await new Promise(function(resolve) {
+          window.setTimeout(resolve, attempt === 0 ? 250 : 600);
+        });
+      }
     }
-    if (res.error || !res.data) {
-      throw new Error('Your account profile is not ready yet. Please wait a moment and sign in again. If this continues, contact OfficeFlow support.');
+
+    if (!res || res.error || !res.data) {
+      var detail = lastError && lastError.message ? ' (' + lastError.message + ')' : '';
+      throw new Error('OfficeFlow signed you in, but could not load your account profile. Please retry. If it continues, ask your administrator to check your profile.' + detail);
     }
+
     this._session = {
       id: user.id,
       email: user.email,
@@ -45,13 +68,17 @@ var OOES_AUTH = {
 
   async login(email, password) {
     try {
-      var { data, error } = await supabase.auth.signInWithPassword({ email: email, password: password });
-      if (error || !data.user) return { error: (error && error.message) || 'Invalid email or password.' };
-      var s = await this._loadProfile(data.user);
-      // This flag is only a UI hint; Supabase session validation and RLS remain
-      // the actual security boundary.
-      localStorage.setItem('ooesSession', '1');
-      return s;
+      if (!email || !password) return { error: 'Enter your email address and password.' };
+      var result = await supabase.auth.signInWithPassword({
+        email: email.trim(),
+        password: password
+      });
+      if (result.error || !result.data || !result.data.user) {
+        return { error: (result.error && result.error.message) || 'Unable to sign in. Check your email and password, then try again.' };
+      }
+      var session = await this._loadProfile(result.data.user);
+      this._setSessionFlag();
+      return session;
     } catch (e) {
       return { error: e && e.message ? e.message : 'Unable to complete sign-in. Check your connection and try again.' };
     }
@@ -61,8 +88,8 @@ var OOES_AUTH = {
     try {
       var fullName = (fn + ' ' + ln).trim();
       var confirmationUrl = redirectTo || (window.location.origin + '/dashboard/auth.html');
-      var { data, error } = await supabase.auth.signUp({
-        email: email,
+      var result = await supabase.auth.signUp({
+        email: email.trim(),
         password: password,
         options: {
           data: {
@@ -74,13 +101,14 @@ var OOES_AUTH = {
           emailRedirectTo: confirmationUrl
         }
       });
-      if (error) return { error: error.message };
-      if (!data.user) return { error: 'If registration succeeded, check your email to confirm the account, then sign in.' };
-      // If email confirmation is off, Supabase returns a session immediately.
-      if (data.session) {
-        var s = await this._loadProfile(data.user);
-        localStorage.setItem('ooesSession', '1');
-        return s;
+      if (result.error) return { error: result.error.message };
+      if (!result.data || !result.data.user) {
+        return { error: 'If registration succeeded, check your email to confirm the account, then sign in.' };
+      }
+      if (result.data.session) {
+        var session = await this._loadProfile(result.data.user);
+        this._setSessionFlag();
+        return session;
       }
       return { pendingConfirmation: true, email: email };
     } catch (e) {
@@ -89,9 +117,11 @@ var OOES_AUTH = {
   },
 
   async logout(redirect) {
-    await supabase.auth.signOut();
-    this._session = null;
-    localStorage.removeItem('ooesSession');
+    try { await supabase.auth.signOut(); }
+    finally {
+      this._session = null;
+      this._clearSessionFlag();
+    }
     if (redirect !== false) window.location.href = '/dashboard/auth.html';
   },
 
@@ -104,23 +134,30 @@ var OOES_AUTH = {
   },
 
   async requireAuth() {
-    var { data } = await supabase.auth.getSession();
-    if (!data.session) {
-      localStorage.removeItem('ooesSession');
-      window.location.replace('/dashboard/auth.html');
+    try {
+      var result = await supabase.auth.getSession();
+      if (result.error) throw result.error;
+      if (!result.data || !result.data.session) {
+        this._clearSessionFlag();
+        window.location.replace('/dashboard/auth.html');
+        return false;
+      }
+      await this._loadProfile(result.data.session.user);
+      this._setSessionFlag();
+      return true;
+    } catch (e) {
+      this._clearSessionFlag();
+      window.location.replace('/dashboard/auth.html?auth_error=session');
       return false;
     }
-    await this._loadProfile(data.session.user);
-    localStorage.setItem('ooesSession', '1'); // keep the pre-render guard flag in sync
-    return true;
   },
 
   renderUserInfo: function () {
-    var s = this._session;
-    if (!s) return;
-    document.querySelectorAll('[data-user-name]').forEach(function (el) { el.textContent = s.name; });
-    document.querySelectorAll('[data-user-email]').forEach(function (el) { el.textContent = s.email; });
-    document.querySelectorAll('[data-user-role]').forEach(function (el) { el.textContent = s.role; });
+    var session = this._session;
+    if (!session) return;
+    document.querySelectorAll('[data-user-name]').forEach(function (el) { el.textContent = session.name; });
+    document.querySelectorAll('[data-user-email]').forEach(function (el) { el.textContent = session.email; });
+    document.querySelectorAll('[data-user-role]').forEach(function (el) { el.textContent = session.role; });
   }
 };
 
