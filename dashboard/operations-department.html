@@ -495,10 +495,8 @@
         }
 
         function assignTask() {
-            showNotification('Opening task assignment interface...', 'info');
-            setTimeout(() => {
-                showNotification('Task assignment ready!', 'success');
-            }, 1200);
+            // Open the real, authenticated task manager and launch its create/assignment form.
+            window.location.href = '/dashboard/tasks-management.html?action=create';
         }
 
         function scheduleAudit() {
