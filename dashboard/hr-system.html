@@ -666,7 +666,7 @@
                 return;
             }
             try {
-                const { error } = await window.supabase.from('employees').insert([{
+                const { error } = await supabase.from('employees').insert([{
                     name: fn + ' ' + ln,
                     email,
                     phone: phone || null,
