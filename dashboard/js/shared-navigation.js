@@ -10,7 +10,7 @@
     { title: 'Core Modules', items: [
       ['HR Management','hr-system.html','fa-users'],
       ['Finance & Administration','financial-management.html','fa-coins'],
-      ['Accounting Tools (Classic)','accounting-tools.html','fa-calculator'],
+      ['Accounting Tools','accounting-tools.html','fa-calculator'],
       ['Tasks & Workflow','tasks-management.html','fa-list-check'],
       ['Document Management','document-management.html','fa-file-alt'],
       ['Email & Communication','email-system.html','fa-envelope'],
@@ -32,8 +32,8 @@
     { title: 'Organization & Departments', items: [
       ['Departments','departments.html','fa-building'],
       ['Communication Department','communication-department.html','fa-comments'],
-      ['Operations Department (Classic)','operations-department.html','fa-gears'],
-      ['Sales & Marketing (Classic)','sales-department.html','fa-chart-line']
+      ['Operations Department','operations-department.html','fa-gears'],
+      ['Sales & Marketing','sales-department.html','fa-chart-line']
     ]},
     { title: 'Tools & Integrations', items: [
       ['Excel','excel-system.html','fa-file-excel'],
