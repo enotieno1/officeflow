@@ -84,4 +84,6 @@ async function load(){
  }catch(e){$('error').textContent=e.message||'Unable to load Control Tower.';$('error').classList.remove('hidden');}
 }
 document.addEventListener('DOMContentLoaded',async()=>{try{await OOES_AUTH.ready;if(!OOES_AUTH.isLoggedIn())return;await loadUnits();await load();$('unitSelect').addEventListener('change',load);}catch(e){$('error').textContent=e.message||'Unable to load organizational units.';$('error').classList.remove('hidden');}});
-</script></body></html>
+</script>
+<script src="/dashboard/js/shared-navigation.js" defer></script>
+</body></html>
