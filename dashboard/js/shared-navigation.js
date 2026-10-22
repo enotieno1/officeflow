@@ -29,10 +29,21 @@
       ['Control Tower','control-tower.html','fa-chart-line'],
       ['Fraud Alerts','fraud-detection.html','fa-triangle-exclamation']
     ]},
-    { title: 'Organization', items: [
+    { title: 'Organization & Departments', items: [
       ['Departments','departments.html','fa-building'],
+      ['Communication Department','communication-department.html','fa-comments'],
       ['Operations Department (Classic)','operations-department.html','fa-gears'],
       ['Sales & Marketing (Classic)','sales-department.html','fa-chart-line']
+    ]},
+    { title: 'Tools & Integrations', items: [
+      ['Excel','excel-system.html','fa-file-excel'],
+      ['Google Drive','google-drive.html','fa-cloud'],
+      ['Trello','trello-management.html','fa-list-check'],
+      ['Data Management','data-management.html','fa-database'],
+      ['IT Compliance','it-compliance.html','fa-shield-alt'],
+      ['Tools','tools.html','fa-toolbox'],
+      ['Systems','systems.html','fa-gears'],
+      ['Scaling','scaling.html','fa-up-right-and-down-left-from-center']
     ]},
     { title: 'Communication & Support', items: [
       ['Gmail','gmail-system.html','fa-envelope-open-text'],
