@@ -27,4 +27,6 @@ async function load(){
  }catch(e){$('error').textContent=e.message||'Unable to load My Work.';$('error').classList.remove('hidden');}}
 async function act(id,decision){const comment=prompt('Optional comment:')||null;try{await OfficeFlowWorkflow.decide(id,decision,comment);await load();}catch(e){$('error').textContent=e.message||'Action failed.';$('error').classList.remove('hidden');}}
 $('refresh').onclick=load;document.addEventListener('DOMContentLoaded',load);
-</script></body></html>
+</script>
+<script src="/dashboard/js/shared-navigation.js" defer></script>
+</body></html>
