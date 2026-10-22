@@ -14,8 +14,6 @@ var OOES_AUTH = {
     super_admin:   {canEdit:true,  canDelete:true,  canViewFinance:true,  canManageUsers:true}
   },
 
-  // Storage is only a UI hint; browser privacy settings must never invalidate
-  // a successful Supabase authentication.
   _setSessionFlag() {
     try { window.localStorage.setItem('ooesSession', '1'); } catch (_) {}
   },
@@ -30,8 +28,6 @@ var OOES_AUTH = {
       user.email || 'OfficeFlow user';
     var res = null;
     var lastError = null;
-
-    // Retry short transient network/API failures after successful authentication.
     for (var attempt = 0; attempt < 3; attempt++) {
       try {
         res = await supabase.from('profiles')
@@ -40,25 +36,19 @@ var OOES_AUTH = {
           .maybeSingle();
         if (!res.error && res.data) break;
         lastError = res.error || new Error('Profile row was not returned.');
-      } catch (e) {
-        lastError = e;
-      }
+      } catch (e) { lastError = e; }
       if (attempt < 2) {
         await new Promise(function(resolve) {
           window.setTimeout(resolve, attempt === 0 ? 250 : 600);
         });
       }
     }
-
     if (!res || res.error || !res.data) {
       var detail = lastError && lastError.message ? ' (' + lastError.message + ')' : '';
       throw new Error('OfficeFlow signed you in, but could not load your account profile. Please retry. If it continues, ask your administrator to check your profile.' + detail);
     }
-
     this._session = {
-      id: user.id,
-      email: user.email,
-      name: name,
+      id: user.id, email: user.email, name: name,
       role: res.data.role || 'employee',
       organization_id: res.data.organization_id || null,
       unit_id: res.data.unit_id || null
@@ -69,10 +59,7 @@ var OOES_AUTH = {
   async login(email, password) {
     try {
       if (!email || !password) return { error: 'Enter your email address and password.' };
-      var result = await supabase.auth.signInWithPassword({
-        email: email.trim(),
-        password: password
-      });
+      var result = await supabase.auth.signInWithPassword({email: email.trim(), password: password});
       if (result.error || !result.data || !result.data.user) {
         return { error: (result.error && result.error.message) || 'Unable to sign in. Check your email and password, then try again.' };
       }
@@ -87,15 +74,15 @@ var OOES_AUTH = {
   async register(fn, ln, email, password, redirectTo, phone) {
     try {
       var fullName = (fn + ' ' + ln).trim();
-      var confirmationUrl = redirectTo || (window.location.origin + '/dashboard/auth.html');
+      // Always use the dedicated confirmation handler; caller-provided redirect URLs
+      // can point at a page that does not process every Supabase email-link format.
+      var confirmationUrl = window.location.origin + '/dashboard/auth-confirmation.html';
       var result = await supabase.auth.signUp({
         email: email.trim(),
         password: password,
         options: {
           data: {
-            full_name: fullName,
-            first_name: fn,
-            last_name: ln,
+            full_name: fullName, first_name: fn, last_name: ln,
             ...(phone ? { phone: phone } : {})
           },
           emailRedirectTo: confirmationUrl
@@ -118,10 +105,7 @@ var OOES_AUTH = {
 
   async logout(redirect) {
     try { await supabase.auth.signOut(); }
-    finally {
-      this._session = null;
-      this._clearSessionFlag();
-    }
+    finally { this._session = null; this._clearSessionFlag(); }
     if (redirect !== false) window.location.href = '/dashboard/auth.html';
   },
 
@@ -162,7 +146,6 @@ var OOES_AUTH = {
 };
 
 OOES_AUTH.ready = new Promise(function (resolve) { OOES_AUTH._readyResolve = resolve; });
-
 (function () {
   if (!window.location.pathname.includes('auth.html')) {
     document.addEventListener('DOMContentLoaded', async function () {
@@ -170,7 +153,5 @@ OOES_AUTH.ready = new Promise(function (resolve) { OOES_AUTH._readyResolve = res
       if (ok) OOES_AUTH.renderUserInfo();
       OOES_AUTH._readyResolve(ok);
     });
-  } else {
-    OOES_AUTH._readyResolve(false);
-  }
+  } else { OOES_AUTH._readyResolve(false); }
 })();

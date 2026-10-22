@@ -729,6 +729,11 @@
                 document.getElementById('signUpForm').classList.remove('hidden');
             }
 
+            // Show a clear message when the dedicated confirmation page returns the user to sign in.
+            if (params.get('confirmed') === '1') {
+                showNotification('Email Confirmed', 'Your email address has been verified. Sign in to continue.', 'success');
+            }
+
             // Supabase can return authentication errors in the query string or hash.
             const authError = params.get('error_description') || hashParams.get('error_description');
             if (authError) {
