@@ -58,8 +58,28 @@
         }
 
         .input-group label.floating-label {
-            z-index: 1;
+            /* Keep field names visible above the input surface, including before typing. */
+            z-index: 12;
             pointer-events: none;
+            background: rgba(255, 255, 255, 0.98);
+            padding: 0 4px;
+            line-height: 1.2;
+            white-space: nowrap;
+        }
+
+        .input-group input::placeholder {
+            color: transparent;
+        }
+
+        .input-group input {
+            background-color: #fff;
+            color: #1f2937;
+        }
+
+        .input-group input:focus {
+            border-color: var(--of-brass);
+            outline: 2px solid rgba(182, 154, 90, 0.18);
+            outline-offset: 0;
         }
         
         .input-group input:focus + label,
