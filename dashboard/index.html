@@ -116,5 +116,7 @@ document.getElementById("stat-escalated-sub").textContent="Escalated items";
 }
 document.addEventListener("DOMContentLoaded",loadDashboard);
 function globalSearchFn(){var q=document.getElementById("globalSearch").value.toLowerCase().trim();if(!q)return;var pages=[{name:"Requests",url:"workflow.html"},{name:"My Work",url:"my-work.html"},{name:"Notifications",url:"notifications.html"},{name:"Control Tower",url:"control-tower.html"},{name:"Workflow Builder",url:"workflow-builder.html"},{name:"Automation Engine",url:"automation.html"},{name:"Reports",url:"reports.html"},{name:"Departments",url:"departments.html"},{name:"People",url:"hr-system.html"},{name:"Documents",url:"document-management.html"},{name:"Security",url:"security-center.html"},{name:"Fraud Alerts",url:"fraud-detection.html"},{name:"Tasks",url:"tasks-management.html"},{name:"Finance",url:"financial-management.html"},{name:"Email",url:"email-system.html"},{name:"Calendar",url:"calendar-system.html"},{name:"AI Productivity",url:"ai-features.html"}];var m=pages.filter(function(p){return p.name.toLowerCase().includes(q);});if(m.length>0){window.location.href=m[0].url;}else{showNotification("Search","No OfficeFlow area found for: "+q,"info");}}</script>
+
+<script src="/dashboard/js/shared-navigation.js" defer></script>
 </body>
 </html>
