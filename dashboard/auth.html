@@ -642,7 +642,18 @@
                     return;
                 }
                 if (result.pendingConfirmation) {
-                    showNotification('Check Your Email', 'Registration is awaiting email confirmation for ' + result.email + '. Open the confirmation link in your inbox or spam folder before signing in.', 'info');
+                    // Move the user to sign-in so the next step is obvious; keep a one-click
+                    // confirmation resend action available without submitting signup again.
+                    var signInPanel = document.getElementById('signInForm');
+                    var signUpPanel = document.getElementById('signUpForm');
+                    if (signInPanel && signUpPanel) {
+                        signUpPanel.classList.add('hidden');
+                        signInPanel.classList.remove('hidden');
+                    }
+                    var signInEmail = document.getElementById('signInEmail');
+                    if (signInEmail) signInEmail.value = result.email || email;
+                    showResendConfirmationButton(result.email || email);
+                    showNotification('Account Created — Verify Your Email', 'We sent a confirmation link to ' + (result.email || email) + '. Open it to verify your address, then sign in here. If it is not in your inbox, check spam or use Resend confirmation email.', 'info');
                     return;
                 }
                 showNotification('Account Created!', 'Welcome ' + result.name, 'success');
