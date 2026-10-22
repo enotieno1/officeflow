@@ -100,4 +100,6 @@ $('exportReport').onclick=()=>{const csv='table,visible_count\n'+report.map(x=>x
 $('draftBtn').onclick=()=>{const t=$('draftInput').value.trim();$('draftOutput').value=t?'Subject: Follow-up\n\nDear [Recipient],\n\n'+t+'\n\nPlease let me know if any further information is required.\n\nKind regards,\n[Your name]':'Please enter a short description first.'};
 load();
 </script>
+
+<script src="/dashboard/js/shared-navigation.js" defer></script>
 </body></html>
