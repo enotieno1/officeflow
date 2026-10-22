@@ -31,7 +31,8 @@
     ]},
     { title: 'Organization', items: [
       ['Departments','departments.html','fa-building'],
-      ['Operations Department (Classic)','operations-department.html','fa-gears']
+      ['Operations Department (Classic)','operations-department.html','fa-gears'],
+      ['Sales & Marketing (Classic)','sales-department.html','fa-chart-line']
     ]}
   ];
 
@@ -96,6 +97,8 @@
       overlay.addEventListener('click', close);
       sidebar.querySelectorAll('a').forEach(a => a.addEventListener('click', close));
     }
+    const legacyToggle = document.getElementById('mobileMenuBtn');
+    if (legacyToggle) { legacyToggle.onclick = null; legacyToggle.style.display = 'none'; }
     const logout = document.getElementById('of-nav-logout');
     if (logout) logout.addEventListener('click', () => {
       if (window.OOES_AUTH && typeof window.OOES_AUTH.logout === 'function') window.OOES_AUTH.logout();
