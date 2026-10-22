@@ -572,13 +572,53 @@
                     var loginError = (result && result.error)
                         ? (typeof result.error === 'string' ? result.error : (result.error.message || 'Invalid email or password.'))
                         : 'Invalid email or password.';
-                    showNotification('Login Failed', loginError, 'error');
+                    if (/email not confirmed/i.test(loginError)) {
+                        showNotification('Email Not Confirmed', 'Your account exists, but you must confirm the email address first. Check your inbox and spam folder, or use the resend button below.', 'error');
+                        showResendConfirmationButton(email);
+                    } else {
+                        showNotification('Login Failed', loginError, 'error');
+                    }
                 }
             } catch (error) {
                 showNotification('Login Failed', 'OfficeFlow could not complete sign-in. Check your connection and try again.', 'error');
             } finally {
                 if (submitButton) submitButton.disabled = false;
             }
+        }
+
+        // Offer a real confirmation resend action when Supabase rejects an unverified account.
+        function showResendConfirmationButton(email) {
+            var signInForm = document.getElementById('officeFlowSignInForm');
+            if (!signInForm) return;
+            var existing = document.getElementById('resendConfirmationButton');
+            if (existing) existing.remove();
+            var button = document.createElement('button');
+            button.type = 'button';
+            button.id = 'resendConfirmationButton';
+            button.className = 'w-full mt-3 py-2 px-4 rounded-lg border border-gray-300 text-sm font-semibold text-gray-700 hover:bg-gray-50';
+            button.textContent = 'Resend confirmation email';
+            button.addEventListener('click', async function() {
+                button.disabled = true;
+                button.textContent = 'Sending confirmation email...';
+                try {
+                    var response = await supabase.auth.resend({ type: 'signup', email: email.trim() });
+                    if (response.error) {
+                        var message = response.error.message || 'Unable to resend the confirmation email.';
+                        if (/rate limit|after \d+ seconds/i.test(message)) {
+                            message = 'Please wait before requesting another email. Check your inbox and spam folder for the earlier confirmation link.';
+                        }
+                        showNotification('Confirmation Email Not Sent', message, 'error');
+                    } else {
+                        showNotification('Check Your Email', 'If this address has a pending registration, a new confirmation link has been sent. Check your inbox and spam folder.', 'info');
+                    }
+                } catch (error) {
+                    showNotification('Confirmation Email Not Sent', 'Please check your connection and try again later.', 'error');
+                } finally {
+                    button.disabled = false;
+                    button.textContent = 'Resend confirmation email';
+                }
+            });
+            signInForm.appendChild(button);
         }
 
         // Handle Sign Up
@@ -602,7 +642,7 @@
                     return;
                 }
                 if (result.pendingConfirmation) {
-                    showNotification('Check Your Email', 'Confirm your account at ' + result.email + ', then sign in.', 'info');
+                    showNotification('Check Your Email', 'Registration is awaiting email confirmation for ' + result.email + '. Open the confirmation link in your inbox or spam folder before signing in.', 'info');
                     return;
                 }
                 showNotification('Account Created!', 'Welcome ' + result.name, 'success');
