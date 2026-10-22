@@ -80,7 +80,7 @@ document.addEventListener('keydown', function(e) {
   document.body.appendChild(container);
 })();
 
-function showNotification(message, type, duration) {
+function ooesShowNotification(message, type, duration) {
   type = type || 'info';       // 'success' | 'error' | 'warning' | 'info'
   duration = duration || 4000;
 
@@ -130,14 +130,23 @@ function showNotification(message, type, duration) {
   }, duration);
 }
 
+// Preserve page-specific notification APIs (the authentication page uses title/message/type).
+if (typeof window.showNotification !== 'function') window.showNotification = ooesShowNotification;
+
 // ─── Forms ────────────────────────────────────────────────────────────────────
 
-// Prevent default form submission on all forms that have no action/method set
+// Only intercept generic placeholder forms. Never intercept forms with their own
+// submit handler: doing so creates false "success" messages on login/registration.
 document.addEventListener('DOMContentLoaded', function() {
   document.querySelectorAll('form:not([action]):not([method])').forEach(function(form) {
+    if (form.hasAttribute('onsubmit') ||
+        form.id === 'officeFlowSignInForm' ||
+        form.id === 'officeFlowSignUpForm') return;
     form.addEventListener('submit', function(e) {
       e.preventDefault();
-      showNotification('Form submitted successfully!', 'success');
+      if (typeof window.showNotification === 'function') {
+        window.showNotification('Form submitted successfully!', 'success');
+      }
     });
   });
 });
