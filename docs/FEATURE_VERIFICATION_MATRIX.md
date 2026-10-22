@@ -25,8 +25,9 @@ Status values: **PASS** means the stated SQL invariant passed; **PARTIAL** means
 | AUTH-01 | sign-up and profile provision in fresh browser | NOT RUN | Browser test with new controlled account |
 | AUTH-02 | session refresh/expiry/sign-out | NOT RUN | Test all protected pages with expired session |
 | AUTH-03 | package selection protected by Supabase session, not localStorage flag | PARTIAL / ISSUE | `dashboard/package-selection.html` begins with localStorage guard |
-| ORG-01 | self-service organization creation RPC exists | PARTIAL | `fn_create_organization_for_current_user`; end-to-end test required |
-| ORG-02 | second tenant cannot read/write first tenant data | NOT RUN in this audit | Run separate authenticated identity tests; do not infer from RLS enabled |
+| ORG-01 | self-service organization creation RPC exists | PARTIAL | `fn_create_organization_for_current_user` is deployed; fresh-user registration → email verification → workspace creation → first-admin routing still needs a controlled browser test. |
+| ORG-02 | second tenant cannot read/write first tenant data | NOT RUN | No separate customer tenant is present in the current production snapshot; use two controlled identities and test reads/writes across tenant boundaries. |
+| ORG-03 | employee invitation creation, email delivery and acceptance | PARTIAL | Production invitation table/RPCs are deployed with RLS and no direct anon/authenticated table privileges; Edge Function and UI are deployed to source. End-to-end email delivery and acceptance remain untested with a real invited mailbox. |
 | WF-01 | workflow definitions, versions and steps exist | PARTIAL | Schema and RPCs present |
 | WF-02 | request submit/approve/reject/return/cancel/resubmit | PARTIAL | RPCs and UI present; full role-separated browser test not run |
 | WF-03 | immutable in-flight workflow version | NOT RUN | Publish new version while old request pending |
