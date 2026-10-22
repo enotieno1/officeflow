@@ -5,6 +5,51 @@ var OOES_AUTH = {
   _readyResolve: null,
   ready: null,
 
+  // Fixed session lifetime: refreshes and navigation do not extend it.
+  // Change this value to adjust the permitted login duration.
+  SESSION_DURATION_MS: 30 * 60 * 1000,
+  SESSION_EXPIRY_KEY: 'ooesSessionExpiresAt',
+  _expiryTimer: null,
+
+  _scheduleSessionExpiry() {
+    if (this._expiryTimer) window.clearTimeout(this._expiryTimer);
+    var expiresAt = 0;
+    try { expiresAt = Number(window.localStorage.getItem(this.SESSION_EXPIRY_KEY)); } catch (_) {}
+    var remaining = expiresAt - Date.now();
+    if (!expiresAt || remaining <= 0) {
+      this._expireAndRedirect();
+      return;
+    }
+    this._expiryTimer = window.setTimeout(() => this._expireAndRedirect(), remaining);
+  },
+  _startSessionExpiry() {
+    try { window.localStorage.setItem(this.SESSION_EXPIRY_KEY, String(Date.now() + this.SESSION_DURATION_MS)); } catch (_) {}
+    this._scheduleSessionExpiry();
+  },
+  _isSessionExpired() {
+    try {
+      var expiresAt = Number(window.localStorage.getItem(this.SESSION_EXPIRY_KEY));
+      return !expiresAt || Date.now() >= expiresAt;
+    } catch (_) {
+      // Fail closed if expiry cannot be verified.
+      return true;
+    }
+  },
+  _clearSessionExpiry() {
+    try { window.localStorage.removeItem(this.SESSION_EXPIRY_KEY); } catch (_) {}
+  },
+  _expireAndRedirect() {
+    this._session = null;
+    this._clearSessionFlag();
+    this._clearSessionExpiry();
+    // End the Supabase session as well as the local application session.
+    supabase.auth.signOut().catch(function () {}).finally(function () {
+      if (!window.location.pathname.includes('auth.html')) {
+        window.location.replace('/dashboard/auth.html?reason=session_expired');
+      }
+    });
+  },
+
   ROLE_PERMISSIONS: {
     employee:      {canEdit:true,  canDelete:false, canViewFinance:false, canManageUsers:false},
     officer:       {canEdit:true,  canDelete:false, canViewFinance:true,  canManageUsers:false},
@@ -77,6 +122,7 @@ var OOES_AUTH = {
         return { error: (result.error && result.error.message) || 'Unable to sign in. Check your email and password, then try again.' };
       }
       var session = await this._loadProfile(result.data.user);
+      this._startSessionExpiry();
       this._setSessionFlag();
       return session;
     } catch (e) {
@@ -107,6 +153,7 @@ var OOES_AUTH = {
       }
       if (result.data.session) {
         var session = await this._loadProfile(result.data.user);
+        this._startSessionExpiry();
         this._setSessionFlag();
         return session;
       }
@@ -121,6 +168,8 @@ var OOES_AUTH = {
     finally {
       this._session = null;
       this._clearSessionFlag();
+      this._clearSessionExpiry();
+      if (this._expiryTimer) window.clearTimeout(this._expiryTimer);
     }
     if (redirect !== false) window.location.href = '/dashboard/auth.html';
   },
@@ -135,6 +184,15 @@ var OOES_AUTH = {
 
   async requireAuth() {
     try {
+      // The deadline is created at login and is deliberately not reset by page refreshes.
+      if (this._isSessionExpired()) {
+        this._session = null;
+        this._clearSessionFlag();
+        this._clearSessionExpiry();
+        await supabase.auth.signOut().catch(function () {});
+        window.location.replace('/dashboard/auth.html?reason=session_expired');
+        return false;
+      }
       var result = await supabase.auth.getSession();
       if (result.error) throw result.error;
       if (!result.data || !result.data.session) {
@@ -143,10 +201,12 @@ var OOES_AUTH = {
         return false;
       }
       await this._loadProfile(result.data.session.user);
+      this._scheduleSessionExpiry();
       this._setSessionFlag();
       return true;
     } catch (e) {
       this._clearSessionFlag();
+      this._clearSessionExpiry();
       window.location.replace('/dashboard/auth.html?auth_error=session');
       return false;
     }
@@ -171,6 +231,16 @@ OOES_AUTH.ready = new Promise(function (resolve) { OOES_AUTH._readyResolve = res
       OOES_AUTH._readyResolve(ok);
     });
   } else {
+    // Expired users must not retain an authenticated Supabase session on the login page.
+    document.addEventListener('DOMContentLoaded', function () {
+      if (new URLSearchParams(window.location.search).get('reason') === 'session_expired') {
+        var banner = document.createElement('div');
+        banner.setAttribute('role', 'status');
+        banner.style.cssText = 'margin:12px auto;padding:12px 16px;max-width:560px;border:1px solid #d6b979;border-radius:8px;background:#fff8e7;color:#5c4821;font-size:14px;';
+        banner.textContent = 'Your OfficeFlow session has expired. Please sign in again.';
+        document.body.prepend(banner);
+      }
+    });
     OOES_AUTH._readyResolve(false);
   }
 })();
