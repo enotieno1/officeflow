@@ -33,6 +33,11 @@
       ['Departments','departments.html','fa-building'],
       ['Operations Department (Classic)','operations-department.html','fa-gears'],
       ['Sales & Marketing (Classic)','sales-department.html','fa-chart-line']
+    ]},
+    { title: 'Communication & Support', items: [
+      ['Gmail','gmail-system.html','fa-envelope-open-text'],
+      ['Pricing','pricing.html','fa-tags'],
+      ['Contact','contact.html','fa-headset']
     ]}
   ];
 
