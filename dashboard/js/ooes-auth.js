@@ -88,7 +88,17 @@ var OOES_AUTH = {
           emailRedirectTo: confirmationUrl
         }
       });
-      if (result.error) return { error: result.error.message };
+      if (result.error) {
+        var authMessage = result.error.message || 'Unable to create your account. Please try again.';
+        if (/email rate limit exceeded|rate limit/i.test(authMessage)) {
+          authMessage = 'OfficeFlow reached the email provider sending limit. Please wait before requesting another confirmation email. If this continues, the platform administrator must configure a production SMTP provider in Supabase Auth.';
+        } else if (/already registered|user already exists/i.test(authMessage)) {
+          authMessage = 'An account may already exist for this email. Try signing in, or use Forgot password if you cannot access it.';
+        } else if (/password.*(weak|short)|weak password/i.test(authMessage)) {
+          authMessage = 'Please choose a stronger password that meets the password requirements.';
+        }
+        return { error: authMessage };
+      }
       if (!result.data || !result.data.user) {
         return { error: 'If registration succeeded, check your email to confirm the account, then sign in.' };
       }
