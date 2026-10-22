@@ -9,9 +9,22 @@ var OOES_AUTH = {
   // Change this value to adjust the permitted login duration.
   SESSION_DURATION_MS: 30 * 60 * 1000,
   SESSION_EXPIRY_KEY: 'ooesSessionExpiresAt',
+  _expiryTimer: null,
 
+  _scheduleSessionExpiry() {
+    if (this._expiryTimer) window.clearTimeout(this._expiryTimer);
+    var expiresAt = 0;
+    try { expiresAt = Number(window.localStorage.getItem(this.SESSION_EXPIRY_KEY)); } catch (_) {}
+    var remaining = expiresAt - Date.now();
+    if (!expiresAt || remaining <= 0) {
+      this._expireAndRedirect();
+      return;
+    }
+    this._expiryTimer = window.setTimeout(() => this._expireAndRedirect(), remaining);
+  },
   _startSessionExpiry() {
     try { window.localStorage.setItem(this.SESSION_EXPIRY_KEY, String(Date.now() + this.SESSION_DURATION_MS)); } catch (_) {}
+    this._scheduleSessionExpiry();
   },
   _isSessionExpired() {
     try {
@@ -156,6 +169,7 @@ var OOES_AUTH = {
       this._session = null;
       this._clearSessionFlag();
       this._clearSessionExpiry();
+      if (this._expiryTimer) window.clearTimeout(this._expiryTimer);
     }
     if (redirect !== false) window.location.href = '/dashboard/auth.html';
   },
@@ -187,6 +201,7 @@ var OOES_AUTH = {
         return false;
       }
       await this._loadProfile(result.data.session.user);
+      this._scheduleSessionExpiry();
       this._setSessionFlag();
       return true;
     } catch (e) {
