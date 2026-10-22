@@ -55,8 +55,8 @@ Status values: **PASS** means the stated SQL invariant passed; **PARTIAL** means
 
 | Table | Rows |
 |---|---:|
-| organizations | 1 |
-| profiles | 3 |
+| organizations | 1 (bootstrap organization only; no customer workspace confirmed) |
+| profiles | 6 |
 | workflow_definitions | 9 |
 | requests | 2 |
 | request_steps | 3 |
@@ -64,6 +64,7 @@ Status values: **PASS** means the stated SQL invariant passed; **PARTIAL** means
 | automation_rules | 0 |
 | automation_runs | 0 |
 | email_outbox | 0 |
+| organization_invitations | 0 pending |
 
 These counts are not a user-quality measure. They indicate that automation/email and pilot evidence should be generated in controlled tests rather than inferred from existing production activity.
 
