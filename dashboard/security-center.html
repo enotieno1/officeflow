@@ -56,4 +56,6 @@ $('refresh').addEventListener('click',load);$('search').addEventListener('input'
 $('export').addEventListener('click',()=>{const cols=['created_at','action','actor_id','request_id','id','details'];const quote=v=>'"'+String(v??'').replace(/"/g,'""')+'"';const csv=[cols.join(','),...visibleEvents.map(x=>cols.map(k=>quote(k==='details'?JSON.stringify(x[k]??{}):x[k])).join(','))].join('\r\n');const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='officeflow-audit-events.csv';a.click();URL.revokeObjectURL(url)});
 document.addEventListener('DOMContentLoaded',load);
 </script>
+
+<script src="/dashboard/js/shared-navigation.js" defer></script>
 </body></html>
