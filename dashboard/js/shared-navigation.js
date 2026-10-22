@@ -79,7 +79,7 @@
       body.of-nav-injected>.of-shared-sidebar{margin:0!important}
       body:has(.of-shared-sidebar) .ml-56{margin-left:256px!important}
       body:has(.of-shared-sidebar) .ml-64{margin-left:256px!important}
-      body:has(.of-shared-sidebar) .container.mx-auto{margin-left:272px!important;margin-right:16px!important;max-width:calc(100% - 288px)!important}
+      body:has(.of-shared-sidebar) .container.mx-auto{margin-left:272px!important;margin-right:16px!important;max-width:calc(100% - 288px)!important}body:has(.of-shared-sidebar) .ml-56 .container.mx-auto,body:has(.of-shared-sidebar) .ml-64 .container.mx-auto{margin-left:auto!important;margin-right:auto!important;max-width:100%!important}body.of-nav-injected .container.mx-auto{margin-left:auto!important;margin-right:auto!important;max-width:100%!important}
       #of-nav-toggle{display:none;position:fixed;left:10px;top:10px;z-index:1002;border:0;border-radius:8px;background:#16213e;color:#fff;padding:10px 12px;box-shadow:0 2px 12px #0003}
       #of-nav-overlay{display:none;position:fixed;inset:0;background:#0b1220a6;z-index:999}
       @media(max-width:768px){body.of-nav-injected{padding-left:0!important}body:has(.of-shared-sidebar) .ml-56,body:has(.of-shared-sidebar) .ml-64{margin-left:0!important}body:has(.of-shared-sidebar) .container.mx-auto{margin-left:0!important;margin-right:auto!important;max-width:100%!important}.of-shared-sidebar{transform:translateX(-102%)}.of-shared-sidebar.of-nav-open{transform:translateX(0)}#of-nav-toggle{display:block}#of-nav-overlay.of-nav-overlay-open{display:block}}
