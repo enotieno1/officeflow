@@ -31,6 +31,7 @@
     ]},
     { title: 'Organization & Departments', items: [
       ['Departments','departments.html','fa-building'],
+      ['Team Invitations','team-invitations.html','fa-user-plus'],
       ['Communication Department','communication-department.html','fa-comments'],
       ['Operations Department','operations-department.html','fa-gears'],
       ['Sales & Marketing','sales-department.html','fa-chart-line']
