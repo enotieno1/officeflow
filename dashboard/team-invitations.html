@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Team Invitations | OfficeFlow</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/dashboard/js/config.js"></script>
+<script>var supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);</script>
+<link rel="stylesheet" href="css/executive-theme.css"><link rel="stylesheet" href="css/mobile.css">
+</head>
+<body class="bg-gray-50">
+<header class="of-header px-6 py-4 flex items-center justify-between">
+<div><div class="of-eyebrow">Organization administration</div><h1 class="of-serif text-2xl font-semibold">Team invitations</h1><p class="text-sm text-gray-500 mt-1">Invite colleagues into this organization’s workspace.</p></div>
+<a href="/dashboard/index.html" class="text-sm" style="color:var(--of-brass)">← Dashboard</a>
+</header>
+<main class="max-w-5xl mx-auto p-6 space-y-6">
+<section class="of-card p-6">
+<h2 class="of-serif text-xl font-semibold">Invite an employee</h2>
+<p class="text-sm text-gray-600 mt-2">An invitation is sent to the employee’s email. They must use that verified email to accept and join this organization.</p>
+<form id="inviteForm" class="grid md:grid-cols-2 gap-4 mt-5">
+<div class="md:col-span-2"><label for="inviteEmail" class="block text-sm font-medium mb-1">Work email address</label><input id="inviteEmail" type="email" required maxlength="320" autocomplete="email" placeholder="colleague@organization.com" class="w-full rounded-lg border border-gray-300 px-4 py-3"></div>
+<div><label for="inviteRole" class="block text-sm font-medium mb-1">Access role</label><select id="inviteRole" class="w-full rounded-lg border border-gray-300 px-4 py-3"><option value="employee">Employee</option><option value="officer">Officer</option><option value="manager">Manager</option><option value="administrator">Organization administrator</option><option value="auditor">Auditor</option></select><p class="text-xs text-gray-500 mt-1">Platform super-admin access cannot be granted through invitations.</p></div>
+<div><label for="inviteUnit" class="block text-sm font-medium mb-1">Department (optional)</label><select id="inviteUnit" class="w-full rounded-lg border border-gray-300 px-4 py-3"><option value="">No department assigned</option></select></div>
+<div class="md:col-span-2 flex flex-wrap items-center gap-3"><button id="sendButton" type="submit" class="rounded-lg px-5 py-3 text-white font-semibold" style="background:var(--of-navy)">Send invitation</button><span id="formStatus" class="text-sm text-gray-600" role="status" aria-live="polite"></span></div>
+</form>
+</section>
+<section class="of-card p-6">
+<div class="flex items-center justify-between gap-3"><div><h2 class="of-serif text-xl font-semibold">Recent invitations</h2><p class="text-sm text-gray-600 mt-1">Invitations expire after seven days.</p></div><button id="refreshButton" class="text-sm underline" style="color:var(--of-navy)" type="button">Refresh</button></div>
+<div id="listStatus" class="text-sm text-gray-600 mt-4" role="status" aria-live="polite">Loading invitations…</div>
+<div class="overflow-x-auto mt-3"><table class="w-full text-sm text-left"><thead><tr class="border-b text-gray-500"><th class="py-3 pr-4">Email</th><th class="py-3 pr-4">Role</th><th class="py-3 pr-4">Status</th><th class="py-3">Expires</th></tr></thead><tbody id="invitationRows"></tbody></table></div>
+</section>
+</main>
+<script src="/dashboard/js/ooes-auth.js"></script><script src="/dashboard/js/shared-navigation.js" defer></script>
+<script>
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function statusMessage(id,msg,error=false){const el=document.getElementById(id);el.textContent=msg;el.className='text-sm '+(error?'text-red-700':'text-gray-600');}
+async function loadInvitations(){
+ const target=document.getElementById('invitationRows');target.innerHTML='';
+ statusMessage('listStatus','Loading invitations…');
+ const {data,error}=await supabase.rpc('fn_list_org_invitations');
+ if(error){statusMessage('listStatus',error.message||'Unable to load invitations.',true);return;}
+ if(!data||!data.length){statusMessage('listStatus','No invitations yet.');return;}
+ statusMessage('listStatus',data.length+' invitation(s)');
+ target.innerHTML=data.map(i=>'<tr class="border-b border-gray-100"><td class="py-3 pr-4">'+esc(i.email)+'</td><td class="py-3 pr-4">'+esc(i.role)+'</td><td class="py-3 pr-4">'+esc(i.status)+'</td><td class="py-3">'+esc(new Date(i.expires_at).toLocaleString())+'</td></tr>').join('');
+}
+async function initialize(){
+ await OOES_AUTH.ready;
+ const account=OOES_AUTH.getSession();
+ if(!account){statusMessage('listStatus','Please sign in first.',true);document.getElementById('sendButton').disabled=true;return;}
+ if(account.role!=='administrator'){statusMessage('listStatus','Only an organization administrator can manage invitations.',true);document.getElementById('sendButton').disabled=true;document.getElementById('inviteForm').hidden=true;return;}
+ const {data:departments}=await supabase.from('departments').select('id,name').eq('is_active',true).order('name');
+ (departments||[]).forEach(d=>{const o=document.createElement('option');o.value=d.id;o.textContent=d.name;document.getElementById('inviteUnit').appendChild(o);});
+ await loadInvitations();
+}
+document.getElementById('inviteForm').addEventListener('submit',async e=>{
+ e.preventDefault();const btn=document.getElementById('sendButton');const email=document.getElementById('inviteEmail').value.trim().toLowerCase();const role=document.getElementById('inviteRole').value;const unit=document.getElementById('inviteUnit').value;
+ btn.disabled=true;btn.textContent='Sending…';statusMessage('formStatus','Sending secure invitation…');
+ try{
+  const {data:{session},error:sessionError}=await supabase.auth.getSession();if(sessionError||!session)throw new Error('Your session has expired. Please sign in again.');
+  const response=await fetch(SUPABASE_URL+'/functions/v1/organization-invite',{method:'POST',headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':'Bearer '+session.access_token},body:JSON.stringify({email,role,unit_id:unit||null})});
+  const result=await response.json();if(!response.ok||!result.success)throw new Error(result.error||'Invitation could not be sent.');
+  statusMessage('formStatus','Invitation email sent to '+email+'.');document.getElementById('inviteEmail').value='';await loadInvitations();
+ }catch(err){statusMessage('formStatus',err.message||'Invitation failed. Please retry.',true);}
+ finally{btn.disabled=false;btn.textContent='Send invitation';}
+});
+document.getElementById('refreshButton').addEventListener('click',loadInvitations);
+document.addEventListener('DOMContentLoaded',initialize);
+</script></body></html>
