@@ -882,37 +882,122 @@
         }
         
         function setupNavigation() {
-            const navLinks = document.querySelectorAll('.nav-link');
-            const currentHash = window.location.hash || '#editor';
-            
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === currentHash) {
-                    link.classList.add('active');
-                }
-            });
-            
-            navLinks.forEach(link => {
+            let panel = document.getElementById('excelTabPanel');
+            if (!panel) {
+                panel = document.createElement('section');
+                panel.id = 'excelTabPanel';
+                panel.className = 'spreadsheet-container';
+                panel.style.cssText = 'padding:24px;min-height:360px;margin-top:0';
+                document.querySelector('.content-area').appendChild(panel);
+            }
+            document.querySelectorAll('.nav-link').forEach(link => {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
                     const href = this.getAttribute('href');
-                    window.location.hash = href;
-                    updateActiveNav();
+                    if (window.location.hash !== href) window.location.hash = href;
+                    renderExcelTab(href);
                 });
             });
+            renderExcelTab(window.location.hash || '#editor');
         }
-        
-        function updateActiveNav() {
-            const navLinks = document.querySelectorAll('.nav-link');
-            const currentHash = window.location.hash || '#editor';
-            
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === currentHash) {
-                    link.classList.add('active');
-                }
+
+        function renderExcelTab(hash) {
+            const allowed = ['#editor','#templates','#import','#export','#preferences','#help'];
+            if (!allowed.includes(hash)) hash = '#editor';
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.toggle('active', link.getAttribute('href') === hash));
+            const panel = document.getElementById('excelTabPanel');
+            if (!panel) return;
+            const editorNodes = ['.file-info','.toolbar','.spreadsheet-container'];
+            editorNodes.forEach(selector => {
+                document.querySelectorAll('.content-area > ' + selector).forEach(node => {
+                    if (node.id !== 'excelTabPanel') node.style.display = hash === '#editor' ? '' : 'none';
+                });
             });
+            const importBar = document.getElementById('excelImportInput')?.parentElement;
+            if (importBar) importBar.style.display = hash === '#editor' ? 'none' : 'none';
+            panel.style.display = hash === '#editor' ? 'none' : 'block';
+            if (hash === '#editor') return;
+
+            const card = (title, description, button, action, icon='fa-circle-check') =>
+                '<div style="border:1px solid var(--color-border);border-radius:12px;padding:18px;background:#fff;margin-bottom:12px"><h3 style="font-weight:700;font-size:1.05rem;margin-bottom:6px"><i class="fas '+icon+' mr-2" style="color:var(--color-accent-primary)"></i>'+title+'</h3><p style="color:var(--color-text-secondary);margin-bottom:14px">'+description+'</p><button type="button" class="action-button" data-excel-action="'+action+'">'+button+'</button></div>';
+            const heading = (title, desc) => '<h2 class="section-title">'+title+'</h2><p style="color:var(--color-text-secondary);margin:-12px 0 20px">'+desc+'</p>';
+            if (hash === '#templates') {
+                panel.innerHTML = heading('Workbook Templates','Choose a practical starting point. Selecting a template fills the current workbook; save it to keep a cloud copy.') +
+                    card('Blank workbook','Start from an empty spreadsheet.','Use blank workbook','template-blank','fa-file') +
+                    card('Monthly budget','Income, expense categories, budget and actual amounts.','Use budget template','template-budget','fa-wallet') +
+                    card('Staff register','Track employee number, name, department, email and status.','Use staff template','template-staff','fa-users') +
+                    card('Expense tracker','Record date, reference, category, description, amount and approval status.','Use expense template','template-expenses','fa-receipt');
+            } else if (hash === '#import') {
+                panel.innerHTML = heading('Import Spreadsheet','Import an Excel or CSV file into the editor. Imported data is not stored in the cloud until you press Save.') +
+                    '<div style="border:1px dashed var(--color-accent-primary);border-radius:12px;padding:26px;text-align:center;background:var(--color-bg-primary)"><i class="fas fa-file-import" style="font-size:2rem;color:var(--color-accent-primary)"></i><h3 style="font-weight:700;margin:12px 0">Choose a file to import</h3><p style="color:var(--color-text-secondary);margin-bottom:18px">Supported formats: .xlsx, .xls and .csv. The first worksheet is imported, up to 100 rows and 10 columns.</p><input id="excelTabImportInput" type="file" accept=".xlsx,.xls,.csv" style="display:block;max-width:100%;margin:0 auto 16px"><button type="button" class="action-button" data-excel-action="import-file"><i class="fas fa-upload mr-2"></i>Import selected file</button></div>';
+            } else if (hash === '#export') {
+                panel.innerHTML = heading('Export Workbook','Download a copy of the current workbook to your device. Exporting does not change the cloud-saved version.') +
+                    card('Excel workbook (.xlsx)','Recommended for sharing with Excel and compatible spreadsheet apps.','Download .xlsx','export-xlsx','fa-file-excel') +
+                    card('CSV file (.csv)','Download the current grid as comma-separated values. Formatting is not included.','Download .csv','export-csv','fa-file-csv');
+            } else if (hash === '#preferences') {
+                panel.innerHTML = heading('Spreadsheet Preferences','These settings affect this page only. Your workbook data is unchanged.') +
+                    '<div style="border:1px solid var(--color-border);border-radius:12px;padding:18px;margin-bottom:12px"><label style="display:flex;align-items:center;gap:10px;margin-bottom:16px"><input id="excelShowGrid" type="checkbox" checked> Show grid lines</label><label style="display:block;margin-bottom:8px;font-weight:600" for="excelFontSize">Cell text size</label><select id="excelFontSize" style="padding:8px;border:1px solid var(--color-border);border-radius:6px"><option value="12px">Small</option><option value="14px" selected>Standard</option><option value="16px">Large</option><option value="18px">Extra large</option></select><div style="margin-top:18px"><button type="button" class="action-button" data-excel-action="apply-preferences">Apply preferences</button></div></div>';
+            } else if (hash === '#help') {
+                panel.innerHTML = heading('Spreadsheet Help','Quick guidance for the main spreadsheet tasks.') +
+                    card('Edit cells','Select a cell and type. Use Tab to move across and Enter to move down. Use the toolbar to undo, redo, cut, copy, paste and format text.','Open editor','go-editor','fa-keyboard') +
+                    card('Save your work','Give the workbook a name, then choose Save. Saved workbooks appear in the Open a saved workbook list.','Open editor','go-editor','fa-cloud') +
+                    card('Import and export','Import .xlsx, .xls or .csv files. Export downloads an .xlsx or .csv copy to your device.','Open import','go-import','fa-file-import');
+            }
+            panel.querySelectorAll('[data-excel-action]').forEach(button => button.addEventListener('click', () => handleExcelTabAction(button.dataset.excelAction)));
         }
+
+        function handleExcelTabAction(action) {
+            if (action === 'go-editor') { window.location.hash = '#editor'; renderExcelTab('#editor'); return; }
+            if (action === 'go-import') { window.location.hash = '#import'; renderExcelTab('#import'); return; }
+            if (action === 'template-blank') { newSpreadsheet(); window.location.hash = '#editor'; renderExcelTab('#editor'); return; }
+            const templates = {
+                'template-budget': [['Date','Description','Category','Budget','Actual','Variance','Notes'],['','','Income','','','',''],['','','Expenses','','','','']],
+                'template-staff': [['Employee No.','First Name','Last Name','Department','Email','Phone','Status'],['','','','','','','']],
+                'template-expenses': [['Date','Reference','Category','Description','Amount (KES)','Requested By','Approval Status'],['','','','','','','Pending']]
+            };
+            if (templates[action]) {
+                spreadsheetData = {};
+                templates[action].forEach((row,r) => row.forEach((value,col) => { if (value !== '') spreadsheetData[String.fromCharCode(65+col)+(r+1)] = value; }));
+                document.getElementById('spreadsheetName').value = ({'template-budget':'Monthly Budget','template-staff':'Staff Register','template-expenses':'Expense Tracker'})[action];
+                currentSpreadsheetId = null; spreadsheetDirty = true; history = [JSON.parse(JSON.stringify(spreadsheetData))]; historyIndex = 0;
+                refreshGrid(); setExcelStatus('Template loaded. Review it in the editor and press Save to store it.', 'warning');
+                window.location.hash = '#editor'; renderExcelTab('#editor'); return;
+            }
+            if (action === 'export-xlsx') { exportSpreadsheet(); return; }
+            if (action === 'export-csv') { downloadSpreadsheetCSV(); return; }
+            if (action === 'import-file') {
+                const input = document.getElementById('excelTabImportInput');
+                if (!input || !input.files || !input.files[0]) { setExcelStatus('Choose an Excel or CSV file first.', 'warning'); return; }
+                importSpreadsheetFile(input.files[0]).then(() => { window.location.hash = '#editor'; renderExcelTab('#editor'); });
+                return;
+            }
+            if (action === 'apply-preferences') {
+                const showGrid = document.getElementById('excelShowGrid')?.checked;
+                const fontSize = document.getElementById('excelFontSize')?.value || '14px';
+                document.querySelectorAll('#spreadsheetGrid .cell').forEach(cell => { cell.style.borderColor = showGrid ? 'var(--color-border)' : 'transparent'; cell.style.fontSize = fontSize; });
+                setExcelStatus('Preferences applied to this workbook view.', 'success'); return;
+            }
+        }
+
+        function downloadSpreadsheetCSV() {
+            const rows = [];
+            for (let row=0; row<100; row++) {
+                const values = [];
+                for (let col=0; col<10; col++) {
+                    const address = String.fromCharCode(65+col)+(row+1);
+                    const value = spreadsheetData[address] || '';
+                    values.push('"'+String(value).replace(/"/g,'""')+'"');
+                }
+                rows.push(values.join(','));
+            }
+            const blob = new Blob([rows.join('\\r\\n')], {type:'text/csv;charset=utf-8;'});
+            const url = URL.createObjectURL(blob); const a = document.createElement('a');
+            a.href=url; a.download=((document.getElementById('spreadsheetName').value||'OfficeFlow-Workbook').replace(/[^a-z0-9_-]/gi,'_'))+'.csv';
+            document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+            showNotification('Workbook exported as CSV', 'success');
+        }
+
+        function updateActiveNav() { renderExcelTab(window.location.hash || '#editor'); }
         
         // Handle hash changes
         window.addEventListener('hashchange', updateActiveNav);
