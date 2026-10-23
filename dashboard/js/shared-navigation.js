@@ -114,7 +114,46 @@
       #of-nav-overlay{display:none;position:fixed;inset:0;background:#0b1220a6;z-index:999}
       @media(max-width:768px){#of-nav-toggle{left:10px!important;top:10px!important}body.of-nav-collapsed #of-nav-toggle{left:10px!important}body.of-nav-injected{padding-left:0!important}body:has(.of-shared-sidebar) .ml-56,body:has(.of-shared-sidebar) .ml-64{margin-left:0!important}body:has(.of-shared-sidebar) .container.mx-auto{margin-left:0!important;margin-right:auto!important;max-width:100%!important}.of-shared-sidebar{transform:translateX(-102%)}.of-shared-sidebar.of-nav-open{transform:translateX(0)}#of-nav-toggle{display:block}#of-nav-overlay.of-nav-overlay-open{display:block}}
     `;
+    // Keep the collapsed state stronger than legacy page margins and injected-body padding.
+    css.textContent += `
+      body.of-nav-collapsed.of-nav-injected{padding-left:0!important}
+      body.of-nav-collapsed:has(.of-shared-sidebar) .ml-56,body.of-nav-collapsed:has(.of-shared-sidebar) .ml-64{margin-left:0!important;width:100%!important;max-width:100%!important}
+      body.of-nav-collapsed:has(.of-shared-sidebar) .container.mx-auto{margin-left:auto!important;margin-right:auto!important;max-width:100%!important}
+      #of-horizontal-scroll{position:fixed;left:0;right:0;bottom:0;height:16px;overflow-x:auto;overflow-y:hidden;z-index:1300;background:rgba(226,232,240,.94);border-top:1px solid #cbd5e1;display:none;scrollbar-width:auto}
+      #of-horizontal-scroll-inner{height:1px;pointer-events:none}
+      @media(max-width:768px){#of-horizontal-scroll{bottom:0}}
+    `;
     document.head.appendChild(css);
+    // A bottom horizontal scrollbar appears only when the page really overflows horizontally.
+    if (!document.getElementById('of-horizontal-scroll')) {
+      const horizontalScroll = document.createElement('div');
+      horizontalScroll.id = 'of-horizontal-scroll';
+      horizontalScroll.setAttribute('role','scrollbar');
+      horizontalScroll.setAttribute('aria-label','Horizontal page scroll');
+      horizontalScroll.tabIndex = 0;
+      horizontalScroll.innerHTML = '<div id="of-horizontal-scroll-inner"></div>';
+      document.body.appendChild(horizontalScroll);
+      const horizontalInner = horizontalScroll.firstElementChild;
+      let syncingHorizontalScroll = false;
+      const refreshHorizontalScroll = () => {
+        const width = Math.max(document.documentElement.scrollWidth, document.body.scrollWidth);
+        horizontalInner.style.width = width + 'px';
+        horizontalScroll.style.display = width > window.innerWidth + 2 ? 'block' : 'none';
+        horizontalScroll.scrollLeft = window.scrollX || document.documentElement.scrollLeft || 0;
+      };
+      horizontalScroll.addEventListener('scroll', () => {
+        if (syncingHorizontalScroll) return;
+        syncingHorizontalScroll = true;
+        window.scrollTo(horizontalScroll.scrollLeft, window.scrollY || 0);
+        syncingHorizontalScroll = false;
+      }, {passive:true});
+      window.addEventListener('scroll', () => {
+        if (!syncingHorizontalScroll) horizontalScroll.scrollLeft = window.scrollX || document.documentElement.scrollLeft || 0;
+      }, {passive:true});
+      window.addEventListener('resize', refreshHorizontalScroll);
+      if (window.ResizeObserver) new ResizeObserver(refreshHorizontalScroll).observe(document.body);
+      refreshHorizontalScroll();
+    }
     if (!document.getElementById('of-nav-toggle')) {
       const toggle = document.createElement('button');
       toggle.id = 'of-nav-toggle'; toggle.type = 'button'; toggle.setAttribute('aria-label','Toggle dashboard navigation'); toggle.title = 'Show or hide dashboard navigation'; toggle.innerHTML = '<i class="fas fa-bars" aria-hidden="true"></i>';
