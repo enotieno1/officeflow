@@ -1,0 +1,2 @@
+-- OfficeFlow payroll provider integration foundation.
+-- No provider credentials or live transfers are created by this migration.
