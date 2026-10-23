@@ -18,7 +18,15 @@
         .toolbar-btn.active { background-color: #3b82f6; color: white; }
     </style>
 <link rel="stylesheet" href="css/mobile.css">
-<link rel="stylesheet" href="css/executive-theme.css"></head>
+<link rel="stylesheet" href="css/executive-theme.css">
+<style id="email-workspace-layout-fix">
+  /* Keep the email workspace inside the viewport beside the shared navigation. */
+  #emailWorkspace{margin-left:256px!important;width:calc(100% - 256px)!important;max-width:calc(100% - 256px)!important;min-width:0!important;box-sizing:border-box!important}
+  body.of-nav-collapsed #emailWorkspace{margin-left:0!important;width:100%!important;max-width:100%!important}
+  #emailWorkspace main,#emailWorkspace header{min-width:0;max-width:100%;box-sizing:border-box}
+  #emailWorkspace .container.mx-auto{width:100%;max-width:100%;margin-left:auto!important;margin-right:auto!important;box-sizing:border-box}
+  @media(max-width:768px){#emailWorkspace{margin-left:0!important;width:100%!important;max-width:100%!important}}
+</style></head>
 <body class="bg-gray-50">
 <div id="sidebar" class="fixed inset-y-0 left-0 w-56 text-white z-50 flex flex-col overflow-y-auto" style="background:linear-gradient(135deg,#16213E 0%,#1F2C4F 100%);transition:transform 0.3s ease">
 <div class="p-4 border-b border-white border-opacity-20"><a href="/dashboard/index.html" style="color:white;text-decoration:none;font-size:18px;font-weight:bold">OfficeFlow</a></div>
@@ -57,7 +65,7 @@
 <button onclick="OOES_AUTH.logout()" style="color:rgba(252,165,165,1);background:none;border:none;cursor:pointer;margin-top:4px"><i class="fas fa-sign-out-alt"></i> Logout</button>
 </div>
 </div>
-<div style="margin-left:224px">
+<div id="emailWorkspace" style="margin-left:224px;box-sizing:border-box">
 
     <!-- Header -->
     <header class="gradient-bg text-white shadow-lg">
