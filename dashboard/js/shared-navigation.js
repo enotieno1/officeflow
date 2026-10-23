@@ -56,8 +56,7 @@
   function initialize() {
     if (!document.body || document.querySelector('.of-shared-sidebar')) return;
     const path = location.pathname.split('/').pop() || 'index.html';
-    // Email composition needs an unobstructed canvas: start with the desktop sidebar collapsed on that page.
-    if (path === 'email-system.html' && window.matchMedia('(min-width: 769px)').matches) document.body.classList.add('of-nav-collapsed');
+    // Keep the main navigation visible across every dashboard module, including Email & Communication.
     const original = document.getElementById('sidebar');
     const sidebar = original || document.createElement('aside');
     if (!original) sidebar.id = 'sidebar';
