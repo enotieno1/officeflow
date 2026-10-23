@@ -56,6 +56,8 @@
   function initialize() {
     if (!document.body || document.querySelector('.of-shared-sidebar')) return;
     const path = location.pathname.split('/').pop() || 'index.html';
+    // Email composition needs an unobstructed canvas: start with the desktop sidebar collapsed on that page.
+    if (path === 'email-system.html' && window.matchMedia('(min-width: 769px)').matches) document.body.classList.add('of-nav-collapsed');
     const original = document.getElementById('sidebar');
     const sidebar = original || document.createElement('aside');
     if (!original) sidebar.id = 'sidebar';
@@ -97,6 +99,10 @@
       body.of-nav-injected>.of-shared-sidebar{margin:0!important}
       body:has(.of-shared-sidebar) .ml-56,body:has(.of-shared-sidebar) .ml-64{width:auto;min-width:0;box-sizing:border-box}
       body.of-nav-collapsed .of-shared-sidebar{transform:translateX(-102%)!important}
+      body.of-nav-collapsed .of-shared-sidebar{visibility:hidden!important;pointer-events:none!important}
+      body.of-nav-collapsed #of-nav-toggle{left:12px!important}
+      body.of-nav-collapsed .ml-56,body.of-nav-collapsed .ml-64{margin-left:0!important;width:100%!important;max-width:100%!important}
+      body.of-nav-collapsed .container.mx-auto{margin-left:auto!important;margin-right:auto!important;max-width:100%!important}
       body.of-nav-collapsed:has(.of-shared-sidebar) .ml-56,body.of-nav-collapsed:has(.of-shared-sidebar) .ml-64{margin-left:0!important}
       body.of-nav-collapsed:has(.of-shared-sidebar) .container.mx-auto{margin-left:auto!important;margin-right:auto!important;max-width:100%!important}
       .modal,.modal.active,[role="dialog"],dialog{z-index:1200!important}
