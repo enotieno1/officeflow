@@ -91,14 +91,16 @@ document.addEventListener('DOMContentLoaded', function () {
       currentImage = null;
       byId('run-ocr').disabled = true;
       byId('make-pdf').disabled = true;
-      setStatus('Please choose a photo or image file (JPG, PNG, or another browser-supported image).', 'error');
+      byId('save-document').disabled = true;
+      setStatus('Please choose a JPG, PNG or WEBP image.', 'error');
       return;
     }
-    if (file.size > 15 * 1024 * 1024) {
+    if (file.size > 10 * 1024 * 1024) {
       currentImage = null;
       byId('run-ocr').disabled = true;
       byId('make-pdf').disabled = true;
-      setStatus('This image is larger than 15 MB. Resize it and upload again for reliable browser processing.', 'error');
+      byId('save-document').disabled = true;
+      setStatus('This image is larger than 10 MB. Resize it and upload again.', 'error');
       return;
     }
     currentImage = file;
@@ -112,9 +114,76 @@ document.addEventListener('DOMContentLoaded', function () {
     byId('download-text').disabled = true;
     byId('run-ocr').disabled = false;
     byId('make-pdf').disabled = false;
+    byId('save-document').disabled = false;
+    byId('save-document').textContent = 'Save to OfficeFlow';
     setStatus('Image selected. OfficeFlow is starting automatic text recognition…');
     recognizeImage();
   });
+
+
+  async function saveDocument() {
+    const button = byId('save-document');
+    const name = byId('scan-name').value.trim();
+    const folder = byId('scan-folder').value;
+    if (!currentImage) { setStatus('Choose a scan before saving.', 'error'); return; }
+    if (!name) { byId('scan-name').focus(); setStatus('Enter a document name before saving.', 'error'); return; }
+    if (!['image/jpeg','image/png','image/webp'].includes(currentImage.type)) {
+      setStatus('Use a JPG, PNG or WEBP image. These are the formats allowed by secure document storage.', 'error'); return;
+    }
+    if (currentImage.size > 10 * 1024 * 1024) {
+      setStatus('This file exceeds the 10 MB secure storage limit. Resize it and try again.', 'error'); return;
+    }
+    button.disabled = true;
+    const previousLabel = button.textContent;
+    button.textContent = 'Saving…';
+    setStatus('Checking your session and organization permissions…');
+    let uploadedPath = '';
+    try {
+      if (window.OOES_AUTH) {
+        await OOES_AUTH.ready;
+        if (!OOES_AUTH.isLoggedIn()) throw new Error('Your session has expired. Sign in again, then retry saving.');
+      }
+      const { data: authData, error: authError } = await supabase.auth.getUser();
+      if (authError) throw authError;
+      const user = authData && authData.user;
+      if (!user) throw new Error('You must be signed in to save documents.');
+      const { data: orgId, error: orgError } = await supabase.rpc('fn_current_org');
+      if (orgError) throw orgError;
+      if (!orgId) throw new Error('OfficeFlow could not identify your organization. Please sign in again or contact your administrator.');
+      const safeName = name.replace(/[^a-zA-Z0-9._-]+/g, '-').replace(/^-+|-+$/g, '').slice(0,100) || 'scanned-document';
+      uploadedPath = String(orgId) + '/' + user.id + '/' + Date.now() + '-' + crypto.randomUUID() + '-' + safeName + '.' + (currentImage.type === 'image/jpeg' ? 'jpg' : currentImage.type === 'image/png' ? 'png' : 'webp');
+      setStatus('Uploading the scan to private organization storage…');
+      const { error: uploadError } = await supabase.storage.from('officeflow-documents').upload(uploadedPath, currentImage, { contentType: currentImage.type, upsert: false });
+      if (uploadError) throw uploadError;
+      setStatus('File uploaded. Registering document metadata…');
+      const { error: insertError } = await supabase.from('documents').insert({
+        name: name,
+        type: currentImage.type,
+        size: String(currentImage.size),
+        folder: folder,
+        uploaded_by: user.email || user.id,
+        url: uploadedPath,
+        owner_id: user.id,
+        organization_id: orgId
+      });
+      if (insertError) {
+        await supabase.storage.from('officeflow-documents').remove([uploadedPath]);
+        uploadedPath = '';
+        throw insertError;
+      }
+      setStatus('Document saved successfully to your organization’s document register and private storage.', 'success');
+      button.textContent = 'Saved to OfficeFlow';
+      await window.loadOfficeFlowDocuments?.();
+      const refreshButton = byId('refresh');
+      if (refreshButton) refreshButton.click();
+      setTimeout(() => { if (button.isConnected) { button.textContent = previousLabel; button.disabled = !currentImage; } }, 2500);
+    } catch (error) {
+      setStatus('Could not save document: ' + (error && error.message ? error.message : 'Unknown storage or permission error.') + ' Your scan remains in this window; correct the issue and retry.', 'error');
+      button.textContent = previousLabel;
+      button.disabled = !currentImage;
+    }
+  }
+  byId('save-document').addEventListener('click', saveDocument);
 
   byId('run-ocr').addEventListener('click', recognizeImage);
 
