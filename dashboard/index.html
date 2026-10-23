@@ -9,6 +9,24 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link rel="stylesheet" href="css/mobile.css">
 <link rel="stylesheet" href="css/executive-theme.css">
+
+<style>
+.of-hero{background:linear-gradient(120deg,var(--of-navy),var(--of-navy-light));color:#fff;border-radius:14px;padding:22px 26px;display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;margin-bottom:24px;border-left:5px solid var(--of-brass)}
+.of-hero h3{font-size:20px;font-weight:700;margin:0 0 4px}.of-hero p{margin:0;color:#C7CEDB;font-size:14px;max-width:60ch}
+.of-hero a{background:var(--of-brass);color:#fff;font-weight:600;font-size:14px;padding:10px 18px;border-radius:9px;text-decoration:none}
+.of-hero a:hover{background:var(--of-brass-light)}
+.stat-card.k-amber{border-top:4px solid var(--of-amber)}.stat-card.k-red{border-top:4px solid var(--of-red)}.stat-card.k-navy{border-top:4px solid var(--of-navy)}
+.stat-card .of-stat-value{font-weight:700;letter-spacing:-.02em}
+.stat-card.k-red .of-stat-value.hot{color:var(--of-red)}.stat-card.k-amber .of-stat-value.hot{color:var(--of-amber)}
+.of-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-top:1px solid var(--of-border);text-decoration:none;color:inherit}
+.of-row:first-child{border-top:0}.of-row strong{display:block;font-size:14px}.of-row span.d{font-size:12px;color:var(--of-slate)}
+.of-pill{font-size:12px;font-weight:600;padding:3px 10px;border-radius:99px;background:#EDEAE0;color:var(--of-slate);white-space:nowrap}
+.of-pill.amber{background:#F6EBD2;color:var(--of-amber)}.of-pill.red{background:#F4DADA;color:var(--of-red)}.of-pill.green{background:#DDEFE5;color:var(--of-green)}
+.of-bar{height:8px;background:#EDEAE0;border-radius:9px;overflow:hidden;margin:8px 0 4px}.of-bar i{display:block;height:100%;background:var(--of-green);width:0;transition:width .6s ease}
+.mod-ic{width:38px;height:38px;border-radius:10px;background:#EEF0F6;display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+.qa-primary{background:var(--of-navy)!important;border-color:var(--of-navy)!important}.qa-primary p,.qa-primary i{color:#fff!important}
+@media(max-width:767px){.of-hero{padding:18px}.of-hero a{width:100%;text-align:center}.of-row{align-items:flex-start}.of-pill{white-space:normal;text-align:center}}
+</style>
 </head>
 <body class="bg-gray-100 min-h-screen">
 <div id="sidebar" class="fixed inset-y-0 left-0 w-64 gradient-bg text-white z-50 flex flex-col overflow-y-auto" style="transition:transform 0.3s ease">
@@ -49,7 +67,7 @@
 </div>
 <div class="ml-64 flex flex-col min-h-screen">
 <header class="of-header px-6 py-4 flex items-center justify-between sticky top-0 z-40">
-<div><p class="of-eyebrow mb-1">Dashboard</p><h2 class="of-greeting text-xl"><span data-user-name>there</span></h2>
+<div><p class="of-eyebrow mb-1">Dashboard</p><h2 class="of-greeting text-xl"><span id="greet">Welcome</span>, <span data-user-name>there</span></h2>
 <p class="text-sm of-mono text-gray-400 mt-1" id="current-date"></p></div>
 <div class="flex items-center gap-3">
 <div class="relative"><input type="text" id="globalSearch" placeholder="Search..." onkeydown="if(event.key==='Enter')globalSearchFn()" class="pl-8 pr-4 py-2 border rounded text-sm focus:outline-none" style="width:200px;border-color:var(--of-border)"><i class="fas fa-search absolute left-2.5 top-2.5 text-gray-400 text-xs"></i></div>
@@ -57,30 +75,31 @@
 </div>
 </header>
 <main class="p-6 flex-1">
+<section class="of-hero" id="attn"><div><h3 id="attn-title">Checking what needs your attention…</h3><p id="attn-sub">Approvals, overdue and escalated items are summarised below.</p></div><a href="my-work.html">Open My Work</a></section>
 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
-<div class="stat-card of-rule-top p-6">
+<div class="stat-card k-navy p-6">
 <p class="of-stat-label">Requests</p><p class="of-stat-value text-3xl mt-2" id="stat-requests">--</p><p class="text-xs text-gray-400 mt-2" id="stat-requests-sub">Loading...</p></div>
-<div class="stat-card of-rule-top p-6"><p class="of-stat-label">Pending Approvals</p><p class="of-stat-value text-3xl mt-2" id="stat-approvals">--</p><p class="text-xs text-gray-400 mt-2" id="stat-approvals-sub">Loading...</p></div>
-<div class="stat-card of-rule-top p-6"><p class="of-stat-label">Overdue</p><p class="of-stat-value text-3xl mt-2" id="stat-overdue">--</p><p class="text-xs text-gray-400 mt-2" id="stat-overdue-sub">Loading...</p></div>
-<div class="stat-card of-rule-top p-6"><p class="of-stat-label">Escalated</p><p class="of-stat-value text-3xl mt-2" id="stat-escalated">--</p><p class="text-xs text-gray-400 mt-2" id="stat-escalated-sub">Loading...</p></div>
+<div class="stat-card k-amber p-6"><p class="of-stat-label">Pending Approvals</p><p class="of-stat-value text-3xl mt-2" id="stat-approvals">--</p><p class="text-xs text-gray-400 mt-2" id="stat-approvals-sub">Loading...</p></div>
+<div class="stat-card k-red p-6"><p class="of-stat-label">Overdue</p><p class="of-stat-value text-3xl mt-2" id="stat-overdue">--</p><p class="text-xs text-gray-400 mt-2" id="stat-overdue-sub">Loading...</p></div>
+<div class="stat-card k-red p-6"><p class="of-stat-label">Escalated</p><p class="of-stat-value text-3xl mt-2" id="stat-escalated">--</p><p class="text-xs text-gray-400 mt-2" id="stat-escalated-sub">Loading...</p></div>
 </div>
 <div class="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-8">
-<div class="of-card p-6"><div class="flex items-center justify-between mb-4"><h3 class="of-serif text-lg font-semibold">My Work</h3><a href="my-work.html" class="text-sm" style="color:var(--of-brass)">My Work →</a></div><div id="tasks-list"><p class="text-center text-gray-500 py-8">Use <a href="my-work.html" style="color:var(--of-brass)">My Work</a> to review approvals assigned to you.</p></div></div>
-<div class="of-card p-6"><div class="flex items-center justify-between mb-4"><h3 class="of-serif text-lg font-semibold">Operational Status</h3><a href="control-tower.html" class="text-sm" style="color:var(--of-brass)">Control Tower →</a></div><div id="transactions-list"><p class="text-center text-gray-500 py-8">Use the <a href="control-tower.html" style="color:var(--of-brass)">Control Tower</a> to monitor workflow performance.</p></div></div>
+<div class="of-card p-6"><div class="flex items-center justify-between mb-4"><h3 class="of-serif text-lg font-semibold">My Work</h3><a href="my-work.html" class="text-sm" style="color:var(--of-brass)">My Work →</a></div><div id="tasks-list"><a class="of-row" href="my-work.html"><div><strong>Review pending approvals</strong><span class="d">Approvals assigned to you</span></div><span class="of-pill amber" id="mw-approvals">--</span></a><a class="of-row" href="my-work.html"><div><strong>Resolve overdue items</strong><span class="d">Past SLA, oldest first</span></div><span class="of-pill red" id="mw-overdue">--</span></a><a class="of-row" href="my-work.html"><div><strong>Respond to escalations</strong><span class="d">Needs leadership input</span></div><span class="of-pill red" id="mw-escalated">--</span></a></div></div>
+<div class="of-card p-6"><div class="flex items-center justify-between mb-4"><h3 class="of-serif text-lg font-semibold">Operational Status</h3><a href="control-tower.html" class="text-sm" style="color:var(--of-brass)">Control Tower →</a></div><div id="transactions-list"><p class="text-sm text-gray-500">Open-work indicators based on available workflow counts.</p><div class="of-bar"><i id="ontrack-bar"></i></div><div class="flex justify-between text-xs text-gray-500"><span id="ontrack-pct">--</span><a href="control-tower.html" style="color:var(--of-brass)">Open Control Tower →</a></div></div></div>
 </div>
 <section class="of-card p-6 mb-8"><div class="flex flex-wrap items-center justify-between gap-3 mb-4"><div><h3 class="of-serif text-lg font-semibold">All 9 Core Modules</h3><p class="text-sm text-gray-500 mt-1">Open a module from one clearly organized dashboard.</p></div><span class="text-xs of-mono text-gray-500">OFFICE OPERATIONS</span></div><div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-<a href="hr-system.html" class="border rounded-lg p-4 hover:border-[var(--of-brass)] transition" style="border-color:var(--of-border)"><i class="fas fa-users text-lg mb-3 block" style="color:var(--of-navy)"></i><p class="font-medium text-sm">Human Resources</p><p class="text-xs text-gray-500 mt-1">Staff records and HR operations</p></a>
-<a href="financial-management.html" class="border rounded-lg p-4 hover:border-[var(--of-brass)] transition" style="border-color:var(--of-border)"><i class="fas fa-coins text-lg mb-3 block" style="color:var(--of-navy)"></i><p class="font-medium text-sm">Finance & Administration</p><p class="text-xs text-gray-500 mt-1">Financial controls and office administration</p></a>
-<a href="tasks-management.html" class="border rounded-lg p-4 hover:border-[var(--of-brass)] transition" style="border-color:var(--of-border)"><i class="fas fa-list-check text-lg mb-3 block" style="color:var(--of-navy)"></i><p class="font-medium text-sm">Tasks & Workflow</p><p class="text-xs text-gray-500 mt-1">Requests, tasks and approvals</p></a>
-<a href="document-management.html" class="border rounded-lg p-4 hover:border-[var(--of-brass)] transition" style="border-color:var(--of-border)"><i class="fas fa-file-alt text-lg mb-3 block" style="color:var(--of-navy)"></i><p class="font-medium text-sm">Document Management</p><p class="text-xs text-gray-500 mt-1">Organized, searchable documents</p></a>
-<a href="email-system.html" class="border rounded-lg p-4 hover:border-[var(--of-brass)] transition" style="border-color:var(--of-border)"><i class="fas fa-envelope text-lg mb-3 block" style="color:var(--of-navy)"></i><p class="font-medium text-sm">Email & Communication</p><p class="text-xs text-gray-500 mt-1">Workplace communication tools</p></a>
-<a href="calendar-system.html" class="border rounded-lg p-4 hover:border-[var(--of-brass)] transition" style="border-color:var(--of-border)"><i class="fas fa-calendar-days text-lg mb-3 block" style="color:var(--of-navy)"></i><p class="font-medium text-sm">Calendar & Scheduling</p><p class="text-xs text-gray-500 mt-1">Events and work schedules</p></a>
-<a href="ai-features.html" class="border rounded-lg p-4 hover:border-[var(--of-brass)] transition" style="border-color:var(--of-border)"><i class="fas fa-wand-magic-sparkles text-lg mb-3 block" style="color:var(--of-navy)"></i><p class="font-medium text-sm">AI Productivity</p><p class="text-xs text-gray-500 mt-1">Assisted work and productivity</p></a>
-<a href="reports.html" class="border rounded-lg p-4 hover:border-[var(--of-brass)] transition" style="border-color:var(--of-border)"><i class="fas fa-chart-bar text-lg mb-3 block" style="color:var(--of-navy)"></i><p class="font-medium text-sm">Reports & Insights</p><p class="text-xs text-gray-500 mt-1">Operational reporting and visibility</p></a>
-<a href="security-center.html" class="border rounded-lg p-4 hover:border-[var(--of-brass)] transition" style="border-color:var(--of-border)"><i class="fas fa-shield-alt text-lg mb-3 block" style="color:var(--of-navy)"></i><p class="font-medium text-sm">Security & Access</p><p class="text-xs text-gray-500 mt-1">Access controls and audit visibility</p></a>
+<a href="hr-system.html" class="border rounded-lg p-4 hover:border-[var(--of-brass)] transition" style="border-color:var(--of-border)"><span class="mod-ic"><i class="fas fa-users text-lg" style="color:var(--of-navy)"></i></span><p class="font-medium text-sm">Human Resources</p><p class="text-xs text-gray-500 mt-1">Staff records and HR operations</p></a>
+<a href="financial-management.html" class="border rounded-lg p-4 hover:border-[var(--of-brass)] transition" style="border-color:var(--of-border)"><span class="mod-ic"><i class="fas fa-coins text-lg" style="color:var(--of-navy)"></i></span><p class="font-medium text-sm">Finance & Administration</p><p class="text-xs text-gray-500 mt-1">Financial controls and office administration</p></a>
+<a href="tasks-management.html" class="border rounded-lg p-4 hover:border-[var(--of-brass)] transition" style="border-color:var(--of-border)"><span class="mod-ic"><i class="fas fa-list-check text-lg" style="color:var(--of-navy)"></i></span><p class="font-medium text-sm">Tasks & Workflow</p><p class="text-xs text-gray-500 mt-1">Requests, tasks and approvals</p></a>
+<a href="document-management.html" class="border rounded-lg p-4 hover:border-[var(--of-brass)] transition" style="border-color:var(--of-border)"><span class="mod-ic"><i class="fas fa-file-alt text-lg" style="color:var(--of-navy)"></i></span><p class="font-medium text-sm">Document Management</p><p class="text-xs text-gray-500 mt-1">Organized, searchable documents</p></a>
+<a href="email-system.html" class="border rounded-lg p-4 hover:border-[var(--of-brass)] transition" style="border-color:var(--of-border)"><span class="mod-ic"><i class="fas fa-envelope text-lg" style="color:var(--of-navy)"></i></span><p class="font-medium text-sm">Email & Communication</p><p class="text-xs text-gray-500 mt-1">Workplace communication tools</p></a>
+<a href="calendar-system.html" class="border rounded-lg p-4 hover:border-[var(--of-brass)] transition" style="border-color:var(--of-border)"><span class="mod-ic"><i class="fas fa-calendar-days text-lg" style="color:var(--of-navy)"></i></span><p class="font-medium text-sm">Calendar & Scheduling</p><p class="text-xs text-gray-500 mt-1">Events and work schedules</p></a>
+<a href="ai-features.html" class="border rounded-lg p-4 hover:border-[var(--of-brass)] transition" style="border-color:var(--of-border)"><span class="mod-ic"><i class="fas fa-wand-magic-sparkles text-lg" style="color:var(--of-navy)"></i></span><p class="font-medium text-sm">AI Productivity</p><p class="text-xs text-gray-500 mt-1">Assisted work and productivity</p></a>
+<a href="reports.html" class="border rounded-lg p-4 hover:border-[var(--of-brass)] transition" style="border-color:var(--of-border)"><span class="mod-ic"><i class="fas fa-chart-bar text-lg" style="color:var(--of-navy)"></i></span><p class="font-medium text-sm">Reports & Insights</p><p class="text-xs text-gray-500 mt-1">Operational reporting and visibility</p></a>
+<a href="security-center.html" class="border rounded-lg p-4 hover:border-[var(--of-brass)] transition" style="border-color:var(--of-border)"><span class="mod-ic"><i class="fas fa-shield-alt text-lg" style="color:var(--of-navy)"></i></span><p class="font-medium text-sm">Security & Access</p><p class="text-xs text-gray-500 mt-1">Access controls and audit visibility</p></a>
 </div></section>
 <div class="of-card p-6"><h3 class="of-serif text-lg font-semibold mb-4">Quick Actions</h3><div class="grid grid-cols-2 md:grid-cols-5 gap-4">
-<a href="workflow.html" class="flex flex-col items-center p-4 rounded border hover:border-[var(--of-brass)] transition" style="border-color:var(--of-border)"><i class="fas fa-user-plus text-xl mb-2" style="color:var(--of-navy)"></i><p class="text-sm text-gray-700">New Request</p></a>
+<a href="workflow.html" class="qa-primary flex flex-col items-center p-4 rounded border hover:border-[var(--of-brass)] transition" style="border-color:var(--of-border)"><i class="fas fa-user-plus text-xl mb-2" style="color:var(--of-navy)"></i><p class="text-sm text-gray-700">New Request</p></a>
 <a href="my-work.html" class="flex flex-col items-center p-4 rounded border hover:border-[var(--of-brass)] transition" style="border-color:var(--of-border)"><i class="fas fa-plus-circle text-xl mb-2" style="color:var(--of-navy)"></i><p class="text-sm text-gray-700">My Work</p></a>
 <a href="notifications.html" class="flex flex-col items-center p-4 rounded border hover:border-[var(--of-brass)] transition" style="border-color:var(--of-border)"><i class="fas fa-bell text-xl mb-2" style="color:var(--of-navy)"></i><p class="text-sm text-gray-700">Notifications</p></a>
 <a href="workflow-builder.html" class="flex flex-col items-center p-4 rounded border hover:border-[var(--of-brass)] transition" style="border-color:var(--of-border)"><i class="fas fa-upload text-xl mb-2" style="color:var(--of-navy)"></i><p class="text-sm text-gray-700">Build Workflow</p></a>
@@ -94,6 +113,16 @@
 <script src="/dashboard/js/ooes-auth.js"></script>
 <script src="/dashboard/js/ooes-core.js"></script>
 <script>
+(function(){var h=new Date().getHours();var g=document.getElementById("greet");if(g)g.textContent=h<12?"Good morning":h<17?"Good afternoon":"Good evening";})();
+function paintInsights(x){var a=Number(x.pending_requests)||0,o=Number(x.overdue_steps)||0,e=Number(x.escalated_steps)||0,n=a+o+e;
+var set=function(i,v){var el=document.getElementById(i);if(el)el.textContent=v;};
+set("mw-approvals",a+" pending");set("mw-overdue",o+" overdue");set("mw-escalated",e+" escalated");
+set("attn-title",n?(n+" attention indicators require review"):"You are all caught up");
+set("attn-sub",n?(a+" pending, "+o+" overdue and "+e+" escalated. Prioritise overdue and escalated work.":"No pending, overdue or escalated items are currently reported.");
+["approvals","overdue","escalated"].forEach(function(k,i){var v=[a,o,e][i];var el=document.getElementById("stat-"+k);if(el&&v>0)el.classList.add("hot");});
+var denominator=a+o+e;var pct=denominator?Math.round(100*Math.max(0,denominator-o-e)/denominator):100;
+set("ontrack-pct",denominator?pct+"% indicator-based on-track estimate":"No open-work indicators");
+var b=document.getElementById("ontrack-bar");if(b)b.style.width=pct+"%";}
 function applyRoleNavigation(){const role=OOES_AUTH.getRole();const isAdmin=["administrator","super_admin"].includes(role);document.querySelectorAll('a[href="control-tower.html"],a[href="workflow-builder.html"],a[href="automation.html"],a[href="reports.html"],a[href="security-center.html"],a[href="fraud-detection.html"]').forEach(a=>{if(!isAdmin){a.style.display="none";a.setAttribute("aria-hidden","true");}});document.querySelectorAll('a[href="control-tower.html"]').forEach(a=>{const card=a.closest(".of-card");if(card&&!isAdmin)card.style.display="none";});document.querySelectorAll('a[href="workflow-builder.html"]').forEach(a=>{if(!isAdmin)a.style.display="none";});document.querySelectorAll('a[href="automation.html"],a[href="reports.html"]').forEach(a=>{if(!isAdmin)a.style.display="none";});}
 document.getElementById("current-date").textContent=new Date().toLocaleDateString("en-KE",{weekday:"long",year:"numeric",month:"long",day:"numeric"});
 async function loadDashboard(){
@@ -106,7 +135,7 @@ if(isAdmin){document.getElementById("stat-requests").textContent=x.total_request
 document.getElementById("stat-approvals").textContent=x.pending_requests??0;
 document.getElementById("stat-overdue").textContent=x.overdue_steps??0;
 document.getElementById("stat-escalated").textContent=x.escalated_steps??0;
-
+paintInsights(x);
 document.getElementById("stat-approvals-sub").textContent="Awaiting action";
 document.getElementById("stat-overdue-sub").textContent="Past SLA";
 document.getElementById("stat-escalated-sub").textContent="Escalated items";
