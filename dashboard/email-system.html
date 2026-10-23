@@ -26,7 +26,44 @@
   #emailWorkspace main,#emailWorkspace header{min-width:0;max-width:100%;box-sizing:border-box}
   #emailWorkspace .container.mx-auto{width:100%;max-width:100%;margin-left:auto!important;margin-right:auto!important;box-sizing:border-box}
   @media(max-width:768px){#emailWorkspace{margin-left:0!important;width:100%!important;max-width:100%!important}}
-</style></head>
+</style>
+<style id="professional-email-layout">
+  .of-email-main{max-width:1600px!important}
+  .of-metric-card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:18px 20px;box-shadow:0 2px 8px rgba(22,33,62,.035);min-width:0}
+  .of-metric-label{font-size:12px;font-weight:700;letter-spacing:.04em;color:#6b7280;text-transform:uppercase}
+  .of-metric-icon{height:38px;width:38px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;font-size:15px}
+  .of-metric-value{font-size:30px;font-weight:750;letter-spacing:-.04em;color:#16213E;margin-top:12px;line-height:1.1}
+  .of-metric-note{font-size:11px;color:#9ca3af;margin-top:8px;line-height:1.4}
+  .of-panel-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 22px;border-bottom:1px solid #edf0f4;background:linear-gradient(180deg,#fff,#fcfcfd)}
+  .of-heading-icon{display:flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:13px;background:#f0f3f8;color:#16213E}
+  .of-status-pill{display:inline-flex;align-items:center;gap:7px;border:1px solid #dbeafe;background:#eff6ff;color:#1d4ed8;border-radius:999px;padding:6px 10px;font-size:11px;font-weight:700;white-space:nowrap}
+  .of-status-pill span{width:6px;height:6px;background:#3b82f6;border-radius:50%}
+  .of-field-label{display:block;font-size:12px;font-weight:700;color:#374151;margin-bottom:8px}
+  .of-field{display:block;width:100%;min-width:0;border:1px solid #d1d5db;background:#fff;border-radius:10px;padding:12px 14px;color:#111827;font-size:14px;outline:none;box-sizing:border-box;transition:border-color .15s,box-shadow .15s}
+  .of-field:focus{border-color:#A6823D;box-shadow:0 0 0 3px rgba(166,130,61,.13)}
+  .of-editor-toolbar{display:flex;align-items:center;flex-wrap:wrap;gap:5px;padding:10px 12px;background:#f8fafc;border-bottom:1px solid #e5e7eb}
+  .of-toolbar-divider{height:22px;width:1px;background:#d1d5db;margin:0 6px}
+  .toolbar-btn{width:34px;height:34px;border:1px solid transparent;border-radius:8px;color:#4b5563;background:transparent}
+  .toolbar-btn:hover{background:#e9edf3;color:#16213E}
+  .of-email-body{min-height:300px;padding:18px 20px;outline:none;color:#1f2937;line-height:1.7;font-size:14px;overflow-wrap:anywhere}
+  .of-email-body:empty:before{content:attr(data-placeholder);color:#9ca3af;pointer-events:none}
+  .of-email-body:focus{box-shadow:inset 0 0 0 2px rgba(166,130,61,.12)}
+  .of-primary-btn,.of-secondary-btn{display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;border-radius:10px;padding:10px 15px;font-size:13px;font-weight:700;transition:all .18s ease}
+  .of-primary-btn{background:#16213E;color:white;border:1px solid #16213E;box-shadow:0 3px 8px rgba(22,33,62,.12)}
+  .of-primary-btn:hover{background:#25365e;transform:translateY(-1px)}
+  .of-secondary-btn{background:white;color:#374151;border:1px solid #d1d5db}
+  .of-secondary-btn:hover{background:#f9fafb;border-color:#9ca3af}
+  .of-action-row,.of-template-row{display:flex;align-items:center;gap:12px;width:100%;padding:11px;border-radius:12px;text-align:left;border:1px solid transparent;background:#fff;transition:background .15s,border-color .15s;min-width:0}
+  .of-action-row:hover,.of-template-row:hover{background:#f8fafc;border-color:#e5e7eb}
+  .of-action-row strong,.of-template-row strong{display:block;font-size:13px;color:#1f2937;font-weight:700}
+  .of-action-row small,.of-template-row small{display:block;font-size:11px;color:#9ca3af;margin-top:3px}
+  .of-action-icon,.of-template-icon{width:38px;height:38px;flex:0 0 38px;border-radius:11px;display:flex;align-items:center;justify-content:center}
+  .of-stat-icon{width:42px;height:42px;flex:0 0 42px;border-radius:12px;display:flex;align-items:center;justify-content:center}
+  #emailWorkspace .container.mx-auto{width:100%;max-width:1600px}
+  @media(max-width:768px){.of-email-main{padding-left:14px!important;padding-right:14px!important;padding-top:20px!important}.of-panel-heading{padding:15px}.of-email-body{min-height:240px;padding:14px}.of-metric-card{padding:16px}.of-primary-btn,.of-secondary-btn{padding:10px 12px}}
+</style>
+
+</head>
 <body class="bg-gray-50">
 <div id="sidebar" class="fixed inset-y-0 left-0 w-56 text-white z-50 flex flex-col overflow-y-auto" style="background:linear-gradient(135deg,#16213E 0%,#1F2C4F 100%);transition:transform 0.3s ease">
 <div class="p-4 border-b border-white border-opacity-20"><a href="/dashboard/index.html" style="color:white;text-decoration:none;font-size:18px;font-weight:bold">OfficeFlow</a></div>
@@ -93,277 +130,103 @@
     </header>
 
     <!-- Main Content -->
-    <main class="container mx-auto px-6 py-8">
-        <!-- Professional Email System Header -->
-        <div class="bg-white rounded-lg shadow-md p-8 mb-8">
-            <h2 class="text-2xl font-bold mb-6 text-gray-800">
-                <i class="fas fa-envelope mr-3 text-blue-600"></i>
-                Professional Email System
-            </h2>
-            
-            <div class="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                <p class="text-blue-800 font-semibold mb-2">
-                    <i class="fas fa-at mr-2"></i>
-                    Business Communications Hub
-                </p>
-                <p class="text-blue-700 text-sm">Professional email system with templates, auto-responses, and client management. Contact: <strong>+254 717 261 425</strong> | <strong>contact@ooes.co.ke</strong></p>
-            </div>
+<main class="container mx-auto px-6 py-7 of-email-main">
+  <section class="mb-7">
+    <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
+      <div>
+        <p class="text-xs font-bold uppercase tracking-[0.18em] text-[#A6823D] mb-2">COMMUNICATIONS WORKSPACE</p>
+        <h2 class="text-3xl font-bold text-[#16213E]">Email workspace</h2>
+        <p class="text-gray-500 mt-2 max-w-2xl">Compose professional messages, reuse approved templates, and keep your business communication organised.</p>
+      </div>
+      <div class="flex flex-wrap gap-2">
+        <button onclick="checkEmail(this)" class="of-secondary-btn"><i class="fas fa-sync-alt mr-2"></i>Check inbox</button>
+        <button onclick="composeNew(this)" class="of-primary-btn"><i class="fas fa-plus mr-2"></i>New message</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-7" aria-label="Email overview">
+    <div class="of-metric-card"><div class="flex items-center justify-between"><span class="of-metric-label">Inbox messages</span><span class="of-metric-icon text-blue-700 bg-blue-50"><i class="fas fa-inbox"></i></span></div><div class="of-metric-value">247</div><p class="of-metric-note">Mailbox connection required for live counts</p></div>
+    <div class="of-metric-card"><div class="flex items-center justify-between"><span class="of-metric-label">Sent emails</span><span class="of-metric-icon text-emerald-700 bg-emerald-50"><i class="fas fa-paper-plane"></i></span></div><div class="of-metric-value">—</div><p class="of-metric-note">Delivery provider not connected</p></div>
+    <div class="of-metric-card"><div class="flex items-center justify-between"><span class="of-metric-label">Saved drafts</span><span class="of-metric-icon text-amber-700 bg-amber-50"><i class="fas fa-file-alt"></i></span></div><div class="of-metric-value">12</div><p class="of-metric-note">Drafts stored in this browser</p></div>
+    <div class="of-metric-card"><div class="flex items-center justify-between"><span class="of-metric-label">Email templates</span><span class="of-metric-icon text-violet-700 bg-violet-50"><i class="fas fa-layer-group"></i></span></div><div class="of-metric-value">04</div><p class="of-metric-note">Ready-to-use business templates</p></div>
+  </section>
+
+  <section class="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start mb-7">
+    <div id="composeSection" class="xl:col-span-8 bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+      <div class="of-panel-heading">
+        <div class="flex items-center gap-3">
+          <span class="of-heading-icon"><i class="fas fa-pen-nib"></i></span>
+          <div><h3 class="text-lg font-bold text-[#16213E]">Compose email</h3><p class="text-sm text-gray-500">Create a clear, professional message</p></div>
         </div>
+        <span class="of-status-pill"><span></span>Draft editor</span>
+      </div>
+      <div class="p-5 md:p-7">
+        <form id="emailForm" class="space-y-5" onsubmit="return validateForm(this)">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div><label for="toEmail" class="of-field-label">To <span class="text-red-500">*</span></label><input type="email" id="toEmail" class="of-field" placeholder="recipient@company.com" autocomplete="email"></div>
+            <div><label for="ccEmail" class="of-field-label">CC <span class="text-gray-400 font-normal">(optional)</span></label><input type="email" id="ccEmail" class="of-field" placeholder="copy@company.com"></div>
+          </div>
+          <div><label for="subject" class="of-field-label">Subject <span class="text-red-500">*</span></label><input type="text" id="subject" class="of-field" placeholder="Add a clear subject line"></div>
+          <div class="rounded-xl border border-gray-200 overflow-hidden">
+            <div class="of-editor-toolbar">
+              <span class="text-xs font-semibold uppercase tracking-wider text-gray-500 mr-2">Format</span>
+              <button type="button" aria-label="Bold" title="Bold" onclick="formatText('bold')" class="toolbar-btn"><i class="fas fa-bold"></i></button>
+              <button type="button" aria-label="Italic" title="Italic" onclick="formatText('italic')" class="toolbar-btn"><i class="fas fa-italic"></i></button>
+              <button type="button" aria-label="Underline" title="Underline" onclick="formatText('underline')" class="toolbar-btn"><i class="fas fa-underline"></i></button>
+              <span class="of-toolbar-divider"></span>
+              <button type="button" aria-label="Insert link" title="Insert link" onclick="addLink()" class="toolbar-btn"><i class="fas fa-link"></i></button>
+              <button type="button" aria-label="Insert image" title="Insert image" onclick="addImage()" class="toolbar-btn"><i class="far fa-image"></i></button>
+              <button type="button" aria-label="Add attachment" title="Add attachment" onclick="addAttachment()" class="toolbar-btn"><i class="fas fa-paperclip"></i></button>
+            </div>
+            <div id="emailBody" contenteditable="true" role="textbox" aria-label="Email message" aria-multiline="true" data-placeholder="Write your message here…" class="compose-area of-email-body"></div>
+          </div>
+          <div id="attachments" class="hidden rounded-xl bg-gray-50 border border-gray-200 p-4"><p class="of-field-label mb-2">Attachments</p><div id="attachmentList" class="space-y-2"></div></div>
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-t border-gray-100 pt-5">
+            <p class="text-xs text-gray-500"><i class="fas fa-shield-alt mr-1 text-[#A6823D]"></i>Sending stays disabled operationally until a delivery provider is configured.</p>
+            <div class="flex gap-3">
+              <button type="button" onclick="saveDraft()" class="of-secondary-btn"><i class="fas fa-save mr-2"></i>Save draft</button>
+              <button type="button" onclick="sendEmail()" class="of-primary-btn"><i class="fas fa-paper-plane mr-2"></i>Send email</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
 
-        <!-- Email System Activities Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-            <!-- Email Compose Activity -->
-            <div class="activity-card bg-white rounded-xl shadow-lg overflow-hidden" onclick="focusCompose()">
-                <div class="flex items-center justify-between mb-4">
-                    <div>
-                        <h3 class="text-lg font-bold text-gray-800">Email Compose</h3>
-                        <span class="text-sm text-gray-500">Rich Text Editor</span>
-                    </div>
-                    <div class="flex space-x-2">
-                        <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">Active</span>
-                        <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">12 Drafts</span>
-                    </div>
-                </div>
-                <div class="flex items-center justify-between">
-                    <i class="fas fa-pen text-3xl text-blue-600 mr-3"></i>
-                    <i class="fas fa-clock text-sm text-gray-500 mr-2"></i>
-                    <span class="text-sm text-gray-600">Last compose: 10 min ago</span>
-                </div>
-            </div>
-            <p class="text-gray-600 text-sm mb-4">Advanced email composer with rich text formatting, attachments, and professional templates.</p>
-            <button onclick="focusCompose()" class="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition font-semibold">
-                <i class="fas fa-arrow-right mr-2"></i>Compose Email
-            </button>
-            </div>
-            
-            <!-- Email Templates Activity -->
-            <div class="activity-card bg-white rounded-xl shadow-lg overflow-hidden" onclick="scrollToTemplates()">
-                <div class="flex items-center justify-between mb-4">
-                    <div>
-                        <h3 class="text-lg font-bold text-gray-800">Email Templates</h3>
-                        <span class="text-sm text-gray-500">4 Templates</span>
-                    </div>
-                    <div class="flex space-x-2">
-                        <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">Active</span>
-                        <span class="bg-[#EFEAE0] text-[#16213E] px-2 py-1 rounded text-xs">Professional</span>
-                    </div>
-                </div>
-                <div class="flex items-center justify-between">
-                    <i class="fas fa-file-alt text-3xl text-green-600 mr-3"></i>
-                    <i class="fas fa-clock text-sm text-gray-500 mr-2"></i>
-                    <span class="text-sm text-gray-600">Last used: 1 hour ago</span>
-                </div>
-            </div>
-            <p class="text-gray-600 text-sm mb-4">Professional email templates for welcome messages, follow-ups, invoices, and meeting requests.</p>
-            <button onclick="scrollToTemplates()" class="w-full bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition font-semibold">
-                <i class="fas fa-arrow-right mr-2"></i>View Templates
-            </button>
-            </div>
-            
-            <!-- Email Analytics Activity -->
-            <div class="activity-card bg-white rounded-xl shadow-lg overflow-hidden" onclick="viewEmailAnalytics()">
-                <div class="flex items-center justify-between mb-4">
-                    <div>
-                        <h3 class="text-lg font-bold text-gray-800">Email Analytics</h3>
-                        <span class="text-sm text-gray-500">1.8K Sent</span>
-                    </div>
-                    <div class="flex space-x-2">
-                        <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">Active</span>
-                        <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded text-xs">98% Delivered</span>
-                    </div>
-                </div>
-                <div class="flex items-center justify-between">
-                    <i class="fas fa-chart-line text-3xl text-[#A6823D] mr-3"></i>
-                    <i class="fas fa-clock text-sm text-gray-500 mr-2"></i>
-                    <span class="text-sm text-gray-600">Last report: Today</span>
-                </div>
-            </div>
-            <p class="text-gray-600 text-sm mb-4">Comprehensive email analytics with delivery tracking, open rates, and response metrics.</p>
-            <button onclick="viewEmailAnalytics()" class="w-full bg-[#16213E] text-white px-4 py-2 rounded-lg hover:bg-[#1F2C4F] transition font-semibold">
-                <i class="fas fa-arrow-right mr-2"></i>View Analytics
-            </button>
-            </div>
+    <aside class="xl:col-span-4 space-y-6">
+      <section class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="of-panel-heading"><div><h3 class="font-bold text-[#16213E]">Quick actions</h3><p class="text-sm text-gray-500 mt-1">Shortcuts for your workflow</p></div><i class="fas fa-bolt text-[#A6823D]"></i></div>
+        <div class="p-4 space-y-3">
+          <button onclick="checkEmail(this)" class="of-action-row"><span class="of-action-icon bg-blue-50 text-blue-700"><i class="fas fa-inbox"></i></span><span><strong>Check new email</strong><small>Refresh your connected inbox</small></span><i class="fas fa-chevron-right ml-auto text-gray-400 text-xs"></i></button>
+          <button onclick="composeNew(this)" class="of-action-row"><span class="of-action-icon bg-emerald-50 text-emerald-700"><i class="fas fa-pen"></i></span><span><strong>Compose new</strong><small>Start with a blank message</small></span><i class="fas fa-chevron-right ml-auto text-gray-400 text-xs"></i></button>
+          <button onclick="viewCalendar(this)" class="of-action-row"><span class="of-action-icon bg-amber-50 text-amber-700"><i class="fas fa-calendar-alt"></i></span><span><strong>Open calendar</strong><small>Plan your next meeting</small></span><i class="fas fa-chevron-right ml-auto text-gray-400 text-xs"></i></button>
         </div>
+      </section>
 
-        <!-- Quick Actions Section -->
-        <div class="bg-white rounded-lg shadow-md p-8 mb-8">
-            <h3 class="text-xl font-bold mb-6 text-gray-800">
-                <i class="fas fa-bolt mr-3 text-blue-600"></i>
-                Quick Actions
-            </h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="text-center">
-                    <button onclick="checkEmail(this)" class="w-full bg-blue-500 text-white px-6 py-4 rounded-lg hover:bg-blue-600 transition-all mb-3">
-                        <i class="fas fa-sync text-2xl mb-2"></i>
-                        <div class="font-semibold">Check New Email</div>
-                    </button>
-                    <p class="text-sm text-gray-600">Instantly check for new messages and update inbox</p>
-                </div>
-                <div class="text-center">
-                    <button onclick="composeNew(this)" class="w-full bg-green-500 text-white px-6 py-4 rounded-lg hover:bg-green-600 transition-all mb-3">
-                        <i class="fas fa-plus text-2xl mb-2"></i>
-                        <div class="font-semibold">Compose New</div>
-                    </button>
-                    <p class="text-sm text-gray-600">Start composing a new professional email</p>
-                </div>
-                <div class="text-center">
-                    <button onclick="viewCalendar(this)" class="w-full bg-[#A6823D] text-white px-6 py-4 rounded-lg hover:bg-[#16213E] transition-all mb-3">
-                        <i class="fas fa-calendar text-2xl mb-2"></i>
-                        <div class="font-semibold">View Calendar</div>
-                    </button>
-                    <p class="text-sm text-gray-600">Access your calendar and schedule meetings</p>
-                </div>
-            </div>
+      <section id="templatesSection" class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="of-panel-heading"><div><h3 class="font-bold text-[#16213E]">Quick templates</h3><p class="text-sm text-gray-500 mt-1">Select a template to fill the composer</p></div><i class="fas fa-file-alt text-[#A6823D]"></i></div>
+        <div class="p-4 space-y-2">
+          <button onclick="useTemplate('welcome')" class="of-template-row"><span class="of-template-icon bg-blue-50 text-blue-700"><i class="fas fa-handshake"></i></span><span><strong>Welcome message</strong><small>New client onboarding</small></span><i class="fas fa-arrow-up-right-from-square ml-auto text-gray-400 text-xs"></i></button>
+          <button onclick="useTemplate('followup')" class="of-template-row"><span class="of-template-icon bg-emerald-50 text-emerald-700"><i class="fas fa-reply"></i></span><span><strong>Follow-up</strong><small>Continue a conversation</small></span><i class="fas fa-arrow-up-right-from-square ml-auto text-gray-400 text-xs"></i></button>
+          <button onclick="useTemplate('invoice')" class="of-template-row"><span class="of-template-icon bg-amber-50 text-amber-700"><i class="fas fa-file-invoice"></i></span><span><strong>Invoice notice</strong><small>Payment reminder</small></span><i class="fas fa-arrow-up-right-from-square ml-auto text-gray-400 text-xs"></i></button>
+          <button onclick="useTemplate('meeting')" class="of-template-row"><span class="of-template-icon bg-violet-50 text-violet-700"><i class="fas fa-calendar-check"></i></span><span><strong>Meeting request</strong><small>Arrange a discussion</small></span><i class="fas fa-arrow-up-right-from-square ml-auto text-gray-400 text-xs"></i></button>
         </div>
+      </section>
+    </aside>
+  </section>
 
-        <!-- Email Compose Section -->
-        <div id="composeSection" class="bg-white rounded-lg shadow-md p-8 mb-8">
-            <div class="flex items-center justify-between mb-6">
-                <h3 class="text-xl font-bold text-gray-800">
-                    <i class="fas fa-pen mr-2"></i>Compose Email
-                </h3>
-                <div class="flex space-x-2">
-                    <button onclick="saveDraft()" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition">
-                        <i class="fas fa-save mr-1"></i>Save Draft
-                    </button>
-                    <button onclick="sendEmail()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">
-                        <i class="fas fa-paper-plane mr-1"></i>Send
-                    </button>
-                </div>
-            </div>
+  <section class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden mb-7">
+    <div class="of-panel-heading"><div><h3 class="font-bold text-[#16213E]">Communication overview</h3><p class="text-sm text-gray-500 mt-1">Workspace counters — live mailbox analytics require an email provider connection</p></div><button onclick="viewEmailAnalytics()" class="of-secondary-btn text-sm"><i class="fas fa-chart-line mr-2"></i>View analytics</button></div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-gray-100">
+      <div class="p-5 flex items-center gap-4"><span class="of-stat-icon bg-blue-50 text-blue-700"><i class="fas fa-inbox"></i></span><div><div class="text-2xl font-bold text-[#16213E]">247</div><div class="text-sm text-gray-500">Inbox messages</div></div></div>
+      <div class="p-5 flex items-center gap-4"><span class="of-stat-icon bg-emerald-50 text-emerald-700"><i class="fas fa-paper-plane"></i></span><div><div class="text-2xl font-bold text-[#16213E]">—</div><div class="text-sm text-gray-500">Sent emails</div></div></div>
+      <div class="p-5 flex items-center gap-4"><span class="of-stat-icon bg-amber-50 text-amber-700"><i class="fas fa-file-alt"></i></span><div><div class="text-2xl font-bold text-[#16213E]">12</div><div class="text-sm text-gray-500">Draft messages</div></div></div>
+      <div class="p-5 flex items-center gap-4"><span class="of-stat-icon bg-gray-100 text-gray-600"><i class="fas fa-archive"></i></span><div><div class="text-2xl font-bold text-[#16213E]">—</div><div class="text-sm text-gray-500">Archived emails</div></div></div>
+    </div>
+  </section>
+</main>
 
-            <!-- Email Form -->
-            <form id="emailForm" class="space-y-4" onsubmit="return validateForm(this)">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">To:</label>
-                        <input type="email" id="toEmail" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="recipient@example.com">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">CC:</label>
-                        <input type="email" id="ccEmail" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="cc@example.com">
-                    </div>
-                </div>
-                
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Subject:</label>
-                    <input type="text" id="subject" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Email subject">
-                </div>
-                
-                <!-- Email Toolbar -->
-                <div class="bg-gray-50 p-3 rounded-lg border border-gray-200">
-                    <div class="flex flex-wrap gap-2">
-                        <button type="button" onclick="formatText('bold')" class="toolbar-btn p-2 rounded hover:bg-gray-200 transition">
-                            <i class="fas fa-bold"></i>
-                        </button>
-                        <button type="button" onclick="formatText('italic')" class="toolbar-btn p-2 rounded hover:bg-gray-200 transition">
-                            <i class="fas fa-italic"></i>
-                        </button>
-                        <button type="button" onclick="formatText('underline')" class="toolbar-btn p-2 rounded hover:bg-gray-200 transition">
-                            <i class="fas fa-underline"></i>
-                        </button>
-                        <div class="border-l border-gray-300 mx-2"></div>
-                        <button type="button" onclick="addLink()" class="toolbar-btn p-2 rounded hover:bg-gray-200 transition">
-                            <i class="fas fa-link"></i>
-                        </button>
-                        <button type="button" onclick="addImage()" class="toolbar-btn p-2 rounded hover:bg-gray-200 transition">
-                            <i class="fas fa-image"></i>
-                        </button>
-                        <button type="button" onclick="addAttachment()" class="toolbar-btn p-2 rounded hover:bg-gray-200 transition">
-                            <i class="fas fa-paperclip"></i>
-                        </button>
-                    </div>
-                </div>
-                
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Message:</label>
-                    <div id="emailBody" contenteditable="true" class="compose-area w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent min-h-[300px]" placeholder="Type your message here..."></div>
-                </div>
-                
-                <!-- Attachments -->
-                <div id="attachments" class="hidden">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Attachments:</label>
-                    <div id="attachmentList" class="space-y-2"></div>
-                </div>
-            </form>
-        </div>
-
-        <!-- Email Templates Section -->
-        <div id="templatesSection" class="bg-white rounded-lg shadow-md p-8 mb-8">
-            <h3 class="text-xl font-bold mb-6 text-gray-800">
-                <i class="fas fa-file-alt mr-2 text-blue-600"></i>Quick Templates
-            </h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="activity-card bg-white rounded-xl shadow-lg overflow-hidden border border-blue-200" onclick="useTemplate('welcome')">
-                    <div class="p-4 text-center">
-                        <i class="fas fa-handshake text-blue-500 text-3xl mb-3"></i>
-                        <h4 class="font-bold text-gray-800 mb-1">Welcome Message</h4>
-                        <p class="text-sm text-gray-600">New client onboarding</p>
-                    </div>
-                </div>
-                <div class="activity-card bg-white rounded-xl shadow-lg overflow-hidden border border-green-200" onclick="useTemplate('followup')">
-                    <div class="p-4 text-center">
-                        <i class="fas fa-phone text-green-500 text-3xl mb-3"></i>
-                        <h4 class="font-bold text-gray-800 mb-1">Follow-up</h4>
-                        <p class="text-sm text-gray-600">Meeting follow-up</p>
-                    </div>
-                </div>
-                <div class="activity-card bg-white rounded-xl shadow-lg overflow-hidden border border-yellow-200" onclick="useTemplate('invoice')">
-                    <div class="p-4 text-center">
-                        <i class="fas fa-file-invoice text-yellow-500 text-3xl mb-3"></i>
-                        <h4 class="font-bold text-gray-800 mb-1">Invoice Notice</h4>
-                        <p class="text-sm text-gray-600">Payment reminder</p>
-                    </div>
-                </div>
-                <div class="activity-card bg-white rounded-xl shadow-lg overflow-hidden border border-[#E4E1D8]" onclick="useTemplate('meeting')">
-                    <div class="p-4 text-center">
-                        <i class="fas fa-calendar text-[#A6823D] text-3xl mb-3"></i>
-                        <h4 class="font-bold text-gray-800 mb-1">Meeting Request</h4>
-                        <p class="text-sm text-gray-600">Schedule meeting</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Email Statistics Section -->
-        <div class="bg-white rounded-lg shadow-md p-8">
-            <h3 class="text-xl font-bold mb-6 text-gray-800">
-                <i class="fas fa-chart-bar mr-2 text-blue-600"></i>Email Statistics
-            </h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div class="text-center">
-                    <div class="bg-blue-50 p-6 rounded-lg border border-blue-200">
-                        <i class="fas fa-inbox text-blue-600 text-3xl mb-3"></i>
-                        <div class="text-2xl font-bold text-blue-600">247</div>
-                        <div class="text-sm text-gray-600">Inbox Messages</div>
-                    </div>
-                </div>
-                <div class="text-center">
-                    <div class="bg-green-50 p-6 rounded-lg border border-green-200">
-                        <i class="fas fa-paper-plane text-green-600 text-3xl mb-3"></i>
-                        <div class="text-2xl font-bold text-green-600">—</div>
-                        <div class="text-sm text-gray-600">Sent Emails</div>
-                    </div>
-                </div>
-                <div class="text-center">
-                    <div class="bg-yellow-50 p-6 rounded-lg border border-yellow-200">
-                        <i class="fas fa-file-alt text-yellow-600 text-3xl mb-3"></i>
-                        <div class="text-2xl font-bold text-yellow-600">12</div>
-                        <div class="text-sm text-gray-600">Draft Messages</div>
-                    </div>
-                </div>
-                <div class="text-center">
-                    <div class="bg-[#F7F6F2] p-6 rounded-lg border border-[#E4E1D8]">
-                        <i class="fas fa-archive text-[#A6823D] text-3xl mb-3"></i>
-                        <div class="text-2xl font-bold text-[#A6823D]">3,456</div>
-                        <div class="text-sm text-gray-600">Archived Emails</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <!-- Email Preview Modal -->
+<!-- Email Preview Modal -->
     <div id="emailModal" class="modal">
         <div class="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-hidden m-4">
             <div class="bg-gradient-to-r from-blue-600 to-[#16213E] text-white p-6">
