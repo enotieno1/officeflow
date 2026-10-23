@@ -118,7 +118,7 @@ function paintInsights(x){var a=Number(x.pending_requests)||0,o=Number(x.overdue
 var set=function(i,v){var el=document.getElementById(i);if(el)el.textContent=v;};
 set("mw-approvals",a+" pending");set("mw-overdue",o+" overdue");set("mw-escalated",e+" escalated");
 set("attn-title",n?(n+" attention indicators require review"):"You are all caught up");
-set("attn-sub",n?(a+" pending, "+o+" overdue and "+e+" escalated. Prioritise overdue and escalated work.":"No pending, overdue or escalated items are currently reported.");
+set("attn-sub",n?(a+" pending, "+o+" overdue and "+e+" escalated. Prioritise overdue and escalated work."):"No pending, overdue or escalated items are currently reported.");
 ["approvals","overdue","escalated"].forEach(function(k,i){var v=[a,o,e][i];var el=document.getElementById("stat-"+k);if(el&&v>0)el.classList.add("hot");});
 var denominator=a+o+e;var pct=denominator?Math.round(100*Math.max(0,denominator-o-e)/denominator):100;
 set("ontrack-pct",denominator?pct+"% pending share of reported indicators":"No attention indicators reported");
