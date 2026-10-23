@@ -17,7 +17,10 @@ Deno.serve(async (req: Request) => {
   const url = Deno.env.get("SUPABASE_URL");
   const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
   const authHeader = req.headers.get("Authorization");
-  const anonKey = Deno.env.get("SUPABASE_ANON_KEY");
+  let anonKey = Deno.env.get("SUPABASE_ANON_KEY");
+  if (!anonKey) {
+    try { anonKey = JSON.parse(Deno.env.get("SUPABASE_PUBLISHABLE_KEYS") ?? "{}").default; } catch { /* handled below */ }
+  }
   if (!url || !serviceKey || !anonKey || !authHeader) return reply(401, { error: "Authentication required" });
 
   const userClient = createClient(url, anonKey, {
