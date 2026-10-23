@@ -116,6 +116,9 @@
     `;
     // Keep the collapsed state stronger than legacy page margins and injected-body padding.
     css.textContent += `
+      /* Email page uses an inline-margin wrapper rather than Tailwind .ml-56. */
+      body:has(.of-shared-sidebar) #sidebar+div{margin-left:256px!important;width:calc(100% - 256px)!important;max-width:calc(100% - 256px)!important;box-sizing:border-box!important}
+      body.of-nav-collapsed:has(.of-shared-sidebar) #sidebar+div{margin-left:0!important;width:100%!important;max-width:100%!important}
       body.of-nav-collapsed.of-nav-injected{padding-left:0!important}
       body.of-nav-collapsed:has(.of-shared-sidebar) .ml-56,body.of-nav-collapsed:has(.of-shared-sidebar) .ml-64{margin-left:0!important;width:100%!important;max-width:100%!important}
       body.of-nav-collapsed:has(.of-shared-sidebar) .container.mx-auto{margin-left:auto!important;margin-right:auto!important;max-width:100%!important}
