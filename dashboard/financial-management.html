@@ -18,6 +18,52 @@
         .status-overdue { background-color: #ef4444; color: white; }
         .status-draft { background-color: #6b7280; color: white; }
         .progress-bar { transition: width 0.3s ease; }
+
+        /* OfficeFlow executive finance presentation */
+        :root { --of-navy:#16213E; --of-navy-2:#1F2C4F; --of-brass:#A6823D; --of-line:#E4E1D8; --of-paper:#F7F6F2; }
+        body.bg-gray-50 { background:var(--of-paper)!important; color:#202938; }
+        .gradient-bg { background:linear-gradient(115deg,var(--of-navy) 0%,var(--of-navy-2) 68%,#34415F 100%)!important; border-bottom:3px solid var(--of-brass); }
+        .gradient-bg .text-yellow-100 { color:#E7D8B7!important; }
+        .gradient-bg .text-green-400 { color:#D9C18D!important; }
+        .gradient-bg .bg-white { color:var(--of-navy)!important; border:1px solid rgba(255,255,255,.25); }
+        main.container { max-width:1600px; }
+        main section > .bg-white { border:1px solid var(--of-line); border-radius:16px; box-shadow:0 5px 22px rgba(22,33,62,.055); }
+        main h2 { color:var(--of-navy)!important; letter-spacing:-.025em; }
+        .finance-card { border-radius:14px!important; border:1px solid var(--of-line)!important; background:#fff!important; box-shadow:0 3px 12px rgba(22,33,62,.035); }
+        .finance-card:hover { transform:translateY(-3px); box-shadow:0 12px 26px rgba(22,33,62,.10); border-color:#C7B17E!important; }
+        .finance-card h4,.finance-card .text-green-800,.finance-card .text-blue-800,.finance-card .text-yellow-800 { color:var(--of-navy)!important; }
+        .finance-card .text-green-600,.finance-card .text-blue-600,.finance-card .text-yellow-600 { color:var(--of-brass)!important; }
+        .finance-card .bg-green-200,.finance-card .bg-blue-200,.finance-card .bg-yellow-200 { background:#EEE8D9!important; }
+        .finance-card .bg-green-600,.finance-card .bg-blue-600,.finance-card .bg-yellow-600 { background:var(--of-brass)!important; }
+        main button { border-radius:9px!important; transition:transform .16s ease,box-shadow .16s ease,background .16s ease; }
+        main button:hover { box-shadow:0 5px 14px rgba(22,33,62,.12); }
+        #invoicesSection table { border-collapse:separate; border-spacing:0; width:100%; }
+        #invoicesSection thead { background:#F2F0E9; color:var(--of-navy); }
+        #invoicesSection th { font-size:11px; letter-spacing:.08em; text-transform:uppercase; }
+        #invoicesSection tbody tr:hover { background:#FAF8F3; }
+        .status-badge { border-radius:6px; letter-spacing:.04em; padding:5px 9px; }
+        .status-paid { background:#E3F2EA; color:#176644; }
+        .status-pending { background:#F5EBD2; color:#79591A; }
+        .status-overdue { background:#F8E4E1; color:#963D35; }
+        .status-draft { background:#E8EBF0; color:#4B5563; }
+        #sidebar { box-shadow:4px 0 18px rgba(15,23,42,.08); }
+        #sidebar nav a { transition:background .15s ease,color .15s ease; }
+        #sidebar nav a:hover { background:rgba(255,255,255,.10)!important; color:#fff!important; }
+        .modal > div { border:1px solid var(--of-line); border-radius:16px; box-shadow:0 24px 80px rgba(15,23,42,.28); }
+        .modal > div > div:first-child { background:linear-gradient(115deg,var(--of-navy),var(--of-navy-2))!important; }
+        input,textarea,select { border-color:#D7D9DE!important; border-radius:8px!important; }
+        input:focus,textarea:focus,select:focus { outline:2px solid rgba(166,130,61,.24); border-color:var(--of-brass)!important; }
+        @media(max-width:900px) {
+          #sidebar { transform:translateX(-100%); }
+          body > div[style*="margin-left:224px"] { margin-left:0!important; }
+          .gradient-bg .container { padding:20px 18px!important; }
+          .gradient-bg .container > div { align-items:flex-start; gap:18px; flex-direction:column; }
+          .gradient-bg .container > div > div:last-child { display:flex; flex-wrap:wrap; gap:12px; width:100%; }
+          main.container { padding:20px 14px!important; }
+          main section { margin-bottom:20px!important; }
+          main section > .bg-white { padding:20px!important; }
+        }
+
     </style>
 <link rel="stylesheet" href="css/mobile.css">
 <link rel="stylesheet" href="css/executive-theme.css"></head>
