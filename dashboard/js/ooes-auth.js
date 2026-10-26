@@ -65,6 +65,7 @@ var OOES_AUTH = {
       }
       var session = await this._loadProfile(result.data.user);
       this._setSessionFlag();
+      this._resetIdleTimer();
       return session;
     } catch (e) {
       return { error: e && e.message ? e.message : 'Unable to complete sign-in. Check your connection and try again.' };
@@ -105,6 +106,7 @@ var OOES_AUTH = {
       if (result.data.session) {
         var session = await this._loadProfile(result.data.user);
         this._setSessionFlag();
+        this._resetIdleTimer();
         return session;
       }
       return { pendingConfirmation: true, email: email };
@@ -115,7 +117,7 @@ var OOES_AUTH = {
 
   async logout(redirect) {
     try { await supabase.auth.signOut(); }
-    finally { this._session = null; this._clearSessionFlag(); }
+    finally { this._session = null; this._clearSessionFlag(); this._stopIdleTimer(); }
     if (redirect !== false) window.location.href = '/dashboard/auth.html';
   },
 
@@ -138,6 +140,7 @@ var OOES_AUTH = {
       }
       await this._loadProfile(result.data.session.user);
       this._setSessionFlag();
+      this._resetIdleTimer();
       return true;
     } catch (e) {
       this._clearSessionFlag();
@@ -154,6 +157,40 @@ var OOES_AUTH = {
     document.querySelectorAll('[data-user-role]').forEach(function (el) { el.textContent = session.role; });
   }
 };
+
+
+// Security policy: sign out after five minutes without user activity.
+// Any keyboard, pointer, touch, wheel, or scroll interaction resets the inactivity timer.
+OOES_AUTH.IDLE_TIMEOUT_MS = 5 * 60 * 1000;
+OOES_AUTH._idleTimer = null;
+OOES_AUTH._idleWarningShown = false;
+OOES_AUTH._resetIdleTimer = function () {
+  if (this._idleTimer) window.clearTimeout(this._idleTimer);
+  if (!this._session) return;
+  var self = this;
+  this._idleTimer = window.setTimeout(async function () {
+    self._idleTimer = null;
+    self._session = null;
+    self._clearSessionFlag();
+    try { await supabase.auth.signOut(); } catch (_) {}
+    window.location.replace('/dashboard/auth.html?reason=idle_timeout');
+  }, this.IDLE_TIMEOUT_MS);
+};
+OOES_AUTH._stopIdleTimer = function () {
+  if (this._idleTimer) window.clearTimeout(this._idleTimer);
+  this._idleTimer = null;
+};
+(function installIdleTimeout() {
+  var activityEvents = ['pointerdown', 'pointermove', 'keydown', 'touchstart', 'wheel', 'scroll'];
+  activityEvents.forEach(function (eventName) {
+    document.addEventListener(eventName, function () {
+      if (OOES_AUTH._session) OOES_AUTH._resetIdleTimer();
+    }, { passive: true });
+  });
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'visible' && OOES_AUTH._session) OOES_AUTH._resetIdleTimer();
+  });
+})();
 
 OOES_AUTH.ready = new Promise(function (resolve) { OOES_AUTH._readyResolve = resolve; });
 (function () {
