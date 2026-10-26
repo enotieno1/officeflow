@@ -191,6 +191,33 @@
         @media(max-width:1023px) { .slide-in { max-width:560px; width:100%; margin:0 auto; } }
         @media(max-width:640px) { body.min-h-screen { padding:20px 14px; align-items:flex-start; } .auth-card { padding:24px 20px; border-radius:14px; } .portal-grid { grid-template-columns:1fr; } }
 
+    
+        /* OfficeFlow corporate typography hierarchy — marketing panel */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650;700&family=Source+Serif+4:wght@500;600;650;700&display=swap');
+        body { font-family:'Inter',Arial,sans-serif; }
+        .of-serif, .fade-in > div:first-child h1 { font-family:'Source Serif 4',Georgia,serif; letter-spacing:-.035em; font-weight:600; }
+        .fade-in > div:first-child h1 { font-size:clamp(2.6rem,4.1vw,3.65rem); line-height:1.08; margin-bottom:.6rem; }
+        .fade-in > div:first-child h2 { font-family:'Inter',Arial,sans-serif; font-size:clamp(1.2rem,2vw,1.55rem); line-height:1.35; font-weight:600; letter-spacing:-.025em; margin-bottom:1rem; }
+        .fade-in > div:first-child p { font-size:1.0625rem; line-height:1.75; max-width:34rem; color:rgba(255,255,255,.82); }
+        .fade-in h3 { font-family:'Inter',Arial,sans-serif; font-size:1.125rem; line-height:1.4; font-weight:650; letter-spacing:-.015em; margin-bottom:.35rem; color:#fff; }
+        .fade-in .space-y-6 > div > div:last-child p { font-size:.9375rem; line-height:1.65; color:rgba(255,255,255,.76); max-width:34rem; }
+        .trust-panel { padding:1.35rem 1.5rem; }
+        .trust-panel h4 { font-size:1rem; line-height:1.45; font-weight:650; letter-spacing:-.01em; }
+        .trust-panel p { line-height:1.7; }
+        .trust-mark { width:40px; height:40px; flex:0 0 40px; }
+        @media(min-width:1024px) {
+            .fade-in { padding:1.25rem 0; }
+            .fade-in > div:first-child { margin-bottom:2rem; }
+            .fade-in .space-y-6 { gap:1.2rem; }
+        }
+        @media(max-width:640px) {
+            .fade-in > div:first-child h1 { font-size:2.5rem; line-height:1.1; }
+            .fade-in > div:first-child h2 { font-size:1.2rem; }
+            .fade-in > div:first-child p { font-size:1rem; line-height:1.7; margin-bottom:1.5rem; }
+            .fade-in h3 { font-size:1.05rem; }
+            .fade-in .space-y-6 > div > div:last-child p { font-size:.9rem; }
+            .trust-panel { padding:1.1rem; }
+        }
     </style>
 <link rel="stylesheet" href="css/mobile.css"></head>
 <body class="min-h-screen gradient-bg flex items-center justify-center p-4">
