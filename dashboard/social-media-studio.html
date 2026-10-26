@@ -4,6 +4,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Social Media Studio — OfficeFlow</title>
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link rel="stylesheet" href="css/executive-theme.css"><link rel="stylesheet" href="css/mobile.css">
 <style>
 :root{--navy:#14283f;--brass:#a6823d;--ink:#243447;--muted:#64748b;--line:#dbe3eb;--canvas:#f4f7fa}
@@ -14,12 +15,12 @@
 <body>
 <header class="top"><div class="shell px-5 md:px-8 py-6"><div class="head flex items-center justify-between gap-4"><div><p class="text-xs uppercase tracking-widest text-white/60">OfficeFlow / Marketing & Communications</p><h1 class="text-3xl font-bold mt-2">Social Media Studio</h1><p class="text-sm text-white/75 mt-2">Plan social content and manage publishing readiness from one workspace.</p></div><a href="/dashboard/index.html" class="text-sm font-semibold text-white">← Dashboard</a></div></div></header>
 <main class="shell px-5 md:px-8 py-7 space-y-6">
-<section class="panel p-5 md:p-6"><div class="flex flex-wrap justify-between items-start gap-3"><div><p class="eyebrow">Channel readiness</p><h2 class="text-xl font-bold mt-2">Your social channels</h2><p class="muted text-sm mt-1">Official publishing connections require platform developer approval and secure server-side credentials.</p></div><span class="status">Publishing connections not configured</span></div>
+<section class="panel p-5 md:p-6"><div id="socialIntegrationFeedback" class="text-sm muted mb-4" role="status" aria-live="polite">Checking connection readiness…</div><div class="flex flex-wrap justify-between items-start gap-3"><div><p class="eyebrow">Channel readiness</p><h2 class="text-xl font-bold mt-2">Your social channels</h2><p class="muted text-sm mt-1">Official publishing connections require platform developer approval and secure server-side credentials.</p></div><span class="status">Publishing connections not configured</span></div>
 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-3 mt-5">
-<article class="platform"><div class="mark fb">f</div><div><h3 class="font-bold">Facebook</h3><p class="text-xs muted mt-1">Pages, campaigns and community updates</p><p class="text-xs mt-2"><span class="status">Not connected</span></p><a class="inline-block mt-3" href="https://developers.facebook.com/" target="_blank" rel="noopener noreferrer">Meta developer portal ↗</a></div></article>
-<article class="platform"><div class="mark x">X</div><div><h3 class="font-bold">X (Twitter)</h3><p class="text-xs muted mt-1">Short updates and announcements</p><p class="text-xs mt-2"><span class="status">Not connected</span></p><a class="inline-block mt-3" href="https://developer.x.com/" target="_blank" rel="noopener noreferrer">X developer portal ↗</a></div></article>
-<article class="platform"><div class="mark wa"><i class="fab fa-whatsapp"></i>WA</div><div><h3 class="font-bold">WhatsApp</h3><p class="text-xs muted mt-1">Customer service and opt-in messaging</p><p class="text-xs mt-2"><span class="status">Not connected</span></p><a class="inline-block mt-3" href="https://developers.facebook.com/docs/whatsapp/" target="_blank" rel="noopener noreferrer">WhatsApp Business API ↗</a></div></article>
-<article class="platform"><div class="mark li">in</div><div><h3 class="font-bold">LinkedIn</h3><p class="text-xs muted mt-1">Company news and professional updates</p><p class="text-xs mt-2"><span class="status">Not connected</span></p><a class="inline-block mt-3" href="https://learn.microsoft.com/linkedin/" target="_blank" rel="noopener noreferrer">LinkedIn developer docs ↗</a></div></article>
+<article class="platform"><div class="mark fb">f</div><div><h3 class="font-bold">Facebook</h3><p class="text-xs muted mt-1">Pages, campaigns and community updates</p><p class="text-xs mt-2"><span class="status">Not connected</span></p><button class="btn secondary mt-3" type="button" data-connect="facebook">Connect Facebook</button><a class="inline-block mt-3" href="https://developers.facebook.com/" target="_blank" rel="noopener noreferrer">Meta developer portal ↗</a></div></article>
+<article class="platform"><div class="mark x">X</div><div><h3 class="font-bold">X (Twitter)</h3><p class="text-xs muted mt-1">Short updates and announcements</p><p class="text-xs mt-2"><span class="status">Not connected</span></p><button class="btn secondary mt-3" type="button" data-connect="x">Connect X</button><a class="inline-block mt-3" href="https://developer.x.com/" target="_blank" rel="noopener noreferrer">X developer portal ↗</a></div></article>
+<article class="platform"><div class="mark wa"><i class="fab fa-whatsapp"></i>WA</div><div><h3 class="font-bold">WhatsApp</h3><p class="text-xs muted mt-1">Customer service and opt-in messaging</p><p class="text-xs mt-2"><span class="status">Not connected</span></p><button class="btn secondary mt-3" type="button" data-connect="whatsapp">Connect WhatsApp</button><a class="inline-block mt-3" href="https://developers.facebook.com/docs/whatsapp/" target="_blank" rel="noopener noreferrer">WhatsApp Business API ↗</a></div></article>
+<article class="platform"><div class="mark li">in</div><div><h3 class="font-bold">LinkedIn</h3><p class="text-xs muted mt-1">Company news and professional updates</p><p class="text-xs mt-2"><span class="status">Not connected</span></p><button class="btn secondary mt-3" type="button" data-connect="linkedin">Connect LinkedIn</button><a class="inline-block mt-3" href="https://learn.microsoft.com/linkedin/" target="_blank" rel="noopener noreferrer">LinkedIn developer docs ↗</a></div></article>
 <article class="platform"><div class="mark ig"><i class="fab fa-instagram"></i></div><div><h3 class="font-bold">Instagram</h3><p class="text-xs muted mt-1">Brand visuals and campaign content</p><p class="text-xs mt-2"><span class="status">Not connected</span></p><a class="inline-block mt-3" href="https://developers.facebook.com/docs/instagram-platform/" target="_blank" rel="noopener noreferrer">Instagram API ↗</a></div></article>
 </div></section>
 <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 grid-social">
@@ -55,4 +56,44 @@ $('refreshDrafts').onclick=render;render();
 })();
 </script>
 <script src="js/config.js"></script><script src="js/ooes-auth.js"></script>
+
+<script>
+(async function(){
+ const endpoint='https://oghowrilrhummzvrljdt.supabase.co/functions/v1/social-media-oauth';
+ const key='sb_publishable_WReuIZP0Pp2mJOJ691GOLA_5Uwf50wQ';
+ const note=document.getElementById('socialIntegrationFeedback');
+ let client=null,session=null;
+ try {
+  if(window.supabase && window.supabase.createClient) {
+   client=window.supabase.createClient('https://oghowrilrhummzvrljdt.supabase.co',key);
+   const got=await client.auth.getSession(); session=got.data && got.data.session;
+  }
+  if(!session){note.textContent='Sign in to OfficeFlow to check and connect accounts. Provider credentials and developer approvals are also required.';}
+  else {
+   const res=await fetch(endpoint+'?action=status',{headers:{'Authorization':'Bearer '+session.access_token,'apikey':key}});
+   const data=await res.json();
+   if(!res.ok) throw new Error(data.error||'Could not check connection status');
+   const names={facebook:'Facebook',x:'X',whatsapp:'WhatsApp Business',linkedin:'LinkedIn'};
+   note.textContent=data.providers.map(p=>names[p.provider]+': '+(p.connected?'connected':p.configured?'ready to authorise':'setup required ('+(p.missing_credentials||[]).join(', ')+')')).join(' · ');
+   data.providers.forEach(p=>{const b=document.querySelector('[data-connect="'+p.provider+'"]');if(b){b.disabled=!p.configured;b.title=p.configured?'Connect '+names[p.provider]:'Configure server credentials first';b.textContent=p.connected?'Reconnect '+names[p.provider]:'Connect '+names[p.provider];}});
+  }
+ } catch(e){note.textContent='Connection status could not be checked: '+(e.message||'Unknown error')+'. Draft planning remains available.';}
+ document.querySelectorAll('[data-connect]').forEach(button=>button.addEventListener('click',async()=>{
+  try{
+   if(!client) throw new Error('Supabase client is not available. Refresh the page and sign in again.');
+   const auth=await client.auth.getSession();const active=auth.data&&auth.data.session;
+   if(!active) throw new Error('Your OfficeFlow session has expired. Sign in again.');
+   button.disabled=true;note.textContent='Starting secure authorisation…';
+   const res=await fetch(endpoint+'?action=start',{method:'POST',headers:{'Authorization':'Bearer '+active.access_token,'apikey':key,'Content-Type':'application/json'},body:JSON.stringify({provider:button.dataset.connect})});
+   const data=await res.json();
+   if(!res.ok) throw new Error((data.missing_credentials||[]).length?'Server setup required: '+data.missing_credentials.join(', '):data.error||'Could not start provider authorisation');
+   if(!data.authorization_url||!data.authorization_url.startsWith('https://')) throw new Error('Provider returned an invalid authorisation URL.');
+   window.location.assign(data.authorization_url);
+  }catch(e){note.textContent=e.message||'Could not connect provider.';button.disabled=false;}
+ }));
+ const params=new URLSearchParams(window.location.search);
+ if(params.has('social_connected')){note.textContent='OAuth completed for '+params.get('social_connected')+'. Publishing and account metadata still require provider-specific setup and verification.';history.replaceState({},'',window.location.pathname);}
+ if(params.has('social_error')){note.textContent='Social account authorisation did not complete ('+params.get('social_error')+'). Check the provider app configuration and try again.';history.replaceState({},'',window.location.pathname);}
+})();
+</script>
 </body></html>
