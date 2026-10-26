@@ -198,7 +198,45 @@
             font-size: 0.9rem;
             margin-top: 5px;
         }
-    </style>
+    
+/* Executive OfficeFlow technology workspace */
+:root{--of-navy:#16213E;--of-navy2:#1F2C4F;--of-brass:#A6823D;--of-ink:#202A3B;--of-muted:#667085;--of-line:#E4E7EC;--of-paper:#F5F6F8}
+body{background:var(--of-paper);color:var(--of-ink);font-family:Inter,"Segoe UI",Tahoma,sans-serif}
+.gradient-bg{background:linear-gradient(120deg,var(--of-navy),var(--of-navy2))}
+header.gradient-bg{border-bottom:3px solid var(--of-brass);box-shadow:0 8px 24px rgba(22,33,62,.12)}
+header .container{max-width:1440px} header h1{letter-spacing:-.035em;font-size:clamp(1.7rem,3vw,2.35rem)} header p{color:#D8DDE7}
+header a,footer a{border-radius:9px!important;font-weight:700;box-shadow:0 4px 12px rgba(0,0,0,.08)}
+.container.mx-auto.px-6.py-8{max-width:1440px}
+.container.mx-auto.px-6.py-8>.bg-white{padding:clamp(1rem,2.5vw,2rem);border:1px solid var(--of-line);border-radius:18px;box-shadow:0 8px 28px rgba(16,24,40,.055)}
+.stats-container{grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.stat-card{text-align:left;padding:20px;border:1px solid var(--of-line);border-radius:13px;box-shadow:none;border-top:3px solid var(--of-brass)}
+.stat-card:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(16,24,40,.07)}
+.stat-number{color:var(--of-navy);font-size:clamp(1.5rem,2.2vw,2rem);letter-spacing:-.04em}
+.stat-label{color:var(--of-muted);font-size:.83rem;font-weight:600}
+.search-box{margin-bottom:16px;border:1px solid #D0D5DD;border-radius:10px;background:#fff}
+.search-box:focus{border-color:var(--of-brass);box-shadow:0 0 0 3px rgba(166,130,61,.13)}
+.filter-buttons{gap:8px;margin-bottom:22px}
+.filter-btn{border:1px solid #D0D5DD;color:#344054;border-radius:9px;padding:8px 14px;font-size:.9rem}
+.filter-btn:hover,.filter-btn.active{background:var(--of-navy);color:#fff;border-color:var(--of-navy);transform:none}
+.tool-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,265px),1fr));gap:16px}
+.tool-card{margin:0;padding:22px;border:1px solid var(--of-line);border-radius:14px;box-shadow:0 2px 7px rgba(16,24,40,.035);cursor:pointer}
+.tool-card:before{display:none}.tool-card:hover{transform:translateY(-3px);border-color:#C5B184;box-shadow:0 10px 24px rgba(16,24,40,.09)}
+.tool-icon{width:48px;height:48px;border-radius:12px;background:#F0EEE8;color:var(--of-navy);font-size:20px;margin-bottom:17px}
+.tool-card:hover .tool-icon{transform:none;box-shadow:none}.tool-card h3{font-size:1.08rem;color:var(--of-navy)}
+.tool-card p{min-height:44px;font-size:.9rem;line-height:1.55}
+.tool-progress{height:5px;margin-top:18px;background:#EAECF0}.tool-progress-bar{background:var(--of-brass)}.tool-progress-bar:after{display:none}
+.tool-status{margin-top:12px;padding:5px 10px;border-radius:6px;font-size:.75rem}
+.status-active{background:#E8F3EC;color:#246B45}.status-setup{background:#FFF2D9;color:#875B12}
+.integration-indicator{width:8px;height:8px;background:var(--of-brass);animation:none}
+.document-section,.timeline-panel{margin-top:26px;padding:24px;background:#FAFAFB;border:1px solid var(--of-line);border-radius:14px}
+.document-section h3{color:var(--of-navy);font-size:1.25rem}.document-section h4{color:var(--of-navy);font-size:.96rem}
+.document-section ul{font-size:.9rem;color:#475467}.document-section li{padding:9px 10px;border:1px solid #EAECF0;border-radius:8px;background:white}
+.timeline-row{display:grid;grid-template-columns:110px 1fr;gap:16px;align-items:start;padding:13px 0;border-bottom:1px solid var(--of-line)}
+.timeline-row:last-child{border-bottom:0}footer{border-top:3px solid var(--of-brass)}
+@media(max-width:900px){.stats-container{grid-template-columns:repeat(2,minmax(0,1fr))}.ml-56{margin-left:0!important}}
+@media(max-width:560px){.stats-container{gap:10px}.stat-card{padding:14px}.filter-buttons{gap:6px}.filter-btn{padding:7px 10px;font-size:.82rem}.tool-card{padding:17px}.timeline-row{grid-template-columns:1fr;gap:4px}header .container{padding-left:16px;padding-right:16px}header .flex.items-center.justify-between{align-items:flex-start;gap:12px;flex-wrap:wrap}}
+
+</style>
 <link rel="stylesheet" href="css/mobile.css">
 <link rel="stylesheet" href="css/executive-theme.css"></head>
 <body class="bg-gray-50">
@@ -283,21 +321,21 @@
                     <div class="stat-label">In Setup</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number">100%</div>
-                    <div class="stat-label">Integration</div>
+                    <div class="stat-number">—</div>
+                    <div class="stat-label">Live connection checks</div>
                 </div>
             </div>
             
             <!-- Search and Filter -->
             <div class="mb-6">
-                <input type="text" id="searchBox" class="search-box" placeholder="= Search tools by name or category...">
+                <input type="text" id="searchBox" class="search-box" placeholder="Search tools by name or description..." aria-label="Search technology tools">
                 
                 <div class="filter-buttons">
-                    <button class="filter-btn active" onclick="filterTools('all')">All Tools</button>
-                    <button class="filter-btn" onclick="filterTools('productivity')">Productivity</button>
-                    <button class="filter-btn" onclick="filterTools('communication')">Communication</button>
-                    <button class="filter-btn" onclick="filterTools('automation')">Automation</button>
-                    <button class="filter-btn" onclick="filterTools('financial')">Financial</button>
+                    <button class="filter-btn active" onclick="filterTools('all', this)">All Tools</button>
+                    <button class="filter-btn" onclick="filterTools('productivity', this)">Productivity</button>
+                    <button class="filter-btn" onclick="filterTools('communication', this)">Communication</button>
+                    <button class="filter-btn" onclick="filterTools('automation', this)">Automation</button>
+                    <button class="filter-btn" onclick="filterTools('financial', this)">Financial</button>
                 </div>
             </div>
             
@@ -418,44 +456,45 @@
             <div class="document-section">
                 <h3 class="text-2xl font-bold text-gray-800 mb-4">
                     <i class="fas fa-network-wired mr-3 text-[#A6823D]"></i>
-                    Integration Status
+                    Integration Register
                 </h3>
+                <p class="text-sm text-gray-600 mb-5">Relationships listed in this guide; live API connectivity has not been verified by this page.</p>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <h4 class="font-semibold text-gray-700 mb-3">Active Integrations</h4>
+                        <h4 class="font-semibold text-gray-700 mb-3">Listed as active · verify connection</h4>
                         <ul class="space-y-2">
                             <li class="flex items-center">
                                 <i class="fas fa-check-circle text-green-500 mr-2"></i>
-                                <span>Google Drive ? Gmail</span>
+                                <span>Google Drive ↔ Gmail</span>
                             </li>
                             <li class="flex items-center">
                                 <i class="fas fa-check-circle text-green-500 mr-2"></i>
-                                <span>Trello ? Google Sheets</span>
+                                <span>Trello ↔ Google Sheets</span>
                             </li>
                             <li class="flex items-center">
                                 <i class="fas fa-check-circle text-green-500 mr-2"></i>
-                                <span>Zapier ? All Tools</span>
+                                <span>Zapier ↔ All Tools</span>
                             </li>
                             <li class="flex items-center">
                                 <i class="fas fa-check-circle text-green-500 mr-2"></i>
-                                <span>WhatsApp ? Gmail</span>
+                                <span>WhatsApp ↔ Gmail</span>
                             </li>
                         </ul>
                     </div>
                     <div>
-                        <h4 class="font-semibold text-gray-700 mb-3">Pending Integrations</h4>
+                        <h4 class="font-semibold text-gray-700 mb-3">Planned / pending setup</h4>
                         <ul class="space-y-2">
                             <li class="flex items-center">
                                 <i class="fas fa-clock text-yellow-500 mr-2"></i>
-                                <span>QuickBooks ? Google Sheets</span>
+                                <span>QuickBooks ↔ Google Sheets</span>
                             </li>
                             <li class="flex items-center">
                                 <i class="fas fa-clock text-yellow-500 mr-2"></i>
-                                <span>HubSpot ? Gmail</span>
+                                <span>HubSpot ↔ Gmail</span>
                             </li>
                             <li class="flex items-center">
                                 <i class="fas fa-clock text-yellow-500 mr-2"></i>
-                                <span>HubSpot ? WhatsApp</span>
+                                <span>HubSpot ↔ WhatsApp</span>
                             </li>
                         </ul>
                     </div>
@@ -465,27 +504,27 @@
     </div>
 
     <!-- Implementation Timeline -->
-            <div class="mt-8 bg-[#F7F6F2] p-6 rounded-lg">
+            <div class="timeline-panel">
                 <h3 class="text-xl font-bold mb-4 text-gray-800">Implementation Timeline</h3>
                 <div class="space-y-4">
-                    <div class="flex items-center">
-                        <div class="w-32 font-semibold text-[#1F2C4F]">Month 1:</div>
+                    <div class="timeline-row">
+                        <div class="font-semibold text-[#1F2C4F]">Month 1:</div>
                         <div class="flex-1 text-gray-600">Set up Google Workspace, basic email automation</div>
                     </div>
-                    <div class="flex items-center">
-                        <div class="w-32 font-semibold text-[#1F2C4F]">Month 2:</div>
+                    <div class="timeline-row">
+                        <div class="font-semibold text-[#1F2C4F]">Month 2:</div>
                         <div class="flex-1 text-gray-600">Implement QuickBooks, Trello boards</div>
                     </div>
-                    <div class="flex items-center">
-                        <div class="w-32 font-semibold text-[#1F2C4F]">Month 3:</div>
+                    <div class="timeline-row">
+                        <div class="font-semibold text-[#1F2C4F]">Month 3:</div>
                         <div class="flex-1 text-gray-600">Configure WhatsApp Business, Zapier automations</div>
                     </div>
-                    <div class="flex items-center">
-                        <div class="w-32 font-semibold text-[#1F2C4F]">Month 4:</div>
+                    <div class="timeline-row">
+                        <div class="font-semibold text-[#1F2C4F]">Month 4:</div>
                         <div class="flex-1 text-gray-600">Deploy HubSpot CRM, advanced integrations</div>
                     </div>
-                    <div class="flex items-center">
-                        <div class="w-32 font-semibold text-[#1F2C4F]">Month 5-6:</div>
+                    <div class="timeline-row">
+                        <div class="font-semibold text-[#1F2C4F]">Month 5-6:</div>
                         <div class="flex-1 text-gray-600">Optimize workflows, train staff, monitor performance</div>
                     </div>
                 </div>
@@ -503,50 +542,27 @@
         </div>
     </footer>
 <script>
-        // Search functionality
-        document.getElementById('searchBox').addEventListener('input', function(e) {
-            const searchTerm = e.target.value.toLowerCase();
-            const toolCards = document.querySelectorAll('.tool-card');
-            
-            toolCards.forEach(card => {
-                const title = card.querySelector('h3').textContent.toLowerCase();
-                const description = card.querySelector('p').textContent.toLowerCase();
-                
-                if (title.includes(searchTerm) || description.includes(searchTerm)) {
-                    card.style.display = 'block';
-                    card.style.animation = 'fadeIn 0.3s ease';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        });
-        
-        // Filter functionality
-        function filterTools(category) {
-            const toolCards = document.querySelectorAll('.tool-card');
-            const filterButtons = document.querySelectorAll('.filter-btn');
-            
-            // Update active button
-            filterButtons.forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            // Filter cards
-            toolCards.forEach(card => {
-                if (category === 'all') {
-                    card.style.display = 'block';
-                    card.style.animation = 'fadeIn 0.3s ease';
-                } else {
-                    const cardCategory = card.getAttribute('data-category');
-                    if (cardCategory === category) {
-                        card.style.display = 'block';
-                        card.style.animation = 'fadeIn 0.3s ease';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                }
+        // Search and category filters work together.
+        let activeToolCategory = 'all';
+        function applyToolFilters() {
+            const searchTerm = (document.getElementById('searchBox')?.value || '').trim().toLowerCase();
+            document.querySelectorAll('.tool-card').forEach(card => {
+                const title = card.querySelector('h3')?.textContent.toLowerCase() || '';
+                const description = card.querySelector('p')?.textContent.toLowerCase() || '';
+                const category = card.getAttribute('data-category') || '';
+                const matchesSearch = title.includes(searchTerm) || description.includes(searchTerm) || category.includes(searchTerm);
+                const matchesCategory = activeToolCategory === 'all' || category === activeToolCategory;
+                card.style.display = matchesSearch && matchesCategory ? '' : 'none';
             });
         }
-        
+        document.getElementById('searchBox')?.addEventListener('input', applyToolFilters);
+        function filterTools(category, button) {
+            activeToolCategory = category;
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            if (button) button.classList.add('active');
+            applyToolFilters();
+        }
+
         // Tool details navigation
         function showToolDetails(toolName) {
             const toolPages = {
@@ -573,17 +589,17 @@
         function showNotification(message, type = 'info') {
             const notification = document.createElement('div');
             notification.className = `fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 max-w-sm ${
-                type === 'success' ? 'bg-green-500 text-white' :
-                type === 'error' ? 'bg-red-500 text-white' :
-                type === 'warning' ? 'bg-yellow-500 text-white' :
+                type === 'success' ↔ 'bg-green-500 text-white' :
+                type === 'error' ↔ 'bg-red-500 text-white' :
+                type === 'warning' ↔ 'bg-yellow-500 text-white' :
                 'bg-blue-500 text-white'
             }`;
             notification.innerHTML = `
                 <div class="flex items-center">
                     <i class="fas ${
-                        type === 'success' ? 'fa-check-circle' :
-                        type === 'error' ? 'fa-exclamation-circle' :
-                        type === 'warning' ? 'fa-exclamation-triangle' :
+                        type === 'success' ↔ 'fa-check-circle' :
+                        type === 'error' ↔ 'fa-exclamation-circle' :
+                        type === 'warning' ↔ 'fa-exclamation-triangle' :
                         'fa-info-circle'
                     } mr-3"></i>
                     <div class="font-medium">${message}</div>
@@ -598,7 +614,7 @@
         }
 
         function closeModal(element) {
-            const modal = element ? element.closest('.modal, .fixed') : document.querySelector('.modal.active, .fixed.inset-0');
+            const modal = element ↔ element.closest('.modal, .fixed') : document.querySelector('.modal.active, .fixed.inset-0');
             if (modal) {
                 modal.classList.remove('active');
                 modal.style.display = 'none';
