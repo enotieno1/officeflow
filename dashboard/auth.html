@@ -429,7 +429,7 @@
                 </div>
 
                 <!-- Department access directory and trial benefits -->
-                <div class="mt-8 benefits-panel rounded-xl p-6"><h3 class="text-lg font-semibold text-gray-800 mb-3">Department access</h3><p class="text-sm text-gray-600 mb-4">Choose your department portal. Your account permissions are checked after sign-in.</p><div class="portal-grid grid grid-cols-2 gap-2 text-sm mb-6"><a href="/dashboard/portals/hr.html">Human Resources <i class="fas fa-arrow-up-right-from-square"></i></a><a href="/dashboard/portals/finance.html">Finance <i class="fas fa-arrow-up-right-from-square"></i></a><a href="/dashboard/portals/procurement.html">Procurement <i class="fas fa-arrow-up-right-from-square"></i></a><a href="/dashboard/portals/administration.html">Administration <i class="fas fa-arrow-up-right-from-square"></i></a><a href="/dashboard/portals/it.html">Information Technology <i class="fas fa-arrow-up-right-from-square"></i></a><a href="/dashboard/portals/legal.html">Legal & Compliance <i class="fas fa-arrow-up-right-from-square"></i></a><a href="/dashboard/portals/corporate-operations.html">Corporate Operations <i class="fas fa-arrow-up-right-from-square"></i></a></div>
+                <div class="mt-8 benefits-panel rounded-xl p-6"><h3 class="text-lg font-semibold text-gray-800 mb-3">Department access</h3><p class="text-sm text-gray-600 mb-4">Choose your department portal. Your account permissions are checked after sign-in.</p><div class="portal-grid grid grid-cols-2 gap-2 text-sm mb-6"><a href="/dashboard/portals/hr.html">Human Resources <i class="fas fa-arrow-up-right-from-square"></i></a><a href="/dashboard/portals/finance.html">Finance <i class="fas fa-arrow-up-right-from-square"></i></a><a href="/dashboard/portals/procurement.html">Procurement <i class="fas fa-arrow-up-right-from-square"></i></a><a href="/dashboard/portals/administration.html">Administration <i class="fas fa-arrow-up-right-from-square"></i></a><a href="/dashboard/portals/it.html">Information Technology <i class="fas fa-arrow-up-right-from-square"></i></a><a href="/dashboard/portals/legal.html">Legal & Compliance <i class="fas fa-arrow-up-right-from-square"></i></a><a href="/dashboard/portals/corporate-operations.html">Corporate Operations <i class="fas fa-arrow-up-right-from-square"></i></a><a href="/dashboard/platform-admin.html">OOES Platform Admin <i class="fas fa-shield-halved"></i></a></div>
                     <h3 class="text-lg font-semibold text-gray-800 mb-4">
                         <i class="fas fa-gift mr-2 text-[color:var(--of-brass)]"></i>
                         A more organised way to work
@@ -548,6 +548,8 @@
 
         function destinationForAccount(account) {
             var bootstrapOrgId = '00000000-0000-0000-0000-000000000001';
+            var requestedPortal = new URLSearchParams(window.location.search).get('portal');
+            if (requestedPortal === 'platform-admin') return '/dashboard/platform-admin.html';
             return account && account.role === 'employee' && account.organization_id === bootstrapOrgId
                 ? '/dashboard/organization-setup.html'
                 : '/dashboard/index.html';
