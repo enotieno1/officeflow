@@ -335,6 +335,52 @@
         @media(max-width:900px){.stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.task-register{overflow-x:auto}.task-register table{min-width:760px}}
         @media(max-width:640px){#sidebar{transform:translateX(-100%)}body>div[style*="margin-left:224px"]{margin-left:0!important}.page-header .flex.items-center.justify-between{align-items:flex-start;gap:1rem;flex-direction:column}.page-header .flex.items-center.gap-3{width:100%}.page-header .flex.items-center.gap-3 button{flex:1;justify-content:center}.stats-grid{gap:.65rem}.stat-card{padding:1rem}.stat-value{font-size:1.55rem}.tab-btn{padding:.75rem .8rem}.task-toolbar{display:grid!important;grid-template-columns:1fr 1fr;gap:.65rem!important}.task-toolbar #taskSearch{grid-column:1/-1}.task-toolbar select{width:100%!important}}
 
+    
+        /* OfficeFlow executive task register refinement */
+        :root{--of-navy:#16213e;--of-navy-2:#24365d;--of-brass:#a6823d;--of-border:#e4e7ec;--of-muted:#667085}
+        body{color:#25324a;background:#f6f7f9}
+        #sidebar{box-shadow:4px 0 18px rgba(16,24,40,.08);border-right:1px solid rgba(255,255,255,.08)}
+        #sidebar nav a{transition:background .15s ease,color .15s ease}
+        #sidebar nav a:hover{background:rgba(255,255,255,.09)!important;color:#fff!important}
+        .page-header{padding:1.2rem 0 1.35rem;border-bottom:1px solid var(--of-border)}
+        .page-header h1{font-family:'Source Serif 4',Georgia,serif;font-weight:650;line-height:1.15}
+        .page-header p{color:#596579;line-height:1.55}
+        .stats-grid{gap:.9rem}
+        .stat-card{border:1px solid var(--of-border);box-shadow:0 2px 7px rgba(16,24,40,.025);transition:box-shadow .15s ease,transform .15s ease}
+        .stat-card:hover{box-shadow:0 7px 18px rgba(16,24,40,.06);transform:translateY(-1px)}
+        .stat-card:before{top:14px;bottom:14px}
+        .stat-value{font-variant-numeric:tabular-nums}
+        .task-toolbar{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;margin:0 0 1rem}
+        .task-toolbar #taskSearch{flex:1;min-width:220px}
+        .task-toolbar .form-select{width:auto;min-width:165px}
+        .tab-nav{margin-bottom:1rem}
+        .tab-btn{position:relative}
+        .tab-btn.active:after{content:"";position:absolute;left:1rem;right:1rem;bottom:-1px;height:2px;background:var(--of-brass)}
+        .task-register{box-shadow:0 2px 8px rgba(16,24,40,.025)}
+        .task-register table{min-width:780px}
+        .task-register th{padding:13px 15px;white-space:nowrap}
+        .task-register td{padding:14px 15px}
+        .task-register tbody tr{transition:background .12s ease}
+        .task-register tbody tr:hover{background:#f8f9fb}
+        .task-title{font-size:.86rem}
+        .task-description{line-height:1.45}
+        .task-priority,.task-status{font-weight:700;display:inline-flex;align-items:center;justify-content:center;min-width:72px}
+        .task-due{font-variant-numeric:tabular-nums;white-space:nowrap}
+        .task-assignee{font-size:.82rem}
+        .task-avatar{border:1px solid rgba(22,33,62,.08)}
+        .task-actions{gap:4px}
+        .task-actions .action-btn{width:34px;height:34px;display:inline-flex;align-items:center;justify-content:center;padding:0;border-radius:6px}
+        .task-actions .action-btn-secondary{color:#52627c;border-color:transparent}
+        .task-actions .action-btn-secondary:hover{background:#f0f2f6;border-color:#d8dee8;color:#16213e}
+        .action-btn:disabled{opacity:.55;cursor:wait;transform:none}
+        .modal{backdrop-filter:blur(3px);padding:1rem}
+        .modal-content{border:1px solid #e4e7ec;box-shadow:0 24px 60px rgba(16,24,40,.22)}
+        .form-label{font-weight:650}
+        .form-input,.form-select,.form-textarea{color:#16213e}
+        .empty-state{background:#fff}
+        @media(max-width:900px){.task-register table{min-width:780px}.page-header h1{font-size:1.6rem!important}}
+        @media(max-width:640px){.stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.stat-card{padding:.95rem}.stat-label{font-size:.68rem}.task-toolbar{grid-template-columns:1fr 1fr}.task-toolbar #taskSearch{grid-column:1/-1;min-width:0}.task-toolbar .form-select{min-width:0;width:100%}.task-register{overflow-x:auto}.page-header{padding:1rem 0}.tab-nav{margin-right:-.25rem}.task-actions .action-btn{width:32px;height:32px}}
+
     </style>
 <link rel="stylesheet" href="css/mobile.css">
 <link rel="stylesheet" href="css/executive-theme.css"></head>
