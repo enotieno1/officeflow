@@ -170,6 +170,27 @@
         .feature-icon:hover {
             color: var(--of-brass);
         }
+    
+        /* Final executive polish: consistent enterprise typography, spacing and accessible controls. */
+        body.gradient-bg { min-height:100vh; background-color:#101c30; background-image:linear-gradient(135deg,#101c30 0%,#172840 55%,#0f1a2b 100%); }
+        .glass-effect { background:#fff; border:1px solid #e1e6ed; backdrop-filter:none; }
+        .auth-card { border:1px solid #e1e6ed; border-top:3px solid #b69a5a; border-radius:16px; box-shadow:0 22px 55px rgba(0,0,0,.2); }
+        .auth-card h2 { letter-spacing:-.025em; color:#172840; }
+        .auth-card p { line-height:1.55; }
+        .btn-primary { background:#172840; border:1px solid #172840; border-radius:8px; min-height:48px; transition:background .18s ease, transform .18s ease; }
+        .btn-primary:hover { background:#263b57; transform:translateY(-1px); }
+        .social-btn { min-height:46px; border:1px solid #d8dee7; border-radius:8px; background:#fff; }
+        .social-btn:hover { border-color:#b69a5a; background:#faf9f6; box-shadow:none; transform:translateY(-1px); }
+        .input-group input { min-height:50px; border:1px solid #cfd7e2; border-radius:8px; }
+        .input-group input:focus { border-color:#a6823d; outline:0; box-shadow:0 0 0 3px rgba(182,154,90,.15); }
+        .floating-label { color:#596579; }
+        .trust-panel { border-radius:12px; background:rgba(255,255,255,.045); }
+        .portal-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; }
+        .portal-grid a { min-height:44px; font-size:.9rem; font-weight:500; text-decoration:none; }
+        .portal-grid a:focus-visible, .social-btn:focus-visible, .btn-primary:focus-visible { outline:3px solid rgba(182,154,90,.55); outline-offset:2px; }
+        @media(max-width:1023px) { .slide-in { max-width:560px; width:100%; margin:0 auto; } }
+        @media(max-width:640px) { body.min-h-screen { padding:20px 14px; align-items:flex-start; } .auth-card { padding:24px 20px; border-radius:14px; } .portal-grid { grid-template-columns:1fr; } }
+
     </style>
 <link rel="stylesheet" href="css/mobile.css"></head>
 <body class="min-h-screen gradient-bg flex items-center justify-center p-4">
