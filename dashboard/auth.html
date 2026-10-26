@@ -804,7 +804,7 @@
                         var account = await OOES_AUTH._loadProfile(data.session.user);
                         localStorage.setItem('ooesSession', '1');
                         showNotification('Signed In', 'Welcome to OfficeFlow. Opening your workspace...', 'success');
-                        window.history.replaceState({}, document.title, window.location.pathname);
+                        window.history.replaceState({}, document.title, window.location.pathname + (params.get('portal') ? '?portal=' + encodeURIComponent(params.get('portal')) : ''));
                         setTimeout(function() { window.location.replace(destinationForAccount(account)); }, 700);
                         return;
                     }
