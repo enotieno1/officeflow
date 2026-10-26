@@ -589,17 +589,17 @@ header a,footer a{border-radius:9px!important;font-weight:700;box-shadow:0 4px 1
         function showNotification(message, type = 'info') {
             const notification = document.createElement('div');
             notification.className = `fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 max-w-sm ${
-                type === 'success' ↔ 'bg-green-500 text-white' :
-                type === 'error' ↔ 'bg-red-500 text-white' :
-                type === 'warning' ↔ 'bg-yellow-500 text-white' :
+                type === 'success' ? 'bg-green-500 text-white' :
+                type === 'error' ? 'bg-red-500 text-white' :
+                type === 'warning' ? 'bg-yellow-500 text-white' :
                 'bg-blue-500 text-white'
             }`;
             notification.innerHTML = `
                 <div class="flex items-center">
                     <i class="fas ${
-                        type === 'success' ↔ 'fa-check-circle' :
-                        type === 'error' ↔ 'fa-exclamation-circle' :
-                        type === 'warning' ↔ 'fa-exclamation-triangle' :
+                        type === 'success' ? 'fa-check-circle' :
+                        type === 'error' ? 'fa-exclamation-circle' :
+                        type === 'warning' ? 'fa-exclamation-triangle' :
                         'fa-info-circle'
                     } mr-3"></i>
                     <div class="font-medium">${message}</div>
@@ -614,7 +614,7 @@ header a,footer a{border-radius:9px!important;font-weight:700;box-shadow:0 4px 1
         }
 
         function closeModal(element) {
-            const modal = element ↔ element.closest('.modal, .fixed') : document.querySelector('.modal.active, .fixed.inset-0');
+            const modal = element ? element.closest('.modal, .fixed') : document.querySelector('.modal.active, .fixed.inset-0');
             if (modal) {
                 modal.classList.remove('active');
                 modal.style.display = 'none';
