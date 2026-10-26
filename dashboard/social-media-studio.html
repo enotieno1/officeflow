@@ -92,6 +92,9 @@ $('refreshDrafts').onclick=render;render();
   }catch(e){note.textContent=e.message||'Could not connect provider.';button.disabled=false;}
  }));
  const params=new URLSearchParams(window.location.search);
+ const selectedChannel=params.get('channel');
+ const channelLabels={facebook:'Facebook',whatsapp:'WhatsApp',instagram:'Instagram',x:'X (Twitter)',linkedin:'LinkedIn'};
+ if(selectedChannel&&channelLabels[selectedChannel]){document.querySelectorAll('input[name="channel"]').forEach(input=>{input.checked=input.value===channelLabels[selectedChannel];});const title=document.querySelector('input[name="title"]');if(title&&!title.value)title.value=channelLabels[selectedChannel]+' update';const planner=document.getElementById('postForm');if(planner)planner.scrollIntoView({behavior:'smooth',block:'start'});}
  if(params.has('social_connected')){note.textContent='OAuth completed for '+params.get('social_connected')+'. Publishing and account metadata still require provider-specific setup and verification.';history.replaceState({},'',window.location.pathname);}
  if(params.has('social_error')){note.textContent='Social account authorisation did not complete ('+params.get('social_error')+'). Check the provider app configuration and try again.';history.replaceState({},'',window.location.pathname);}
 })();
