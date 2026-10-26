@@ -6,65 +6,98 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="css/executive-theme.css"><link rel="stylesheet" href="css/mobile.css">
 <style>
-:root{--navy:#16213e;--brass:#a6823d}body{background:#f7f6f2;color:#16213e}.panel{background:white;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 4px 16px #16213e0a}.pill{display:inline-flex;align-items:center;border-radius:999px;padding:5px 10px;font-size:12px;font-weight:700;background:#fff4dc;color:#805b12}.primary{background:var(--navy);color:white}.primary:hover{opacity:.92}.muted{color:#5b6472}.link{color:#8a6729;text-decoration:underline;text-underline-offset:3px}.checklist{padding-left:1.2rem;list-style:disc}.checklist li{margin:.35rem 0}
+:root{--of-navy:#14233f;--of-ink:#202b3c;--of-muted:#687487;--of-brass:#a9823c;--of-line:#e3e8ef;--of-canvas:#f4f6f9;--of-green:#267455}
+*{box-sizing:border-box}body{margin:0;background:var(--of-canvas);color:var(--of-ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.shell{max-width:1180px;margin:0 auto}.topbar{background:var(--of-navy);color:#fff}.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:750;color:#bfc9d8}.hero-title{letter-spacing:-.035em;font-weight:700}.muted{color:var(--of-muted)}.panel{background:#fff;border:1px solid var(--of-line);border-radius:14px;box-shadow:0 2px 7px rgba(20,35,63,.035)}.metric{border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.055);border-radius:12px;padding:14px 16px;min-width:0}.metric-label{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:#c5cede}.metric-value{font-size:23px;font-weight:700;line-height:1.3;color:#fff}.status{display:inline-flex;align-items:center;gap:7px;border-radius:6px;border:1px solid #e8d8b7;background:#fbf5e8;color:#795a20;font-size:11px;font-weight:750;letter-spacing:.035em;padding:6px 9px;white-space:nowrap}.status-dot{width:6px;height:6px;border-radius:50%;background:#b58a36;display:inline-block}.provider-head{display:flex;align-items:flex-start;gap:13px}.provider-mark{height:42px;width:42px;flex:0 0 42px;display:grid;place-items:center;border:1px solid var(--of-line);border-radius:10px;background:#f8fafc;color:var(--of-navy);font-weight:800;font-size:13px;letter-spacing:-.03em}.provider-kicker{font-size:10px;text-transform:uppercase;letter-spacing:.13em;color:#7b8797;font-weight:750}.provider-title{font-size:19px;line-height:1.3;font-weight:700;letter-spacing:-.02em;color:var(--of-navy)}.provider-copy{font-size:13px;line-height:1.7;color:#5d6879}.requirements{border-top:1px solid #edf0f4;margin-top:18px;padding-top:15px}.requirements-title{font-size:11px;text-transform:uppercase;letter-spacing:.1em;font-weight:750;color:#536074}.checklist{padding:0;margin:10px 0 0;list-style:none;display:grid;gap:9px}.checklist li{position:relative;padding-left:19px;color:#5b6676;font-size:12px;line-height:1.5}.checklist li:before{content:"";position:absolute;left:0;top:5px;width:9px;height:9px;border:1.5px solid #b7c1ce;border-radius:2px}.provider-link{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:650;color:#775a26;text-decoration:none}.provider-link:hover{text-decoration:underline;text-underline-offset:3px}.btn-primary{background:var(--of-navy);color:white;border:1px solid var(--of-navy);border-radius:8px;padding:10px 14px;font-size:12px;font-weight:700}.btn-secondary{background:white;color:var(--of-navy);border:1px solid #d8dee7;border-radius:8px;padding:10px 14px;font-size:12px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center}.btn-primary:hover{background:#20375d}.accounting-tile{border:1px solid var(--of-line);border-radius:10px;padding:15px;background:#fff}.accounting-name{font-size:14px;font-weight:750;color:var(--of-navy)}.accounting-copy{font-size:12px;line-height:1.6;color:var(--of-muted);min-height:58px}.callout{border:1px solid #e7d9b9;background:#fcf8ef;border-radius:10px;color:#644d24}.section-title{font-size:15px;font-weight:750;letter-spacing:-.015em;color:var(--of-navy)}.section-copy{font-size:12px;color:var(--of-muted);line-height:1.7}.section-label{font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#8a6a2d}a:focus-visible,button:focus-visible{outline:3px solid #c7a65e;outline-offset:3px}
+@media(max-width:640px){.provider-head{flex-wrap:wrap}.provider-title{font-size:17px}.accounting-copy{min-height:0}.metric-value{font-size:20px}}
 </style>
 </head>
 <body>
-<header class="px-5 md:px-8 py-5 border-b bg-white">
-<div class="max-w-6xl mx-auto flex items-center justify-between gap-4"><div><p class="text-xs uppercase tracking-widest muted">OfficeFlow · Administration</p><h1 class="text-2xl md:text-3xl font-semibold mt-1">Integration Centre</h1><p class="text-sm muted mt-1">Connect your organisation's existing tools to OfficeFlow securely.</p></div><a href="/dashboard/index.html" class="text-sm font-semibold">← Dashboard</a></div>
+<header class="topbar">
+  <div class="shell px-5 md:px-8 py-5 md:py-6">
+    <div class="flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="grid place-items-center rounded-lg border border-white/20 bg-white/10 w-10 h-10 text-sm font-extrabold tracking-tight">OF</div>
+        <div><p class="eyebrow">OfficeFlow / Administration</p><p class="text-sm font-semibold mt-1">Organisation settings</p></div>
+      </div>
+      <a href="/dashboard/index.html" class="text-sm font-semibold text-white/90 hover:text-white">← Dashboard</a>
+    </div>
+    <div class="mt-8 md:mt-10 grid lg:grid-cols-[1fr_350px] gap-7 items-end">
+      <div class="max-w-2xl">
+        <p class="eyebrow">Connected workplace</p>
+        <h1 class="hero-title text-3xl md:text-4xl mt-2">Integration Centre</h1>
+        <p class="text-sm md:text-base text-white/75 leading-7 mt-3 max-w-xl">Bring your organisation’s approved tools into one controlled operating environment. Manage provider readiness, permissions and secure synchronisation from here.</p>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div class="metric"><p class="metric-label">Providers listed</p><p class="metric-value mt-1">8</p></div>
+        <div class="metric"><p class="metric-label">Verified connections</p><p class="metric-value mt-1">0</p></div>
+        <div class="metric col-span-2"><p class="metric-label">Current deployment status</p><p class="text-sm font-semibold mt-1 text-white">Setup required · No live provider connection verified</p></div>
+      </div>
+    </div>
+  </div>
 </header>
-<main class="max-w-6xl mx-auto p-5 md:p-8 space-y-6">
-<section class="panel p-5 md:p-6">
-<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3"><div><h2 class="text-lg font-semibold">Connection status</h2><p class="text-sm muted mt-1">These services are not yet authenticated to this OfficeFlow deployment. Opening a provider console does not connect it by itself.</p></div><span class="pill">5 integrations awaiting setup</span></div>
-<div class="mt-4 rounded-xl bg-amber-50 border border-amber-200 p-4 text-sm text-amber-950"><strong>Important:</strong> No provider is marked “Connected” until OfficeFlow has a working OAuth/API flow, securely stored credentials, and a successful connection test. Never paste API secrets into a chat or browser page.</div>
-</section>
-<section class="grid md:grid-cols-2 gap-5">
-<article class="panel p-5 flex flex-col">
-<div class="flex items-start justify-between gap-3"><div><p class="text-xs uppercase tracking-wider muted">Email · Files · Calendar</p><h2 class="text-xl font-semibold mt-1">Google Workspace</h2></div><span class="pill">Not configured</span></div>
-<p class="text-sm muted mt-3">Potential services: Gmail, Drive, Docs, Sheets and Calendar. Each permission should be limited to what the organisation enables.</p>
-<div class="mt-4 text-sm"><strong>Required before connecting</strong><ul class="checklist mt-2"><li>Google Cloud project and OAuth consent screen</li><li>OAuth client ID and authorised redirect URL</li><li>Server-side callback/token storage and least-privilege scopes</li><li>Test sign-in, API access and disconnect/revoke</li></ul></div>
-<div class="mt-auto pt-5 flex flex-wrap gap-3"><a class="link text-sm" href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener noreferrer">Google Cloud credentials ↗</a><a class="link text-sm" href="https://developers.google.com/identity/protocols/oauth2" target="_blank" rel="noopener noreferrer">OAuth documentation ↗</a></div>
-</article>
-<article class="panel p-5 flex flex-col">
-<div class="flex items-start justify-between gap-3"><div><p class="text-xs uppercase tracking-wider muted">Email · Files · Office apps</p><h2 class="text-xl font-semibold mt-1">Microsoft 365</h2></div><span class="pill">Not configured</span></div>
-<p class="text-sm muted mt-3">Potential services: Outlook, OneDrive, Excel, Word, Teams and Calendar through Microsoft Graph, subject to tenant permissions.</p>
-<div class="mt-4 text-sm"><strong>Required before connecting</strong><ul class="checklist mt-2"><li>Microsoft Entra app registration</li><li>Client ID, tenant configuration and redirect URL</li><li>Approved Graph delegated/application permissions</li><li>Server-side token handling and end-to-end test</li></ul></div>
-<div class="mt-auto pt-5 flex flex-wrap gap-3"><a class="link text-sm" href="https://entra.microsoft.com/" target="_blank" rel="noopener noreferrer">Microsoft Entra ↗</a><a class="link text-sm" href="https://learn.microsoft.com/graph/overview" target="_blank" rel="noopener noreferrer">Graph documentation ↗</a></div>
-</article>
-<article class="panel p-5 flex flex-col">
-<div class="flex items-start justify-between gap-3"><div><p class="text-xs uppercase tracking-wider muted">Spreadsheets</p><h2 class="text-xl font-semibold mt-1">Excel / Google Sheets</h2></div><span class="pill">File tools available</span></div>
-<p class="text-sm muted mt-3">The OfficeFlow spreadsheet workspace supports file import/export and is designed for cloud saving. That is not the same as live synchronisation with a user's Microsoft or Google account.</p>
-<div class="mt-4 text-sm"><strong>To enable live sync</strong><ul class="checklist mt-2"><li>Complete Microsoft Graph or Google Sheets OAuth</li><li>Define which workbook and spreadsheet actions are allowed</li><li>Implement sync conflict handling and audit records</li><li>Test read/write access with a real authorised account</li></ul></div>
-<div class="mt-auto pt-5 flex flex-wrap gap-3"><a class="link text-sm" href="excel-system.html">Open OfficeFlow spreadsheet ↗</a><a class="link text-sm" href="https://developers.google.com/sheets/api" target="_blank" rel="noopener noreferrer">Sheets API ↗</a></div>
-</article>
-<article class="panel p-5 flex flex-col">
-<div class="flex items-start justify-between gap-3"><div><p class="text-xs uppercase tracking-wider muted">Tasks · Boards</p><h2 class="text-xl font-semibold mt-1">Trello</h2></div><span class="pill">Not configured</span></div>
-<p class="text-sm muted mt-3">A real connector can read and update permitted boards/cards and map Trello activity to OfficeFlow tasks. It needs a provider-authorised token and explicit sync rules.</p>
-<div class="mt-4 text-sm"><strong>Required before connecting</strong><ul class="checklist mt-2"><li>Trello developer/API access and authorised account</li><li>Secure server-side token storage</li><li>Board/card mapping, sync direction and duplicate handling</li><li>Permission and write-operation tests</li></ul></div>
-<div class="mt-auto pt-5 flex flex-wrap gap-3"><a class="link text-sm" href="https://developer.atlassian.com/cloud/trello/" target="_blank" rel="noopener noreferrer">Trello API documentation ↗</a><a class="link text-sm" href="https://trello.com/power-ups/admin" target="_blank" rel="noopener noreferrer">Trello Power-Ups ↗</a></div>
-</article>
-<article class="panel p-5 flex flex-col md:col-span-2">
-<div class="flex items-start justify-between gap-3"><div><p class="text-xs uppercase tracking-wider muted">Finance · Accounting</p><h2 class="text-xl font-semibold mt-1">Accounting systems</h2></div><span class="pill">Provider not selected</span></div>
-<p class="text-sm muted mt-3">Accounting connections must be provider-specific. OfficeFlow should not write to a live ledger until the organisation authorises the connector and approves exactly which records may be read or created.</p>
-<div class="grid sm:grid-cols-3 gap-3 mt-4">
-<div class="rounded-xl border p-4"><strong>QuickBooks Online</strong><p class="text-sm muted mt-1">Invoices, customers and accounting records, subject to granted scopes.</p><a class="link text-sm inline-block mt-3" href="https://developer.intuit.com/" target="_blank" rel="noopener noreferrer">Developer portal ↗</a></div>
-<div class="rounded-xl border p-4"><strong>Xero</strong><p class="text-sm muted mt-1">Accounting data through Xero's OAuth-based API.</p><a class="link text-sm inline-block mt-3" href="https://developer.xero.com/" target="_blank" rel="noopener noreferrer">Developer portal ↗</a></div>
-<div class="rounded-xl border p-4"><strong>Sage</strong><p class="text-sm muted mt-1">API availability and scopes depend on the Sage product and region.</p><a class="link text-sm inline-block mt-3" href="https://developer.sage.com/" target="_blank" rel="noopener noreferrer">Developer portal ↗</a></div>
-</div>
-</article>
-</section>
-<section class="panel p-5 md:p-6">
-<h2 class="text-lg font-semibold">What is still needed inside OfficeFlow</h2>
-<p class="text-sm muted mt-1">Provider credentials alone are not enough. The application needs secure backend callback routes, encrypted token storage, organisation-scoped access controls, refresh/revocation handling, sync logs, error reporting and verified tests. Do not put client secrets in frontend HTML or commit them to GitHub.</p>
-<div class="mt-4 flex flex-wrap gap-3"><button id="copyChecklist" class="primary rounded-lg px-4 py-2 text-sm font-semibold">Copy implementation checklist</button><a href="/dashboard/security-center.html" class="rounded-lg border px-4 py-2 text-sm font-semibold">Security & Audit</a><a href="/dashboard/workflow.html" class="rounded-lg border px-4 py-2 text-sm font-semibold">Open Work Center</a></div>
-<p id="copyStatus" class="text-sm muted mt-3" aria-live="polite"></p>
-</section>
-<footer class="text-xs muted pb-4">Status shown here describes OfficeFlow's integration configuration, not whether a provider website itself is available.</footer>
+<main class="shell px-5 md:px-8 py-6 md:py-8 space-y-6">
+  <section class="panel p-5 md:p-6">
+    <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+      <div class="max-w-3xl"><p class="section-label">Readiness overview</p><h2 class="section-title text-lg mt-2">Provider connections are not yet configured</h2><p class="section-copy mt-2">Provider portals below are setup resources only. OfficeFlow will show a provider as connected only after its authorisation flow, secure token handling and a live connection test have all succeeded.</p></div>
+      <span class="status"><span class="status-dot"></span> SETUP REQUIRED</span>
+    </div>
+    <div class="callout p-4 mt-5 flex gap-3 items-start"><span class="font-bold text-base leading-none">!</span><p class="text-xs leading-6"><strong>Security control:</strong> Never paste API keys, client secrets or access tokens into chat, frontend forms or source code. Configure credentials through approved deployment secrets and backend-only routes.</p></div>
+  </section>
+
+  <div class="flex items-end justify-between gap-4"><div><p class="section-label">Productivity & collaboration</p><h2 class="text-xl font-bold tracking-tight mt-1 text-slate-900">Workplace providers</h2></div><p class="hidden sm:block text-xs muted">4 integration areas</p></div>
+  <section class="grid md:grid-cols-2 gap-5">
+    <article class="panel p-5 md:p-6 flex flex-col">
+      <div class="provider-head"><div class="provider-mark">G</div><div class="flex-1 min-w-0"><p class="provider-kicker">Email · Files · Calendar</p><h3 class="provider-title mt-1">Google Workspace</h3></div><span class="status"><span class="status-dot"></span> NOT CONFIGURED</span></div>
+      <p class="provider-copy mt-4">Potential access to Gmail, Drive, Docs, Sheets and Calendar, limited to the services and permissions the organisation approves.</p>
+      <div class="requirements"><p class="requirements-title">Implementation requirements</p><ul class="checklist"><li>Google Cloud project and OAuth consent configuration</li><li>OAuth client and authorised callback URL</li><li>Server-side token storage with least-privilege scopes</li><li>Live sign-in, API access and disconnect/revoke tests</li></ul></div>
+      <div class="mt-auto pt-5 flex flex-wrap gap-x-5 gap-y-3"><a class="provider-link" href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener noreferrer">Google Cloud credentials ↗</a><a class="provider-link" href="https://developers.google.com/identity/protocols/oauth2" target="_blank" rel="noopener noreferrer">OAuth guide ↗</a></div>
+    </article>
+    <article class="panel p-5 md:p-6 flex flex-col">
+      <div class="provider-head"><div class="provider-mark">M</div><div class="flex-1 min-w-0"><p class="provider-kicker">Email · Files · Office apps</p><h3 class="provider-title mt-1">Microsoft 365</h3></div><span class="status"><span class="status-dot"></span> NOT CONFIGURED</span></div>
+      <p class="provider-copy mt-4">Potential access to Outlook, OneDrive, Excel, Word, Teams and Calendar through Microsoft Graph, subject to tenant consent.</p>
+      <div class="requirements"><p class="requirements-title">Implementation requirements</p><ul class="checklist"><li>Microsoft Entra application registration</li><li>Client ID, tenant settings and callback URL</li><li>Approved Graph permissions and admin consent where required</li><li>Server-side token handling and end-to-end tests</li></ul></div>
+      <div class="mt-auto pt-5 flex flex-wrap gap-x-5 gap-y-3"><a class="provider-link" href="https://entra.microsoft.com/" target="_blank" rel="noopener noreferrer">Microsoft Entra ↗</a><a class="provider-link" href="https://learn.microsoft.com/graph/overview" target="_blank" rel="noopener noreferrer">Graph documentation ↗</a></div>
+    </article>
+    <article class="panel p-5 md:p-6 flex flex-col">
+      <div class="provider-head"><div class="provider-mark">XLS</div><div class="flex-1 min-w-0"><p class="provider-kicker">Spreadsheet workflows</p><h3 class="provider-title mt-1">Excel / Google Sheets</h3></div><span class="status"><span class="status-dot"></span> LIVE SYNC NOT SET UP</span></div>
+      <p class="provider-copy mt-4">OfficeFlow’s spreadsheet workspace supports file import/export. File handling does not mean that a user’s Microsoft or Google workbook is synchronised.</p>
+      <div class="requirements"><p class="requirements-title">To enable live synchronisation</p><ul class="checklist"><li>Complete Microsoft Graph or Google Sheets OAuth</li><li>Define permitted workbook and spreadsheet operations</li><li>Implement conflict handling and sync audit records</li><li>Test real read/write access with an authorised account</li></ul></div>
+      <div class="mt-auto pt-5 flex flex-wrap gap-x-5 gap-y-3"><a class="provider-link" href="excel-system.html">Open OfficeFlow spreadsheets ↗</a><a class="provider-link" href="https://developers.google.com/sheets/api" target="_blank" rel="noopener noreferrer">Sheets API ↗</a></div>
+    </article>
+    <article class="panel p-5 md:p-6 flex flex-col">
+      <div class="provider-head"><div class="provider-mark">T</div><div class="flex-1 min-w-0"><p class="provider-kicker">Tasks · Boards</p><h3 class="provider-title mt-1">Trello</h3></div><span class="status"><span class="status-dot"></span> NOT CONFIGURED</span></div>
+      <p class="provider-copy mt-4">A future connector can map approved Trello boards and cards to OfficeFlow tasks, with clear sync direction and duplicate prevention.</p>
+      <div class="requirements"><p class="requirements-title">Implementation requirements</p><ul class="checklist"><li>Trello API access and authorisation by the organisation</li><li>Secure server-side credential storage</li><li>Board/card mapping, sync direction and duplicate handling</li><li>Permission, write-operation and failure-recovery tests</li></ul></div>
+      <div class="mt-auto pt-5 flex flex-wrap gap-x-5 gap-y-3"><a class="provider-link" href="https://developer.atlassian.com/cloud/trello/" target="_blank" rel="noopener noreferrer">Trello API documentation ↗</a><a class="provider-link" href="https://trello.com/power-ups/admin" target="_blank" rel="noopener noreferrer">Power-Ups ↗</a></div>
+    </article>
+  </section>
+
+  <div class="flex items-end justify-between gap-4 pt-2"><div><p class="section-label">Finance systems</p><h2 class="text-xl font-bold tracking-tight mt-1 text-slate-900">Accounting integrations</h2></div><p class="hidden sm:block text-xs muted">Choose a provider before implementation</p></div>
+  <section class="panel p-5 md:p-6">
+    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3"><div><h3 class="section-title">Connect to your accounting platform</h3><p class="section-copy mt-1 max-w-2xl">Each accounting platform needs its own approved OAuth/API integration. OfficeFlow must not create or change live ledger records until access, write permissions and reconciliation rules are explicitly authorised.</p></div><span class="status"><span class="status-dot"></span> PROVIDER NOT SELECTED</span></div>
+    <div class="grid md:grid-cols-3 gap-3 mt-5">
+      <div class="accounting-tile"><div class="flex items-center gap-3"><div class="provider-mark">QB</div><div><h4 class="accounting-name">QuickBooks Online</h4><p class="text-xs muted mt-1">Intuit accounting platform</p></div></div><p class="accounting-copy mt-3">Invoices, customer records and accounting data within the granted scopes.</p><a class="provider-link mt-2" href="https://developer.intuit.com/" target="_blank" rel="noopener noreferrer">Developer portal ↗</a></div>
+      <div class="accounting-tile"><div class="flex items-center gap-3"><div class="provider-mark">X</div><div><h4 class="accounting-name">Xero</h4><p class="text-xs muted mt-1">Cloud accounting platform</p></div></div><p class="accounting-copy mt-3">Accounting data through Xero’s OAuth-based API and approved scopes.</p><a class="provider-link mt-2" href="https://developer.xero.com/" target="_blank" rel="noopener noreferrer">Developer portal ↗</a></div>
+      <div class="accounting-tile"><div class="flex items-center gap-3"><div class="provider-mark">S</div><div><h4 class="accounting-name">Sage</h4><p class="text-xs muted mt-1">Accounting software suite</p></div></div><p class="accounting-copy mt-3">Available APIs and permissions vary by Sage product and operating region.</p><a class="provider-link mt-2" href="https://developer.sage.com/" target="_blank" rel="noopener noreferrer">Developer portal ↗</a></div>
+    </div>
+  </section>
+
+  <section class="panel p-5 md:p-6">
+    <div class="grid lg:grid-cols-[1fr_auto] gap-5 items-start">
+      <div><p class="section-label">Implementation governance</p><h2 class="section-title text-lg mt-2">Security and operational controls</h2><p class="section-copy mt-2 max-w-3xl">Provider credentials alone are not sufficient. Production integrations need backend callback routes, protected token storage, organisation-scoped permissions, token refresh and revocation, sync logs, actionable errors and verified tests.</p>
+        <div class="grid sm:grid-cols-2 gap-x-6 gap-y-3 mt-5 text-xs text-slate-600"><p><strong class="text-slate-800">01</strong> · Backend-only OAuth and secret handling</p><p><strong class="text-slate-800">02</strong> · Tenant-scoped access and least privilege</p><p><strong class="text-slate-800">03</strong> · Retry, conflict and revocation handling</p><p><strong class="text-slate-800">04</strong> · Real API tests and auditable sync logs</p></div>
+      </div>
+      <div class="flex flex-col sm:flex-row lg:flex-col gap-2"><button id="copyChecklist" class="btn-primary">Copy implementation checklist</button><a href="/dashboard/security-center.html" class="btn-secondary">Security &amp; Audit</a><a href="/dashboard/workflow.html" class="btn-secondary">Open Work Center</a></div>
+    </div>
+    <p id="copyStatus" class="text-xs muted mt-4" aria-live="polite"></p>
+  </section>
+  <footer class="border-t border-slate-200 pt-4 pb-5 flex flex-col sm:flex-row sm:justify-between gap-2 text-xs muted"><span>OfficeFlow · Integration Centre</span><span>Connection status reflects verified OfficeFlow configuration, not provider website availability.</span></footer>
 </main>
 <script>
 document.getElementById('copyChecklist').addEventListener('click',async function(){
- const text='OfficeFlow integrations implementation checklist\n1. Confirm production domain and exact OAuth callback routes.\n2. Build server-side OAuth start/callback/disconnect handlers for each provider.\n3. Store secrets in deployment environment variables, never in frontend code or Git.\n4. Store provider tokens securely and scope records by organization and authorising admin.\n5. Request least-privilege permissions and support token refresh/revocation.\n6. Implement provider-specific read/write and sync mapping, retries, audit logs and clear errors.\n7. Test real login, API read/write, expired token, revoked access and tenant isolation.\n8. Display Connected only after a successful live health check.';
- try{await navigator.clipboard.writeText(text);document.getElementById('copyStatus').textContent='Checklist copied.';}catch(e){document.getElementById('copyStatus').textContent=text;}
+ const checklist='OfficeFlow integrations implementation checklist\n1. Confirm production domain and exact OAuth callback routes.\n2. Build server-side OAuth start, callback and disconnect handlers per provider.\n3. Store secrets in deployment environment variables, never frontend code or Git.\n4. Store provider tokens securely and scope records to the authorising organisation.\n5. Request least-privilege permissions; support token refresh and revocation.\n6. Implement provider-specific mappings, retries, audit logs and actionable errors.\n7. Test real login, API read/write, expired token, revoked access and tenant isolation.\n8. Show Connected only after a successful live health check.';
+ try{await navigator.clipboard.writeText(checklist);document.getElementById('copyStatus').textContent='Implementation checklist copied to clipboard.';}catch(e){document.getElementById('copyStatus').textContent=checklist;}
 });
 </script>
-</body></html>
+</body>
+</html>
