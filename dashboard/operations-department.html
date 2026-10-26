@@ -17,6 +17,38 @@
         .status-pending { background-color: #f59e0b; color: white; }
         .status-completed { background-color: #10b981; color: white; }
         .progress-bar { transition: width 0.3s ease; }
+    
+/* OfficeFlow executive department refresh */
+:root{--of-navy:#14283f;--of-navy-deep:#0b1b2b;--of-brass:#a6823d;--of-ink:#243447;--of-muted:#64748b;--of-line:#dbe3eb;--of-canvas:#f4f7fa}
+html{min-height:100%;overflow:auto;scrollbar-gutter:stable}
+body{min-height:100vh;background:var(--of-canvas)!important;color:var(--of-ink);overflow:auto!important;font-family:Inter,"Segoe UI",Arial,sans-serif}
+body *{box-sizing:border-box}
+header,.gradient-bg{background:linear-gradient(115deg,var(--of-navy-deep),var(--of-navy))!important;color:#fff!important}
+header{border-bottom:3px solid var(--of-brass);box-shadow:0 5px 18px rgba(11,27,43,.12)}
+header h1{font-size:clamp(1.35rem,2.2vw,1.9rem)!important;letter-spacing:-.025em;font-weight:750!important}
+header p{color:#d7e0ea!important;font-size:.92rem;letter-spacing:.01em}
+main{width:100%;max-width:none!important;padding:clamp(1rem,2.4vw,2.25rem)!important}
+section{margin-bottom:2rem!important}
+h2{color:var(--of-navy)!important;font-weight:750!important;letter-spacing:-.02em}
+.ops-card,.comm-card,main .bg-white,main .rounded-lg,main .rounded-xl{border:1px solid var(--of-line);border-radius:12px!important;box-shadow:0 2px 8px rgba(20,40,63,.045);transition:box-shadow .18s ease,border-color .18s ease}
+.ops-card:hover,.comm-card:hover,main .bg-white:hover{transform:translateY(-2px);border-color:#bdcbd9;box-shadow:0 8px 22px rgba(20,40,63,.09)}
+main .text-gray-500,main .text-gray-600{color:var(--of-muted)!important}
+main .text-yellow-600,main .text-amber-600,main .text-purple-600,main .text-indigo-600{color:var(--of-brass)!important}
+button,.btn{border-radius:7px!important;font-weight:650!important;transition:filter .15s ease,transform .15s ease}
+button:hover,.btn:hover{filter:brightness(.96)}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid rgba(166,130,61,.35);outline-offset:2px}
+input,select,textarea{max-width:100%;border:1px solid #cbd5e1!important;border-radius:7px!important}
+table{width:100%;border-collapse:separate;border-spacing:0;min-width:720px}
+thead th{background:#eef2f6;color:var(--of-navy);font-size:.72rem;text-transform:uppercase;letter-spacing:.055em;font-weight:750}
+th,td{padding:.85rem 1rem!important;border-bottom:1px solid #e4eaf0;text-align:left;vertical-align:middle}
+main .overflow-x-auto,.overflow-x-auto{max-width:100%;overflow-x:auto!important;-webkit-overflow-scrolling:touch}
+main .overflow-y-auto,.overflow-y-auto{overflow-y:auto!important}
+.modal{overflow:auto;padding:1rem}
+.modal.active{align-items:flex-start;justify-content:center}
+.modal>div{max-width:min(720px,100%);max-height:calc(100vh - 2rem);overflow:auto;margin:auto}
+a{overflow-wrap:anywhere}
+@media(max-width:768px){main{padding:1rem!important}header .container{padding-left:1rem;padding-right:1rem}section{margin-bottom:1.4rem!important}th,td{padding:.7rem!important}.modal.active{padding:.5rem}.modal>div{max-height:calc(100vh - 1rem)}}
+
     </style>
 <link rel="stylesheet" href="css/mobile.css">
 <link rel="stylesheet" href="css/executive-theme.css"></head>
