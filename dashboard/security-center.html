@@ -9,12 +9,32 @@
 <script>var supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);</script>
 <link rel="stylesheet" href="css/executive-theme.css"><link rel="stylesheet" href="css/mobile.css">
 <style>
-:root{--audit-ink:#17243b;--audit-brass:#a98645}.audit-card{background:#fff;border:1px solid #e5e7eb;border-radius:14px;box-shadow:0 3px 12px rgba(20,32,50,.035)}.audit-btn{border:1px solid #d1d5db;border-radius:9px;padding:9px 12px;font-size:13px;background:#fff}.audit-btn-primary{background:var(--audit-ink);color:#fff;border-color:var(--audit-ink)}.audit-pill{display:inline-flex;border-radius:999px;padding:3px 9px;background:#f3f4f6;font-size:11px;color:#374151}.audit-table th{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:#6b7280;font-weight:600;text-align:left;padding:12px 10px;background:#f9fafb}.audit-table td{padding:12px 10px;border-top:1px solid #eef0f3;vertical-align:top;font-size:13px}.audit-table tr:hover td{background:#fcfcfd}
+:root{--of-navy:#14233f;--of-ink:#202b3c;--of-muted:#687487;--of-brass:#a9823c;--of-line:#e3e8ef;--of-canvas:#f4f6f9}
+*{box-sizing:border-box}body{margin:0;background:var(--of-canvas);color:var(--of-ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.of-header{background:var(--of-navy)!important;color:#fff!important;border-bottom:3px solid var(--of-brass);padding-top:22px!important;padding-bottom:22px!important;align-items:center}
+.of-header .of-eyebrow{color:#c1ccdc!important;font-size:10px;letter-spacing:.16em;text-transform:uppercase;font-weight:800;margin-bottom:7px}
+.of-header h1{color:#fff;letter-spacing:-.035em;font-weight:700}.of-header p{color:#c6cfdd!important}.of-header>a{color:#fff!important;border:1px solid #ffffff35;border-radius:8px;padding:9px 12px;font-weight:650;text-decoration:none}.of-header>a:hover{background:#ffffff12}
+main.max-w-7xl{max-width:1240px!important}.audit-card{background:#fff;border:1px solid var(--of-line);border-radius:13px;box-shadow:0 2px 7px rgba(20,35,63,.035);padding:21px!important}
+section.audit-card h2{color:var(--of-navy);letter-spacing:-.02em}
+main>section:first-of-type .audit-card{min-height:125px}
+main>section:first-of-type .text-xs.uppercase{font-size:10px;letter-spacing:.12em;font-weight:750;color:#788496}
+#role,#events,#notifications,#accessStatus{color:var(--of-navy);font-weight:750;letter-spacing:-.03em}
+#accessStatus{font-size:20px!important}
+.audit-btn{border:1px solid #d3dbe5;border-radius:8px;padding:10px 14px;font-size:12px;font-weight:700;background:#fff;color:var(--of-navy);transition:background .15s,border-color .15s}
+.audit-btn:hover{background:#f4f6f9;border-color:#aeb9c8}.audit-btn-primary{background:var(--of-navy);color:#fff;border-color:var(--of-navy)}.audit-btn-primary:hover{background:#21375b;color:#fff}
+.audit-pill{display:inline-flex;border-radius:5px;padding:5px 8px;background:#eef1f5;font-size:10px;text-transform:uppercase;letter-spacing:.05em;font-weight:750;color:#46536a}
+.audit-table{border-collapse:separate;border-spacing:0}.audit-table th{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:#667387;font-weight:800;text-align:left;padding:13px 12px;background:#f4f6f9;border-top:1px solid var(--of-line);border-bottom:1px solid var(--of-line)}.audit-table th:first-child{border-radius:7px 0 0 7px}.audit-table th:last-child{border-radius:0 7px 7px 0}.audit-table td{padding:14px 12px;border-bottom:1px solid #edf0f4;vertical-align:top;font-size:12px;line-height:1.55}.audit-table tr:hover td{background:#fafbfd}
+input,select{min-height:42px!important;border-color:#d7dee8!important;border-radius:8px!important;color:#26344a!important;background-color:#fff!important;box-shadow:none!important}input:focus,select:focus{outline:2px solid #d7bd83!important;outline-offset:1px;border-color:#a9823c!important}label{font-weight:650!important;color:#536074!important}label input,label select{font-weight:400}
+#resultCount{font-weight:700;color:#536074}.audit-card .of-serif{font-family:inherit!important}.audit-card ul li{font-size:12px;line-height:1.65}.audit-card ul li::marker{color:var(--of-brass)}
+#notice,#error{border-radius:10px!important;font-size:12px;line-height:1.65}
+details summary{font-weight:700;font-size:11px;text-decoration:none}details summary:hover{color:#14233f;text-decoration:underline;text-underline-offset:3px}
+main>section:last-of-type .audit-card{height:100%}
+@media(max-width:640px){.of-header{align-items:flex-start;flex-direction:column}.audit-card{padding:16px!important}.audit-table td{padding:11px 9px}.of-header h1{font-size:26px!important}}
 </style>
 </head>
 <body class="bg-gray-50 text-slate-800">
-<header class="of-header px-5 md:px-8 py-4 flex justify-between items-center gap-4"><div><div class="of-eyebrow">OfficeFlow · Governance</div><h1 class="of-serif text-2xl md:text-3xl font-semibold">Security, Privacy & Audit</h1><p class="text-sm text-gray-500 mt-1">Tenant-scoped audit visibility for authorised leadership. Audit records are read-only here.</p></div><a href="index.html" class="text-sm whitespace-nowrap">← Dashboard</a></header>
-<main class="max-w-7xl mx-auto p-4 md:p-7 space-y-6">
+<header class="of-header px-5 md:px-8 py-5 flex justify-between items-center gap-4"><div><div class="of-eyebrow">OfficeFlow / Governance &amp; Risk</div><h1 class="of-serif text-2xl md:text-3xl font-semibold">Security, Privacy &amp; Audit</h1><p class="text-sm mt-2">Organisation-scoped oversight, activity evidence and access governance.</p></div><a href="index.html" class="text-sm whitespace-nowrap">← Dashboard</a></header>
+<main class="max-w-7xl mx-auto p-4 md:p-7 space-y-5"><div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2"><div><p class="text-xs uppercase tracking-widest font-bold" style="color:#92713a">Governance workspace</p><h2 class="text-xl font-bold tracking-tight mt-1" style="color:#14233f">Audit oversight</h2><p class="text-xs muted mt-1">Review recorded events and investigate workflow activity within your authorised scope.</p></div><span class="text-xs font-semibold px-3 py-2 rounded-lg border bg-white" style="border-color:#e0e6ed;color:#5b687b">Read-only register · Latest 500 events</span></div>
 <div id="error" class="hidden rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800"></div>
 <div id="notice" class="hidden rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900"></div>
 <section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
@@ -24,7 +44,7 @@
 <div class="audit-card p-5"><div class="text-xs uppercase tracking-wide text-gray-500">Audit access</div><div id="accessStatus" class="text-xl font-semibold mt-2">Checking…</div><div class="text-xs text-gray-500 mt-1">Organisation-level access control</div></div>
 </section>
 <section class="audit-card p-5 md:p-6">
-<div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 mb-5"><div><h2 class="of-serif text-xl font-semibold">Audit event register</h2><p class="text-sm text-gray-500 mt-1">Review activity, actor, time, affected request and recorded details.</p></div><div class="flex flex-wrap gap-2"><button id="refresh" class="audit-btn">↻ Refresh</button><button id="export" class="audit-btn audit-btn-primary">Export CSV</button></div></div>
+<div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 mb-5"><div><p class="text-xs uppercase tracking-widest font-bold mb-2" style="color:#92713a">Activity register</p><h2 class="of-serif text-xl font-semibold">Audit event register</h2><p class="text-sm text-gray-500 mt-1">Search recorded activity, review event context and export the currently filtered results.</p></div><div class="flex flex-wrap gap-2"><button id="refresh" class="audit-btn">↻ Refresh</button><button id="export" class="audit-btn audit-btn-primary">Export CSV</button></div></div>
 <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
 <label class="text-xs text-gray-600">Search events<input id="search" class="block w-full mt-1 rounded-lg border border-gray-300 px-3 py-2 text-sm" placeholder="Action, actor, request ID or details"></label>
 <label class="text-xs text-gray-600">Activity category<select id="category" class="block w-full mt-1 rounded-lg border border-gray-300 px-3 py-2 text-sm"><option value="">All categories</option><option value="workflow">Workflow & approvals</option><option value="access">Access & security</option><option value="finance">Finance</option><option value="document">Documents</option><option value="hr">Human resources</option><option value="other">Other activity</option></select></label>
@@ -35,8 +55,8 @@
 <div class="mt-4 text-xs text-gray-500">This view shows only fields recorded by the application. IP address, device, session events, data-change diffs and retention status will appear only after their respective capture mechanisms are implemented.</div>
 </section>
 <section class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-<div class="audit-card p-5"><h2 class="font-semibold mb-3">Audit coverage</h2><ul class="space-y-2 text-sm text-gray-600"><li>• Actor and timestamp of recorded events</li><li>• Event/action name and structured details</li><li>• Request/workflow linkage where recorded</li><li>• Organisation-scoped visibility and role checks</li><li>• Search, category/date filters and CSV export</li></ul></div>
-<div class="audit-card p-5"><h2 class="font-semibold mb-3">Privacy & control safeguards</h2><ul class="space-y-2 text-sm text-gray-600"><li>• Audit register is read-only from this page</li><li>• Access restricted to administrator and super administrator roles</li><li>• Row visibility is enforced by database RLS, not just the interface</li><li>• Avoid exporting or sharing personal or confidential details unnecessarily</li><li>• No claim of complete immutable logging until write-path coverage is verified</li></ul></div>
+<div class="audit-card p-5"><p class="text-xs uppercase tracking-widest font-bold mb-2" style="color:#92713a">Logging scope</p><h2 class="font-semibold mb-3">Audit coverage</h2><ul class="space-y-2 text-sm text-gray-600"><li>• Actor and timestamp of recorded events</li><li>• Event/action name and structured details</li><li>• Request/workflow linkage where recorded</li><li>• Organisation-scoped visibility and role checks</li><li>• Search, category/date filters and CSV export</li></ul></div>
+<div class="audit-card p-5"><p class="text-xs uppercase tracking-widest font-bold mb-2" style="color:#92713a">Governance controls</p><h2 class="font-semibold mb-3">Privacy &amp; control safeguards</h2><ul class="space-y-2 text-sm text-gray-600"><li>• Audit register is read-only from this page</li><li>• Access restricted to administrator and super administrator roles</li><li>• Row visibility is enforced by database RLS, not just the interface</li><li>• Avoid exporting or sharing personal or confidential details unnecessarily</li><li>• No claim of complete immutable logging until write-path coverage is verified</li></ul></div>
 </section>
 </main>
 <script src="/dashboard/js/ooes-auth.js"></script>
