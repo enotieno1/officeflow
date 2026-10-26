@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OOES Platform Admin | OfficeFlow</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/dashboard/js/config.js"></script>
+<script>var supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);</script>
+<script src="/dashboard/js/ooes-auth.js"></script>
+<link rel="stylesheet" href="/dashboard/css/executive-theme.css"><link rel="stylesheet" href="/dashboard/css/mobile.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+body{background:#f4f6f9;color:#17253b}.topbar{background:#14243b;color:white;border-bottom:3px solid #b69a5a}.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#b69a5a;font-weight:700}.panel{background:white;border:1px solid #e0e5ec;border-radius:14px;box-shadow:0 5px 18px rgba(20,36,59,.04)}.metric{font-size:30px;font-weight:700;letter-spacing:-.04em;color:#17253b}.metric-label{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:#657187;font-weight:700}.nav-item{display:flex;gap:12px;align-items:center;padding:12px 14px;border-radius:9px;color:#d7dfeb;text-decoration:none}.nav-item:hover,.nav-item.active{background:#263a56;color:white}.nav-item i{width:18px;color:#c4a767}.status{display:inline-flex;padding:5px 9px;border-radius:99px;background:#f5ead1;color:#755722;font-size:11px;font-weight:700}.muted{color:#68758a}@media(max-width:700px){.metric{font-size:25px}}
+</style></head>
+<body><header class="topbar px-5 md:px-8 py-5 flex flex-wrap items-center justify-between gap-4">
+<div><div class="eyebrow">OOES · Internal Platform Operations</div><h1 class="text-2xl font-semibold mt-1">Platform Admin</h1><p class="text-sm text-slate-300 mt-1">Operate OfficeFlow separately from customer workspaces.</p></div>
+<div class="flex items-center gap-3"><span class="text-sm text-slate-300 hidden sm:inline" data-user-email></span><button id="signOut" class="border border-slate-500 rounded-lg px-4 py-2 text-sm hover:bg-slate-700">Sign out</button></div></header>
+<div class="grid md:grid-cols-[235px_1fr] min-h-[calc(100vh-105px)]">
+<aside class="bg-[#172940] p-4"><div class="px-3 py-3 mb-2"><div class="text-white font-semibold">OOES Operations</div><div class="text-xs text-slate-400 mt-1">Restricted workspace</div></div><nav class="space-y-1">
+<a class="nav-item active" href="#overview"><i class="fa-solid fa-gauge-high"></i>Platform overview</a><a class="nav-item" href="#customers"><i class="fa-solid fa-building"></i>Customer organisations</a><a class="nav-item" href="#billing"><i class="fa-solid fa-credit-card"></i>Subscriptions & billing</a><a class="nav-item" href="#support"><i class="fa-solid fa-headset"></i>Support operations</a><a class="nav-item" href="#growth"><i class="fa-solid fa-chart-line"></i>Strategy & growth</a><a class="nav-item" href="#security"><i class="fa-solid fa-shield-halved"></i>Access & audit</a></nav>
+<div class="mt-8 border-t border-slate-600 pt-4 px-3 text-xs text-slate-400 leading-5">Access is granted independently of customer roles. Operational actions require authorisation and audit.</div></aside>
+<main class="p-5 md:p-8 max-w-7xl w-full">
+<section id="accessError" class="panel p-6 hidden" role="alert"><h2 class="text-lg font-semibold">Platform access not enabled</h2><p id="accessMessage" class="muted mt-2">Your account is not registered as an OOES platform administrator.</p><p class="text-sm muted mt-3">A trusted database owner must explicitly grant membership. Customer administrator and super administrator roles are not sufficient.</p><a class="inline-block mt-4 underline" href="/dashboard/index.html">Return to customer workspace</a></section>
+<div id="workspace" class="hidden space-y-6">
+<section id="overview" class="flex flex-wrap justify-between items-end gap-4"><div><div class="eyebrow">Operations centre</div><h2 class="text-3xl font-semibold mt-2">Platform overview</h2><p class="muted mt-2">Aggregate platform totals only; customer business records remain tenant-scoped.</p></div><button id="refresh" class="bg-[#172940] text-white rounded-lg px-4 py-2 text-sm"><i class="fa-solid fa-rotate mr-2"></i>Refresh overview</button></section>
+<div id="loadError" class="hidden rounded-lg border border-red-200 bg-red-50 text-red-800 p-4 text-sm" role="alert"></div>
+<section class="grid sm:grid-cols-2 xl:grid-cols-4 gap-4">
+<article class="panel p-5"><div class="metric-label">Customer organisations</div><div class="metric mt-3" id="orgCount">—</div><p class="text-xs muted mt-2">Registered organisation records</p></article>
+<article class="panel p-5"><div class="metric-label">User profiles</div><div class="metric mt-3" id="profileCount">—</div><p class="text-xs muted mt-2">Profiles across the platform</p></article>
+<article class="panel p-5"><div class="metric-label">Subscription records</div><div class="metric mt-3" id="subscriptionCount">—</div><p class="text-xs muted mt-2">Not a paid-customer count</p></article>
+<article class="panel p-5"><div class="metric-label">Payment attempts</div><div class="metric mt-3" id="paymentCount">—</div><p class="text-xs muted mt-2">Does not imply payment success</p></article></section>
+<section class="grid xl:grid-cols-2 gap-5">
+<article class="panel p-6" id="customers"><div class="flex items-center justify-between gap-3"><h3 class="font-semibold text-lg">Customer organisations</h3><span class="status">Read-only summary</span></div><p class="muted text-sm mt-3">This first release shows aggregate counts only. Organisation lifecycle actions need audited server-side operations; unsafe direct edits are not exposed.</p></article>
+<article class="panel p-6" id="billing"><div class="flex items-center justify-between gap-3"><h3 class="font-semibold text-lg">Subscriptions & billing</h3><span class="status">Foundation</span></div><p class="muted text-sm mt-3">Counts provide visibility only. Checkout, payment verification, refunds and entitlement changes remain unavailable until provider webhooks and server-side verification are validated.</p></article>
+<article class="panel p-6" id="support"><h3 class="font-semibold text-lg">Support operations</h3><p class="muted text-sm mt-3">Reserved for support cases and time-limited audited assistance. Customer impersonation and private record access are not enabled.</p></article>
+<article class="panel p-6" id="growth"><h3 class="font-semibold text-lg">Strategy & growth</h3><p class="muted text-sm mt-3">Internal OOES strategy: stabilise the product, convert pilots, expand nationally, then enter East African markets when readiness gates are met. This plan is not exposed in customer workspaces.</p><div class="mt-4 grid sm:grid-cols-2 gap-3"><div class="rounded-lg bg-slate-50 p-4"><div class="eyebrow">Stage 1–2</div><div class="font-semibold mt-2">Stabilise & convert pilots</div><p class="text-sm muted mt-1">Reliability, onboarding, adoption and paid retention.</p></div><div class="rounded-lg bg-slate-50 p-4"><div class="eyebrow">Stage 3–5</div><div class="font-semibold mt-2">Scale & expand</div><p class="text-sm muted mt-1">Support, national sales, then regional expansion when ready.</p></div></div></article>
+<article class="panel p-6 xl:col-span-2" id="security"><h3 class="font-semibold text-lg">Access & audit</h3><p class="muted text-sm mt-3">Platform membership is managed separately from customer profile roles. Membership changes must be performed by a trusted database owner.</p><p class="text-xs muted mt-3" id="updatedAt">Overview not loaded yet.</p></article></section>
+<footer class="text-xs muted">OOES Platform Admin · Least privilege · Tenant isolation · Audited operations</footer></div></main></div>
+<script>
+(async function(){
+ const $=id=>document.getElementById(id);$('signOut').addEventListener('click',()=>OOES_AUTH.logout());
+ try{
+  await OOES_AUTH.ready;
+  if(!OOES_AUTH.isLoggedIn()){window.location.replace('/dashboard/auth.html?portal=platform-admin');return;}
+  document.querySelectorAll('[data-user-email]').forEach(el=>el.textContent=OOES_AUTH.getSession()?.email||'');
+  const membership=await supabase.rpc('fn_is_platform_admin');
+  if(membership.error)throw membership.error;
+  if(membership.data!==true){$('accessError').classList.remove('hidden');return;}
+  $('workspace').classList.remove('hidden');
+  async function loadOverview(){
+   $('loadError').classList.add('hidden');$('refresh').disabled=true;$('refresh').textContent='Refreshing…';
+   try{const res=await supabase.rpc('fn_platform_admin_overview');if(res.error)throw res.error;const d=res.data||{};
+    $('orgCount').textContent=Number(d.organizations||0).toLocaleString();$('profileCount').textContent=Number(d.profiles||0).toLocaleString();$('subscriptionCount').textContent=Number(d.subscriptions||0).toLocaleString();$('paymentCount').textContent=Number(d.payment_attempts||0).toLocaleString();$('updatedAt').textContent='Last refreshed: '+new Date(d.generated_at||Date.now()).toLocaleString();
+   }catch(e){$('loadError').textContent='Overview could not be loaded. '+(e.message||'Check migration and permissions.');$('loadError').classList.remove('hidden');}
+   finally{$('refresh').disabled=false;$('refresh').innerHTML='<i class="fa-solid fa-rotate mr-2"></i>Refresh overview';}
+  }
+  $('refresh').addEventListener('click',loadOverview);await loadOverview();
+ }catch(e){$('accessError').classList.remove('hidden');$('accessMessage').textContent=e.message||'Platform access could not be verified.';}
+})();
+</script></body></html>
