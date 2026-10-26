@@ -285,6 +285,56 @@
             resize: vertical;
             min-height: 100px;
         }
+    
+        /* Corporate task workspace */
+        .page-header{box-shadow:none;padding:1.35rem 0;background:#fff}
+        .breadcrumb{font-size:.78rem;margin-bottom:1.15rem;letter-spacing:.01em}
+        .breadcrumb-current{font-weight:650}
+        .page-header h1{letter-spacing:-.035em;color:#16213e!important;font-size:1.8rem!important}
+        .page-header h1 .fa-tasks{color:#a6823d}
+        .page-header p{font-size:.93rem}
+        .action-btn{background:#16213e;border:1px solid #16213e;border-radius:7px;padding:.65rem 1rem;font-weight:600;box-shadow:none;transition:background .15s,border-color .15s}
+        .action-btn:hover{background:#24365d;border-color:#24365d;transform:none}
+        .action-btn-secondary{background:#fff;color:#344054;border:1px solid #d9dee8}
+        .action-btn-secondary:hover{background:#f7f8fa;border-color:#a6823d;color:#16213e}
+        .stats-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:1rem;margin-bottom:1.5rem}
+        .stat-card{position:relative;text-align:left;padding:1.15rem 1.25rem;border-radius:9px;box-shadow:0 1px 2px rgba(16,24,40,.025);min-width:0}
+        .stat-card:before{content:"";position:absolute;left:0;top:12px;bottom:12px;width:3px;background:#a6823d;border-radius:0 3px 3px 0}
+        .stat-value{font-size:1.85rem;line-height:1.2;margin:0 0 .4rem;font-weight:700;letter-spacing:-.04em}
+        .stat-label{font-size:.79rem;text-transform:uppercase;letter-spacing:.045em;color:#667085;font-weight:650}
+        .tab-nav{gap:.25rem;margin:0 0 1rem;overflow-x:auto;white-space:nowrap}
+        .tab-btn{padding:.85rem 1rem;font-weight:600}
+        .tab-btn.active{color:#16213e;border-bottom-color:#a6823d}
+        .form-input,.form-select{border-radius:7px;border-color:#d0d5dd;min-height:42px;background-color:#fff}
+        .form-input:focus,.form-select:focus,.form-textarea:focus{border-color:#a6823d;box-shadow:0 0 0 3px rgba(166,130,61,.12)}
+        .task-register{background:#fff;border:1px solid #e4e7ec;border-radius:9px;overflow:hidden}
+        .task-register table{width:100%;border-collapse:collapse}
+        .task-register thead{background:#f8f9fb}
+        .task-register th{padding:12px 16px;text-align:left;font-size:.7rem;letter-spacing:.065em;text-transform:uppercase;color:#667085;font-weight:700;border-bottom:1px solid #e4e7ec}
+        .task-register td{padding:15px 16px;border-bottom:1px solid #eef0f3;vertical-align:middle;font-size:.86rem;color:#344054}
+        .task-register tbody tr:last-child td{border-bottom:0}
+        .task-register tbody tr:hover{background:#fbfcfe}
+        .task-title{font-weight:650;color:#16213e;line-height:1.35}
+        .task-description{color:#667085;font-size:.79rem;margin-top:4px;max-width:420px;overflow-wrap:anywhere}
+        .task-priority,.task-status{border-radius:5px;padding:.3rem .55rem;font-size:.68rem;letter-spacing:.025em;white-space:nowrap}
+        .priority-high{background:#fff0ef;color:#a13d3d}
+        .priority-medium{background:#fff7e6;color:#946200}
+        .priority-low{background:#edf7f0;color:#2f6e4e}
+        .status-pending{background:#f2f4f7;color:#475467}
+        .status-in-progress{background:#eef4ff;color:#315a9b}
+        .status-completed{background:#edf7f0;color:#2f6e4e}
+        .status-overdue{background:#fff0ef;color:#a13d3d}
+        .task-assignee{display:flex;align-items:center;gap:8px;min-width:120px}
+        .task-avatar{display:inline-flex;align-items:center;justify-content:center;width:29px;height:29px;border-radius:50%;background:#eef1f7;color:#344563;font-size:.67rem;font-weight:700;flex-shrink:0}
+        .task-due.overdue{color:#a13d3d;font-weight:650}
+        .task-actions{display:flex;justify-content:flex-end;gap:5px}
+        .task-actions .action-btn{padding:.42rem .58rem;font-size:.76rem}
+        .task-actions .action-btn-secondary{background:transparent}
+        .register-count{font-size:.8rem;color:#667085}
+        .empty-state{padding:3rem 1rem;text-align:center;color:#667085}
+        @media(max-width:900px){.stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.task-register{overflow-x:auto}.task-register table{min-width:760px}}
+        @media(max-width:640px){#sidebar{transform:translateX(-100%)}body>div[style*="margin-left:224px"]{margin-left:0!important}.page-header .flex.items-center.justify-between{align-items:flex-start;gap:1rem;flex-direction:column}.page-header .flex.items-center.gap-3{width:100%}.page-header .flex.items-center.gap-3 button{flex:1;justify-content:center}.stats-grid{gap:.65rem}.stat-card{padding:1rem}.stat-value{font-size:1.55rem}.tab-btn{padding:.75rem .8rem}.task-toolbar{display:grid!important;grid-template-columns:1fr 1fr;gap:.65rem!important}.task-toolbar #taskSearch{grid-column:1/-1}.task-toolbar select{width:100%!important}}
+
     </style>
 <link rel="stylesheet" href="css/mobile.css">
 <link rel="stylesheet" href="css/executive-theme.css"></head>
@@ -350,7 +400,7 @@
                         <i class="fas fa-tasks mr-2"></i>
                         Task Management
                     </h1>
-                    <p class="text-gray-600">Manage and track all your tasks in one place</p>
+                    <p class="text-gray-600">Coordinate ownership, priorities and deadlines across your organisation.</p>
                 </div>
                 
                 <div class="flex items-center gap-3">
@@ -373,19 +423,19 @@
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-value pending-tasks">—</div>
-                <div class="stat-label">Pending Tasks</div>
+                <div class="stat-label">Pending tasks</div>
             </div>
             <div class="stat-card">
                 <div class="stat-value in-progress-tasks">—</div>
-                <div class="stat-label">In Progress</div>
+                <div class="stat-label">In progress</div>
             </div>
             <div class="stat-card">
                 <div class="stat-value completed-tasks">—</div>
-                <div class="stat-label">Completed Today</div>
+                <div class="stat-label">Completed tasks</div>
             </div>
             <div class="stat-card">
                 <div class="stat-value overdue-tasks">—</div>
-                <div class="stat-label">Overdue</div>
+                <div class="stat-label">Overdue tasks</div>
             </div>
         </div>
 
@@ -399,7 +449,7 @@
         </div>
 
         <!-- Search and Filter -->
-        <div class="flex items-center gap-4 mb-6">
+        <div class="task-toolbar flex items-center gap-4 mb-5">
             <div class="flex-1">
                 <input type="text" placeholder="Search tasks..." class="form-input" id="taskSearch">
             </div>
@@ -417,7 +467,7 @@
         </div>
 
         <!-- Tasks are rendered from the authenticated tenant's database records. -->
-        <div id="tasksContainer" aria-live="polite" class="space-y-3">
+        <div id="tasksContainer" aria-live="polite"><div class="task-register"><div class="empty-state">Loading your tasks…</div></div></div>
             <div class="rounded-lg border bg-white p-6 text-gray-500">Loading your tasks…</div>
         </div>
     </main>
@@ -625,36 +675,41 @@
         function renderTasks() {
             const container = document.getElementById('tasksContainer');
             const rows = filteredTasks();
+            const statusOf = t => String(t.status || 'pending').toLowerCase().replace(/[ -]+/g, '_');
+            const isOverdue = t => !['completed','cancelled'].includes(statusOf(t)) && !!t.due_date && t.due_date < new Date().toISOString().slice(0,10);
             const counts = {
-                pending: taskRecords.filter(t => taskStatus(t) === 'pending').length,
-                in_progress: taskRecords.filter(t => taskStatus(t) === 'in_progress').length,
-                completed: taskRecords.filter(t => taskStatus(t) === 'completed').length,
-                overdue: taskRecords.filter(t => taskStatus(t) === 'overdue').length
+                pending: taskRecords.filter(t => statusOf(t) === 'pending' && !isOverdue(t)).length,
+                in_progress: taskRecords.filter(t => ['in_progress','inprogress'].includes(statusOf(t)) && !isOverdue(t)).length,
+                completed: taskRecords.filter(t => statusOf(t) === 'completed').length,
+                overdue: taskRecords.filter(isOverdue).length
             };
-            document.querySelectorAll('.pending-tasks').forEach(el => el.textContent = counts.pending);
-            document.querySelectorAll('.in-progress-tasks').forEach(el => el.textContent = counts.in_progress);
-            document.querySelectorAll('.completed-tasks').forEach(el => el.textContent = counts.completed);
-            document.querySelectorAll('.overdue-tasks').forEach(el => el.textContent = counts.overdue);
+            document.querySelector('.pending-tasks').textContent = counts.pending;
+            document.querySelector('.in-progress-tasks').textContent = counts.in_progress;
+            document.querySelector('.completed-tasks').textContent = counts.completed;
+            document.querySelector('.overdue-tasks').textContent = counts.overdue;
             if (!rows.length) {
-                container.innerHTML = '<div class="rounded-lg border bg-white p-8 text-center text-gray-500"><i class="fas fa-clipboard-list text-2xl mb-3"></i><p class="font-semibold">No tasks found</p><p class="text-sm mt-1">Create a task or adjust your filters.</p></div>';
+                container.innerHTML = '<div class="task-register"><div class="empty-state"><i class="fas fa-clipboard-list text-2xl mb-3"></i><p class="font-semibold text-gray-800">No tasks found</p><p class="text-sm mt-1">Create a task or adjust your filters.</p></div></div>';
                 return;
             }
-            container.innerHTML = rows.map(t => {
-                const status = taskStatus(t), priority = priorityValue(t.priority);
-                const statusLabel = status.replace('_',' ').replace(/\b\w/g,c=>c.toUpperCase());
-                const overdue = status === 'overdue';
-                return '<article class="task-card" data-task-id="' + esc(t.id) + '">' +
-                  '<div class="flex flex-wrap items-start justify-between gap-3"><div class="flex-1 min-w-0">' +
-                  '<h3 class="text-lg font-semibold text-gray-900 break-words">' + esc(t.title || 'Untitled task') + '</h3>' +
-                  '<div class="flex flex-wrap items-center gap-2 mt-2"><span class="task-priority priority-' + priority + '">' + priority.toUpperCase() + ' PRIORITY</span>' +
-                  '<span class="task-status ' + (status === 'completed' ? 'status-completed' : overdue ? 'status-overdue' : 'status-in-progress') + '">' + esc(statusLabel) + '</span></div>' +
-                  '<p class="text-gray-600 mt-3 whitespace-pre-wrap break-words">' + esc(t.description || 'No description provided.') + '</p>' +
-                  '<div class="flex flex-wrap gap-x-5 gap-y-2 text-sm text-gray-500 mt-3"><span><i class="fas fa-user mr-1"></i>' + esc(t.assigned_to || 'Unassigned') + '</span><span><i class="fas fa-calendar mr-1"></i>' + esc(t.due_date || 'No due date') + '</span></div></div>' +
-                  '<div class="flex flex-wrap gap-2 items-center"><select aria-label="Change task status" class="form-select" onchange="updateTaskStatus(' + JSON.stringify(String(t.id)) + ', this.value)">' +
-                  ['pending','in_progress','completed','cancelled'].map(s=>'<option value="' + s + '"' + (status===s?' selected':'') + '>' + s.replace('_',' ') + '</option>').join('') + '</select>' +
-                  '<button class="action-btn action-btn-secondary" onclick="editTask(' + JSON.stringify(String(t.id)) + ')">Edit</button>' +
-                  '<button class="action-btn action-btn-secondary" onclick="deleteTask(' + JSON.stringify(String(t.id)) + ')">Delete</button></div></div></article>';
+            const initials = name => String(name || 'U').trim().split(/\s+/).slice(0,2).map(part => part.charAt(0).toUpperCase()).join('');
+            const htmlRows = rows.map(t => {
+                const rawStatus = statusOf(t);
+                const overdue = isOverdue(t);
+                const priority = priorityValue(t.priority);
+                const label = overdue ? 'Overdue' : rawStatus.replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+                const statusClass = overdue ? 'status-overdue' : rawStatus === 'completed' ? 'status-completed' : ['in_progress','inprogress'].includes(rawStatus) ? 'status-in-progress' : 'status-pending';
+                const assignee = t.assigned_to || 'Unassigned';
+                const due = t.due_date ? esc(t.due_date) : 'No due date';
+                return '<tr>' +
+                    '<td><div class="task-title">' + esc(t.title || 'Untitled task') + '</div><div class="task-description">' + esc(t.description || 'No description provided') + '</div></td>' +
+                    '<td><span class="task-priority priority-' + priority + '">' + priority.charAt(0).toUpperCase()+priority.slice(1) + '</span></td>' +
+                    '<td><div class="task-assignee"><span class="task-avatar">' + esc(initials(assignee)) + '</span><span>' + esc(assignee) + '</span></div></td>' +
+                    '<td><span class="task-due ' + (overdue ? 'overdue' : '') + '">' + due + '</span></td>' +
+                    '<td><span class="task-status ' + statusClass + '">' + esc(label) + '</span></td>' +
+                    '<td><div class="task-actions"><button class="action-btn action-btn-secondary" aria-label="Edit task" onclick="editTask(' + JSON.stringify(String(t.id)) + ')"><i class="fas fa-pen"></i></button><button class="action-btn action-btn-secondary" aria-label="Delete task" onclick="deleteTask(' + JSON.stringify(String(t.id)) + ')"><i class="fas fa-trash-alt"></i></button></div></td>' +
+                    '</tr>';
             }).join('');
+            container.innerHTML = '<div class="task-register"><div class="flex items-center justify-between px-4 py-3 border-b border-gray-200"><span class="font-semibold text-gray-800 text-sm">Task register</span><span class="register-count">' + rows.length + ' record' + (rows.length === 1 ? '' : 's') + '</span></div><table><thead><tr><th style="width:36%">Task</th><th>Priority</th><th>Assignee</th><th>Due date</th><th>Status</th><th style="text-align:right">Actions</th></tr></thead><tbody>' + htmlRows + '</tbody></table></div>';
         }
         async function loadTaskAssignees(session) {
             if (taskAssigneesLoadedFor === session.id) return;
