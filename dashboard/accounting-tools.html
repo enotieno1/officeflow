@@ -383,6 +383,48 @@
             width: 300px;
             height: 300px;
         }
+
+        /* OfficeFlow executive accounting integration presentation */
+        :root {
+          --acct-navy:#16213E; --acct-navy-2:#1F2C4F; --acct-brass:#A6823D;
+          --acct-brass-light:#D9C18D; --acct-paper:#F7F6F2; --acct-line:#E4E1D8;
+        }
+        body { background:var(--acct-paper)!important; color:#202938; }
+        header, .gradient-bg, .page-header { background:linear-gradient(115deg,var(--acct-navy),var(--acct-navy-2) 70%,#34415F)!important; border-bottom:3px solid var(--acct-brass); }
+        h1,h2 { color:var(--acct-navy); letter-spacing:-.025em; }
+        header h1, header h2, .page-header h1, .page-header h2 { color:#fff!important; }
+        header p, .page-header p { color:#E7D8B7!important; }
+        main section > .bg-white, section > .bg-white { border:1px solid var(--acct-line); border-radius:16px!important; box-shadow:0 5px 22px rgba(22,33,62,.055)!important; }
+        .accounting-card { background:#fff!important; border:1px solid var(--acct-line)!important; border-radius:14px!important; box-shadow:0 3px 12px rgba(22,33,62,.04); transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease; }
+        .accounting-card:hover { transform:translateY(-3px); border-color:#C7B17E!important; box-shadow:0 12px 26px rgba(22,33,62,.10); }
+        .accounting-card [class*="bg-gradient-to-br"] { background:linear-gradient(135deg,var(--acct-navy),var(--acct-navy-2))!important; }
+        .accounting-card h3 { color:var(--acct-navy)!important; }
+        .accounting-card .text-green-600,.accounting-card .text-blue-600,.accounting-card .text-purple-600,.accounting-card .text-indigo-600 { color:var(--acct-brass)!important; }
+        button { border-radius:9px!important; transition:transform .16s ease,box-shadow .16s ease,background .16s ease; }
+        button:hover { box-shadow:0 5px 14px rgba(22,33,62,.12); }
+        .bg-blue-600,.bg-green-600,.bg-indigo-600,.bg-purple-600 { background-color:var(--acct-navy)!important; }
+        .hover\\:bg-blue-700:hover,.hover\\:bg-green-700:hover,.hover\\:bg-indigo-700:hover,.hover\\:bg-purple-700:hover { background-color:var(--acct-navy-2)!important; }
+        .bg-blue-100,.bg-green-100,.bg-indigo-100,.bg-purple-100 { background-color:#F1EEE6!important; }
+        .text-blue-600,.text-green-600,.text-indigo-600,.text-purple-600 { color:var(--acct-brass)!important; }
+        table { border-collapse:separate; border-spacing:0; width:100%; }
+        thead { background:#F2F0E9; color:var(--acct-navy); }
+        thead th { font-size:11px; letter-spacing:.08em; text-transform:uppercase; }
+        tbody tr { border-color:var(--acct-line)!important; }
+        tbody tr:hover { background:#FAF8F3!important; }
+        input,textarea,select { border-color:#D7D9DE!important; border-radius:8px!important; }
+        input:focus,textarea:focus,select:focus { outline:2px solid rgba(166,130,61,.24); border-color:var(--acct-brass)!important; }
+        .modal > div { border:1px solid var(--acct-line); border-radius:16px; box-shadow:0 24px 80px rgba(15,23,42,.28); }
+        #sidebar { box-shadow:4px 0 18px rgba(15,23,42,.08); }
+        #sidebar nav a { transition:background .15s ease,color .15s ease; }
+        #sidebar nav a:hover { background:rgba(255,255,255,.10)!important; color:#fff!important; }
+        @media(max-width:900px) {
+          #sidebar { transform:translateX(-100%); }
+          body > div[style*="margin-left:224px"] { margin-left:0!important; }
+          main.container, main { padding-left:14px!important; padding-right:14px!important; }
+          section > .bg-white { padding:20px!important; }
+          .flex.items-center.justify-between { flex-wrap:wrap; gap:12px; }
+        }
+
     </style>
 <link rel="stylesheet" href="css/mobile.css">
 <link rel="stylesheet" href="css/executive-theme.css"></head>
