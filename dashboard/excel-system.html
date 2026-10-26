@@ -334,6 +334,79 @@
                 grid-template-columns: repeat(11, minmax(80px, 1fr));
             }
         }
+    
+        /* OfficeFlow executive spreadsheet workspace */
+        :root {
+            --color-bg-primary:#f3f5f9;
+            --color-bg-secondary:#e9edf4;
+            --color-accent-primary:#a88443;
+            --color-accent-secondary:#c6a96b;
+            --color-text-primary:#17243d;
+            --color-text-secondary:#667085;
+            --color-border:#dfe5ee;
+        }
+        body { background:#f3f5f9; color:#17243d; font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+        .ml-56 { min-height:100vh; background:#f3f5f9; }
+        #sidebar { box-shadow:8px 0 28px rgba(15,23,42,.12); }
+        #sidebar a { transition:background .18s ease,color .18s ease; }
+        #sidebar a:hover { background:rgba(255,255,255,.12); }
+        .container { max-width:1600px; padding:28px clamp(16px,2.4vw,36px); }
+        .header { color:#fff; background:linear-gradient(120deg,#16213e 0%,#223456 72%,#2a3c5c 100%); border:1px solid rgba(255,255,255,.08); border-radius:16px; padding:24px 28px; margin-bottom:22px; box-shadow:0 14px 32px rgba(22,33,62,.14); position:relative; overflow:hidden; }
+        .header:after { content:""; position:absolute; width:260px;height:260px;border:1px solid rgba(198,169,107,.18);border-radius:50%;right:-80px;top:-140px;pointer-events:none; }
+        .header-content { position:relative; z-index:1; gap:20px; }
+        .logo { color:#e0c58f; font-size:1.35rem; letter-spacing:-.025em; }
+        .logo-section > div:last-child { color:#d5dceb!important; font-size:.92rem; }
+        .user-avatar { background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.2); color:#e0c58f; }
+        .main-content { grid-template-columns:230px minmax(0,1fr); gap:22px; align-items:start; }
+        .sidebar,.content-area { border:1px solid #e1e6ee; border-radius:14px; box-shadow:0 6px 20px rgba(16,24,40,.045); }
+        .sidebar { padding:18px 14px; }
+        .nav-section { margin-bottom:22px; }
+        .nav-title { font-size:.78rem; text-transform:uppercase; letter-spacing:.09em; color:#7b8495; margin:0 8px 10px; }
+        .nav-title i { color:#a88443; }
+        .nav-item { margin-bottom:4px; }
+        .nav-link { font-size:.9rem; padding:10px 12px; border:1px solid transparent; border-radius:8px; }
+        .nav-link:hover { transform:none; background:#f5f6f8; border-color:#e6e9ef; }
+        .nav-link.active { background:#17243d; color:white; border-color:#17243d; box-shadow:0 4px 10px rgba(23,36,61,.13); }
+        .content-area { padding:clamp(18px,2.2vw,30px); min-width:0; }
+        .file-info { background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:14px 16px; margin-bottom:16px; gap:14px; flex-wrap:wrap; }
+        .file-name { font-size:1rem; padding:8px 10px; min-width:180px; max-width:100%; border-radius:6px; }
+        .toolbar { background:#f8fafc; border:1px solid #e3e8f0; border-radius:10px; padding:12px; margin-bottom:16px; gap:10px; }
+        .toolbar-group { gap:6px; flex-wrap:wrap; }
+        .action-button { background:#17243d; border:1px solid #17243d; border-radius:7px; padding:9px 13px; font-weight:600; letter-spacing:.005em; box-shadow:none; transition:background .15s ease,border-color .15s ease,transform .15s ease; }
+        .action-button:hover { background:#263958; border-color:#263958; transform:translateY(-1px); box-shadow:0 4px 10px rgba(23,36,61,.13); }
+        .action-button.secondary { background:#fff; color:#344054; border-color:#d0d5dd; }
+        .action-button.secondary:hover { background:#f8fafc; }
+        .spreadsheet-container { border:1px solid #dbe2ec; border-radius:10px; min-height:440px; box-shadow:inset 0 1px 2px rgba(16,24,40,.025); }
+        .spreadsheet-header { background:#f8fafc; border-bottom:1px solid #dbe2ec; padding:12px 14px; }
+        .spreadsheet-grid { max-height:560px; grid-template-columns:48px repeat(10,minmax(92px,1fr)); }
+        .cell { border-color:#e5e9f0; padding:8px; min-width:92px; min-height:34px; font-size:.85rem; outline:none; }
+        .cell:focus { z-index:2; outline:2px solid #a88443; outline-offset:-2px; background:#fffdf7; color:#17243d; }
+        .cell:hover { background:#f7f9fc; }
+        .cell.selected { background:#e9eff8; color:#17243d; outline:2px solid #a88443; outline-offset:-2px; }
+        .cell-header { background:#edf1f6; color:#526079; font-family:Inter,-apple-system,sans-serif; font-size:.78rem; }
+        .section-title { font-size:1.2rem; letter-spacing:-.02em; margin-bottom:1rem; }
+        #excelTabPanel { box-shadow:none; }
+        #excelTabPanel .action-button { margin-top:2px; }
+        #excelTabPanel input,#excelTabPanel select { accent-color:#a88443; }
+        @media(max-width:1024px) {
+            .ml-56 { margin-left:0!important; }
+            .main-content { grid-template-columns:1fr; }
+            .sidebar { padding:12px; }
+            .nav-list { display:grid; grid-template-columns:repeat(auto-fit,minmax(135px,1fr)); gap:4px; }
+            .nav-item { margin:0; }
+        }
+        @media(max-width:768px) {
+            .container { padding:14px; }
+            .header { padding:20px; }
+            .header-content { align-items:flex-start; }
+            .logo-section { align-items:flex-start; flex-direction:column; gap:6px; }
+            .toolbar { align-items:flex-start; }
+            .toolbar-group { width:100%; }
+            .spreadsheet-grid { grid-template-columns:48px repeat(10,minmax(90px,1fr)); }
+            .file-info { align-items:flex-start; flex-direction:column; }
+            .file-actions { flex-wrap:wrap; }
+        }
+
     </style>
 <link rel="stylesheet" href="css/mobile.css">
 <link rel="stylesheet" href="css/executive-theme.css"></head>
