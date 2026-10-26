@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OfficeFlow — Automation & Integrations</title>
+<script src="https://cdn.tailwindcss.com"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/dashboard/js/config.js"></script><script>var supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);</script>
+<link rel="stylesheet" href="css/executive-theme.css"><link rel="stylesheet" href="css/mobile.css">
+<style>
+:root{--navy:#14233f;--brass:#a9823c;--line:#e2e7ee;--muted:#657286}
+*{box-sizing:border-box}body{background:#f4f6f9;color:#202b3c}.hero{background:linear-gradient(120deg,#0b1b2b,#1b3151);color:#fff;border-bottom:4px solid var(--brass)}.eyebrow{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#b8c6d8;font-weight:800}.panel{background:white;border:1px solid var(--line);border-radius:14px;box-shadow:0 2px 8px #14233f08}.tile{display:flex;flex-direction:column;min-height:250px;padding:22px;text-decoration:none;color:inherit;transition:transform .15s,border-color .15s}.tile:hover{transform:translateY(-2px);border-color:#b6c3d3}.iconbox{width:42px;height:42px;display:grid;place-items:center;border-radius:11px;background:#edf1f6;color:var(--navy);font-size:19px}.state{font-size:10px;text-transform:uppercase;letter-spacing:.07em;font-weight:800;border-radius:5px;padding:5px 8px;background:#f8f0df;color:#7a5b22;align-self:flex-start}.state.ready{background:#e7f3ec;color:#276447}.state.partial{background:#fff0df;color:#875319}.tile h2{font-size:20px;font-weight:750;letter-spacing:-.02em;color:var(--navy);margin-top:16px}.tile p{font-size:13px;line-height:1.65;color:var(--muted);margin-top:8px}.tile .open{margin-top:auto;padding-top:18px;font-size:12px;font-weight:750;color:#7a5b22}.small{font-size:12px;color:var(--muted);line-height:1.65}
+</style>
+</head>
+<body>
+<header class="hero px-5 md:px-8 py-7 md:py-9">
+<div class="max-w-7xl mx-auto">
+<div class="flex items-center justify-between gap-4"><div><p class="eyebrow">OfficeFlow · Operations Control</p><h1 class="text-3xl md:text-4xl font-bold mt-2">Automation & Integrations</h1><p class="text-white/75 text-sm md:text-base mt-3 max-w-3xl leading-7">A single workspace for document OCR, approval workflows, event-based automation, outbound communications and payment-provider readiness.</p></div><a class="text-sm text-white underline underline-offset-4" href="/dashboard/index.html">← Dashboard</a></div>
+<div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 mt-7">
+<div class="rounded-xl border border-white/15 bg-white/5 p-4"><p class="eyebrow">OCR</p><p class="font-semibold mt-2">Image-to-text</p><p class="text-xs text-white/65 mt-1">Runs in the browser; proofread results</p></div>
+<div class="rounded-xl border border-white/15 bg-white/5 p-4"><p class="eyebrow">Workflows</p><p class="font-semibold mt-2">Approval routing</p><p class="text-xs text-white/65 mt-1">Published steps and SLA controls</p></div>
+<div class="rounded-xl border border-white/15 bg-white/5 p-4"><p class="eyebrow">Messaging</p><p class="font-semibold mt-2" id="messageMetric">Checking queue…</p><p class="text-xs text-white/65 mt-1">Queue status is not proof of delivery</p></div>
+<div class="rounded-xl border border-white/15 bg-white/5 p-4"><p class="eyebrow">Payments</p><p class="font-semibold mt-2">Provider setup required</p><p class="text-xs text-white/65 mt-1">No live payout without onboarding and approval</p></div>
+</div></div>
+</header>
+<main class="max-w-7xl mx-auto px-5 md:px-8 py-7 space-y-6">
+<section><div class="flex flex-wrap justify-between items-end gap-3 mb-4"><div><p class="eyebrow" style="color:#8a6a2d">Feature workbench</p><h2 class="text-2xl font-bold mt-1" style="color:#14233f">Open a capability</h2><p class="small mt-1">The links below take you to the feature's working page, not a marketing description.</p></div><button id="refresh" class="border rounded-lg px-4 py-2 text-sm font-semibold bg-white">Refresh status</button></div>
+<div class="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
+<a class="panel tile" href="/dashboard/document-management.html"><span class="iconbox">▤</span><span class="state partial">Image OCR available</span><h2>Document OCR & Capture</h2><p>Upload a supported image, extract editable text in the browser, review the suggested folder and save the scan to the document register. The current scanner accepts JPG, PNG and WEBP images; PDF OCR is not yet confirmed.</p><span class="open">Open Document Management →</span></a>
+<a class="panel tile" href="/dashboard/workflow-builder.html"><span class="iconbox">⇢</span><span class="state">Admin access</span><h2>Workflow Builder</h2><p>Configure workflow owner, ordered approval steps, responsible units, approver roles and service-level deadlines. Publishing uses the existing workflow RPCs and must pass your organization's access rules.</p><span class="open">Build a workflow →</span></a>
+<a class="panel tile" href="/dashboard/automation.html"><span class="iconbox">ϟ</span><span class="state">Rule engine</span><h2>Workflow Automation</h2><p>Create event-triggered rules for request creation, status changes, approval-step changes and overdue steps. Available actions include notifications, task creation, priority/SLA updates and email queueing.</p><span class="open">Open Automation Engine →</span></a>
+<a class="panel tile" href="/dashboard/communication-department.html"><span class="iconbox">✉</span><span class="state partial">Delivery provider unverified</span><h2>Messaging & Communications</h2><p>Open the communications workspace to manage departmental communication. Email/SMS/WhatsApp delivery requires a configured provider, server-side credentials, delivery callbacks and retry monitoring; a queued message is not a sent message.</p><span class="open">Open Communications →</span></a>
+<a class="panel tile" href="/dashboard/integration-center.html"><span class="iconbox">⌘</span><span class="state partial">Setup required</span><h2>Payment & Provider Integrations</h2><p>Review provider setup requirements and connection readiness. Subscription checkout and payroll disbursement are separate flows. Live salary payments remain gated until approved B2C onboarding, credentials, callback reconciliation and dual authorization are verified.</p><span class="open">Open Integration Centre →</span></a>
+<a class="panel tile" href="/dashboard/financial-management.html"><span class="iconbox">KSh</span><span class="state partial">Live payout disabled</span><h2>Finance & Payment Operations</h2><p>Access finance workflows and payroll operations. Never treat a checkout acknowledgement as a completed payment or mark a salary batch paid before a verified provider result and reconciliation.</p><span class="open">Open Finance →</span></a>
+</div></section>
+<section class="panel p-5 md:p-6"><div class="flex flex-wrap justify-between gap-3 items-start"><div><p class="eyebrow" style="color:#8a6a2d">Runtime truth</p><h2 class="text-xl font-bold mt-1" style="color:#14233f">What is and is not live</h2><p class="small mt-2 max-w-3xl">This panel reads available database counts where permitted. It does not claim external message delivery or provider settlement.</p></div><span id="connection" class="state partial">Checking connection</span></div>
+<div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 mt-4">
+<div class="rounded-lg border p-4"><p class="small">Published workflow versions</p><p class="text-2xl font-bold mt-2" id="workflows">—</p></div>
+<div class="rounded-lg border p-4"><p class="small">Automation rules</p><p class="text-2xl font-bold mt-2" id="rules">—</p></div>
+<div class="rounded-lg border p-4"><p class="small">Email queue records</p><p class="text-2xl font-bold mt-2" id="outbox">—</p></div>
+<div class="rounded-lg border p-4"><p class="small">Payment provider accounts</p><p class="text-2xl font-bold mt-2" id="providers">—</p></div>
+</div><p id="diagnostic" class="small mt-4" role="status">Connecting to OfficeFlow…</p></section>
+</main>
+<script src="/dashboard/js/ooes-auth.js"></script>
+<script>
+const byId=id=>document.getElementById(id);
+async function countQuery(table){const {count,error}=await supabase.from(table).select('*',{count:'exact',head:true});if(error)throw error;return count??0;}
+async function refreshStatus(){byId('diagnostic').textContent='Checking authorized database access…';byId('connection').textContent='Checking connection';try{if(window.OOES_AUTH){await OOES_AUTH.ready;if(!OOES_AUTH.isLoggedIn())throw new Error('Sign in to view organization-scoped status.');}
+const results=await Promise.allSettled([countQuery('workflow_versions'),countQuery('automation_rules'),countQuery('email_outbox'),countQuery('payroll_provider_accounts')]);
+const ids=['workflows','rules','outbox','providers'];const labels=['published workflow versions','automation rules','email queue records','payment provider accounts'];let failed=[];
+results.forEach((r,i)=>{byId(ids[i]).textContent=r.status==='fulfilled'?String(r.value):'Restricted';if(r.status==='rejected')failed.push(labels[i]);});
+byId('messageMetric').textContent=results[2].status==='fulfilled'?results[2].value+' queued/recorded':'Queue access restricted';
+byId('connection').textContent=failed.length?'Partial data':'Database reachable';byId('connection').className='state '+(failed.length?'partial':'ready');
+byId('diagnostic').textContent=failed.length?'Some counts could not be read under your current role: '+failed.join(', ')+'. This is an access/readiness result, not proof of provider failure.':'Counts loaded under your current session. Email count is queue volume only; no delivery status is inferred. External provider connectivity is not tested by this page.';
+}catch(e){byId('connection').textContent='Sign-in/access required';byId('connection').className='state partial';byId('diagnostic').textContent=e.message||'Could not read status. Sign in and refresh.';['workflows','rules','outbox','providers'].forEach(id=>byId(id).textContent='—');byId('messageMetric').textContent='Sign-in required';}}
+byId('refresh').addEventListener('click',refreshStatus);document.addEventListener('DOMContentLoaded',refreshStatus);
+</script>
+<script src="/dashboard/js/shared-navigation.js" defer></script>
+</body></html>
