@@ -776,13 +776,13 @@
             showNotification('Sending Reset Link', 'Please wait...', 'info');
             try {
                 var { error } = await supabase.auth.resetPasswordForEmail(email, {
-                    redirectTo: window.location.origin + '/dashboard/reset-password.html'
+                    redirectTo: 'https://office-sort.vercel.app/dashboard/reset-password.html'
                 });
                 if (error) {
                     showNotification('Reset Failed', error.message || 'Unable to send a reset link. Please try again.', 'error');
                     return;
                 }
-                showNotification('Check Your Email', 'If the account exists, a password reset link has been sent.', 'success');
+                showNotification('Reset Request Submitted', 'If the account exists, Supabase will email a reset link. Check Inbox and Spam. The link returns to the OfficeFlow reset page.', 'success');
             } catch (error) {
                 showNotification('Reset Failed', 'OfficeFlow could not reach the password-reset service. Check your connection and try again.', 'error');
             }
