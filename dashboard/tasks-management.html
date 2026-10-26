@@ -381,6 +381,25 @@
         @media(max-width:900px){.task-register table{min-width:780px}.page-header h1{font-size:1.6rem!important}}
         @media(max-width:640px){.stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.stat-card{padding:.95rem}.stat-label{font-size:.68rem}.task-toolbar{grid-template-columns:1fr 1fr}.task-toolbar #taskSearch{grid-column:1/-1;min-width:0}.task-toolbar .form-select{min-width:0;width:100%}.task-register{overflow-x:auto}.page-header{padding:1rem 0}.tab-nav{margin-right:-.25rem}.task-actions .action-btn{width:32px;height:32px}}
 
+    
+        /* Reliable two-axis scrolling for desktop, tablet and touch clients */
+        html{min-height:100%;overflow-x:auto;overflow-y:auto;scrollbar-gutter:auto}
+        body{min-height:100vh;overflow-x:auto;overflow-y:auto;overscroll-behavior-x:contain}
+        body>div[style*="margin-left:224px"]{min-height:100vh;min-width:0;overflow:visible}
+        main{min-width:0;overflow:visible}
+        .task-register{max-width:100%;overflow-x:auto;overflow-y:visible;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;touch-action:pan-x pan-y}
+        .task-register table{min-width:760px}
+        .tab-nav{max-width:100%;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;touch-action:pan-x}
+        .task-toolbar{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+        #sidebar{overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain}
+        @media(max-width:640px){
+            html,body{width:100%;max-width:100%;overflow-x:auto;overflow-y:auto}
+            body>div[style*="margin-left:224px"]{width:100%;min-width:0;overflow:visible}
+            main.container{width:100%;max-width:none}
+            .task-register{width:100%;overflow-x:auto;overflow-y:visible}
+            .task-register table{min-width:760px}
+        }
+
     </style>
 <link rel="stylesheet" href="css/mobile.css">
 <link rel="stylesheet" href="css/executive-theme.css"></head>
