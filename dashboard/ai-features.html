@@ -148,379 +148,92 @@
 </div>
 <div style="margin-left:224px">
 
-    <!-- Header -->
-    <header class="bg-black border-b border-gray-800">
-        <div class="container mx-auto px-6 py-4">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-4">
-                    <i class="fas fa-brain text-3xl text-red-500"></i>
-                    <div>
-                        <h1 class="text-2xl font-bold text-white">AI Features</h1>
-                        <p class="text-sm text-gray-400">Smart Efficiency Tools</p>
-                    </div>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <span class="ai-badge" id="aiProviderStatus">AI service setup required</span>
-                    <button class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition">
-                        <i class="fas fa-cog mr-2"></i>Configure
-                    </button>
-                </div>
-            </div>
+    <!-- Corporate AI Intelligence workspace -->
+    <header class="ai-shell-header">
+      <div class="ai-shell-inner">
+        <div class="ai-brand">
+          <div class="ai-brand-mark"><i class="fas fa-brain"></i></div>
+          <div><p class="ai-eyebrow">OFFICEFLOW / INTELLIGENCE</p><h1>AI Intelligence</h1><p class="ai-subtitle">Governed intelligence for everyday operations</p></div>
         </div>
+        <div class="ai-header-actions"><span class="ai-status"><span class="status-dot"></span><span id="aiProviderStatus">Provider not configured</span></span><button class="ai-btn ai-btn-primary" type="button" onclick="document.getElementById('ai-configuration').scrollIntoView({behavior:'smooth',block:'start'})"><i class="fas fa-sliders-h"></i> Configure services</button></div>
+      </div>
     </header>
-
-    <!-- Main Content -->
-    <main class="container mx-auto px-6 py-8">
-        <!-- AI Overview Stats -->
-        <section class="mb-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <div class="metric-card p-6 rounded-lg">
-                    <div class="flex items-center justify-between mb-4">
-                        <i class="fas fa-clock text-2xl text-red-500"></i>
-                        <span class="text-3xl font-bold text-white">—</span>
-                    </div>
-                    <h3 class="text-white font-semibold mb-1">Time Saved</h3>
-                    <p class="text-gray-400 text-sm">Live usage metrics not connected</p>
-                </div>
-                
-                <div class="metric-card p-6 rounded-lg">
-                    <div class="flex items-center justify-between mb-4">
-                        <i class="fas fa-tasks text-2xl text-blue-500"></i>
-                        <span class="text-3xl font-bold text-white">—</span>
-                    </div>
-                    <h3 class="text-white font-semibold mb-1">Tasks Automated</h3>
-                    <p class="text-gray-400 text-sm">Usage tracking not connected</p>
-                </div>
-                
-                <div class="metric-card p-6 rounded-lg">
-                    <div class="flex items-center justify-between mb-4">
-                        <i class="fas fa-file-alt text-2xl text-green-500"></i>
-                        <span class="text-3xl font-bold text-white">—</span>
-                    </div>
-                    <h3 class="text-white font-semibold mb-1">Documents Processed</h3>
-                    <p class="text-gray-400 text-sm">AI provider not connected</p>
-                </div>
-                
-                <div class="metric-card p-6 rounded-lg">
-                    <div class="flex items-center justify-between mb-4">
-                        <i class="fas fa-chart-line text-2xl text-yellow-500"></i>
-                        <span class="text-3xl font-bold text-white">—</span>
-                    </div>
-                    <h3 class="text-white font-semibold mb-1">Accuracy Rate</h3>
-                    <p class="text-gray-400 text-sm">No verified accuracy data</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- AI Features Grid -->
-        <div class="mb-6 rounded-lg border border-yellow-700 bg-yellow-900 bg-opacity-20 p-4 text-sm text-yellow-100">AI tools use the secure OfficeFlow AI service. Live AI answers require an administrator to configure the provider secret. Usage metrics and organization-wide data analysis are not enabled until separately integrated.</div>
-        <section class="mb-8">
-            <h2 class="text-2xl font-bold text-white mb-6">
-                <i class="fas fa-microchip mr-3 text-red-500"></i>
-                Active AI Features
-            </h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Document Processing AI -->
-                <div class="ai-card p-6 rounded-xl cursor-pointer" onclick="openAIFeature('document-processing')">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="feature-icon">
-                            <i class="fas fa-file-invoice"></i>
-                        </div>
-                        <span class="status-active">
-                            <i class="fas fa-circle text-xs mr-2"></i>Active
-                        </span>
-                    </div>
-                    <h3 class="text-xl font-bold text-white mb-2">Document Processing AI</h3>
-                    <p class="text-gray-400 mb-4">Smart OCR, classification, and data extraction from documents</p>
-                    
-                    <div class="space-y-3">
-                        <div class="flex items-center justify-between text-sm">
-                            <span class="text-gray-400">Documents Today</span>
-                            <span class="text-white font-semibold">347</span>
-                        </div>
-                        <div class="flex items-center justify-between text-sm">
-                            <span class="text-gray-400">Accuracy</span>
-                            <span class="text-green-400 font-semibold">98.5%</span>
-                        </div>
-                        <div class="w-full bg-gray-700 rounded-full h-2">
-                            <div class="bg-green-500 h-2 rounded-full" style="width: 98.5%"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Workflow Automation -->
-                <div class="ai-card p-6 rounded-xl cursor-pointer" onclick="openAIFeature('workflow-automation')">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="feature-icon">
-                            <i class="fas fa-robot"></i>
-                        </div>
-                        <span class="status-active">
-                            <i class="fas fa-circle text-xs mr-2"></i>Active
-                        </span>
-                    </div>
-                    <h3 class="text-xl font-bold text-white mb-2">Workflow Automation</h3>
-                    <p class="text-gray-400 mb-4">Intelligent task routing and process optimization</p>
-                    
-                    <div class="space-y-3">
-                        <div class="flex items-center justify-between text-sm">
-                            <span class="text-gray-400">Workflows Active</span>
-                            <span class="text-white font-semibold">28</span>
-                        </div>
-                        <div class="flex items-center justify-between text-sm">
-                            <span class="text-gray-400">Time Saved</span>
-                            <span class="text-green-400 font-semibold">12.5 hrs</span>
-                        </div>
-                        <div class="w-full bg-gray-700 rounded-full h-2">
-                            <div class="bg-blue-500 h-2 rounded-full" style="width: 85%"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Virtual Assistant -->
-                <div class="ai-card p-6 rounded-xl cursor-pointer" onclick="openAIFeature('virtual-assistant')">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="feature-icon">
-                            <i class="fas fa-headset"></i>
-                        </div>
-                        <span class="status-processing">
-                            <i class="fas fa-circle text-xs mr-2"></i>Learning
-                        </span>
-                    </div>
-                    <h3 class="text-xl font-bold text-white mb-2">Virtual Assistant</h3>
-                    <p class="text-gray-400 mb-4">AI-powered administrative and communication assistant</p>
-                    
-                    <div class="space-y-3">
-                        <div class="flex items-center justify-between text-sm">
-                            <span class="text-gray-400">Interactions Today</span>
-                            <span class="text-white font-semibold">1,247</span>
-                        </div>
-                        <div class="flex items-center justify-between text-sm">
-                            <span class="text-gray-400">Satisfaction</span>
-                            <span class="text-green-400 font-semibold">96%</span>
-                        </div>
-                        <div class="w-full bg-gray-700 rounded-full h-2">
-                            <div class="bg-yellow-500 h-2 rounded-full" style="width: 75%"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Financial Intelligence -->
-                <div class="ai-card p-6 rounded-xl cursor-pointer" onclick="openAIFeature('financial-intelligence')">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="feature-icon">
-                            <i class="fas fa-chart-pie"></i>
-                        </div>
-                        <span class="status-active">
-                            <i class="fas fa-circle text-xs mr-2"></i>Active
-                        </span>
-                    </div>
-                    <h3 class="text-xl font-bold text-white mb-2">Financial Intelligence</h3>
-                    <p class="text-gray-400 mb-4">Predictive analytics and expense optimization</p>
-                    
-                    <div class="space-y-3">
-                        <div class="flex items-center justify-between text-sm">
-                            <span class="text-gray-400">Transactions Analyzed</span>
-                            <span class="text-white font-semibold">8,942</span>
-                        </div>
-                        <div class="flex items-center justify-between text-sm">
-                            <span class="text-gray-400">Cost Savings</span>
-                            <span class="text-green-400 font-semibold">$24.7K</span>
-                        </div>
-                        <div class="w-full bg-gray-700 rounded-full h-2">
-                            <div class="bg-green-500 h-2 rounded-full" style="width: 92%"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- HR Analytics -->
-                <div class="ai-card p-6 rounded-xl cursor-pointer" onclick="openAIFeature('hr-analytics')">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="feature-icon">
-                            <i class="fas fa-users-cog"></i>
-                        </div>
-                        <span class="status-active">
-                            <i class="fas fa-circle text-xs mr-2"></i>Active
-                        </span>
-                    </div>
-                    <h3 class="text-xl font-bold text-white mb-2">HR Analytics</h3>
-                    <p class="text-gray-400 mb-4">Employee performance and engagement insights</p>
-                    
-                    <div class="space-y-3">
-                        <div class="flex items-center justify-between text-sm">
-                            <span class="text-gray-400">Employees Analyzed</span>
-                            <span class="text-white font-semibold">156</span>
-                        </div>
-                        <div class="flex items-center justify-between text-sm">
-                            <span class="text-gray-400">Engagement Score</span>
-                            <span class="text-green-400 font-semibold">8.7/10</span>
-                        </div>
-                        <div class="w-full bg-gray-700 rounded-full h-2">
-                            <div class="bg-[#A6823D] h-2 rounded-full" style="width: 87%"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Compliance Monitor -->
-                <div class="ai-card p-6 rounded-xl cursor-pointer" onclick="openAIFeature('compliance-monitor')">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="feature-icon">
-                            <i class="fas fa-shield-alt"></i>
-                        </div>
-                        <span class="status-active">
-                            <i class="fas fa-circle text-xs mr-2"></i>Active
-                        </span>
-                    </div>
-                    <h3 class="text-xl font-bold text-white mb-2">Compliance Monitor</h3>
-                    <p class="text-gray-400 mb-4">Automated regulatory compliance tracking</p>
-                    
-                    <div class="space-y-3">
-                        <div class="flex items-center justify-between text-sm">
-                            <span class="text-gray-400">Compliance Score</span>
-                            <span class="text-white font-semibold">99.2%</span>
-                        </div>
-                        <div class="flex items-center justify-between text-sm">
-                            <span class="text-gray-400">Issues Resolved</span>
-                            <span class="text-green-400 font-semibold">47</span>
-                        </div>
-                        <div class="w-full bg-gray-700 rounded-full h-2">
-                            <div class="bg-green-500 h-2 rounded-full" style="width: 99.2%"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- AI Insights -->
-        <section class="mb-8">
-            <h2 class="text-2xl font-bold text-white mb-6">
-                <i class="fas fa-lightbulb mr-3 text-yellow-500"></i>
-                AI Insights & Recommendations
-            </h2>
-            
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div class="glass-effect p-6 rounded-xl">
-                    <h3 class="text-lg font-bold text-white mb-4">Efficiency Opportunities</h3>
-                    <div class="space-y-3">
-                        <div class="flex items-start space-x-3">
-                            <i class="fas fa-arrow-up text-green-500 mt-1"></i>
-                            <div>
-                                <p class="text-white font-medium">Invoice processing can be 40% faster</p>
-                                <p class="text-gray-400 text-sm">AI suggests implementing template-based extraction</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start space-x-3">
-                            <i class="fas fa-arrow-up text-green-500 mt-1"></i>
-                            <div>
-                                <p class="text-white font-medium">Email response time improved by 60%</p>
-                                <p class="text-gray-400 text-sm">Smart templates and auto-categorization available</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start space-x-3">
-                            <i class="fas fa-exclamation-triangle text-yellow-500 mt-1"></i>
-                            <div>
-                                <p class="text-white font-medium">3 workflows need optimization</p>
-                                <p class="text-gray-400 text-sm">Bottlenecks detected in approval processes</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="glass-effect p-6 rounded-xl">
-                    <h3 class="text-lg font-bold text-white mb-4">Predictive Analytics</h3>
-                    <div class="space-y-4">
-                        <div>
-                            <div class="flex items-center justify-between mb-2">
-                                <span class="text-gray-400">Next Month Workload</span>
-                                <span class="text-white font-semibold">+15%</span>
-                            </div>
-                            <div class="w-full bg-gray-700 rounded-full h-2">
-                                <div class="bg-blue-500 h-2 rounded-full" style="width: 65%"></div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="flex items-center justify-between mb-2">
-                                <span class="text-gray-400">Cost Savings Potential</span>
-                                <span class="text-white font-semibold">$45,000</span>
-                            </div>
-                            <div class="w-full bg-gray-700 rounded-full h-2">
-                                <div class="bg-green-500 h-2 rounded-full" style="width: 78%"></div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="flex items-center justify-between mb-2">
-                                <span class="text-gray-400">Risk Level</span>
-                                <span class="text-white font-semibold">Low</span>
-                            </div>
-                            <div class="w-full bg-gray-700 rounded-full h-2">
-                                <div class="bg-yellow-500 h-2 rounded-full" style="width: 25%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- AI Configuration -->
-        <section>
-            <h2 class="text-2xl font-bold text-white mb-6">
-                <i class="fas fa-sliders-h mr-3 text-red-500"></i>
-                AI Configuration
-            </h2>
-            
-            <div class="glass-effect p-6 rounded-xl">
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <div>
-                        <label class="block text-gray-400 text-sm mb-2">Automation Level</label>
-                        <select class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white">
-                            <option>Conservative</option>
-                            <option selected>Moderate</option>
-                            <option>Aggressive</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-gray-400 text-sm mb-2">Learning Mode</label>
-                        <select class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white">
-                            <option>Passive</option>
-                            <option selected>Active</option>
-                            <option>Adaptive</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-gray-400 text-sm mb-2">Data Privacy</label>
-                        <select class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white">
-                            <option>Standard</option>
-                            <option selected>Enhanced</option>
-                            <option>Maximum</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-gray-400 text-sm mb-2">Update Frequency</label>
-                        <select class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white">
-                            <option>Daily</option>
-                            <option selected>Real-time</option>
-                            <option>Weekly</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="mt-6 flex items-center justify-between">
-                    <div class="flex items-center space-x-4">
-                        <button class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition">
-                            <i class="fas fa-save mr-2"></i>Save Settings
-                        </button>
-                        <button class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition">
-                            <i class="fas fa-undo mr-2"></i>Reset to Default
-                        </button>
-                    </div>
-                    <div class="text-sm text-gray-400">
-                        Last AI training: 2 hours ago | Next scheduled: 6 hours
-                    </div>
-                </div>
-            </div>
-        </section>
+    <main class="ai-workspace">
+      <section class="ai-intro">
+        <div><p class="ai-eyebrow">ORGANISATIONAL OVERVIEW</p><h2>Intelligence, with control.</h2><p>Coordinate document processing, workflow optimisation, financial analysis and compliance from one governed workspace.</p></div>
+        <div class="ai-intro-note"><i class="fas fa-shield-alt"></i><div><strong>Designed for responsible AI</strong><span>Provider credentials remain server-side. Access and usage metrics depend on configured integrations.</span></div></div>
+      </section>
+      <section class="ai-metrics" aria-label="AI usage metrics">
+        <article class="ai-metric"><div class="ai-metric-top"><span>Time recovered</span><i class="fas fa-clock"></i></div><strong>—</strong><small>Usage integration required</small></article>
+        <article class="ai-metric"><div class="ai-metric-top"><span>Processes automated</span><i class="fas fa-diagram-project"></i></div><strong>—</strong><small>Verified event data required</small></article>
+        <article class="ai-metric"><div class="ai-metric-top"><span>Documents processed</span><i class="fas fa-file-lines"></i></div><strong>—</strong><small>AI provider not connected</small></article>
+        <article class="ai-metric"><div class="ai-metric-top"><span>Evaluation accuracy</span><i class="fas fa-chart-line"></i></div><strong>—</strong><small>Evaluation dataset required</small></article>
+      </section>
+      <section class="ai-setup-banner"><div class="ai-banner-icon"><i class="fas fa-plug"></i></div><div class="ai-banner-copy"><strong>AI service setup required</strong><p>Live responses require an administrator-configured provider secret and a working OfficeFlow AI service. Metrics remain blank until verified usage data is integrated.</p></div><button class="ai-btn ai-btn-outline" type="button" onclick="document.getElementById('ai-configuration').scrollIntoView({behavior:'smooth',block:'start'})">Review configuration <i class="fas fa-arrow-right"></i></button></section>
+      <section class="ai-section">
+        <div class="ai-section-heading"><div><p class="ai-eyebrow">CAPABILITY PORTFOLIO</p><h2>AI capabilities</h2><p>Services are shown as capabilities—not as active integrations—until connected and tested.</p></div><span class="ai-count">06 CAPABILITIES</span></div>
+        <div class="ai-feature-grid">
+          <article class="ai-feature"><div class="ai-feature-head"><span class="ai-feature-icon"><i class="fas fa-file-invoice"></i></span><span class="ai-pill ai-pill-muted">Setup required</span></div><h3>Document Intelligence</h3><p>OCR, document classification, metadata extraction and validation support.</p><div class="ai-feature-foot"><span>Documents</span><i class="fas fa-arrow-right"></i></div></article>
+          <article class="ai-feature"><div class="ai-feature-head"><span class="ai-feature-icon"><i class="fas fa-diagram-project"></i></span><span class="ai-pill ai-pill-muted">Setup required</span></div><h3>Workflow Intelligence</h3><p>Identify approval bottlenecks and recommend process-routing improvements.</p><div class="ai-feature-foot"><span>Tasks &amp; workflows</span><i class="fas fa-arrow-right"></i></div></article>
+          <article class="ai-feature"><div class="ai-feature-head"><span class="ai-feature-icon"><i class="fas fa-comments"></i></span><span class="ai-pill ai-pill-muted">Setup required</span></div><h3>Virtual Assistant</h3><p>Support administrative work and approved knowledge retrieval.</p><div class="ai-feature-foot"><span>Workplace productivity</span><i class="fas fa-arrow-right"></i></div></article>
+          <article class="ai-feature"><div class="ai-feature-head"><span class="ai-feature-icon"><i class="fas fa-chart-pie"></i></span><span class="ai-pill ai-pill-muted">Setup required</span></div><h3>Financial Intelligence</h3><p>Expense trends, transaction anomalies and forecasting support.</p><div class="ai-feature-foot"><span>Finance</span><i class="fas fa-arrow-right"></i></div></article>
+          <article class="ai-feature"><div class="ai-feature-head"><span class="ai-feature-icon"><i class="fas fa-users"></i></span><span class="ai-pill ai-pill-muted">Setup required</span></div><h3>Workforce Analytics</h3><p>Aggregate workforce trends and engagement indicators with appropriate access controls.</p><div class="ai-feature-foot"><span>Human resources</span><i class="fas fa-arrow-right"></i></div></article>
+          <article class="ai-feature"><div class="ai-feature-head"><span class="ai-feature-icon"><i class="fas fa-shield-halved"></i></span><span class="ai-pill ai-pill-muted">Setup required</span></div><h3>Compliance Intelligence</h3><p>Track control exceptions, support audit preparation and organise remediation.</p><div class="ai-feature-foot"><span>Governance &amp; risk</span><i class="fas fa-arrow-right"></i></div></article>
+        </div>
+      </section>
+      <section class="ai-section ai-insights-grid">
+        <article class="ai-panel"><div class="ai-panel-heading"><span class="ai-panel-icon"><i class="fas fa-lightbulb"></i></span><div><h3>Insights &amp; recommendations</h3><p>Evidence-led opportunities from connected organisation data.</p></div></div><div class="ai-empty-state"><i class="fas fa-chart-column"></i><strong>No verified insights available</strong><span>Connect the relevant data sources and AI provider to generate organisation-specific recommendations.</span></div></article>
+        <article class="ai-panel"><div class="ai-panel-heading"><span class="ai-panel-icon"><i class="fas fa-chart-line"></i></span><div><h3>Predictive analytics</h3><p>Forecasts and risk indicators backed by measured data.</p></div></div><div class="ai-prediction-list"><div><span>Workload forecast</span><strong>Not available</strong></div><div><span>Cost-saving estimate</span><strong>Not available</strong></div><div><span>Risk assessment</span><strong>Not evaluated</strong></div></div><p class="ai-footnote">Forecasts will appear after data integration and model evaluation. No estimates are fabricated.</p></article>
+      </section>
+      <section class="ai-section" id="ai-configuration">
+        <div class="ai-section-heading"><div><p class="ai-eyebrow">ADMINISTRATION</p><h2>AI governance &amp; preferences</h2><p>Set local workspace preferences. Provider credentials and organisation-wide policies must be managed by a secured backend.</p></div></div>
+        <form class="ai-panel ai-settings" id="aiSettingsForm">
+          <div class="ai-settings-grid">
+            <label>Automation policy<select id="aiAutomationLevel" name="automationLevel"><option value="conservative">Conservative — approval first</option><option value="moderate" selected>Moderate — assisted execution</option><option value="restricted">Restricted — recommendations only</option></select><small>Does not grant permissions or trigger automated actions.</small></label>
+            <label>Assistant behaviour<select id="aiLearningMode" name="learningMode"><option value="passive" selected>On-demand only</option><option value="assisted">User-approved assistance</option></select><small>No model training is implied by this preference.</small></label>
+            <label>Data handling<select id="aiPrivacyMode" name="privacyMode"><option value="enhanced" selected>Enhanced — minimise sensitive data</option><option value="strict">Strict — no sensitive data in prompts</option></select><small>Actual controls depend on backend enforcement.</small></label>
+            <label>Metrics refresh<select id="aiUpdateFrequency" name="updateFrequency"><option value="manual" selected>Manual refresh</option><option value="hourly">Hourly (when integrated)</option><option value="daily">Daily (when integrated)</option></select><small>Refresh schedule is a preference, not a live integration.</small></label>
+          </div>
+          <div class="ai-settings-actions"><p id="aiSettingsStatus" role="status">Preferences are stored in this browser only.</p><div><button class="ai-btn ai-btn-outline" type="button" id="aiResetSettings">Reset preferences</button><button class="ai-btn ai-btn-primary" type="submit"><i class="fas fa-save"></i> Save preferences</button></div></div>
+        </form>
+      </section>
+      <footer class="ai-footer"><span>OfficeFlow AI Intelligence</span><span><i class="fas fa-lock"></i> Provider secrets must never be stored in the browser.</span></footer>
     </main>
-
+    <style>
+      :root{--ai-ink:#17263d;--ai-muted:#64748b;--ai-line:#dce3ec;--ai-bg:#f4f6f9;--ai-gold:#a6823d;--ai-navy:#16213e}
+      body{background:var(--ai-bg)!important;color:var(--ai-ink)!important;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+      body>div[style*="margin-left:224px"]{margin-left:224px}
+      .ai-shell-header{background:#fff;border-bottom:1px solid var(--ai-line);position:sticky;top:0;z-index:20}
+      .ai-shell-inner{max-width:1500px;margin:auto;padding:22px 32px;display:flex;justify-content:space-between;align-items:center;gap:20px}
+      .ai-brand{display:flex;align-items:center;gap:15px}.ai-brand-mark{width:48px;height:48px;border-radius:12px;background:var(--ai-navy);display:grid;place-items:center;color:#d7b66f;font-size:21px}
+      .ai-brand h1{font-size:25px;font-weight:750;letter-spacing:-.04em;margin:2px 0;color:var(--ai-ink)}.ai-subtitle{font-size:13px;color:var(--ai-muted);margin:0}
+      .ai-eyebrow{font-size:10px;letter-spacing:.15em;font-weight:800;color:#8b6b31;margin:0 0 5px}.ai-header-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+      .ai-status{display:inline-flex;align-items:center;gap:8px;padding:9px 12px;border:1px solid var(--ai-line);border-radius:8px;font-size:12px;font-weight:650;color:#7c5c25;background:#fbf8f0}.status-dot{width:7px;height:7px;border-radius:50%;background:#c08a2d}
+      .ai-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:8px;padding:10px 14px;font-weight:650;font-size:12px;cursor:pointer;transition:.15s;border:1px solid transparent}.ai-btn-primary{background:var(--ai-navy);color:#fff}.ai-btn-primary:hover{background:#26395b}.ai-btn-outline{background:white;color:var(--ai-ink);border-color:#cbd5e1}.ai-btn-outline:hover{background:#f8fafc}
+      .ai-workspace{max-width:1500px;margin:auto;padding:30px 32px 24px}.ai-intro{display:flex;justify-content:space-between;align-items:center;gap:28px;margin-bottom:24px}.ai-intro h2{font-size:27px;font-weight:750;letter-spacing:-.04em;margin:0 0 7px}.ai-intro p:not(.ai-eyebrow){color:var(--ai-muted);font-size:13px;margin:0;max-width:690px;line-height:1.7}
+      .ai-intro-note{display:flex;gap:12px;align-items:flex-start;max-width:360px;padding:14px 16px;background:#fff;border:1px solid var(--ai-line);border-radius:10px}.ai-intro-note>i{color:var(--ai-gold);font-size:19px;margin-top:3px}.ai-intro-note strong,.ai-intro-note span{display:block}.ai-intro-note strong{font-size:12px;margin-bottom:5px}.ai-intro-note span{font-size:11px;line-height:1.55;color:var(--ai-muted)}
+      .ai-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:22px}.ai-metric{padding:19px;background:#fff;border:1px solid var(--ai-line);border-radius:11px;min-width:0}.ai-metric-top{display:flex;justify-content:space-between;gap:8px;color:var(--ai-muted);font-size:12px;font-weight:600}.ai-metric-top i{color:#9b7a3c}.ai-metric>strong{display:block;font-size:29px;letter-spacing:-.04em;margin:15px 0 5px;color:var(--ai-ink)}.ai-metric small{font-size:11px;color:#7b8798}
+      .ai-setup-banner{display:flex;align-items:center;gap:14px;padding:16px 18px;border:1px solid #e8d8b3;background:#fffcf5;border-radius:11px;margin-bottom:32px}.ai-banner-icon{width:40px;height:40px;display:grid;place-items:center;background:#f4ead4;color:#8c6b2f;border-radius:9px;flex-shrink:0}.ai-banner-copy{flex:1}.ai-banner-copy strong{font-size:13px}.ai-banner-copy p{font-size:12px;color:#74674f;line-height:1.6;margin:4px 0 0}
+      .ai-section{margin:0 0 32px;scroll-margin-top:100px}.ai-section-heading{display:flex;justify-content:space-between;align-items:flex-end;gap:18px;margin-bottom:16px}.ai-section-heading h2{font-size:21px;font-weight:750;letter-spacing:-.03em;margin:0 0 5px}.ai-section-heading p:not(.ai-eyebrow){font-size:12px;color:var(--ai-muted);margin:0}.ai-count{font-size:10px;letter-spacing:.12em;font-weight:750;color:#64748b;padding:8px 10px;border:1px solid var(--ai-line);border-radius:7px;background:#fff;white-space:nowrap}
+      .ai-feature-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}.ai-feature{padding:20px;background:#fff;border:1px solid var(--ai-line);border-radius:11px;transition:border-color .18s,box-shadow .18s}.ai-feature:hover{border-color:#c4b184;box-shadow:0 8px 24px #17263d0b}.ai-feature-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:17px}.ai-feature-icon{width:42px;height:42px;display:grid;place-items:center;border-radius:10px;background:#f0f2f6;color:var(--ai-navy);font-size:17px}.ai-pill{font-size:10px;font-weight:700;padding:6px 8px;border-radius:5px}.ai-pill-muted{background:#f1f3f6;color:#657187}.ai-feature h3{font-size:15px;font-weight:750;margin:0 0 8px}.ai-feature>p{font-size:12px;line-height:1.7;color:var(--ai-muted);min-height:42px;margin:0 0 18px}.ai-feature-foot{padding-top:13px;border-top:1px solid #edf0f4;display:flex;justify-content:space-between;align-items:center;color:#6d7788;font-size:11px}.ai-feature-foot i{color:#a6823d}
+      .ai-insights-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:15px}.ai-panel{background:#fff;border:1px solid var(--ai-line);border-radius:11px;padding:21px}.ai-panel-heading{display:flex;gap:12px;align-items:center}.ai-panel-icon{width:38px;height:38px;display:grid;place-items:center;border-radius:9px;background:#f2f0e9;color:#8b6b31}.ai-panel-heading h3{font-size:14px;font-weight:750;margin:0 0 4px}.ai-panel-heading p{font-size:11px;color:var(--ai-muted);margin:0}.ai-empty-state{margin-top:20px;padding:24px 18px;border:1px dashed #d7dee8;border-radius:9px;display:flex;align-items:center;flex-direction:column;text-align:center;gap:8px;color:var(--ai-muted)}.ai-empty-state>i{font-size:20px;color:#9aa5b5;margin-bottom:3px}.ai-empty-state strong{font-size:12px;color:#334155}.ai-empty-state span{font-size:11px;line-height:1.6;max-width:390px}.ai-prediction-list{margin-top:22px}.ai-prediction-list>div{display:flex;justify-content:space-between;gap:15px;padding:13px 0;border-bottom:1px solid #edf0f4;font-size:12px}.ai-prediction-list>div span{color:var(--ai-muted)}.ai-prediction-list>div strong{font-size:11px;color:#64748b}.ai-footnote{font-size:10px;line-height:1.6;color:#8792a2;margin:14px 0 0}
+      .ai-settings-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}.ai-settings label{display:flex;flex-direction:column;gap:8px;font-size:12px;font-weight:700}.ai-settings select{width:100%;padding:11px 12px;background:#fff;border:1px solid #cfd8e3;border-radius:7px;color:#26364b;font-size:12px;outline:none}.ai-settings select:focus{border-color:#a6823d;box-shadow:0 0 0 3px #a6823d1c}.ai-settings label small{font-size:10px;line-height:1.5;font-weight:400;color:#7c8797}.ai-settings-actions{display:flex;justify-content:space-between;align-items:center;gap:15px;border-top:1px solid #edf0f4;padding-top:18px;margin-top:22px}.ai-settings-actions>p{font-size:11px;color:var(--ai-muted);margin:0}.ai-settings-actions>div{display:flex;gap:8px;flex-wrap:wrap}.ai-footer{display:flex;justify-content:space-between;gap:12px;padding:20px 0 5px;border-top:1px solid var(--ai-line);font-size:10px;color:#7d899a}.ai-footer i{margin-right:5px;color:#9a7a40}
+      @media(max-width:1100px){.ai-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.ai-feature-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.ai-intro{align-items:flex-start;flex-direction:column}.ai-intro-note{max-width:none}}
+      @media(max-width:700px){.ai-shell-inner,.ai-workspace{padding-left:16px;padding-right:16px}.ai-shell-inner{align-items:flex-start;flex-direction:column}.ai-header-actions{width:100%;justify-content:space-between}.ai-brand h1{font-size:22px}.ai-metrics,.ai-feature-grid,.ai-insights-grid,.ai-settings-grid{grid-template-columns:1fr}.ai-setup-banner{align-items:flex-start;flex-wrap:wrap}.ai-setup-banner .ai-btn{width:100%}.ai-section-heading{align-items:flex-start;flex-direction:column}.ai-settings-actions{align-items:flex-start;flex-direction:column}.ai-settings-actions>div{width:100%}.ai-settings-actions .ai-btn{flex:1}.ai-footer{flex-direction:column}}
+    </style>
+    <script>
+      (function(){
+        const key='officeflow.ai.preferences.v1';
+        const defaults={automationLevel:'moderate',learningMode:'passive',privacyMode:'enhanced',updateFrequency:'manual'};
+        const form=document.getElementById('aiSettingsForm');
+        const status=document.getElementById('aiSettingsStatus');
+        function read(){try{return JSON.parse(localStorage.getItem(key)||'{}')}catch(_){return {}}}
+        function apply(values){Object.keys(defaults).forEach(k=>{const el=form.elements[k];if(el)el.value=values[k]||defaults[k]})}
+        apply({...defaults,...read()});
+        form.addEventListener('submit',function(e){e.preventDefault();const values={};Object.keys(defaults).forEach(k=>values[k]=form.elements[k].value);try{localStorage.setItem(key,JSON.stringify(values));status.textContent='Preferences saved in this browser. They are not yet synced to your organisation.';status.style.color='#38745a'}catch(_){status.textContent='Could not save preferences in this browser. Check storage settings.';status.style.color='#a33'}});
+        document.getElementById('aiResetSettings').addEventListener('click',function(){apply(defaults);try{localStorage.removeItem(key);status.textContent='Preferences reset to defaults for this browser.';status.style.color='#64748b'}catch(_){status.textContent='Defaults restored on screen; browser storage could not be cleared.'}});
+      })();
+    </script>
     <script>
         const aiFeatureConfig = {
             'document-processing': {
