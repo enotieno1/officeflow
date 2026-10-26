@@ -8,21 +8,80 @@
 <link rel="stylesheet" href="/dashboard/css/executive-theme.css"><link rel="stylesheet" href="/dashboard/css/mobile.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-*{box-sizing:border-box}body{margin:0;background:#f5f6f8;color:#152238;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.wrap{max-width:1100px;margin:0 auto;padding:40px 22px 64px}.top{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:34px}.brand{font-size:25px;font-weight:750;color:#14243a}.brand span{color:#a6823d}.eyebrow{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8a6b2f;font-weight:700}h1{font-size:clamp(30px,5vw,44px);line-height:1.1;margin:10px 0 12px}.intro{max-width:700px;color:#647084;line-height:1.7}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:16px;margin-top:30px}.tile{display:block;background:#fff;border:1px solid #e0e4ea;border-top:3px solid #a6823d;border-radius:12px;padding:22px;color:inherit;text-decoration:none;transition:transform .15s,box-shadow .15s}.tile:hover{transform:translateY(-2px);box-shadow:0 12px 28px #14243a12}.ico{width:44px;height:44px;border-radius:10px;background:#f3efe6;display:grid;place-items:center;color:#14243a;font-size:19px;margin-bottom:18px}.tile h2{font-size:18px;margin:0 0 8px}.tile p{font-size:13px;line-height:1.6;color:#647084;margin:0 0 18px}.go{font-size:13px;font-weight:700;color:#8a6b2f}.notice{margin-top:25px;padding:16px;border-radius:10px;background:#fff;border:1px solid #e0e4ea;color:#647084;font-size:13px;line-height:1.6}.notice a{color:#8a6b2f;font-weight:650;text-decoration:none}
+:root{--navy:#16213e;--navy2:#1f2c4f;--brass:#a6823d;--brass-d:#8a6b2f;--ink:#152238;--mute:#5b6472;--line:#e1e4ea;--bg:#f4f5f7}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.bar{background:var(--navy);border-bottom:1px solid #ffffff14}
+.bar-in{max-width:1180px;margin:0 auto;padding:16px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{font-size:22px;font-weight:700;letter-spacing:-.3px;color:#fff;text-decoration:none}.brand span{color:var(--brass-d);color:#c9a868}
+.bar nav{display:flex;gap:26px;font-size:13px}.bar nav a{color:#c7cedb;text-decoration:none;font-weight:500}.bar nav a:hover{color:#fff}
+.hero{background:linear-gradient(180deg,var(--navy) 0,var(--navy2) 100%);color:#fff;padding:56px 24px 96px;position:relative}
+.hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:linear-gradient(90deg,var(--brass),#c9a868 40%,transparent)}
+.hero-in{max-width:1180px;margin:0 auto}
+.eyebrow{font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;color:#c9a868;display:flex;align-items:center;gap:10px}
+.eyebrow::before{content:"";width:28px;height:1px;background:#c9a868}
+h1{font-size:clamp(30px,4.4vw,44px);line-height:1.12;margin:16px 0 14px;font-weight:700;letter-spacing:-.8px;max-width:720px}
+.intro{max-width:660px;color:#c7cedb;line-height:1.75;font-size:15px;margin:0}
+.wrap{max-width:1180px;margin:-56px auto 0;padding:0 24px 64px;position:relative}
+.panel{background:#fff;border:1px solid var(--line);border-radius:6px;box-shadow:0 16px 40px #16213e14}
+.panel-h{padding:20px 28px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.panel-h h2{margin:0;font-size:15px;font-weight:650;letter-spacing:.01em}.panel-h small{color:var(--mute);font-size:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.tile{display:flex;flex-direction:column;padding:26px 28px;text-decoration:none;border-right:1px solid var(--line);border-bottom:1px solid var(--line);position:relative;transition:background .15s}
+.tile::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--brass);transform:scaleY(0);transform-origin:top;transition:transform .2s}
+.tile:hover,.tile:focus-visible{background:#faf8f3;outline:none}.tile:hover::before,.tile:focus-visible::before{transform:scaleY(1)}
+.top{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.ico{width:42px;height:42px;border-radius:4px;background:var(--navy);display:grid;place-items:center;color:#e9d9b4;font-size:17px;flex:none}
+.tile h3{margin:0;font-size:16.5px;font-weight:650;letter-spacing:-.1px}
+.tile p{margin:0 0 20px;font-size:13px;line-height:1.65;color:var(--mute);flex:1}
+.go{font-size:12.5px;font-weight:650;color:var(--brass-d);letter-spacing:.02em;display:flex;align-items:center;gap:8px}
+.go i{font-size:11px;transition:transform .15s}.tile:hover .go i{transform:translateX(4px)}
+.assure{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:0;margin-top:22px;background:#fff;border:1px solid var(--line);border-radius:6px}
+.assure div{padding:20px 24px;display:flex;gap:14px;align-items:flex-start;border-right:1px solid var(--line)}.assure div:last-child{border-right:0}
+.assure i{color:var(--brass-d);font-size:18px;margin-top:2px}.assure b{display:block;font-size:13.5px;margin-bottom:4px}.assure span{font-size:12.5px;color:var(--mute);line-height:1.6}
+.help{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px;margin-top:22px}
+.card{background:#fff;border:1px solid var(--line);border-radius:6px;padding:24px 26px;font-size:13px;line-height:1.7;color:var(--mute)}
+.card h4{margin:0 0 8px;font-size:14px;color:var(--ink);font-weight:650}.card a{color:var(--brass-d);font-weight:650;text-decoration:none}.card a:hover{text-decoration:underline}
+.foot{max-width:1180px;margin:0 auto;padding:26px 24px 40px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--mute)}
+@media(max-width:640px){.bar nav{display:none}.hero{padding:40px 20px 84px}.wrap{padding:0 16px 48px}.tile{border-right:0}.assure div{border-right:0;border-bottom:1px solid var(--line)}.assure div:last-child{border-bottom:0}}
 </style></head>
-<body><main class="wrap">
-<header class="top"><div class="brand">Office<span>Flow</span></div><a href="/" style="color:#8a6b2f;text-decoration:none;font-size:13px;font-weight:650">Home</a></header>
+<body>
+<div class="bar"><div class="bar-in">
+<a class="brand" href="/">Office<span>Flow</span></a>
+<nav aria-label="Primary"><a href="/">Home</a><a href="/dashboard/auth.html">Main sign-in</a><a href="/dashboard/auth.html?mode=signup">Register organization</a></nav>
+</div></div>
+
+<header class="hero"><div class="hero-in">
 <div class="eyebrow">Secure department access</div>
 <h1>Choose your department portal</h1>
-<p class="intro">Each department has its own sign-in page. OfficeFlow checks your account and department assignment before granting access. Use the portal assigned to your role at your organization.</p>
-<section class="grid" aria-label="Department login portals">
-<a class="tile" href="/dashboard/portals/hr.html"><div class="ico"><i class="fa-solid fa-users"></i></div><h2>Human Resources</h2><p>Employee records, recruitment, leave and HR workflows.</p><div class="go">HR sign in →</div></a>
-<a class="tile" href="/dashboard/portals/finance.html"><div class="ico"><i class="fa-solid fa-coins"></i></div><h2>Finance</h2><p>Finance requests, expense workflows and financial approvals.</p><div class="go">Finance sign in →</div></a>
-<a class="tile" href="/dashboard/portals/procurement.html"><div class="ico"><i class="fa-solid fa-cart-shopping"></i></div><h2>Procurement</h2><p>Purchase requests, sourcing and procurement approvals.</p><div class="go">Procurement sign in →</div></a>
-<a class="tile" href="/dashboard/portals/administration.html"><div class="ico"><i class="fa-solid fa-building"></i></div><h2>Administration</h2><p>Office administration and shared services.</p><div class="go">Administration sign in →</div></a>
-<a class="tile" href="/dashboard/portals/it.html"><div class="ico"><i class="fa-solid fa-laptop-code"></i></div><h2>Information Technology</h2><p>IT service requests, assets and technology operations.</p><div class="go">IT sign in →</div></a>
-<a class="tile" href="/dashboard/portals/legal.html"><div class="ico"><i class="fa-solid fa-scale-balanced"></i></div><h2>Legal &amp; Compliance</h2><p>Legal, compliance and policy workflows.</p><div class="go">Legal sign in →</div></a>
-<a class="tile" href="/dashboard/portals/corporate-operations.html"><div class="ico"><i class="fa-solid fa-sitemap"></i></div><h2>Corporate Operations</h2><p>Cross-functional operations and coordination.</p><div class="go">Corporate operations sign in →</div></a>
+<p class="intro">Each department has its own sign-in page. OfficeFlow verifies your account and department assignment before granting access. Use the portal assigned to your role at your organization.</p>
+</div></header>
+
+<main class="wrap">
+<section class="panel" aria-label="Department login portals">
+<div class="panel-h"><h2>Department portals</h2><small>7 portals &middot; role-based access</small></div>
+<div class="grid">
+<a class="tile" href="/dashboard/portals/hr.html"><div class="top"><div class="ico"><i class="fa-solid fa-users"></i></div><h3>Human Resources</h3></div><p>Employee records, recruitment, leave and HR workflows.</p><div class="go">HR sign in <i class="fa-solid fa-arrow-right"></i></div></a>
+<a class="tile" href="/dashboard/portals/finance.html"><div class="top"><div class="ico"><i class="fa-solid fa-coins"></i></div><h3>Finance</h3></div><p>Finance requests, expense workflows and financial approvals.</p><div class="go">Finance sign in <i class="fa-solid fa-arrow-right"></i></div></a>
+<a class="tile" href="/dashboard/portals/procurement.html"><div class="top"><div class="ico"><i class="fa-solid fa-cart-shopping"></i></div><h3>Procurement</h3></div><p>Purchase requests, sourcing and procurement approvals.</p><div class="go">Procurement sign in <i class="fa-solid fa-arrow-right"></i></div></a>
+<a class="tile" href="/dashboard/portals/administration.html"><div class="top"><div class="ico"><i class="fa-solid fa-building"></i></div><h3>Administration</h3></div><p>Office administration and shared services.</p><div class="go">Administration sign in <i class="fa-solid fa-arrow-right"></i></div></a>
+<a class="tile" href="/dashboard/portals/it.html"><div class="top"><div class="ico"><i class="fa-solid fa-laptop-code"></i></div><h3>Information Technology</h3></div><p>IT service requests, assets and technology operations.</p><div class="go">IT sign in <i class="fa-solid fa-arrow-right"></i></div></a>
+<a class="tile" href="/dashboard/portals/legal.html"><div class="top"><div class="ico"><i class="fa-solid fa-scale-balanced"></i></div><h3>Legal &amp; Compliance</h3></div><p>Legal, compliance and policy workflows.</p><div class="go">Legal sign in <i class="fa-solid fa-arrow-right"></i></div></a>
+<a class="tile" href="/dashboard/portals/corporate-operations.html"><div class="top"><div class="ico"><i class="fa-solid fa-sitemap"></i></div><h3>Corporate Operations</h3></div><p>Cross-functional operations and coordination.</p><div class="go">Corporate operations sign in <i class="fa-solid fa-arrow-right"></i></div></a>
+</div></section>
+
+<section class="assure" aria-label="Security assurances">
+<div><i class="fa-solid fa-user-shield"></i><p style="margin:0"><b>Role-based access</b><span>Permissions follow your assigned role and department.</span></p></div>
+<div><i class="fa-solid fa-building-lock"></i><p style="margin:0"><b>Organization isolation</b><span>Your organization's data is separated from every other tenant.</span></p></div>
+<div><i class="fa-solid fa-clipboard-check"></i><p style="margin:0"><b>Audit trail</b><span>Workflow decisions and role changes are recorded.</span></p></div>
 </section>
-<div class="notice"><strong>Need an account?</strong> Ask your organization administrator to create your account and assign your department. To register a new organization, use the <a href="/dashboard/auth.html?mode=signup">organization sign-up page</a>. Separate portals do not mean separate passwords or databases: your secure OfficeFlow account and database permissions remain the source of access control.</div>
-</main></body></html>
+
+<section class="help">
+<div class="card"><h4>Need an account?</h4>Ask your organization administrator to create your account and assign your department. Separate portals do not mean separate passwords or databases: your secure OfficeFlow account and database permissions remain the source of access control.</div>
+<div class="card"><h4>Registering a new organization?</h4>Set up your workspace, departments and approval workflows on the <a href="/dashboard/auth.html?mode=signup">organization sign-up page</a>.</div>
+</section>
+</main>
+
+<footer class="foot"><span>&copy; OfficeFlow. Africa's Office Operating System.</span><span>Viewpark Towers, floors 7&ndash;10 &middot; +254 717 261 425</span></footer>
+</body></html>
