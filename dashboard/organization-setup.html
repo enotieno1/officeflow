@@ -102,6 +102,7 @@ label{display:block;font-size:.875rem;font-weight:600;color:#344258;margin-botto
     if(invalid){show('Please check this email address: '+invalid,true);return;}
     button.disabled=true;button.textContent='Creating secure workspace…';
     show('Saving organization, package and administrator invitations. Please wait.',false);
+    var workspaceCreated=false;
     try{
       var userResult=await supabase.auth.getUser();
       if(userResult.error||!userResult.data.user)throw new Error('Your session has expired. Sign in again and retry.');
@@ -117,6 +118,7 @@ label{display:block;font-size:.875rem;font-weight:600;color:#344258;margin-botto
       });
       if(result.error)throw result.error;
       var onboard=result.data||{};
+      workspaceCreated=true;
       var account=await OOES_AUTH._loadProfile(userResult.data.user);
       OOES_AUTH._setSessionFlag();
       var sent=0,failed=[];
@@ -136,6 +138,7 @@ label{display:block;font-size:.875rem;font-weight:600;color:#344258;margin-botto
       }
       if(failed.length){
         show('Organization created successfully. '+(sent?'Invitation emails sent: '+sent+'. ':'')+'Some invitations need attention: '+failed.join('; ')+'. You can continue to the dashboard; do not submit this form again.',true);
+        button.type='button';
         button.textContent='Workspace created — continue';
         button.disabled=false;
         button.onclick=function(){window.location.replace('/dashboard/index.html');};
@@ -145,8 +148,14 @@ label{display:block;font-size:.875rem;font-weight:600;color:#344258;margin-botto
       button.textContent='Opening OfficeFlow…';
       window.setTimeout(function(){window.location.replace('/dashboard/index.html');},1800);
     }catch(error){
-      show((error&&error.message)||'OfficeFlow could not finish setup. Check your connection and try again.',true);
-      button.disabled=false;button.textContent='Create organization workspace';
+      if(workspaceCreated){
+        show('Your organization and package were saved, but a follow-up step did not finish: '+((error&&error.message)||'unknown error')+'. Continue to the dashboard and contact support before retrying invitations.',true);
+        button.type='button';button.disabled=false;button.textContent='Workspace created — continue';
+        button.onclick=function(){window.location.replace('/dashboard/index.html');};
+      }else{
+        show((error&&error.message)||'OfficeFlow could not finish setup. Check your connection and try again.',true);
+        button.disabled=false;button.textContent='Create organization workspace';
+      }
     }
   });
   document.getElementById('signOutButton').addEventListener('click',function(){OOES_AUTH.logout();});
