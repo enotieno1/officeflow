@@ -4,6 +4,8 @@
 begin;
 
 alter function public.scan_fraud_risks() rename to scan_fraud_risks_finance_base;
+revoke all on function public.scan_fraud_risks_finance_base() from public;
+revoke all on function public.scan_fraud_risks_finance_base() from authenticated;
 
 create or replace function public.scan_fraud_risks()
 returns jsonb
