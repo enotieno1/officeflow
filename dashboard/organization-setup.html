@@ -2,85 +2,154 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
 <title>Set Up Your Organization | OfficeFlow</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="/dashboard/js/config.js"></script>
 <script>var supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);</script>
-<link rel="stylesheet" href="css/executive-theme.css">
-<link rel="stylesheet" href="css/mobile.css">
-</head>
-<body class="min-h-screen flex items-center justify-center p-4" style="background:var(--of-navy)">
-<main class="w-full max-w-xl">
-  <section class="bg-white rounded-2xl shadow-2xl p-8">
-    <div class="mb-7">
-      <p class="text-sm font-semibold tracking-wide" style="color:var(--of-brass)">OFFICEFLOW SETUP</p>
-      <h1 class="of-serif text-3xl font-semibold text-gray-900 mt-2">Set up your organization</h1>
-      <p class="text-gray-600 mt-3">Create your organization workspace. You will become its administrator and can then configure departments, invite your team, and set up workflows.</p>
-    </div>
-    <form id="orgForm" class="space-y-5">
-      <div>
-        <label for="orgName" class="block text-sm font-medium text-gray-700 mb-2">Organization name</label>
-        <input id="orgName" name="orgName" type="text" minlength="2" maxlength="120" required autocomplete="organization" placeholder="e.g. Acme Limited" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent outline-none">
-      </div>
-      <button id="createButton" type="submit" class="w-full text-white py-3 px-4 rounded-lg font-semibold" style="background:var(--of-navy)">Create workspace</button>
-      <p id="message" class="text-sm text-center" role="status" aria-live="polite"></p>
-    </form>
-    <div class="mt-6 border-t pt-5 text-center">
-      <button id="signOutButton" type="button" class="text-sm underline" style="color:var(--of-navy)">Sign out</button>
-    </div>
-  </section>
-</main>
 <script src="/dashboard/js/ooes-auth.js"></script>
+<link rel="stylesheet" href="/dashboard/css/executive-theme.css">
+<link rel="stylesheet" href="/dashboard/css/mobile.css">
+<style>
+body{background:#111d31;color:#172840;font-family:Inter,Arial,sans-serif}
+.panel{background:#fff;border:1px solid #e3e7ed;border-top:3px solid #b69a5a;border-radius:16px;box-shadow:0 24px 70px rgba(0,0,0,.2)}
+.field{width:100%;border:1px solid #cfd7e2;border-radius:8px;padding:12px 13px;background:white;color:#172840}
+.field:focus{outline:0;border-color:#a6823d;box-shadow:0 0 0 3px rgba(182,154,90,.15)}
+label{display:block;font-size:.875rem;font-weight:600;color:#344258;margin-bottom:7px}
+.btn{background:#172840;color:#fff;border-radius:8px;padding:13px 16px;font-weight:650}
+.btn:disabled{opacity:.6;cursor:wait}
+.note{background:#f7f5ef;border-left:3px solid #b69a5a;padding:12px 14px;border-radius:6px}
+</style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+<main class="w-full max-w-3xl py-6">
+  <header class="text-white mb-6">
+    <p class="uppercase tracking-widest text-xs font-semibold" style="color:#d8c48d">OFFICEFLOW · FIRST-TIME SETUP</p>
+    <h1 class="text-3xl md:text-4xl font-semibold mt-2">Create your organization workspace</h1>
+    <p class="mt-3 text-sm md:text-base text-slate-200 max-w-2xl">Register the organization, choose a subscription package and invite the administrators who will help manage the workspace.</p>
+  </header>
+  <section class="panel p-5 md:p-8">
+    <form id="orgForm" class="space-y-7">
+      <section>
+        <h2 class="text-lg font-semibold mb-4">1. Organization details</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="md:col-span-2"><label for="orgName">Legal or trading name *</label><input class="field" id="orgName" name="orgName" required minlength="2" maxlength="120" autocomplete="organization" placeholder="e.g. Acme Limited"></div>
+          <div><label for="industry">Industry / sector</label><input class="field" id="industry" maxlength="120" placeholder="e.g. Professional services"></div>
+          <div><label for="country">Country *</label><input class="field" id="country" required maxlength="100" value="Kenya" autocomplete="country-name"></div>
+          <div><label for="contactEmail">Organization contact email</label><input class="field" id="contactEmail" type="email" maxlength="320" autocomplete="email" placeholder="admin@organization.co.ke"></div>
+          <div><label for="phone">Organization phone</label><input class="field" id="phone" type="tel" maxlength="40" autocomplete="tel" placeholder="+254..."></div>
+          <div class="md:col-span-2"><label for="website">Website (optional)</label><input class="field" id="website" type="url" maxlength="240" placeholder="https://www.organization.co.ke"></div>
+        </div>
+      </section>
+      <section>
+        <h2 class="text-lg font-semibold mb-1">2. Choose a package</h2>
+        <p class="text-sm text-gray-600 mb-4">The subscription is recorded as pending until checkout/payment is completed. No payment is taken on this screen.</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <label class="border rounded-xl p-4 cursor-pointer" style="border-color:#d8dee7">
+            <div class="flex items-start gap-3"><input type="radio" name="planId" value="starter_monthly" required class="mt-1">
+              <div><span class="block text-base font-semibold text-gray-900">Starter</span><span class="block text-xl font-bold mt-1">KSh 10,000 <small class="text-sm font-normal text-gray-600">/ month</small></span><span class="block text-sm text-gray-600 mt-2">Core requests, approvals, task tracking, private document storage and notifications. Up to 10 users.</span></div>
+            </div>
+          </label>
+          <label class="border rounded-xl p-4 cursor-pointer" style="border-color:#b69a5a">
+            <div class="flex items-start gap-3"><input type="radio" name="planId" value="professional_monthly" required class="mt-1">
+              <div><span class="block text-base font-semibold text-gray-900">Professional</span><span class="block text-xl font-bold mt-1">KSh 40,000 <small class="text-sm font-normal text-gray-600">/ month</small></span><span class="block text-sm text-gray-600 mt-2">Advanced workflow configuration, SLA escalation and operational visibility. Up to 50 users.</span></div>
+            </div>
+          </label>
+        </div>
+      </section>
+      <section>
+        <h2 class="text-lg font-semibold mb-1">3. Invite additional administrators</h2>
+        <p class="text-sm text-gray-600 mb-3">You will be the first administrator. Add up to three other administrators, one email address per line. They will receive an invitation to join your organization.</p>
+        <label for="adminEmails">Additional administrator email addresses (optional)</label>
+        <textarea id="adminEmails" class="field" rows="3" maxlength="1000" placeholder="finance@organization.co.ke&#10;operations@organization.co.ke"></textarea>
+        <p class="text-xs text-gray-500 mt-2">Invitations expire after 7 days. Do not enter your own registration email again.</p>
+      </section>
+      <div class="note text-sm text-gray-700">Your workspace and subscription selection will be saved in OfficeFlow. The selected package will remain pending until billing is completed.</div>
+      <p id="message" class="text-sm" role="status" aria-live="polite"></p>
+      <button id="createButton" type="submit" class="btn w-full">Create organization workspace</button>
+    </form>
+    <div class="mt-5 pt-4 border-t text-center"><button id="signOutButton" type="button" class="text-sm underline" style="color:#172840">Sign out</button></div>
+  </section>
+  <p class="text-xs text-center text-slate-300 mt-5">OfficeFlow · Making Operations Simpler</p>
+</main>
 <script>
-(function() {
-  var bootstrapOrgId = '00000000-0000-0000-0000-000000000001';
-  var form = document.getElementById('orgForm');
-  var button = document.getElementById('createButton');
-  var message = document.getElementById('message');
-  function showMessage(text, isError) {
-    message.textContent = text;
-    message.className = 'text-sm text-center ' + (isError ? 'text-red-600' : 'text-gray-600');
-  }
-  document.addEventListener('DOMContentLoaded', async function() {
+(function(){
+  var bootstrapOrgId='00000000-0000-0000-0000-000000000001';
+  var form=document.getElementById('orgForm'), button=document.getElementById('createButton'), message=document.getElementById('message');
+  function show(text,error){message.textContent=text;message.className='text-sm '+(error?'text-red-700':'text-gray-700');}
+  function parseEmails(raw){return [...new Set(raw.split(/[\n,;]+/).map(function(s){return s.trim().toLowerCase();}).filter(Boolean))];}
+  document.addEventListener('DOMContentLoaded',async function(){
     await OOES_AUTH.ready;
-    var account = OOES_AUTH.getSession();
-    if (!account) return;
-    if (account.role !== 'employee' || account.organization_id !== bootstrapOrgId) {
-      window.location.replace('/dashboard/index.html');
-      return;
-    }
+    var account=OOES_AUTH.getSession();
+    if(!account){window.location.replace('/dashboard/auth.html?mode=signup');return;}
+    if(account.role!=='employee'||account.organization_id!==bootstrapOrgId){window.location.replace('/dashboard/index.html');return;}
+    var emailInput=document.getElementById('adminEmails');
+    emailInput.dataset.ownerEmail=(account.email||'').toLowerCase();
   });
-  form.addEventListener('submit', async function(event) {
+  form.addEventListener('submit',async function(event){
     event.preventDefault();
-    var orgName = document.getElementById('orgName').value.trim();
-    if (orgName.length < 2 || orgName.length > 120) {
-      showMessage('Enter an organization name between 2 and 120 characters.', true);
-      return;
-    }
-    button.disabled = true;
-    button.textContent = 'Creating workspace…';
-    showMessage('Setting up your secure organization workspace. Please wait.', false);
-    try {
-      var result = await supabase.rpc('fn_create_organization_for_current_user', { p_org_name: orgName });
-      if (result.error) {
-        showMessage(result.error.message || 'Workspace setup failed. Please try again.', true);
+    var name=document.getElementById('orgName').value.trim();
+    var plan=document.querySelector('input[name="planId"]:checked');
+    var emails=parseEmails(document.getElementById('adminEmails').value);
+    var ownerEmail=(document.getElementById('adminEmails').dataset.ownerEmail||'').toLowerCase();
+    if(name.length<2||name.length>120){show('Enter an organization name between 2 and 120 characters.',true);return;}
+    if(!plan){show('Choose a subscription package.',true);return;}
+    if(emails.length>3){show('You can invite up to three additional administrators during setup.',true);return;}
+    if(ownerEmail&&emails.includes(ownerEmail)){show('Your own account is already the first administrator. Remove your email from the invitation list.',true);return;}
+    var invalid=emails.find(function(email){return email.length>320||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);});
+    if(invalid){show('Please check this email address: '+invalid,true);return;}
+    button.disabled=true;button.textContent='Creating secure workspace…';
+    show('Saving organization, package and administrator invitations. Please wait.',false);
+    try{
+      var userResult=await supabase.auth.getUser();
+      if(userResult.error||!userResult.data.user)throw new Error('Your session has expired. Sign in again and retry.');
+      var details={
+        industry:document.getElementById('industry').value.trim(),
+        country:document.getElementById('country').value.trim()||'Kenya',
+        website:document.getElementById('website').value.trim(),
+        contact_email:document.getElementById('contactEmail').value.trim(),
+        phone:document.getElementById('phone').value.trim()
+      };
+      var result=await supabase.rpc('fn_onboard_organization',{
+        p_org_name:name,p_plan_id:plan.value,p_org_details:details,p_admin_emails:emails
+      });
+      if(result.error)throw result.error;
+      var onboard=result.data||{};
+      var account=await OOES_AUTH._loadProfile(userResult.data.user);
+      OOES_AUTH._setSessionFlag();
+      var sent=0,failed=[];
+      if(emails.length){
+        var list=await supabase.rpc('fn_list_org_invitations');
+        if(list.error)throw new Error('Organization created, but invitations could not be prepared for sending. Contact support with organization ID '+(onboard.organization_id||'unavailable')+'.');
+        var rows=list.data||[];
+        for(var i=0;i<emails.length;i++){
+          var invite=rows.find(function(row){return row.email.toLowerCase()===emails[i]&&row.status==='pending';});
+          if(!invite){failed.push(emails[i]+' (invitation record missing)');continue;}
+          try{
+            var response=await supabase.functions.invoke('organization-invite',{body:{email:emails[i],role:'administrator',invitation_id:invite.id}});
+            if(response.error||(response.data&&response.data.error))failed.push(emails[i]+' ('+((response.data&&response.data.error)||response.error.message||'send failed')+')');
+            else sent++;
+          }catch(e){failed.push(emails[i]+' (delivery could not be confirmed)');}
+        }
+      }
+      if(failed.length){
+        show('Organization created successfully. '+(sent?'Invitation emails sent: '+sent+'. ':'')+'Some invitations need attention: '+failed.join('; ')+'. You can continue to the dashboard; do not submit this form again.',true);
+        button.textContent='Workspace created — continue';
+        button.disabled=false;
+        button.onclick=function(){window.location.replace('/dashboard/index.html');};
         return;
       }
-      showMessage('Workspace created. Opening OfficeFlow…', false);
-      await OOES_AUTH._loadProfile((await supabase.auth.getUser()).data.user);
-      setTimeout(function() { window.location.replace('/dashboard/index.html'); }, 600);
-    } catch (error) {
-      showMessage('OfficeFlow could not complete workspace setup. Check your connection and try again.', true);
-    } finally {
-      button.disabled = false;
-      button.textContent = 'Create workspace';
+      show('Organization created and saved. '+(emails.length?'Administrator invitation emails sent: '+sent+'. ':'')+'Your selected package is pending checkout.',false);
+      button.textContent='Opening OfficeFlow…';
+      window.setTimeout(function(){window.location.replace('/dashboard/index.html');},1800);
+    }catch(error){
+      show((error&&error.message)||'OfficeFlow could not finish setup. Check your connection and try again.',true);
+      button.disabled=false;button.textContent='Create organization workspace';
     }
   });
-  document.getElementById('signOutButton').addEventListener('click', function() {
-    OOES_AUTH.logout();
-  });
+  document.getElementById('signOutButton').addEventListener('click',function(){OOES_AUTH.logout();});
 })();
 </script>
 </body>
