@@ -34,8 +34,8 @@ Supabase security advisor findings observed at audit time:
 2. **SECURITY DEFINER RPC exposure — WARN, 23 functions.** These may be intentional RPC endpoints, but each needs a function-by-function review of caller identity, organisation scoping, search_path, grants and allowed actions.
 3. **Leaked-password protection disabled — WARN.** Enable through supported Auth settings and retest registration/password changes.
 4. **RLS enabled without policies on social_media_connections and social_media_oauth_states — INFO.** Current table grants showed only postgres/service_role; this is consistent with service-role-only access, but keep it that way and test that client roles have no table privileges.
-5. **Documents RLS has overlapping permissive policies.** `documents_insert_owner` and `documents_delete_owner_or_admin` overlap with `documents_owner_or_admin`. The narrower insert/delete policies do not enforce the HR-sensitive-name restriction present in the all-command policy. Because permissive policies are ORed, they can bypass that restriction. Remove the overlapping policies so the stricter policy governs these operations.
-6. **Duplicate unique index on fraud_alerts.** `fraud_alerts_org_fingerprint_uidx` duplicates the unique constraint index `fraud_alerts_organization_id_fingerprint_key`; keep the constraint-backed index and remove the redundant one.
+5. **Documents RLS policy overlap — remediated 28 October 2026.** `documents_insert_owner` and `documents_delete_owner_or_admin` overlapped with `documents_owner_or_admin` and did not apply its HR-sensitive-name restriction. Both overlapping policies were dropped from the connected production database. Verification confirms only `documents_owner_or_admin` remains on `public.documents`; it retains organisation scoping, owner/admin checks and HR-sensitive-name restrictions.
+6. **Duplicate fraud-alert index — remediated 28 October 2026.** Dropped `fraud_alerts_org_fingerprint_uidx`; verification confirms the constraint-backed unique index `fraud_alerts_organization_id_fingerprint_key` remains.
 7. Performance advisor: 33 unindexed foreign keys, 24 RLS policies with avoidable per-row auth-function evaluation, 49 unused-index candidates. Review incrementally; do not blindly delete indexes or mass-rewrite policies.
 
 ## Module readiness matrix
@@ -59,10 +59,10 @@ Supabase security advisor findings observed at audit time:
 
 ## Remediation plan
 
-### P0 — Fix now
-- Remove overlapping permissive Documents INSERT/DELETE policies that can bypass the HR-sensitive document restrictions.
-- Remove the duplicate fraud-alert index without removing the unique constraint.
-- Verify the resulting policies/indexes and rerun Supabase advisors.
+### P0 — Completed 28 October 2026
+- Dropped the overlapping Documents INSERT/DELETE policies. Verified that only the stricter `documents_owner_or_admin` policy remains, preserving tenant, owner/admin and HR-sensitive-document restrictions.
+- Dropped the redundant `fraud_alerts_org_fingerprint_uidx`; verified the constraint-backed unique index remains.
+- Re-ran Supabase advisors. The document-policy overlap and duplicate-index findings no longer appear. Remaining warnings require separate review.
 
 ### P1 — Security review before broad rollout
 - Review all 23 SECURITY DEFINER functions and the 34 GraphQL-visible objects. Revoke exposure only after confirming the application doesn't depend on it; avoid blanket grants changes.
