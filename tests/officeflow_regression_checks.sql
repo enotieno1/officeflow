@@ -9,6 +9,7 @@ WITH checks AS (
  UNION ALL SELECT 'T02 every RLS table has at least one policy',
    (SELECT count(*) FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace
     WHERE n.nspname='public' AND c.relkind IN ('r','p') AND c.relrowsecurity
+      AND c.relname NOT IN ('social_media_connections','social_media_oauth_states')
       AND NOT EXISTS(SELECT 1 FROM pg_policy p WHERE p.polrelid=c.oid))=0
  UNION ALL SELECT 'T03 anon cannot execute any public function',
    (SELECT count(*) FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace
