@@ -187,9 +187,8 @@ OOES_AUTH._stopIdleTimer = function () {
       if (OOES_AUTH._session) OOES_AUTH._resetIdleTimer();
     }, { passive: true });
   });
-  document.addEventListener('visibilitychange', function () {
-    if (document.visibilityState === 'visible' && OOES_AUTH._session) OOES_AUTH._resetIdleTimer();
-  });
+  // Returning to a visible tab is not user activity. Do not reset the inactivity
+  // deadline here; otherwise a user can leave a tab idle and bypass the timeout.
 })();
 
 OOES_AUTH.ready = new Promise(function (resolve) { OOES_AUTH._readyResolve = resolve; });
