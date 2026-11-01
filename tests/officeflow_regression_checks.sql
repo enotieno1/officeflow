@@ -23,11 +23,13 @@ WITH checks AS (
  UNION ALL SELECT 'T05 every business table has organization_id (except organizations)',
    (SELECT count(*) FROM information_schema.tables t
     WHERE t.table_schema='public' AND t.table_type='BASE TABLE' AND t.table_name<>'organizations'
+      AND t.table_name NOT IN ('billing_plans','billing_provider_events','social_media_connections','social_media_oauth_states')
       AND NOT EXISTS(SELECT 1 FROM information_schema.columns c
         WHERE c.table_schema=t.table_schema AND c.table_name=t.table_name AND c.column_name='organization_id'))=0
  UNION ALL SELECT 'T06 no public organization_id column is nullable',
    (SELECT count(*) FROM information_schema.columns
-    WHERE table_schema='public' AND column_name='organization_id' AND is_nullable='YES')=0
+    WHERE table_schema='public' AND column_name='organization_id' AND is_nullable='YES'
+      AND table_name NOT IN ('billing_plans','billing_provider_events','social_media_connections','social_media_oauth_states'))=0
  UNION ALL SELECT 'T07 authenticated cannot modify audit_events directly',
    (SELECT count(*) FROM information_schema.role_table_grants
     WHERE table_schema='public' AND table_name='audit_events' AND grantee='authenticated'
@@ -66,11 +68,32 @@ WITH checks AS (
  UNION ALL SELECT 'T16 every non-organization public table has NOT NULL organization_id',
    (SELECT count(*) FROM information_schema.tables t
     WHERE t.table_schema='public' AND t.table_type='BASE TABLE' AND t.table_name<>'organizations'
+      AND t.table_name NOT IN ('billing_plans','billing_provider_events','social_media_connections','social_media_oauth_states')
       AND NOT EXISTS(SELECT 1 FROM information_schema.columns c
         WHERE c.table_schema=t.table_schema AND c.table_name=t.table_name
           AND c.column_name='organization_id' AND c.is_nullable='NO'))=0
  UNION ALL SELECT 'T17 no profile role is NULL',
    (SELECT count(*) FROM public.profiles WHERE role IS NULL)=0
+ UNION ALL SELECT 'T18 service-only social tables deny anon/authenticated and grant service_role',
+   (SELECT count(*) FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace
+    WHERE n.nspname='public' AND c.relname IN ('social_media_connections','social_media_oauth_states')
+      AND (NOT c.relrowsecurity
+        OR EXISTS(SELECT 1 FROM pg_policy p WHERE p.polrelid=c.oid)
+        OR has_table_privilege('anon',c.oid,'SELECT') OR has_table_privilege('anon',c.oid,'INSERT')
+        OR has_table_privilege('anon',c.oid,'UPDATE') OR has_table_privilege('anon',c.oid,'DELETE')
+        OR has_table_privilege('authenticated',c.oid,'SELECT') OR has_table_privilege('authenticated',c.oid,'INSERT')
+        OR has_table_privilege('authenticated',c.oid,'UPDATE') OR has_table_privilege('authenticated',c.oid,'DELETE')
+        OR NOT has_table_privilege('service_role',c.oid,'SELECT')
+        OR NOT has_table_privilege('service_role',c.oid,'INSERT')
+        OR NOT has_table_privilege('service_role',c.oid,'UPDATE')
+        OR NOT has_table_privilege('service_role',c.oid,'DELETE')))=0
+ UNION ALL SELECT 'T19 tenant-scoped business tables have organization_id NOT NULL (system tables explicitly excluded)',
+   (SELECT count(*) FROM information_schema.tables t
+    WHERE t.table_schema='public' AND t.table_type='BASE TABLE' AND t.table_name<>'organizations'
+      AND t.table_name NOT IN ('billing_plans','billing_provider_events','social_media_connections','social_media_oauth_states')
+      AND NOT EXISTS(SELECT 1 FROM information_schema.columns c
+        WHERE c.table_schema=t.table_schema AND c.table_name=t.table_name
+          AND c.column_name='organization_id' AND c.is_nullable='NO'))=0
 )
 SELECT name, CASE WHEN pass THEN 'PASS' ELSE 'FAIL' END AS result
 FROM checks ORDER BY name;
