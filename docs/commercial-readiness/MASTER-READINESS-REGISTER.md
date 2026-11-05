@@ -120,3 +120,22 @@ For each module, record the specific user roles, happy path, negative path, tena
 - **Blocked / Unknown:** Evidence or dependency is missing; never treat as complete.
 
 **Current decision:** Audit and stabilise. No feature expansion or production infrastructure migration until the baseline and critical risks are understood.
+
+
+## 9. Fresh infrastructure verification — 2026-11-06
+
+A fresh connected-provider check supersedes the earlier baseline where counts differ:
+
+- Supabase project status: ACTIVE_HEALTHY; region eu-west-1; PostgreSQL 17.6.1.084.
+- Public tables: 46; all 46 have RLS enabled; 83 policies.
+- Production migration records: **99**, not 94. Repository parity remains unverified.
+- Active Edge Functions: 7 — billing-checkout, intasend-webhook, officeflow-ai, organization-invite, payroll-payment-batch, mpesa-b2c-readiness, social-media-oauth.
+- Public SECURITY DEFINER functions: 30; 28 executable by authenticated; none executable by anon. These are counts, not a conclusion that every function is unsafe.
+- The two social-media tables with no RLS policies have no anon or authenticated table privileges (SELECT/INSERT/UPDATE/DELETE). Do not add client policies without evidence of a client access requirement.
+- Security advisor continues to report 34 GraphQL exposure warnings, 23 authenticated-executable SECURITY DEFINER warnings and leaked-password protection disabled. Review each against intended application paths before changing grants or function modes.
+- Performance advisor reports 71 unused indexes; no index removal is approved without representative workload and query-plan evidence.
+- Health advisor returned no lints.
+- No Supabase development branches currently exist.
+- Vercel configuration, DNS, TLS, provider-level backup/restore, monitoring and cloud spend remain unverified.
+
+See [12-PROGRAMME-EXECUTION-BLUEPRINT.md](12-PROGRAMME-EXECUTION-BLUEPRINT.md) for the refreshed programme plan and immediate action queue, and [INTERFACE-AUDIT-2026-11-06.md](INTERFACE-AUDIT-2026-11-06.md) for dashboard findings.
