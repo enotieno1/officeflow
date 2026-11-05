@@ -129,3 +129,16 @@ This is the execution plan for taking the existing OfficeFlow platform to depend
 - No production deploy based solely on a successful build.
 - Each completed task must record test evidence, date, commit/deployment SHA and rollback path.
 - P0 security, tenant-isolation, payment-integrity or data-loss failures block commercial launch.
+
+
+## Edge Function source review — 2026-11-06
+All seven deployed Edge Functions were enumerated and their deployed source inspected read-only:
+- `billing-checkout`: platform JWT verification enabled; code calls `auth.getUser()` using the caller's bearer token. Its CORS default is `https://officeflow.co.ke`, while the known live application URL is `https://office-sort.vercel.app`; actual deployed `APP_ORIGIN` and `APP_BASE_URL` secrets/config values are not visible through this inspection and must be verified.
+- `intasend-webhook`: platform JWT verification disabled; source checks a configured webhook challenge and independently fetches payment status from IntaSend before calling database reconciliation. Verify provider's current webhook verification contract and test replay/out-of-order/failure cases.
+- `officeflow-ai`: platform JWT verification disabled but source manually calls Supabase Auth `/auth/v1/user` to validate the bearer token. It returns 503 when `OPENAI_API_KEY` is absent. CORS currently allows `*`; confirm explicit auth and restrict browser origin to approved production/preview origins.
+- `organization-invite`: platform JWT verification enabled; source validates bearer token via `auth.getUser()` and defaults APP_BASE_URL to the current known live app URL.
+- `payroll-payment-batch`: platform JWT verification enabled; source validates the caller via Supabase Auth. CORS currently allows `*`; restrict to approved browser origins after testing.
+- `mpesa-b2c-readiness`: platform JWT verification enabled; source validates the caller via Supabase Auth. CORS currently allows `*`; restrict to approved browser origins after testing.
+- `social-media-oauth`: platform JWT verification disabled to support OAuth callback flow; source uses state hash/expiry and provider authorization-code flow with PKCE-related handling. Verify state one-time use, provider-specific PKCE, callback URLs and secret storage end to end.
+
+This is source inspection, not a successful provider integration test. No Edge Function was redeployed and no secrets were read or changed. Tracking issue: [#63](https://github.com/enotieno1/officeflow/issues/63).
