@@ -139,3 +139,20 @@ A fresh connected-provider check supersedes the earlier baseline where counts di
 - Vercel configuration, DNS, TLS, provider-level backup/restore, monitoring and cloud spend remain unverified.
 
 See [12-PROGRAMME-EXECUTION-BLUEPRINT.md](12-PROGRAMME-EXECUTION-BLUEPRINT.md) for the refreshed programme plan and immediate action queue, and [INTERFACE-AUDIT-2026-11-06.md](INTERFACE-AUDIT-2026-11-06.md) for dashboard findings.
+
+
+## 10. Migration inventory reconciliation — 2026-11-06
+
+A direct comparison was made between Supabase's production migration ledger and the GitHub `main` branch's `supabase/migrations/` directory:
+
+- Production ledger: **99** migration records; latest version `20261101054733` (`rls_initplan_wrap_and_fk_indexes`).
+- GitHub `main` directory: **27** SQL migration files; latest filename `20261027080000_restore_employee_write_privileges.sql`.
+- Exact version-prefix matches: **16**.
+- Production version records not found as exact version-prefix files in that directory: **83**.
+
+**Interpretation:** this is a serious migration-history reconciliation blocker, not proof that 83 database changes are missing from the application. Some may have been consolidated, renamed, applied manually, stored elsewhere, or represented by later migrations with different timestamps. No production schema change was made.
+
+**Required remediation:** obtain the complete historical migration source from the deployment/Codespace history; map each production ledger entry to its SQL source or an approved consolidation record; inspect dependencies and ordering; establish a reproducible baseline; then add a CI parity check. Do not re-run or recreate migrations in production to make counts match.
+
+The current source tree's latest tracked migration is dated 2026-10-27, while production's latest recorded migration is dated 2026-11-01. This makes the missing history a release-engineering risk: future deployments must not assume the Git migration directory fully represents the live database.
+
