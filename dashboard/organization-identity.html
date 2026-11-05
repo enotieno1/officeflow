@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OfficeFlow — Organisation Identity</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/dashboard/js/config.js"></script>
+<script>var supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);</script>
+<link rel="stylesheet" href="css/executive-theme.css"><link rel="stylesheet" href="css/mobile.css">
+<style>
+.identity-preview{border:1px solid var(--of-border);border-radius:8px;background:#fff;overflow:hidden}
+.identity-preview__bar{height:8px;background:var(--brand-primary,#16213e)}
+.brand-logo{width:88px;height:88px;object-fit:contain;border:1px dashed var(--of-border);border-radius:8px;background:#fafafa}
+.field{display:block;width:100%;border:1px solid var(--of-border);border-radius:5px;padding:10px 12px;margin-top:6px;background:#fff}
+.field:focus{outline:2px solid var(--of-brass-light);outline-offset:1px}
+</style>
+</head>
+<body class="min-h-screen">
+<header class="of-header px-5 py-4 flex flex-wrap justify-between items-center gap-3">
+<div><p class="of-eyebrow">OfficeFlow · Workspace administration</p><h1 class="of-serif text-2xl font-semibold">Organisation identity</h1><p class="text-sm text-gray-500 mt-1">Manage the identity and branding your team sees across its workspace.</p></div>
+<a href="index.html" class="text-sm font-medium">← Back to dashboard</a>
+</header>
+<main class="max-w-5xl mx-auto p-5 space-y-6">
+<div id="notice" class="hidden rounded-md p-3 text-sm" role="status" aria-live="polite"></div>
+<section class="grid lg:grid-cols-3 gap-5">
+<div class="lg:col-span-2 of-card p-5">
+<h2 class="of-serif text-xl font-semibold">Organisation profile</h2>
+<p class="text-sm text-gray-500 mt-1 mb-4">These details identify your organisation, not the OfficeFlow platform.</p>
+<div class="grid md:grid-cols-2 gap-4">
+<label class="text-sm font-medium">Organisation name<input id="orgName" class="field" maxlength="120" required></label>
+<label class="text-sm font-medium">Industry<input id="industry" class="field" maxlength="100" placeholder="e.g. Retail, professional services"></label>
+<label class="text-sm font-medium">Tagline<input id="tagline" class="field" maxlength="160" placeholder="A short description of your organisation"></label>
+<label class="text-sm font-medium">Country<input id="country" class="field" maxlength="80"></label>
+<label class="text-sm font-medium">Business email<input id="email" type="email" class="field" maxlength="254"></label>
+<label class="text-sm font-medium">Business phone<input id="phone" type="tel" class="field" maxlength="40"></label>
+<label class="text-sm font-medium md:col-span-2">Website<input id="website" type="url" class="field" maxlength="255" placeholder="https://example.com"></label>
+</div>
+</div>
+<aside class="of-card p-5">
+<h2 class="of-serif text-xl font-semibold">Workspace preview</h2>
+<div class="identity-preview mt-4">
+<div id="previewBar" class="identity-preview__bar"></div>
+<div class="p-4">
+<img id="previewLogo" class="brand-logo mb-3 hidden" alt="Organisation logo">
+<p id="previewName" class="font-semibold text-lg">Your organisation</p>
+<p id="previewTagline" class="text-sm text-gray-500 mt-1">Your workspace tagline</p>
+<div class="mt-4 text-xs text-gray-500">Powered by OfficeFlow</div>
+</div></div>
+<p class="text-xs text-gray-500 mt-3">Preview of the identity settings. This page does not rebrand the OfficeFlow platform.</p>
+</aside>
+</section>
+<section class="of-card p-5">
+<h2 class="of-serif text-xl font-semibold">Logo and brand colours</h2>
+<p class="text-sm text-gray-500 mt-1 mb-4">Logo files are stored in the private OfficeFlow document bucket and are accessed using short-lived signed links.</p>
+<div class="grid md:grid-cols-2 gap-6">
+<div>
+<label class="text-sm font-medium" for="logoFile">Upload organisation logo</label>
+<input id="logoFile" type="file" accept="image/png,image/jpeg,image/webp" class="field">
+<p class="text-xs text-gray-500 mt-2">PNG, JPG or WebP; maximum 2 MB. Use a transparent PNG for best results.</p>
+<div class="flex items-center gap-3 mt-4"><img id="logoImage" class="brand-logo hidden" alt="Current organisation logo"><span id="logoStatus" class="text-sm text-gray-500">No logo uploaded yet.</span></div>
+</div>
+<div class="grid grid-cols-2 gap-4 content-start">
+<label class="text-sm font-medium">Primary colour<input id="primary" type="color" value="#16213e" class="field h-12 p-1"></label>
+<label class="text-sm font-medium">Accent colour<input id="accent" type="color" value="#a6823d" class="field h-12 p-1"></label>
+</div>
+</div>
+<div class="flex flex-wrap gap-3 mt-6">
+<button id="save" class="of-btn-primary">Save organisation identity</button>
+<button id="reload" class="of-btn-secondary" type="button">Discard changes</button>
+</div>
+<p class="text-xs text-gray-500 mt-3">Changes are saved to this organisation only. Logo uploads are not publicly exposed.</p>
+</section>
+</main>
+<script src="/dashboard/js/ooes-auth.js"></script>
+<script>
+(function(){
+const $=id=>document.getElementById(id);const BUCKET='officeflow-documents';let user=null,orgId=null,settings={},logoPath=null;
+function notice(message,ok=false){$('notice').textContent=message;$('notice').className='rounded-md p-3 text-sm '+(ok?'bg-green-50 text-green-800':'bg-red-50 text-red-800');}
+function escapeHtml(value){return String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function updatePreview(){const name=$('orgName').value.trim()||'Your organisation';$('previewName').textContent=name;$('previewTagline').textContent=$('tagline').value.trim()||'Your workspace tagline';$('previewBar').style.background=$('primary').value;document.documentElement.style.setProperty('--brand-primary',$('primary').value);document.documentElement.style.setProperty('--brand-accent',$('accent').value);}
+async function showLogo(path){logoPath=path||null;if(!path){$('logoImage').classList.add('hidden');$('previewLogo').classList.add('hidden');$('logoStatus').textContent='No logo uploaded yet.';return;}const {data,error}=await supabase.storage.from(BUCKET).createSignedUrl(path,3600);if(error)throw error;$('logoImage').src=data.signedUrl;$('previewLogo').src=data.signedUrl;$('logoImage').classList.remove('hidden');$('previewLogo').classList.remove('hidden');$('logoStatus').textContent='Current logo loaded. Signed link expires after one hour.';}
+async function load(){await OOES_AUTH.ready;const auth=await supabase.auth.getUser();if(auth.error||!auth.data.user)throw new Error('Please sign in again.');user=auth.data.user;const p=await supabase.from('profiles').select('organization_id,role').eq('id',user.id).single();if(p.error)throw p.error;if(!['administrator','super_admin'].includes(p.data.role))throw new Error('Only organisation administrators can change workspace identity.');orgId=p.data.organization_id;if(!orgId)throw new Error('Your account is not assigned to an organisation.');const [o,s]=await Promise.all([supabase.from('organizations').select('id,name,industry,country,website,contact_email,phone').eq('id',orgId).single(),supabase.from('organization_settings').select('document_settings').eq('organization_id',orgId).maybeSingle()]);if(o.error)throw o.error;if(s.error)throw s.error;settings=s.data||{};const branding=(settings.document_settings||{}).branding||{};$('orgName').value=o.data.name||'';$('industry').value=o.data.industry||'';$('country').value=o.data.country||'';$('website').value=o.data.website||'';$('email').value=o.data.contact_email||'';$('phone').value=o.data.phone||'';$('tagline').value=branding.tagline||'';$('primary').value=branding.primary_color||'#16213e';$('accent').value=branding.accent_color||'#a6823d';await showLogo(branding.logo_path||null);updatePreview();}
+async function uploadLogo(file){if(!file)return logoPath;if(!['image/png','image/jpeg','image/webp'].includes(file.type))throw new Error('Choose a PNG, JPG or WebP image.');if(file.size>2*1024*1024)throw new Error('Logo must be 2 MB or smaller.');const ext=file.type==='image/png'?'png':file.type==='image/webp'?'webp':'jpg';const path=orgId+'/'+user.id+'/branding/logo-'+Date.now()+'.'+ext;const {error}=await supabase.storage.from(BUCKET).upload(path,file,{contentType:file.type,upsert:false,cacheControl:'3600'});if(error)throw error;return path;}
+async function save(){const name=$('orgName').value.trim();if(!name)throw new Error('Organisation name is required.');const website=$('website').value.trim();if(website&&!/^https?:\/\//i.test(website))throw new Error('Website must start with https:// or http://.');$('save').disabled=true;$('save').textContent='Saving…';try{const nextLogo=await uploadLogo($('logoFile').files[0]);const update=await supabase.from('organizations').update({name,industry:$('industry').value.trim()||null,country:$('country').value.trim()||'Kenya',website:website||null,contact_email:$('email').value.trim()||null,phone:$('phone').value.trim()||null}).eq('id',orgId).select('id').single();if(update.error)throw update.error;const doc={...(settings.document_settings||{}),branding:{...((settings.document_settings||{}).branding||{}),tagline:$('tagline').value.trim(),primary_color:$('primary').value,accent_color:$('accent').value,logo_path:nextLogo}};const {error}=await supabase.from('organization_settings').upsert({organization_id:orgId,document_settings:doc,updated_by:user.id,updated_at:new Date().toISOString()},{onConflict:'organization_id'});if(error)throw error;settings.document_settings=doc;logoPath=nextLogo;$('logoFile').value='';await showLogo(logoPath);notice('Organisation identity saved successfully.',true);}finally{$('save').disabled=false;$('save').textContent='Save organisation identity';}}
+$('save').addEventListener('click',async()=>{try{await save()}catch(e){notice(e.message||'Could not save organisation identity.')}});$('reload').addEventListener('click',async()=>{try{$('logoFile').value='';await load();notice('Unsaved changes discarded.',true)}catch(e){notice(e.message||'Could not reload settings.')}});['orgName','tagline','primary','accent'].forEach(id=>$(id).addEventListener('input',updatePreview));load().catch(e=>{notice(e.message||'Unable to load organisation identity.');$('save').disabled=true;});
+})();
+</script>
+<script src="/dashboard/js/shared-navigation.js" defer></script>
+</body></html>
