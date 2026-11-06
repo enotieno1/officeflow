@@ -411,7 +411,7 @@ revoke all on function public.fn_ai_reserve(uuid,uuid,uuid,text,integer,integer)
 revoke all on function public.fn_ai_finalize(uuid,uuid,uuid,text,text,integer,integer,integer,integer,text,text,text[]) from public, anon, authenticated;
 revoke all on function public.fn_ai_record_recommendation_trusted(uuid,uuid,text,text,text,jsonb,text) from public, anon, authenticated;
 grant execute on function public.fn_ai_reserve(uuid,uuid,uuid,text,integer,integer) to service_role;
-grant execute on function public.fn_ai_finalize(uuid,uuid,uuid,text,text,integer,integer,integer,text,text,text[]) to service_role;
+grant execute on function public.fn_ai_finalize(uuid,uuid,uuid,text,text,integer,integer,integer,integer,text,text,text[]) to service_role;
 grant execute on function public.fn_ai_record_recommendation_trusted(uuid,uuid,text,text,text,jsonb,text) to service_role;
 
 revoke all on function private.fn_ai_decide_recommendation(uuid,text) from public, anon;
