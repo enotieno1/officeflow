@@ -59,7 +59,6 @@ create table if not exists public.ai_org_limits (
   daily_org_requests integer not null default 1000,
   monthly_token_limit bigint not null default 1000000,
   max_request_tokens integer not null default 12000,
-  monthly_cost_limit_usd numeric(14,4),
   updated_at timestamptz not null default now(),
   constraint ai_org_limits_daily_user_check check (daily_user_requests between 1 and 100000),
   constraint ai_org_limits_daily_org_check check (daily_org_requests between 1 and 1000000),
@@ -237,6 +236,7 @@ create or replace function public.fn_ai_finalize(
   p_model text,
   p_prompt_tokens integer,
   p_completion_tokens integer,
+  p_output_chars integer,
   p_latency_ms integer,
   p_status text,
   p_error_code text,
@@ -255,7 +255,7 @@ begin
     raise exception 'Finalisation requires reservation, user and organisation identifiers';
   end if;
   if coalesce(p_prompt_tokens,0) < 0 or coalesce(p_completion_tokens,0) < 0
-     or coalesce(p_latency_ms,0) < 0 then
+     or coalesce(p_output_chars,0) < 0 or coalesce(p_latency_ms,0) < 0 then
     raise exception 'Token counts and latency must be non-negative';
   end if;
   if p_status not in ('ok','provider_error','not_configured','timeout','invalid_response','blocked') then
@@ -304,7 +304,7 @@ begin
       latency_ms = p_latency_ms,
       error_code = left(p_error_code,120),
       grounded_sources = coalesce(p_sources,'{}'),
-      output_chars = 0,
+      output_chars = greatest(coalesce(p_output_chars,0),0),
       status = p_status,
       reserved_tokens = 0,
       finalized_at = now()
@@ -335,7 +335,7 @@ begin
   from public.profiles
   where id = p_user_id and organization_id = p_organization_id;
 
-  if v_role not in ('manager','administrator','super_admin') then
+  if v_role is null or v_role not in ('manager','administrator','super_admin') then
     raise exception 'User is not authorised to record recommendations';
   end if;
   if p_feature is null or length(p_feature) not between 1 and 60 then
@@ -408,7 +408,7 @@ $function$;
 
 -- Only the server-side service role may reserve/finalise usage or create recommendations.
 revoke all on function public.fn_ai_reserve(uuid,uuid,uuid,text,integer,integer) from public, anon, authenticated;
-revoke all on function public.fn_ai_finalize(uuid,uuid,uuid,text,text,integer,integer,integer,text,text,text[]) from public, anon, authenticated;
+revoke all on function public.fn_ai_finalize(uuid,uuid,uuid,text,text,integer,integer,integer,integer,text,text,text[]) from public, anon, authenticated;
 revoke all on function public.fn_ai_record_recommendation_trusted(uuid,uuid,text,text,text,jsonb,text) from public, anon, authenticated;
 grant execute on function public.fn_ai_reserve(uuid,uuid,uuid,text,integer,integer) to service_role;
 grant execute on function public.fn_ai_finalize(uuid,uuid,uuid,text,text,integer,integer,integer,text,text,text[]) to service_role;
