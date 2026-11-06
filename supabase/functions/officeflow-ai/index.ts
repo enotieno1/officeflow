@@ -154,6 +154,21 @@ Deno.serve(async (req: Request) => {
   const inputChars = messages.reduce((sum, m) => sum + m.content.length, 0);
   if (inputChars > 24000) return json({ error: "The conversation is too long. Please shorten it and try again." }, 413, origin);
 
+  // Resolve the tenant from the signed-in user's own profile under their JWT.
+  // Never accept an organisation identifier from the browser request.
+  const profileResponse = await fetch(
+    `${supabaseUrl}/rest/v1/profiles?select=organization_id&id=eq.${encodeURIComponent(userId)}`,
+    { headers: { apikey: anonKey, Authorization: authorization } },
+  );
+  if (!profileResponse.ok) return json({ error: "Your organisation profile could not be verified." }, 403, origin);
+  const profileRows = await profileResponse.json().catch(() => []);
+  const organizationId = Array.isArray(profileRows) && profileRows.length === 1
+    ? profileRows[0]?.organization_id
+    : null;
+  if (typeof organizationId !== "string") {
+    return json({ error: "Your OfficeFlow organisation membership could not be verified." }, 403, origin);
+  }
+
   const requestId = crypto.randomUUID();
   const reserveTokens = Math.max(1000, Math.min(
     Number(Deno.env.get("AI_RESERVED_TOKENS_PER_REQUEST") ?? "12000"),
@@ -163,15 +178,13 @@ Deno.serve(async (req: Request) => {
   // Trusted metering uses the service-role key only inside this server function.
   const reservation = await rpc(supabaseUrl, serviceKey, serviceKey, "fn_ai_reserve", {
     p_user_id: userId,
-    p_organization_id: null, // Never trust an organisation ID supplied by the browser.
+    p_organization_id: organizationId,
     p_request_id: requestId,
     p_feature: feature,
     p_input_chars: inputChars,
     p_reserved_tokens: reserveTokens,
   });
 
-  // Organisation membership is resolved server-side in the reservation RPC in the next
-  // migration revision; until that contract is available, fail closed rather than guessing.
   if (!reservation.ok) {
     const quota = /quota exceeded|token reservation exceeds/i.test(reservation.errorText);
     return json({ error: quota ? "Your organisation's AI usage limit has been reached." : "AI usage could not be safely reserved. Please try again later." }, quota ? 429 : 503, origin);
@@ -180,8 +193,7 @@ Deno.serve(async (req: Request) => {
   const rows = Array.isArray(reservation.data) ? reservation.data : [];
   const reservationRow = rows[0] as { usage_id?: string; organization_id?: string } | undefined;
   const usageId = reservationRow?.usage_id;
-  const organizationId = reservationRow?.organization_id;
-  if (!usageId || !organizationId) {
+  if (!usageId) {
     return json({ error: "AI reservation returned an invalid result. No provider request was sent." }, 503, origin);
   }
 
