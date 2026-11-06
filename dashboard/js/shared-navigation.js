@@ -72,7 +72,7 @@
       }).join('')
     ).join('');
     sidebar.innerHTML =
-      '<div class="of-nav-brand"><div class="of-nav-brand-title">OfficeFlow</div><div class="of-nav-brand-sub">Office Operations</div></div>' +
+      '<div class="of-nav-brand"><img class="of-nav-logo" src="/assets/brand/officeflow-logo-horizontal-white.svg" alt="OfficeFlow"><div class="of-nav-brand-sub">Office Operations</div></div>' +
       '<nav class="of-nav-list"><a class="of-nav-link'+(path==='index.html'?' is-active':'')+'" href="/dashboard/index.html"><i class="fas fa-home" aria-hidden="true"></i><span>Dashboard</span></a>'+links+'</nav>' +
       '<div class="of-nav-footer"><span class="of-nav-user">OfficeFlow Workspace</span><button type="button" id="of-nav-logout">Logout</button></div>';
     if (!original) {
@@ -84,7 +84,7 @@
     css.textContent = `
       .of-shared-sidebar{position:fixed!important;inset:0 auto 0 0!important;width:256px!important;max-width:86vw!important;height:100vh!important;z-index:900!important;display:flex!important;flex-direction:column!important;overflow:hidden!important;background:linear-gradient(160deg,#16213e 0%,#202d4d 100%)!important;color:#f8fafc!important;border-right:1px solid rgba(255,255,255,.12)!important;box-sizing:border-box!important;transform:translateX(0);transition:transform .22s ease}
       .of-nav-brand{padding:22px 20px 18px;border-bottom:1px solid rgba(255,255,255,.13);flex-shrink:0}
-      .of-nav-brand-title{font:700 23px/1.2 Inter,Arial,sans-serif;letter-spacing:.2px;color:#fff}
+      .of-nav-logo{display:block;width:100%;max-width:210px;height:auto;max-height:56px;object-fit:contain;object-position:left center}
       .of-nav-brand-sub{font:12px/1.5 Inter,Arial,sans-serif;color:#c7d2e8;margin-top:5px}
       .of-nav-list{padding:10px 10px 16px;overflow-y:auto;flex:1;min-height:0}
       .of-nav-section{font:700 10px/1.4 Inter,Arial,sans-serif;text-transform:uppercase;letter-spacing:1.2px;color:#c6a86a;padding:17px 10px 7px}
