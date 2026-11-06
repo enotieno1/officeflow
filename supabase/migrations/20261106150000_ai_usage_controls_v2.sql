@@ -158,6 +158,17 @@ begin
   -- Serialise reservations for this tenant; the row lock above serialises limit edits.
   perform pg_advisory_xact_lock(hashtextextended(p_organization_id::text, 17));
 
+  -- Recover token reservations left open by a crashed Edge Function.
+  -- The gateway provider timeout is 30 seconds; ten minutes is a conservative expiry.
+  update public.ai_usage_log
+  set status = 'timeout',
+      error_code = 'reservation_expired',
+      reserved_tokens = 0,
+      finalized_at = now()
+  where organization_id = p_organization_id
+    and status = 'reserved'
+    and created_at < now() - interval '10 minutes';
+
   select * into v_existing
   from public.ai_usage_log
   where request_id = p_request_id
@@ -332,9 +343,10 @@ declare
   v_role text;
   v_id uuid;
 begin
-  select role into v_role
-  from public.profiles
-  where id = p_user_id and organization_id = p_organization_id;
+  select p.role into v_role
+  from public.profiles p
+  join public.organizations o on o.id = p.organization_id and o.is_active
+  where p.id = p_user_id and p.organization_id = p_organization_id;
 
   if v_role is null or v_role not in ('manager','administrator','super_admin') then
     raise exception 'User is not authorised to record recommendations';
