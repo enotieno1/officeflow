@@ -22,7 +22,7 @@ This is a review branch, not a production deployment.
 - Provider pricing is deliberately not seeded. Cost remains null/unknown until the current model pricing is independently verified and entered.
 - The trusted recommendation recorder validates user/organisation membership and does not depend on `auth.uid()`.
 - Recommendation decisions are audited transactionally; an audit insert failure rolls back the decision.
-- The gateway uses a 30-second provider timeout, caps message count and total input size, caps completion tokens, and requires an explicit allowed-origin list for browser requests.
+- The gateway uses a 30-second provider timeout, accepts at most 12 messages and 16,000 total input characters, limits completion output to 2,000 tokens, and requires an explicit allowed-origin list for browser requests. If a provider timeout leaves actual token usage unknown, the conservative reservation remains held against the monthly token budget rather than being prematurely released.
 
 ## Required Edge Function secrets
 
@@ -53,7 +53,7 @@ The provider secret and current model identifiers have not yet been independentl
 
 - The migration has not been applied to production.
 - The new Edge Function has not been deployed.
-- Automated SQL assertions and authenticated integration tests have not yet been run.
+- Automated SQL assertions and authenticated integration tests have not yet been run. A static source review was performed, but Deno type-checking and live runtime tests remain outstanding.
 - The live provider secret and provider billing/model configuration have not been verified.
 - Legacy client-executable usage/recommendation RPC permissions have intentionally not been revoked because the old gateway still depends on the usage logger.
 - A Supabase development branch could not be created because the connector requires the organisation-specific branch cost to be disclosed and explicitly approved first.
