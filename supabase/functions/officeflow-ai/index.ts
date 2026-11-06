@@ -125,7 +125,10 @@ Deno.serve(async (req: Request) => {
   const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
   const authorization = req.headers.get("Authorization") ?? "";
 
-  if (!supabaseUrl || !anonKey || !serviceKey || !authorization.startsWith("Bearer ")) {
+  if (!supabaseUrl || !anonKey || !serviceKey) {
+    return json({ error: "The AI service is not fully configured. Contact your administrator." }, 503, origin);
+  }
+  if (!authorization.startsWith("Bearer ")) {
     return json({ error: "A valid OfficeFlow session is required." }, 401, origin);
   }
 
