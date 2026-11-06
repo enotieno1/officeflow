@@ -163,7 +163,8 @@ begin
   update public.ai_usage_log
   set status = 'timeout',
       error_code = 'reservation_expired',
-      reserved_tokens = 0,
+      -- Preserve the held token budget: provider processing may have continued
+      -- after the Edge Function lost its connection, so actual usage is unknown.
       finalized_at = now()
   where organization_id = p_organization_id
     and status = 'reserved'
@@ -270,14 +271,21 @@ begin
      or coalesce(p_output_chars,0) < 0 or coalesce(p_latency_ms,0) < 0 then
     raise exception 'Token counts and latency must be non-negative';
   end if;
-  if p_status not in ('ok','provider_error','not_configured','timeout','invalid_response','blocked') then
+  if p_status is null or p_status not in ('ok','provider_error','not_configured','timeout','invalid_response','blocked') then
     raise exception 'Invalid final AI usage status';
   end if;
-  if p_provider is not null and p_provider not in ('openai') then
+  if p_provider is not null and p_provider <> 'openai' then
     raise exception 'Unrecognised AI provider';
   end if;
-  if p_model is not null and length(p_model) > 120 then
-    raise exception 'Invalid model identifier';
+  if p_provider is null and (p_model is not null or p_status <> 'not_configured') then
+    raise exception 'Provider and model are required except for not-configured requests';
+  end if;
+  if p_provider is not null and (p_model is null or length(trim(p_model)) not between 1 and 120) then
+    raise exception 'A valid model identifier is required';
+  end if;
+  if coalesce(p_prompt_tokens,0) > 200000 or coalesce(p_completion_tokens,0) > 200000
+     or coalesce(p_output_chars,0) > 32000 then
+    raise exception 'Reported usage exceeds permitted bounds';
   end if;
 
   select * into v_row
@@ -318,7 +326,7 @@ begin
       grounded_sources = coalesce(p_sources,'{}'),
       output_chars = greatest(coalesce(p_output_chars,0),0),
       status = p_status,
-      reserved_tokens = 0,
+      reserved_tokens = case when p_status = 'timeout' then v_row.reserved_tokens else 0 end,
       finalized_at = now()
   where id = p_usage_id;
 end;
