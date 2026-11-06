@@ -170,10 +170,10 @@ Deno.serve(async (req: Request) => {
   }
 
   const requestId = crypto.randomUUID();
-  const reserveTokens = Math.max(1000, Math.min(
-    Number(Deno.env.get("AI_RESERVED_TOKENS_PER_REQUEST") ?? "12000"),
-    20000,
-  ));
+  const configuredReserve = Number(Deno.env.get("AI_RESERVED_TOKENS_PER_REQUEST") ?? "12000");
+  const reserveTokens = Number.isFinite(configuredReserve)
+    ? Math.max(5000, Math.min(configuredReserve, 20000))
+    : 12000;
 
   // Trusted metering uses the service-role key only inside this server function.
   const reservation = await rpc(supabaseUrl, serviceKey, serviceKey, "fn_ai_reserve", {
