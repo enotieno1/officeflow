@@ -1,0 +1,3 @@
+# Edge Function authentication is enforced by the Supabase gateway and rechecked in code.
+[functions.officeflow-ai]
+verify_jwt = true
