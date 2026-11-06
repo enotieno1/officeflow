@@ -152,12 +152,14 @@ Deno.serve(async (req: Request) => {
   const feature = (body.feature ?? "virtual-assistant") as Feature;
   if (!ALLOWED.has(feature)) return json({ error: "Unknown AI feature." }, 400, origin);
 
-  const messages = Array.isArray(body.messages) ? body.messages : [];
-  if (!messages.length || messages.length > 12 || messages.some((m) =>
+  // Preserve v2 behaviour: the browser may send the full conversation; only the
+  // most recent 12 messages are passed to the model.
+  const messages = Array.isArray(body.messages) ? body.messages.slice(-12) : [];
+  if (!messages.length || messages.some((m) =>
     !m || !["user", "assistant"].includes(m.role) ||
     typeof m.content !== "string" || m.content.length > 8000
   )) {
-    return json({ error: "Provide between 1 and 12 valid messages, each no longer than 8,000 characters." }, 400, origin);
+    return json({ error: "Provide a valid conversation with messages no longer than 8,000 characters each." }, 400, origin);
   }
   const inputChars = messages.reduce((sum, m) => sum + m.content.length, 0);
   if (inputChars > 16000) return json({ error: "The conversation is too long. Please shorten it and try again." }, 413, origin);
