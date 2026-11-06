@@ -53,6 +53,45 @@ begin
   ) then
     raise exception 'Pricing table must remain unseeded until current provider prices are verified';
   end if;
+
+  if not (
+    select relrowsecurity from pg_class where oid='public.ai_org_limits'::regclass
+  ) then
+    raise exception 'ai_org_limits must have row-level security enabled';
+  end if;
+
+  if has_table_privilege('authenticated','public.ai_org_limits','INSERT')
+     or has_table_privilege('authenticated','public.ai_org_limits','UPDATE')
+     or has_table_privilege('authenticated','public.ai_org_limits','DELETE') then
+    raise exception 'Authenticated users must not modify AI organisation limits';
+  end if;
+
+  if not exists (
+    select 1 from pg_constraint
+    where conrelid='public.ai_usage_log'::regclass
+      and conname='ai_usage_log_status_check'
+  ) then
+    raise exception 'Missing expanded usage status constraint';
+  end if;
+
+  if not exists (
+    select 1 from pg_proc p
+    join pg_namespace n on n.oid=p.pronamespace
+    where n.nspname='public' and p.proname='fn_ai_reserve'
+      and p.prosecdef
+      and pg_get_function_arguments(p.oid) like '%p_request_id uuid%'
+  ) then
+    raise exception 'Reservation function must exist as SECURITY DEFINER';
+  end if;
+
+  if not exists (
+    select 1 from pg_proc p
+    join pg_namespace n on n.oid=p.pronamespace
+    where n.nspname='public' and p.proname='fn_ai_finalize'
+      and p.prosecdef
+  ) then
+    raise exception 'Finalisation function must exist as SECURITY DEFINER';
+  end if;
 end;
 $test$;
 
